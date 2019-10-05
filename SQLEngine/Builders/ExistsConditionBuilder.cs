@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SQLEngine
+namespace SQLEngine.Builders
 {
     public class ExistsConditionBuilder: AbstractConditionBuilder
     {

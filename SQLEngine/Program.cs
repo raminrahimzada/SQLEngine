@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using SQLEngine.Builders;
+using SQLEngine.Helpers;
 
 namespace SQLEngine
 {
@@ -8,26 +10,8 @@ namespace SQLEngine
         [STAThread]
         public static void Main(string[] args)
         {
-            //BinaryExpressionBuilder
-            //IfElseQueryBuilder
-            if (false)
-            {
-                IfElseQueryBuilder t = new IfElseQueryBuilder();
-                //t.If("@i>1").Then("SET @i=1;").ElseIf("@i<-1").Then("SET @i=45;").Else("SET @i=777;");
-                t.If(
-                        x => x.Less("@i", "@j")
-                    )
-                    .Then("SET @max = @j;")
-                    .ElseIf(
-                        x => x.Greater("@i", "@j")
-                    )
-                    .Then("SET @max=@i;")
-                    .Else("SET @max=444;");
-                Console.WriteLine(t.Build());
-                return;
-            }
             //IfElseQueryBuilder -  butov
-            if (false)
+            if (!false)
             {
                 var t = new IfElseQueryBuilder();                
                 t.If(
@@ -63,7 +47,7 @@ namespace SQLEngine
                 Console.WriteLine(t.Build());
                 ;
             }
-            if (!true)
+            if (true)
             {
                 var t = new InsertQueryBuilder();
                 t.Into("Users").Columns("NAME","SURNAME","AGE").Values("'Ramin'", "'Rahimzada'", "1");
@@ -81,11 +65,11 @@ namespace SQLEngine
                 Console.WriteLine(t.Build());
                 ;
             }
-            if (!true)
+            if (true)
             {
                 var t = new InsertQueryBuilder();
                 t.Into("Users")
-                    .Values(x=>x.From("Users_2"))
+                    .Values(x=>x.From("Users_Backup"))
                     ;
                 Console.WriteLine(t.Build());
                 ;

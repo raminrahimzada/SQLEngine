@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SQLEngine
+namespace SQLEngine.Builders
 {
     public  class InsertQueryBuilder : AbstractQueryBuilder
     {

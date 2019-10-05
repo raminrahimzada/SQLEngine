@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace SQLEngine
+namespace SQLEngine.Builders
 {
     public  class IfConditionBuilder : AbstractConditionBuilder
     {

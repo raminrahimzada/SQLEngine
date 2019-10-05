@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace SQLEngine
+﻿namespace SQLEngine.Helpers
 {
     public static class QueryBuilderExtensions
     {

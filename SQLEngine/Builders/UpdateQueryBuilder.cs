@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SQLEngine.Helpers;
+using static SQLEngine.SQLKeywords;
 
-namespace SQLEngine
+namespace SQLEngine.Builders
 {
     public  class UpdateQueryBuilder : AbstractQueryBuilder
     {
@@ -76,11 +78,7 @@ namespace SQLEngine
             _columnsAndValuesDictionary.Add(columnName, columnValue);
             return this;
         }
-        public UpdateQueryBuilder Where(string condition)
-        {
-            _whereCondition = condition;
-            return this;
-        }
+        
         public UpdateQueryBuilder Columns(params string[] columnNames)
         {
             _columnNames = columnNames;
@@ -94,6 +92,11 @@ namespace SQLEngine
         public UpdateQueryBuilder Top(int count)
         {
             _topClause = count;
+            return this;
+        }
+        public UpdateQueryBuilder Where(string condition)
+        {
+            _whereCondition = condition;
             return this;
         }
         public UpdateQueryBuilder Where(Func<AbstractConditionBuilder, AbstractConditionBuilder> builder)
@@ -115,28 +118,28 @@ namespace SQLEngine
         {
             Validate();
 
-            Writer.Write("UPDATE ");
+            Writer.Write2(UPDATE);
             if (_topClause != null)
             {
-                Writer.Write("TOP");
+                Writer.Write(TOP);
                 Writer.WriteWithScoped(_topClause.Value.ToString());
-                Writer.Write(" ");
+                Writer.Write2();
             }
             Writer.Write(_tableName);
-            Writer.Write(" SET ");
+            Writer.Write2(SET);
 
             if (_columnsAndValuesDictionary != null)
             {
                 var keys = _columnsAndValuesDictionary.Keys.ToArray();
-                for (int i = 0; i < _columnsAndValuesDictionary.Count; i++)
+                for (var i = 0; i < _columnsAndValuesDictionary.Count; i++)
                 {
                     var key = keys[i];
                     var value = _columnsAndValuesDictionary[key];
                     Writer.Write(key);
-                    Writer.Write(" = ");
+                    Writer.Write2(EQUALS);
                     Writer.Write(value);
                     if (i != _columnsAndValuesDictionary.Count-1)
-                        Writer.Write(" , ");
+                        Writer.Write2(COMMA);
                 }
             }
             else //normal model 
@@ -147,18 +150,19 @@ namespace SQLEngine
                     var column = _columnNames[i];
                     var value = _values[i];
                     Writer.Write(column);
-                    Writer.Write(" = ");
+                    Writer.Write2(EQUALS);
                     Writer.Write(value);
                     if (i != len-1)
-                        Writer.Write(" , ");
+                        Writer.Write2(COMMA);
                 }
             }
 
             if (!string.IsNullOrEmpty(_whereCondition))
             {
-                Writer.Write(" WHERE ");
+                Writer.Write2(WHERE);
                 Writer.WriteWithScoped(_whereCondition);
             }
+
             return base.Build();
         }
     }

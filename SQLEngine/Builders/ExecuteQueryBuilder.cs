@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace SQLEngine
+namespace SQLEngine.Builders
 {
     public abstract class ExecuteQueryBuilder : AbstractQueryBuilder
     {
@@ -111,7 +111,6 @@ namespace SQLEngine
                 }
             }
 
-            Writer.WriteLine(";");
             return base.Build();
         }
     }

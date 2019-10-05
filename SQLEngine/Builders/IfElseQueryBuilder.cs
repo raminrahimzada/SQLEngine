@@ -1,6 +1,7 @@
 ﻿using System;
+using SQLEngine.Helpers;
 
-namespace SQLEngine
+namespace SQLEngine.Builders
 {
     public class IfElseQueryBuilder: AbstractQueryBuilder
     {

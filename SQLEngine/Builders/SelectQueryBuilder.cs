@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using SQLEngine.Helpers;
+using static SQLEngine.SQLKeywords;
 
-namespace SQLEngine
+namespace SQLEngine.Builders
 {
     public  class SelectQueryBuilder: AbstractQueryBuilder
     {
@@ -46,7 +48,7 @@ namespace SQLEngine
         {
             if (_selectors == null) _selectors = new List<string>();
 
-            _selectors.Add(selector + " AS " + alias);
+            _selectors.Add(selector + $" {AS} " + alias);
             return this;
         }
         public SelectQueryBuilder Where(Func<AbstractConditionBuilder, AbstractConditionBuilder> builder)
@@ -79,7 +81,7 @@ namespace SQLEngine
         public SelectQueryBuilder InnerJoin(string alias, string tableName, string leftColumn, string rightColumn)
         {
             if (_joinsList == null) _joinsList =new List<string>();
-            var line = $" INNER JOIN {tableName} AS {alias} ON {leftColumn} = {rightColumn}";
+            var line = $" {INNERJOIN} {tableName} AS {alias} ON {leftColumn} = {rightColumn}";
             _joinsList.Add(line);
             return this;
         }
@@ -122,14 +124,14 @@ namespace SQLEngine
             if (!hasSelector)
             {
                 //no selector then select *
-                Writer.Write(" * ");
+                Writer.Write("* ");
             }
             else
             {
                 var selectorsJoined = string.Join(" , ", _selectors);
                 Writer.Write(selectorsJoined);
             }
-            Writer.Write(" FROM ");
+            Writer.Write("FROM ");
             Writer.Write(_mainTableName);
 
             if (!string.IsNullOrEmpty(_mainTableAliasName))
@@ -161,9 +163,10 @@ namespace SQLEngine
             
             if (!string.IsNullOrEmpty(_having))
             {
-                Writer.Write(" HAVING ");
+                Writer.Write2(HAVING);
                 Writer.Write(_having);
             }
+
             return base.Build();
         }
     }

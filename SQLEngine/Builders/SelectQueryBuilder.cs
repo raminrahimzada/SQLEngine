@@ -7,12 +7,21 @@ namespace SQLEngine.Builders
 {
     public  class SelectQueryBuilder: AbstractQueryBuilder
     {
+        private sealed class JoinModel
+        {
+            public string TableName { get; set; }
+            public string Alias { get; set; }
+            public string JoinType { get; set; }
+            public string ReferenceTableColumnName { get; set; }
+            public string MainTableColumnName { get; set; }
+        }
+
         private string _mainTableName;
         private string _mainTableAliasName;
         private List<string> _selectors;
         private string _whereClause;
         private int? _topClause;
-        private List<string> _joinsList;
+        private List<JoinModel> _joinsList;
 
         private string _groupBy;
         private string _having;
@@ -77,87 +86,99 @@ namespace SQLEngine.Builders
             _topClause = count;
             return this;
         }
-
-        public SelectQueryBuilder InnerJoin(string alias, string tableName, string leftColumn, string rightColumn)
+        public SelectQueryBuilder InnerJoin(string alias, string tableName
+            , string referenceTableColumnName,string mainTableColumnName)
         {
-            if (_joinsList == null) _joinsList =new List<string>();
-            var line = $" {INNERJOIN} {tableName} AS {alias} ON {leftColumn} = {rightColumn}";
-            _joinsList.Add(line);
+            if (_joinsList == null) _joinsList =new List<JoinModel>();
+            _joinsList.Add(new JoinModel
+            {
+                TableName = tableName,
+                Alias = alias,
+                MainTableColumnName=mainTableColumnName,
+                ReferenceTableColumnName=referenceTableColumnName,
+                JoinType = INNERJOIN
+            });
             return this;
         }
        
-        public SelectQueryBuilder RightJoin(string alias, string tableName, string leftColumn, string rightColumn)
+        public SelectQueryBuilder RightJoin(string alias, string tableName,
+            string referenceTableColumnName,string mainTableColumnName)
         {
-            if (_joinsList == null) _joinsList = new List<string>();
-            var line = $" RIGHT JOIN {tableName} AS {alias} ON {leftColumn} = {rightColumn}";
-            if (!string.IsNullOrEmpty(_mainTableAliasName))
+            if (_joinsList == null) _joinsList = new List<JoinModel>();
+            _joinsList.Add(new JoinModel
             {
-                line = $" RIGHT JOIN {tableName} AS {alias} ON {alias}.{leftColumn} = {_mainTableAliasName}.{rightColumn}";
-            }
-            _joinsList.Add( line);
+                TableName = tableName,
+                Alias = alias,
+                MainTableColumnName = mainTableColumnName,
+                ReferenceTableColumnName = referenceTableColumnName,
+                JoinType = RIGHTJOIN,
+                
+            });
             return this;
         }
-        public SelectQueryBuilder LeftJoin(string alias, string tableName, string leftColumn, string rightColumn)
+        public SelectQueryBuilder LeftJoin(string alias, string tableName,
+            string referenceTableColumnName,string mainTableColumnName)
         {
-            if (_joinsList == null) _joinsList = new List<string>();
-            var line = $" LEFT JOIN {tableName} AS {alias} ON {alias}.{leftColumn} = {rightColumn}";
-            if (!string.IsNullOrEmpty(_mainTableAliasName))
+            if (_joinsList == null) _joinsList = new List<JoinModel>();
+            _joinsList.Add(new JoinModel
             {
-                line = $" LEFT JOIN {tableName} AS {alias} ON {alias}.{leftColumn} = {_mainTableAliasName}.{rightColumn}";
-            }
-            _joinsList.Add(line);
+                TableName = tableName,
+                Alias = alias,
+                MainTableColumnName = mainTableColumnName,
+                ReferenceTableColumnName = referenceTableColumnName,
+                JoinType = LEFTJOIN
+            });
             return this;
         }
        
         public override string Build()
         {
             ValidateAndThrow();
-            Writer.Write("SELECT ");
+            Writer.Write2(SELECT);
             if (_topClause != null)
             {
-                Writer.Write("TOP");
+                Writer.Write(TOP);
                 Writer.WriteWithScoped(_topClause.Value.ToString());
-                Writer.Write(" ");
+                Writer.Write2();
             }
 
             var hasSelector = _selectors != null && _selectors.Count > 0;
             if (!hasSelector)
             {
                 //no selector then select *
-                Writer.Write("* ");
+                Writer.Write2(WILCARD);
             }
             else
             {
-                var selectorsJoined = string.Join(" , ", _selectors);
-                Writer.Write(selectorsJoined);
+                Writer.WriteJoined(_selectors.ToArray());
             }
-            Writer.Write("FROM ");
+            Writer.Write2(FROM);
             Writer.Write(_mainTableName);
 
             if (!string.IsNullOrEmpty(_mainTableAliasName))
             {
-                Writer.Write(" AS ");
+                Writer.Write2(AS);
                 Writer.Write(_mainTableAliasName);
             }
 
             if (_joinsList != null)
             {
-                foreach (var joinQuery in _joinsList)
+                foreach (var joinModel in _joinsList)
                 {
-                    Writer.Write(" \n ");
-                    Writer.Write(joinQuery);
+                    Writer.WriteNewLine();
+                    Writer.Write(JoinQuery(joinModel));
                 }
             }
            
             if (!string.IsNullOrEmpty(_whereClause))
             {
-                Writer.Write(" WHERE ");
+                Writer.Write2(WHERE);
                 Writer.Write(_whereClause);
             }
 
             if (!string.IsNullOrEmpty(_groupBy))
             {
-                Writer.Write(" GROUP BY ");
+                Writer.Write2(GROUPBY);
                 Writer.Write(_groupBy);
             } 
             
@@ -168,6 +189,36 @@ namespace SQLEngine.Builders
             }
 
             return base.Build();
+        }
+
+        private string JoinQuery(JoinModel model)
+        {
+            if (!string.IsNullOrEmpty(_mainTableAliasName))
+            {
+                if (!string.IsNullOrEmpty(model.Alias))
+                {
+                    return
+                        $"{model.JoinType}\t{model.TableName} {AS} {model.Alias} {ON} {_mainTableAliasName}.{model.MainTableColumnName} = {model.Alias}.{model.ReferenceTableColumnName}";
+                }
+                else
+                {
+                    return
+                        $"{model.JoinType}\t{model.TableName} {ON} {_mainTableName}.{model.MainTableColumnName} = {model.TableName}.{model.ReferenceTableColumnName}";
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(model.Alias))
+                {
+                    return
+                        $"{model.JoinType}\t{model.TableName} {AS} {model.Alias} {ON} {_mainTableName}.{model.MainTableColumnName} = {model.Alias}.{model.ReferenceTableColumnName}";
+                }
+                else
+                {
+                    return
+                        $"{model.JoinType}\t{model.TableName} {ON} {_mainTableName}.{model.MainTableColumnName} = {model.TableName}.{model.ReferenceTableColumnName}";
+                }
+            }
         }
     }
 }

@@ -10,114 +10,24 @@ namespace SQLEngine
         [STAThread]
         public static void Main(string[] args)
         {
-            //IfElseQueryBuilder -  butov
-            if (!false)
             {
-                var t = new IfElseQueryBuilder();                
-                t.If(
-                        x => x.Less("@i", "@j")
-                    )
-                .Then("SET @max = @j;")
-                .ElseIf(
-                        x => x.Greater("@i", "@j")
-                    )
-                .Then("SET @max = @i;")
-                .ElseIf(x1 => ((AbstractConditionBuilder) x1).Exists(rr => rr.From("Users")))
-                .Else("SET @max = 444;");
-                Console.WriteLine(t.Build());
-                ;
-            }
-            //IfElseQueryBuilder hisse-hisse 
-            if (!true)
-            {
-                var t = new IfElseQueryBuilder();
-                t.If(x=>x.Less("@i","@j"));
-                t.Then("set @MAX = @i");
-                t.ElseIf(x => x.Greater("@i", "@j"));
-                t.Then("set @MAX = @j");
-                t.Else("SET @max = -1");
-                Console.WriteLine(t.Build());
-                ;
-            } 
-            if (!true)
-            {
-                var t = new InsertQueryBuilder();
-                t.Into("Users");
-                t.Values("'Ramin'", "'Rahimzada'", "1");
-                Console.WriteLine(t.Build());
-                ;
-            }
-            if (true)
-            {
-                var t = new InsertQueryBuilder();
-                t.Into("Users").Columns("NAME","SURNAME","AGE").Values("'Ramin'", "'Rahimzada'", "1");
-                Console.WriteLine(t.Build());
-                ;
-            }
-            if (!true)
-            {
-                var t = new InsertQueryBuilder();
-                t.Into("Users")
-                    .Value("NAME","'Ramin'")
-                    .Value("SURNAME", "'Rahimzada'")
-                    .Value("AGE", "1")
+                using (var t=new IfElseQueryBuilder())
+                {
+                    t.If(
+                            x => x.Less("@i", "@j")
+                        )
+                        .Then("SET @max = @j;")
+                        .ElseIf(
+                            x => x.Greater("@i", "@j")
+                        )
+                        .Then("SET @max = @i;")
+                        .ElseIf(x => x.Exists(rr => rr.From("Users")))
+                        .Then("SET @max = 888")
+                        .Else("SET @max = 444;");
+                    Console.WriteLine(t.Build());
                     ;
-                Console.WriteLine(t.Build());
-                ;
+                }
             }
-            if (true)
-            {
-                var t = new InsertQueryBuilder();
-                t.Into("Users")
-                    .Values(x=>x.From("Users_Backup"))
-                    ;
-                Console.WriteLine(t.Build());
-                ;
-            }
-            if (!true)
-            {
-                var t = new UpdateQueryBuilder();
-                t.Table("Users").
-                    Top(5).
-                    Value("NAME", "'Ramin'").
-                    Value("SURNAME", "'Rahimzada'").
-                    Value("AGE", "1")
-                    .Where(a=>a.Equal("ID","1"))
-                ;
-                Console.WriteLine(t.Build());
-                ;
-            }
-            if (!true)
-            {
-                var t = new UpdateQueryBuilder();
-                var dictUpdate = new Dictionary<string, string> {{"COUNT", "1"}};
-
-                t.Table("Users")
-                    .Top(5)
-                    .Values(dictUpdate)
-                    .Where(a => a.Equal("ID", "1"))
-                    ;
-                Console.WriteLine(t.Build());
-                ;
-            }
-            if (true)
-            {
-                var t = new SelectQueryBuilder();
-                t.From("U","Users")
-                    .Top(1)
-                    .Selector("Name")
-                    .Selector("Surname")
-                    .InnerJoin("P","Photos","UserId","Id")
-                    .LeftJoin("A","Attachments","UserId","Id")
-                    .RightJoin("S","Sales","UserId","Id")
-                    .Where(x =>
-                        x.Firstly(e => e.Greater("Age", "17"))
-                            .And(e => e.Equal("ID", "1"))
-                    )
-                    ;
-                ;
-            }
-            return;
             QueryBuilder q = new QueryBuilder();
             //deyishenler
             q.Declare("i", "INT");
@@ -212,10 +122,6 @@ namespace SQLEngine
             //bla bla bla
             q.End();
 
-            q.Else();
-            q.Begin();
-            //bla bla bla
-            q.End();
             //murekkeb if-ler
 
             // @i>1

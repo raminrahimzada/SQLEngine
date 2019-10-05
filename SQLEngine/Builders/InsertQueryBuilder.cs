@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SQLEngine.Helpers;
+using static SQLEngine.SQLKeywords;
 
 namespace SQLEngine.Builders
 {
@@ -65,6 +67,11 @@ namespace SQLEngine.Builders
             _valuesList = values;
             return this;
         }
+        public InsertQueryBuilder Values(IEnumerable<string> values)
+        {
+            _valuesList = values.ToArray();
+            return this;
+        }
         public InsertQueryBuilder Columns(params string[] columnNames)
         {
             _columnNames = columnNames;
@@ -80,45 +87,47 @@ namespace SQLEngine.Builders
         {
             ValidateAndThrow();
 
-            Writer.Write("INSERT INTO ");
+            Writer.Write(INSERT_INTO);
+            Writer.Write2(SPACE);
             Writer.Write(_tableName);
+            Writer.Write2(SPACE);
 
             if (_columnsAndValuesDictionary!=null)
             {
-                Writer.Write("(");
-                var columns = string.Join(" , ", _columnsAndValuesDictionary.Keys);
-                Writer.Write(columns);
-                Writer.Write(") VALUES (");
-                var values = string.Join(" , ", _columnsAndValuesDictionary.Keys.Select(key => _columnsAndValuesDictionary[key]));
-                Writer.Write(values);
-                Writer.Write(")");
+                Writer.BeginScope();
+                Writer.WriteJoined(_columnsAndValuesDictionary.Keys.ToArray());
+                Writer.EndScope();
+
+                Writer.Write(VALUES);
+                Writer.BeginScope();
+
+                Writer.WriteJoined(_columnsAndValuesDictionary.Keys.Select(key => _columnsAndValuesDictionary[key]).ToArray());
+                Writer.EndScope();
             }
             else if(!string.IsNullOrEmpty(_selection))//selection mode
             {
                 if (_columnNames!=null)
                 {
-                    Writer.Write(" (");
-                    var columns = string.Join(" , ", _columnNames);
-                    Writer.Write(columns);
-                    Writer.Write(")");
+                    Writer.BeginScope();
+                    Writer.WriteJoined(_columnNames);
+                    Writer.EndScope();
                 }
-                Writer.Write(" ");
+                Writer.Write(SPACE);
                 Writer.Write(_selection);
             }
             else //normal model 
             {
                 if (_columnNames != null)
                 {
-                    Writer.Write("(");
-                    var columns = string.Join(" , ", _columnNames);
-                    Writer.Write(columns);
-                    Writer.Write(")");
+                    Writer.BeginScope();
+                    Writer.WriteJoined(_columnNames);
+                    Writer.EndScope();
                 }
 
-                Writer.Write(" VALUES (");
-                var values = string.Join(" , ", _valuesList);
-                Writer.Write(values);
-                Writer.Write(")");
+                Writer.Write(VALUES);
+                Writer.BeginScope();
+                Writer.WriteJoined(_valuesList);
+                Writer.EndScope();
             }
             return base.Build();
         }

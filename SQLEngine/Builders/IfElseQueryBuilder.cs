@@ -1,5 +1,6 @@
 ﻿using System;
 using SQLEngine.Helpers;
+using static SQLEngine.SQLKeywords;
 
 namespace SQLEngine.Builders
 {
@@ -7,7 +8,7 @@ namespace SQLEngine.Builders
     {
         public IfElseQueryBuilder If(string condition)
         {
-            Writer.Write("IF");
+            Writer.Write(IF);
             Writer.WriteWithScoped(condition);
             return this;
         }
@@ -15,7 +16,7 @@ namespace SQLEngine.Builders
         {
             var condition = builder.Invoke(GetDefault<BinaryExpressionBuilder>()).Build();
 
-            Writer.Write("IF");
+            Writer.Write(IF);
             Writer.WriteWithScoped(condition);
             return this;
         }
@@ -23,31 +24,33 @@ namespace SQLEngine.Builders
         {
             var condition = builder.Invoke(GetDefault<ExistsConditionBuilder>()).Build();
 
-            Writer.Write("EXISTS");
+            Writer.Write(EXISTS);
             Writer.WriteWithScoped(condition);
 
             return this;
         }
         public IfElseQueryBuilder ElseIf(string condition)
         {
-            Writer.Write("ELSE IF");
+            Writer.Write(ELSEIF);
             Writer.WriteWithScoped(condition);
             return this;
         }
         public IfElseQueryBuilder ElseIf(Func<ExistsConditionBuilder, ExistsConditionBuilder> builder)
         {
             var condition = builder.Invoke(GetDefault<ExistsConditionBuilder>()).Build();
-            Writer.Write("ELSE IF ( EXISTS");
+            Writer.Write(ELSEIF);
+            Writer.BeginScope();
+            Writer.Write(EXISTS);
             Writer.WriteWithScoped(condition);
-            Writer.Write(" )");
-
+            Writer.EndScope();
+            Writer.WriteLine();
             return this;
         }
         public IfElseQueryBuilder ElseIf(Func<BinaryExpressionBuilder, BinaryExpressionBuilder> builder)
         {
             var condition = builder.Invoke(GetDefault<BinaryExpressionBuilder>()).Build();
 
-            Writer.Write("ELSE IF");
+            Writer.Write(ELSEIF);
             Writer.WriteWithScoped(condition);
             return this;
         }
@@ -67,7 +70,7 @@ namespace SQLEngine.Builders
 
         public IfElseQueryBuilder Else(string expression)
         {
-            Writer.WriteLine("ELSE");
+            Writer.WriteLine(ELSE);
             Writer.WriteWithBeginEnd(expression);
             return this;
         }

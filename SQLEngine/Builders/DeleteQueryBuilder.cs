@@ -1,5 +1,6 @@
 ﻿using System;
 using SQLEngine.Helpers;
+using static SQLEngine.SQLKeywords;
 
 namespace SQLEngine.Builders
 {
@@ -42,20 +43,20 @@ namespace SQLEngine.Builders
         public override string Build()
         {
             ValidateAndThrow();
-            Writer.Write("DELETE ");
+            Writer.Write2(DELETE);
             if (_topClause != null)
             {
-                Writer.Write("TOP");
+                Writer.Write(TOP);
                 Writer.WriteWithScoped(_topClause.Value.ToString());
-                Writer.Write(" ");
+                Writer.Write2();
             }
-            Writer.Write(" FROM ");
+            Writer.Write2(FROM);
 
             Writer.Write(_tableName);
 
             if (!string.IsNullOrEmpty(_whereCondition))
             {
-                Writer.Write(" WHERE ");
+                Writer.Write2(WHERE);
                 Writer.WriteWithScoped(_whereCondition);
             }
             return base.Build();

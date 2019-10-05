@@ -49,6 +49,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="QueryAssert.cs" />
+    <Compile Include="UnitTestDeclarationAndSet.cs" />
+    <Compile Include="UnitTestUpdate.cs" />
+    <Compile Include="UnitTestInsert.cs" />
     <Compile Include="UnitTestIfElse.cs" />
     <Compile Include="UnitTestSelect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

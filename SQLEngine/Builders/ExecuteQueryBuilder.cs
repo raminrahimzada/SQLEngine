@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SQLEngine.Helpers;
+using static SQLEngine.SQLKeywords;
 
 namespace SQLEngine.Builders
 {
-    public abstract class ExecuteQueryBuilder : AbstractQueryBuilder
+    public class ExecuteQueryBuilder : AbstractQueryBuilder
     {
         private string _procedureName;
 
@@ -56,7 +58,6 @@ namespace SQLEngine.Builders
             {
                 _parametersList = new List<string>();
             }
-
             _parametersList.Insert(index, parameterValue);
             return this;
         }
@@ -76,9 +77,9 @@ namespace SQLEngine.Builders
         public override string Build()
         {
             ValidateAndThrow();
-            Writer.Write("EXECUTE ");
+            Writer.Write2(EXECUTE);
             Writer.Write(_procedureName);
-            Writer.Write(" ");
+            Writer.Write2();
 
             if (_parametersDictionary != null)
             {
@@ -90,13 +91,14 @@ namespace SQLEngine.Builders
                         var key = keys[i];
                         var value = _parametersDictionary[key];
 
-                        Writer.WriteLine("@");
-                        Writer.WriteLine(key);
-                        Writer.WriteLine("=");
-                        Writer.WriteLine(value);
+                        Writer.Write(VARIABLE_HEADER);
+                        Writer.Write(key);
+                        Writer.Write(EQUALS);
+                        Writer.Write(value);
                         if (i != _parametersDictionary.Count - 1)
                         {
-                            Writer.WriteLine("\r,");
+                            Writer.WriteNewLine();
+                            Writer.WriteLine(COMMA);
                         }
                     }
                 }
@@ -106,8 +108,7 @@ namespace SQLEngine.Builders
             {
                 if (_parametersList.Count > 0)
                 {
-                    var parameters = string.Join(" , ", _parametersList);
-                    Writer.WriteLine(parameters);
+                    Writer.WriteLineJoined(_parametersList);
                 }
             }
 

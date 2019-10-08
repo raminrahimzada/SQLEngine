@@ -89,7 +89,7 @@ namespace SQLEngine.Builders
             _values = values;
             return this;
         }
-        public UpdateQueryBuilder Top(int count)
+        public UpdateQueryBuilder Top(int? count)
         {
             _topClause = count;
             return this;
@@ -122,10 +122,10 @@ namespace SQLEngine.Builders
             if (_topClause != null)
             {
                 Writer.Write(TOP);
-                Writer.WriteWithScoped(_topClause.Value.ToString());
+                Writer.WriteScoped(_topClause.Value.ToString());
                 Writer.Write2();
             }
-            Writer.Write(_tableName);
+            Writer.Write(I(_tableName));
             Writer.Write2(SET);
 
             if (_columnsAndValuesDictionary != null)
@@ -135,7 +135,7 @@ namespace SQLEngine.Builders
                 {
                     var key = keys[i];
                     var value = _columnsAndValuesDictionary[key];
-                    Writer.Write(key);
+                    Writer.Write(I(key));
                     Writer.Write2(EQUALS);
                     Writer.Write(value);
                     if (i != _columnsAndValuesDictionary.Count-1)
@@ -149,7 +149,7 @@ namespace SQLEngine.Builders
                 {
                     var column = _columnNames[i];
                     var value = _values[i];
-                    Writer.Write(column);
+                    Writer.Write(I(column));
                     Writer.Write2(EQUALS);
                     Writer.Write(value);
                     if (i != len-1)
@@ -160,7 +160,7 @@ namespace SQLEngine.Builders
             if (!string.IsNullOrEmpty(_whereCondition))
             {
                 Writer.Write2(WHERE);
-                Writer.WriteWithScoped(_whereCondition);
+                Writer.WriteScoped(_whereCondition);
             }
 
             return base.Build();

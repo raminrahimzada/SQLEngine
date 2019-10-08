@@ -89,13 +89,14 @@ namespace SQLEngine.Builders
 
             Writer.Write(INSERT_INTO);
             Writer.Write2(SPACE);
-            Writer.Write(_tableName);
+            Writer.Write(I(_tableName));
             Writer.Write2(SPACE);
 
+            var columnNamesSafe = _columnNames?.Select(I).ToArray();
             if (_columnsAndValuesDictionary!=null)
             {
                 Writer.BeginScope();
-                Writer.WriteJoined(_columnsAndValuesDictionary.Keys.ToArray());
+                Writer.WriteJoined(_columnsAndValuesDictionary.Keys.Select(I).ToArray());
                 Writer.EndScope();
 
                 Writer.Write(VALUES);
@@ -109,7 +110,7 @@ namespace SQLEngine.Builders
                 if (_columnNames!=null)
                 {
                     Writer.BeginScope();
-                    Writer.WriteJoined(_columnNames);
+                    Writer.WriteJoined(columnNamesSafe);
                     Writer.EndScope();
                 }
                 Writer.Write(SPACE);
@@ -120,7 +121,7 @@ namespace SQLEngine.Builders
                 if (_columnNames != null)
                 {
                     Writer.BeginScope();
-                    Writer.WriteJoined(_columnNames);
+                    Writer.WriteJoined(columnNamesSafe);
                     Writer.EndScope();
                 }
 

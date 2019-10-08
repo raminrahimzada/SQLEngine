@@ -1,4 +1,5 @@
 ﻿using SQLEngine.Helpers;
+using static SQLEngine.SQLKeywords;
 
 namespace SQLEngine.Builders
 {
@@ -38,18 +39,18 @@ namespace SQLEngine.Builders
         }
         public override string Build()
         {
-            Writer.Write(SQLKeywords.DECLARE);
+            Writer.Write(DECLARE);
             Writer.Write2();
-            Writer.Write(SQLKeywords.VARIABLE_HEADER);
+            Writer.Write(VARIABLE_HEADER);
             Writer.Write(_variableName);
             Writer.Write2(_type);
             if (!string.IsNullOrEmpty(_defaultValue))
             {
-                Writer.Write2(SQLKeywords.EQUALS);
+                Writer.Write2(EQUALS);
                 Writer.Write(_defaultValue);
             }
 
-            Writer.Write(SQLKeywords.SEMICOLON);
+            Writer.Write(SEMICOLON);
             return base.Build();
         }
     }

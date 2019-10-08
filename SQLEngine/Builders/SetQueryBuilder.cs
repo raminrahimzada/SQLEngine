@@ -23,6 +23,7 @@ namespace SQLEngine.Builders
             _variableName = variableName;
             return this;
         }
+
         public SetQueryBuilder To(string value)
         {
             _value = value;

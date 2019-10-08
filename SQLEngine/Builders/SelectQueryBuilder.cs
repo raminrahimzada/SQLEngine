@@ -138,7 +138,7 @@ namespace SQLEngine.Builders
             if (_topClause != null)
             {
                 Writer.Write(TOP);
-                Writer.WriteWithScoped(_topClause.Value.ToString());
+                Writer.WriteScoped(_topClause.Value.ToString());
                 Writer.Write2();
             }
 
@@ -153,7 +153,7 @@ namespace SQLEngine.Builders
                 Writer.WriteJoined(_selectors.ToArray());
             }
             Writer.Write2(FROM);
-            Writer.Write(_mainTableName);
+            Writer.Write(I(_mainTableName));
 
             if (!string.IsNullOrEmpty(_mainTableAliasName))
             {
@@ -198,12 +198,12 @@ namespace SQLEngine.Builders
                 if (!string.IsNullOrEmpty(model.Alias))
                 {
                     return
-                        $"{model.JoinType}\t{model.TableName} {AS} {model.Alias} {ON} {_mainTableAliasName}.{model.MainTableColumnName} = {model.Alias}.{model.ReferenceTableColumnName}";
+                        $"{model.JoinType}\t{I(model.TableName)} {AS} {model.Alias} {ON} {_mainTableAliasName}.{model.MainTableColumnName} = {model.Alias}.{model.ReferenceTableColumnName}";
                 }
                 else
                 {
                     return
-                        $"{model.JoinType}\t{model.TableName} {ON} {_mainTableName}.{model.MainTableColumnName} = {model.TableName}.{model.ReferenceTableColumnName}";
+                        $"{model.JoinType}\t{I(model.TableName)} {ON} {I(_mainTableName)}.{model.MainTableColumnName} = {I(model.TableName)}.{model.ReferenceTableColumnName}";
                 }
             }
             else
@@ -211,12 +211,12 @@ namespace SQLEngine.Builders
                 if (!string.IsNullOrEmpty(model.Alias))
                 {
                     return
-                        $"{model.JoinType}\t{model.TableName} {AS} {model.Alias} {ON} {_mainTableName}.{model.MainTableColumnName} = {model.Alias}.{model.ReferenceTableColumnName}";
+                        $"{model.JoinType}\t{I(model.TableName)} {AS} {model.Alias} {ON} {I(_mainTableName)}.{model.MainTableColumnName} = {model.Alias}.{model.ReferenceTableColumnName}";
                 }
                 else
                 {
                     return
-                        $"{model.JoinType}\t{model.TableName} {ON} {_mainTableName}.{model.MainTableColumnName} = {model.TableName}.{model.ReferenceTableColumnName}";
+                        $"{model.JoinType}\t{I(model.TableName)} {ON} {_mainTableName}.{model.MainTableColumnName} = {I(model.TableName)}.{model.ReferenceTableColumnName}";
                 }
             }
         }

@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="QueryAssert.cs" />
+    <Compile Include="UnitTestCreate.cs" />
     <Compile Include="UnitTestDeclarationAndSet.cs" />
     <Compile Include="UnitTestUpdate.cs" />
     <Compile Include="UnitTestInsert.cs" />

@@ -47,6 +47,9 @@
     <Compile Include="AbstractConditionBuilder.cs" />
     <Compile Include="AbstractQueryBuilder.cs" />
     <Compile Include="Builders\BinaryExpressionBuilder.cs" />
+    <Compile Include="Builders\ColumnQueryBuilder.cs" />
+    <Compile Include="Builders\ColumnsQueryBuilder.cs" />
+    <Compile Include="Builders\CreateTableQueryBuilder.cs" />
     <Compile Include="Builders\DeclarationQueryBuilder.cs" />
     <Compile Include="Builders\DeleteQueryBuilder.cs" />
     <Compile Include="Builders\ExecuteQueryBuilder.cs" />
@@ -59,10 +62,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryBuilder.cs" />
-    <Compile Include="Helpers\QueryBuilderExtensions.cs" />
     <Compile Include="Builders\SelectQueryBuilder.cs" />
     <Compile Include="Builders\UpdateQueryBuilder.cs" />
-    <Compile Include="SQLExtensions.cs" />
+    <Compile Include="Helpers\SQLExtensions.cs" />
     <Compile Include="SQLKeywords.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,5 +1,6 @@
 ﻿using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Linq;
 using static SQLEngine.SQLKeywords;
 namespace SQLEngine.Helpers
 {
@@ -13,13 +14,25 @@ namespace SQLEngine.Helpers
         {
             writer.Write(END_SCOPE);
         }
-        public static void WriteWithScoped(this IndentedTextWriter writer, string expression)
+        public static void WriteLineComment(this IndentedTextWriter writer, string comment)
         {
-            writer.Write(BEGIN_SCOPE);
-            writer.Write(expression);
-            writer.Write(END_SCOPE);
+            writer.WriteComment(comment);
+            writer.WriteLine();
         }
-        public static void WriteWithScoped(this IndentedTextWriter writer, string[] expressionArray)
+        public static void WriteComment(this IndentedTextWriter writer, string comment)
+        {
+            writer.Write("/*");
+            writer.Write(comment);
+            writer.Write("*/");
+        }
+        public static void WriteScoped(this IndentedTextWriter writer, string expression,
+            string beginScope=BEGIN_SCOPE,string endScope=END_SCOPE)
+        {
+            writer.Write(beginScope);
+            writer.Write(expression);
+            writer.Write(endScope);
+        }
+        public static void WriteScoped(this IndentedTextWriter writer, string[] expressionArray)
         {
             var expression = string.Join(" , ", expressionArray);
             writer.Write(BEGIN_SCOPE);
@@ -31,7 +44,7 @@ namespace SQLEngine.Helpers
             var expression = string.Join(" , ", expressionArray);
             writer.Write(expression);
         }
-
+        
         public static void WriteNewLine(this IndentedTextWriter writer)
         {
             writer.Write("\r");
@@ -44,7 +57,10 @@ namespace SQLEngine.Helpers
         }
         public static void Write2(this IndentedTextWriter writer, string expression="")
         {
-            writer.Write($" {expression} ");
+            writer.WriteScoped(expression, SPACE, SPACE);
+            //writer.Write(SPACE);
+            //writer.Write(expression);
+            //writer.Write(SPACE);
         }
         public static void WriteWithBeginEnd(this IndentedTextWriter writer, string expression)
         {

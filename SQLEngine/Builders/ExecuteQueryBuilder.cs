@@ -78,7 +78,7 @@ namespace SQLEngine.Builders
         {
             ValidateAndThrow();
             Writer.Write2(EXECUTE);
-            Writer.Write(_procedureName);
+            Writer.Write(I(_procedureName));
             Writer.Write2();
 
             if (_parametersDictionary != null)

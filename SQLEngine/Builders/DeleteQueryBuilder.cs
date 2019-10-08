@@ -14,7 +14,7 @@ namespace SQLEngine.Builders
             _tableName = tableName;
             return this;
         }
-        public DeleteQueryBuilder Top(int count)
+        public DeleteQueryBuilder Top(int? count)
         {
             _topClause = count;
             return this;
@@ -47,17 +47,17 @@ namespace SQLEngine.Builders
             if (_topClause != null)
             {
                 Writer.Write(TOP);
-                Writer.WriteWithScoped(_topClause.Value.ToString());
+                Writer.WriteScoped(_topClause.Value.ToString());
                 Writer.Write2();
             }
             Writer.Write2(FROM);
 
-            Writer.Write(_tableName);
+            Writer.Write(I(_tableName));
 
             if (!string.IsNullOrEmpty(_whereCondition))
             {
                 Writer.Write2(WHERE);
-                Writer.WriteWithScoped(_whereCondition);
+                Writer.WriteScoped(_whereCondition);
             }
             return base.Build();
         }

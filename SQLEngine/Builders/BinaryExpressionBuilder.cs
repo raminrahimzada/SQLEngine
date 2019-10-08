@@ -77,7 +77,7 @@ namespace SQLEngine.Builders
             }
             Writer.Write(expression);
             Writer.Write2(IN);
-            Writer.WriteWithScoped(values);
+            Writer.WriteScoped(values);
             return this;
         }
 
@@ -91,7 +91,7 @@ namespace SQLEngine.Builders
 
             Writer.Write(expression);
             Writer.Write2(NOTIN);
-            Writer.WriteWithScoped(values);
+            Writer.WriteScoped(values);
             return this;
         }
     }

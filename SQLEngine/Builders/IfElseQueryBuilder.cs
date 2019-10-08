@@ -9,7 +9,7 @@ namespace SQLEngine.Builders
         public IfElseQueryBuilder If(string condition)
         {
             Writer.Write(IF);
-            Writer.WriteWithScoped(condition);
+            Writer.WriteScoped(condition);
             return this;
         }
         public IfElseQueryBuilder If(Func<BinaryExpressionBuilder, BinaryExpressionBuilder> builder)
@@ -17,7 +17,7 @@ namespace SQLEngine.Builders
             var condition = builder.Invoke(GetDefault<BinaryExpressionBuilder>()).Build();
 
             Writer.Write(IF);
-            Writer.WriteWithScoped(condition);
+            Writer.WriteScoped(condition);
             return this;
         }
         public IfElseQueryBuilder If(Func<ExistsConditionBuilder, ExistsConditionBuilder> builder)
@@ -25,14 +25,14 @@ namespace SQLEngine.Builders
             var condition = builder.Invoke(GetDefault<ExistsConditionBuilder>()).Build();
 
             Writer.Write(EXISTS);
-            Writer.WriteWithScoped(condition);
+            Writer.WriteScoped(condition);
 
             return this;
         }
         public IfElseQueryBuilder ElseIf(string condition)
         {
             Writer.Write(ELSEIF);
-            Writer.WriteWithScoped(condition);
+            Writer.WriteScoped(condition);
             return this;
         }
         public IfElseQueryBuilder ElseIf(Func<ExistsConditionBuilder, ExistsConditionBuilder> builder)
@@ -41,7 +41,7 @@ namespace SQLEngine.Builders
             Writer.Write(ELSEIF);
             Writer.BeginScope();
             Writer.Write(EXISTS);
-            Writer.WriteWithScoped(condition);
+            Writer.WriteScoped(condition);
             Writer.EndScope();
             Writer.WriteLine();
             return this;
@@ -51,7 +51,7 @@ namespace SQLEngine.Builders
             var condition = builder.Invoke(GetDefault<BinaryExpressionBuilder>()).Build();
 
             Writer.Write(ELSEIF);
-            Writer.WriteWithScoped(condition);
+            Writer.WriteScoped(condition);
             return this;
         }
 
@@ -59,6 +59,12 @@ namespace SQLEngine.Builders
         {
             Writer.WriteLine();
             Writer.WriteWithBeginEnd(rawQuery);
+            return this;
+        }
+        public IfElseQueryBuilder Then(Func<QueryBuilder, QueryBuilder> builder)
+        {
+            Writer.WriteLine();
+            Writer.WriteWithBeginEnd(builder.Invoke(GetDefault<QueryBuilder>()).Build());
             return this;
         }
         public IfElseQueryBuilder Then(Func<AbstractQueryBuilder, AbstractQueryBuilder> builder)

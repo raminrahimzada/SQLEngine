@@ -1,18 +1,23 @@
 ﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SQLEngine.Builders;
+using SQLEngine.SqlServer;
 
 namespace SQLEngine.Tests
 {
     [TestClass]
     public class UnitTestCreate
     {
+        [TestInitialize]
+        public void Init()
+        {
+            QueryBuilderFactory.Setup<SqlServerQueryBuilder>();
+        }
         [TestMethod]
         public void TestMethod1()
         {
-            using (var t=new CreateTableQueryBuilder())
+            using (var t=QueryBuilderFactory.New._create)
             {
-                t.Name("Employees")
+                t.Table("Employees")
                     .Columns(c => new[]
                     {
                         c.Long("ID").Identity(),

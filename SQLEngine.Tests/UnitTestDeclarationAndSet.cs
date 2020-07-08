@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SQLEngine.Builders;
 
 namespace SQLEngine.Tests
 {
@@ -9,9 +8,10 @@ namespace SQLEngine.Tests
         [TestMethod]
         public void TestMethod1()
         {
-            using (var t = new DeclarationQueryBuilder())
+            using (var t = QueryBuilderFactory.New)
             {
-                t.Declare("i").OfType("INT").Default("1");
+                t.Declare("i", "INT", 1.ToSQL());
+                
                 const string query = @"
 DECLARE  @i INT  = 1;
 ";
@@ -22,9 +22,9 @@ DECLARE  @i INT  = 1;
         [TestMethod]
         public void TestMethod2()
         {
-            using (var t = new DeclarationQueryBuilder())
+            using (var t = QueryBuilderFactory.New)
             {
-                t.Declare("i").OfType("INT");
+                t.Declare("i","INT");
                 const string query = @"
 DECLARE  @i INT;
 ";
@@ -35,9 +35,9 @@ DECLARE  @i INT;
         [TestMethod]
         public void TestMethod3()
         {
-            using (var t = new SetQueryBuilder())
+            using (var t = QueryBuilderFactory.New)
             {
-                t.Set("x").To("47");
+                t.Set("x", 47.ToSQL());
                 const string query = @"
 SET @x = 47;
 ";

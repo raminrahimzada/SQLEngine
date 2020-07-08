@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLEngine", "SQLEngine\SQLE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLEngine.Tests", "SQLEngine.Tests\SQLEngine.Tests.csproj", "{8069C256-4569-4A6A-BC67-E3FD3B980B07}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLEngine.SqlServer", "SQLEngine.SqlServer\SQLEngine.SqlServer.csproj", "{66A81F8F-43E3-47FB-A947-78002A4D1B72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{8069C256-4569-4A6A-BC67-E3FD3B980B07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8069C256-4569-4A6A-BC67-E3FD3B980B07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8069C256-4569-4A6A-BC67-E3FD3B980B07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66A81F8F-43E3-47FB-A947-78002A4D1B72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66A81F8F-43E3-47FB-A947-78002A4D1B72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66A81F8F-43E3-47FB-A947-78002A4D1B72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66A81F8F-43E3-47FB-A947-78002A4D1B72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal class ColumnsCreateQueryBuilder : SqlServerAbstractQueryBuilder, IColumnsCreateQueryBuilder
+    internal class ColumnsCreateQueryBuilder : SqlServerQueryBuilder, IColumnsCreateQueryBuilder
     {
         public byte DefaultPrecision => 18;
         public byte DefaultScale => 4;

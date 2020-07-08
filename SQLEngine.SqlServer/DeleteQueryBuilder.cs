@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal sealed class DeleteQueryBuilder : SqlServerAbstractQueryBuilder,
+    internal sealed class DeleteQueryBuilder : SqlServerQueryBuilder,
         IDeleteExceptTableNameQueryBuilder,
         IDeleteExceptTopQueryBuilder,
         IDeleteExceptWhereQueryBuilder

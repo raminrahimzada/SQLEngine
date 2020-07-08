@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal class DropQueryBuilder : SqlServerAbstractQueryBuilder, IDropQueryBuilder, IDropTableQueryBuilder
+    internal class DropQueryBuilder : SqlServerQueryBuilder, IDropQueryBuilder, IDropTableQueryBuilder
     {
         public IDropTableNoNameQueryBuilder Table(string tableName)
         {

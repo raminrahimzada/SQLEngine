@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer
 {
-    internal class AlterQueryBuilder : SqlServerAbstractQueryBuilder
+    internal class AlterQueryBuilder : SqlServerQueryBuilder
     {
         private string _tableName;
         public AlterQueryBuilder(string tableName)
@@ -22,7 +22,7 @@ namespace SQLEngine.SqlServer
         }
     }
 
-    //public class AlterQueryBuilder : SqlServerAbstractQueryBuilder
+    //public class AlterQueryBuilder : SqlServerQueryBuilder
     //{
     //    public AlterTableQueryBuilder Table { get; } = GetDefault<AlterTableQueryBuilder>();
     //    public AlterViewQueryBuilder View { get; } = GetDefault<AlterViewQueryBuilder>();

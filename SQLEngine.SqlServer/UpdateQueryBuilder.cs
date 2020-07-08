@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer
 {
-    internal class UpdateQueryBuilder : SqlServerAbstractQueryBuilder, IUpdateNoTopQueryBuilder, IUpdateNoTableAndTopQueryBuilder, IUpdateNoTableAndValuesAndWhereQueryBuilder, IUpdateQueryBuilder, IUpdateNoTableSingleValueQueryBuilder, IUpdateNoTableQueryBuilder, IUpdateNoTableAndValuesQueryBuilder
+    internal class UpdateQueryBuilder : SqlServerQueryBuilder, IUpdateNoTopQueryBuilder, IUpdateNoTableAndTopQueryBuilder, IUpdateNoTableAndValuesAndWhereQueryBuilder, IUpdateQueryBuilder, IUpdateNoTableSingleValueQueryBuilder, IUpdateNoTableQueryBuilder, IUpdateNoTableAndValuesQueryBuilder
     {
         private string _tableName;
         private Dictionary<string, string> _columnsAndValuesDictionary;

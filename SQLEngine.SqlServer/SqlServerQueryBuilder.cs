@@ -303,6 +303,12 @@ namespace SQLEngine.SqlServer
             Writer.Write(SQLKeywords.END_SCOPE);
             Writer.WriteLine();
         }
+
+        public string I(string s)
+        {
+            //TODO
+            return s;
+        }
     }
 }
 #pragma warning restore IDE1006 // Naming Styles

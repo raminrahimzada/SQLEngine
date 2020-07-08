@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal class DropFunctionQueryBuilder : SqlServerAbstractQueryBuilder, IDropFunctionQueryBuilder
+    internal class DropFunctionQueryBuilder : SqlServerQueryBuilder, IDropFunctionQueryBuilder
     {
         private string _functionName;
         public IDropFunctionQueryBuilder FunctionName(string funcName)

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer
 {
-    internal class InsertQueryBuilder : SqlServerAbstractQueryBuilder, IInsertNoIntoWithColumns, IInsertNoValuesQueryBuilder, IInsertNeedValueQueryBuilder,IInsertQueryBuilder, IInsertNoIntoQueryBuilder
+    internal class InsertQueryBuilder : SqlServerQueryBuilder, IInsertNoIntoWithColumns, IInsertNoValuesQueryBuilder, IInsertNeedValueQueryBuilder,IInsertQueryBuilder, IInsertNoIntoQueryBuilder
     {
         private string _tableName;
         private Dictionary<string, string> _columnsAndValuesDictionary;

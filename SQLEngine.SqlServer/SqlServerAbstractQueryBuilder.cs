@@ -6,25 +6,25 @@ using System.Text;
 
 namespace SQLEngine.SqlServer
 {
-    public abstract class SqlServerAbstractQueryBuilder : AbstractQueryBuilder
-    {
+    //public class SqlServerQueryBuilder : AbstractQueryBuilder
+    //{
+        
+    //    protected static void ValidateConstraintName(ref string constraintName)
+    //    {
+    //        if (string.IsNullOrEmpty(constraintName)) constraintName = Guid.NewGuid().ToString().RemoveString("-");
+    //        if (constraintName.Length >= 120)
+    //        {
+    //            constraintName = constraintName.RemoveString("[", "]", " ", ".dbo.");
+    //            if (constraintName.Length >= 120)
+    //            {
+    //                constraintName = constraintName.Substring(0, 120);
+    //            }
+    //        }
+    //    }
 
-        protected static void ValidateConstraintName(ref string constraintName)
-        {
-            if (string.IsNullOrEmpty(constraintName)) constraintName = Guid.NewGuid().ToString().RemoveString("-");
-            if (constraintName.Length >= 120)
-            {
-                constraintName = constraintName.RemoveString("[", "]", " ", ".dbo.");
-                if (constraintName.Length >= 120)
-                {
-                    constraintName = constraintName.Substring(0, 120);
-                }
-            }
-        }
-
-        public string I(string s)
-        {
-            return s;
-        }
-    }
+    //    public string I(string s)
+    //    {
+    //        return s;
+    //    }
+    //}
 }

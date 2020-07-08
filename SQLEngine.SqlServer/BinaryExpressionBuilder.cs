@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal class BinaryExpressionBuilder : SqlServerAbstractQueryBuilder, IBinaryExpressionNopBuilder, IBinaryExpressionBuilder
+    internal class BinaryExpressionBuilder : SqlServerQueryBuilder, IBinaryExpressionNopBuilder, IBinaryExpressionBuilder
     {
         public IBinaryExpressionNopBuilder Add(string left, string right)
         {

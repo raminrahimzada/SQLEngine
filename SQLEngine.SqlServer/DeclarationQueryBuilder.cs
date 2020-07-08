@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal sealed class DeclarationQueryBuilder : SqlServerAbstractQueryBuilder,
+    internal sealed class DeclarationQueryBuilder : SqlServerQueryBuilder,
         IExceptVariableNameDeclarationQueryBuilder,
         IExceptVariableTypeNameDeclarationQueryBuilder,
         IExceptDefaultValueNameDeclarationQueryBuilder,

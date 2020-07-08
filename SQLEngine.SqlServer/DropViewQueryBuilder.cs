@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal class DropViewQueryBuilder : SqlServerAbstractQueryBuilder, IDropViewQueryBuilder
+    internal class DropViewQueryBuilder : SqlServerQueryBuilder, IDropViewQueryBuilder
     {
         private string _viewName;
         public IDropViewQueryBuilder View(string viewName)

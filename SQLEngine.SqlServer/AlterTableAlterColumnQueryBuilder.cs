@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal class AlterTableAlterColumnQueryBuilder : SqlServerAbstractQueryBuilder
+    internal class AlterTableAlterColumnQueryBuilder : SqlServerQueryBuilder
     {
         internal string SchemaName;
         internal string TableName;

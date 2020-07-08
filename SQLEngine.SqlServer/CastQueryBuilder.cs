@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal sealed class CastQueryBuilder : SqlServerAbstractQueryBuilder, ICastExpectCastQueryBuilder, ICastExpectCastAndToQueryBuilder
+    internal sealed class CastQueryBuilder : SqlServerQueryBuilder, ICastExpectCastQueryBuilder, ICastExpectCastAndToQueryBuilder
     {
         private string _expression;
         private string _type;

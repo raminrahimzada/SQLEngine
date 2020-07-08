@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal class SetQueryBuilder : SqlServerAbstractQueryBuilder, ISetNeedSetQueryBuilder, ISetNeedToQueryBuilder, ISetNoSetNoToQueryBuilder
+    internal class SetQueryBuilder : SqlServerQueryBuilder, ISetNeedSetQueryBuilder, ISetNeedToQueryBuilder, ISetNoSetNoToQueryBuilder
     {
         private string _variable;
         private string _value;

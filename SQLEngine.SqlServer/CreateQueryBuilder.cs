@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal class CreateQueryBuilder :SqlServerAbstractQueryBuilder, ICreateQueryBuilder
+    internal class CreateQueryBuilder :SqlServerQueryBuilder, ICreateQueryBuilder
     {
         public ICreateTableQueryBuilder Table(string tableName)
         {

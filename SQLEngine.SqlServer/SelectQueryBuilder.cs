@@ -120,7 +120,7 @@ namespace SQLEngine.SqlServer
 
         public ISelectWithSelectorQueryBuilder Selector(Func<IConditionFilterQueryHelper, string> helperBuilder)
         {
-            using (var builder = QueryBuilderFactory.New)
+            using (var builder = Query.New)
             {
                 return Selector(helperBuilder(builder.Helper));
             }
@@ -129,7 +129,7 @@ namespace SQLEngine.SqlServer
         public ISelectWithSelectorQueryBuilder Selector(Func<IConditionFilterQueryHelper, string> helperBuilder, string alias)
         {
             MutateAliasName(ref alias);
-            using (var builder = QueryBuilderFactory.New)
+            using (var builder = Query.New)
             {
                 return Selector(helperBuilder(builder.Helper), alias);
             }
@@ -157,21 +157,21 @@ namespace SQLEngine.SqlServer
         //}
         public ISelectWithoutWhereQueryBuilder WhereEquals(string left, string right)
         {
-            using (var b = QueryBuilderFactory.New)
+            using (var b = Query.New)
                 _whereClause = b.Helper.Equal(left, right);
             return this;
         }
 
         public ISelectWithoutWhereQueryBuilder WhereIDIs(long id)
         {
-            using (var b = QueryBuilderFactory.New)
+            using (var b = Query.New)
                 _whereClause = b.Helper.Equal("ID", id.ToSQL());
             return this;
         }
 
         public ISelectWithoutWhereQueryBuilder WhereIDIs(string sqlVariable)
         {
-            using (var b = QueryBuilderFactory.New)
+            using (var b = Query.New)
                 _whereClause = b.Helper.Equal("ID", sqlVariable);
             return this;
         }
@@ -183,7 +183,7 @@ namespace SQLEngine.SqlServer
 
         public ISelectWithoutWhereQueryBuilder WhereAnd(params string[] filters)
         {
-            using (var b = QueryBuilderFactory.New)
+            using (var b = Query.New)
             {
                 _whereClause = b.Helper.And(filters);
             }

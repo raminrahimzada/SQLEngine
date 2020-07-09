@@ -124,7 +124,7 @@
     <Compile Include="IUpdateNoTopQueryBuilder.cs" />
     <Compile Include="IUpdateQueryBuilder.cs" />
     <Compile Include="IndentedTextWriterExtensions.cs" />
-    <Compile Include="QueryBuilderFactory.cs" />
+    <Compile Include="Query.cs" />
     <Compile Include="SQLExtensions.cs" />
     <Compile Include="SQLKeywords.cs" />
     <Compile Include="ITable.cs" />

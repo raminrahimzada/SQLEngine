@@ -47,7 +47,7 @@ namespace SQLEngine.SqlServer
 
         public IAbstractCreateFunctionQueryBuilder Body(Action<IQueryBuilder> body)
         {
-            using (var builder= QueryBuilderFactory.New)
+            using (var builder= Query.New)
             {
                 body(builder);
                 this._body = builder.Build();

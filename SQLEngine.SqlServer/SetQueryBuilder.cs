@@ -33,6 +33,7 @@
             Writer.Write(SQLKeywords.SET);
             Writer.Write2();
             Writer.Write(_variable);
+            Writer.Write(SQLKeywords.SPACE);
             Writer.Write2(SQLKeywords.EQUALS);
             Writer.Write(_value);
             Writer.Write(SQLKeywords.SEMICOLON);

@@ -20,7 +20,7 @@ namespace SQLEngine.Tests
 
             var arr1 = FormatQuery(query1);
             var arr2 = FormatQuery(query2);
-            CollectionAssert.AreEqual(arr1, arr2);
+            Assert.AreEqual(arr1.JoinWith(""), arr2.JoinWith(""));
         }
     }
 }

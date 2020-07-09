@@ -1,84 +1,65 @@
-﻿//using System.Linq;
-//using Microsoft.VisualStudio.TestTools.UnitTesting;
-//using SQLEngine.Builders;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SQLEngine;
+using SQLEngine.SqlServer;
 
-//namespace SQLEngine.Tests
-//{
-//    [TestClass]
-//    public class UnitTestInsert
-//    {
-//        [TestMethod]
-//        public void TestMethod1()
-//        {
-//            using (var t = new InsertQueryBuilder())
-//            {
-//                var data = new object[]
-//                {
-//                    "Ramin", 
-//                    "Rahimzada", 
-//                    1
-//                }
-//                .Select(o => o.ToSQL());
-//                //
-//                t.Into("Users");
-//                t.Values(data);
-//                const string query = "INSERT INTO Users VALUES (N'Ramin' , N'Rahimzada' , 1)";
-//                QueryAssert.AreEqual(t.Build(),query);
-//            }
-//        }
-//        [TestMethod]
-//        public void TestMethod2()
-//        {
-//            using (var t = new InsertQueryBuilder())
-//            {
-//                var data = new object[]
-//                {
-//                    "Ramin", 
-//                    "Rahimzada", 
-//                    1
-//                }
-//                .Select(o => o.ToSQL());
-//                //
-//                var cols = new[] {"NAME", "SURNAME", "AGE"};
-//                //
-//                t.Into("Users").Columns(cols).Values(data);
-//                const string query = "INSERT INTO Users(NAME , SURNAME , AGE) VALUES (N'Ramin' , N'Rahimzada' , 1)";
-//                QueryAssert.AreEqual(t.Build(),query);
-//            }
-//        }
-//        [TestMethod]
-//        public void TestMethod3()
-//        {
-//            using (var t = new InsertQueryBuilder())
-//            {
-//                //person info
-//                var p = new
-//                {
-//                    Name = "Ramin",
-//                    Surname = "Rahimzada",
-//                    Age = 1
-//                };
-//                //query
-//                t.Into("Users")
-//                    .Value("NAME",p.Name.ToSQL() )
-//                    .Value("SURNAME", p.Surname.ToSQL())
-//                    .Value("AGE", p.Age.ToSQL())
-//                    ;
-//                const string query = "INSERT INTO Users(NAME , SURNAME , AGE) VALUES (N'Ramin' , N'Rahimzada' , 1)";
-//                QueryAssert.AreEqual(t.Build(), query);
-//            }
-//        }
-//        [TestMethod]
-//        public void TestMethod4()
-//        {
-//            using (var t = new InsertQueryBuilder())
-//            {
-//                t.Into("Users")
-//                    .Values(x => x.From("Users_Backup"))
-//                    ;
-//                const string query = "INSERT INTO Users  SELECT  *  FROM Users_Backup";
-//                QueryAssert.AreEqual(t.Build(), query);
-//            }
-//        }
-//    }
-//}
+namespace SQLEngine.Tests
+{
+    [TestClass]
+    public class UnitTestInsert
+    {
+        [TestMethod]
+        public void TestMethod_Insert_By_Value()
+        {
+            using (var q = Query.New)
+            {
+                q.Insert(i => i.Into("Users")
+                    .Value("Name", "Ramin".ToSQL())
+                    .Value("Surname", "Rahimzada".ToSQL())
+                    .Value("Age", 26.ToSQL())
+                );
+                const string query = "INSERT INTO Users (Name,Surname,Age) VALUES (N'Ramin' , N'Rahimzada' , 26)";
+                
+                QueryAssert.AreEqual(q.ToString(), query);
+            }
+        }
+
+        [TestMethod]
+        public void TestMethod_Insert_By_Dictionary()
+        {
+            using (var q = Query.New)
+            {
+                var dict = new Dictionary<string, string>
+                {
+                    {"Name", "Ramin".ToSQL()},
+                    {"Surname", "Rahimzada".ToSQL()},
+                    {"Age", 26.ToSQL()},
+                };
+                q.Insert(i => i
+                    .Into("Users")
+                    .Values(dict)
+                );
+
+                const string query = "INSERT INTO Users(Name , Surname , Age) VALUES (N'Ramin' , N'Rahimzada' , 26)";
+                QueryAssert.AreEqual(q.Build(), query);
+            }
+        }
+       
+        [TestMethod]
+        public void TestMethod_Insert_By_Select()
+        {
+            using (var q = Query.New)
+            {
+                q.Insert(insert =>
+                    insert.Into("Users")
+                        .Values(
+                            select => select.From("Users_Backup")
+                        )
+                );
+                const string query = "INSERT INTO Users  SELECT  *  FROM Users_Backup";
+                QueryAssert.AreEqual(q.Build(), query);
+            }
+        }
+    }
+}

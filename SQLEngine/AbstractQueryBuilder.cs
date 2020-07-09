@@ -46,6 +46,16 @@ namespace SQLEngine
             return _stringBuilder.ToString();
         }
 
+        public override string ToString()
+        {
+            return Build();
+        }
+
+        public static implicit operator string(AbstractQueryBuilder queryBuilder)
+        {
+            return queryBuilder.ToSQL();
+        }
+
         public virtual void Dispose()
         {
             Writer?.Dispose();

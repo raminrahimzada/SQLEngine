@@ -2,7 +2,7 @@
 
 namespace SQLEngine
 {
-    public static class QueryBuilderFactory
+    public static class Query
     {
         private static Func<IQueryBuilder> _builderFunction;
         public static void Setup(Func<IQueryBuilder> builderFunction)

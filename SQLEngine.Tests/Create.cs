@@ -5,28 +5,32 @@ using SQLEngine.SqlServer;
 namespace SQLEngine.Tests
 {
     [TestClass]
-    public class UnitTestCreate
+    public partial class Test_Query_Builder_Sql_Server
     {
         [TestInitialize]
         public void Init()
         {
-            QueryBuilderFactory.Setup<SqlServerQueryBuilder>();
+            Query.Setup<SqlServerQueryBuilder>();
         }
+
         [TestMethod]
-        public void TestMethod1()
+        public void TestMethodCreateTable()
         {
-            using (var t=QueryBuilderFactory.New._create)
+            //just for example
+            using (var b=Query.New)
             {
-                t.Table("Employees")
+                string queryFromBuilder = b._create.Table("Employees")
                     .Columns(c => new[]
                     {
                         c.Long("ID").Identity(),
                         c.Long("UserID")
                             .ForeignKey("USERS", "ID").NotNull(),
+
                         c.String("Name").MaxLength(50).Unique(),
                         c.Decimal("Weight"),
+                        
                         //custom column with all props
-                        c.Column("Age").Type("INT"),
+                        c.Column("Age").Type("INT").Check("Age>1 && Age<100"),
                         c.Datetime("BirthDate").DefaultValue("GETDATE()"),
                         c.Bool("HasDriverLicense"),
                       
@@ -37,16 +41,9 @@ namespace SQLEngine.Tests
 
                         //calculated column
                         c.Column("Sum").CalculatedColumn("Amount1 + Amount2"),
-                    })
+                    }).ToString()
                     ;
-                var q = t.Build();
-                const string query = @"
-
-";
                 ;
-                var all = SQLKeywords.AllKeywords;
-
-                //QueryAssert.AreEqual(t.Build(), query);
             }
         }
     }

@@ -20,7 +20,7 @@ namespace SQLEngine
             {
                 return IsNull(key);
             }
-            return $"{key}={value}";
+            return $"{key} = {value}";
         }
         public string NotEqual(string key, string value)
         {
@@ -28,23 +28,23 @@ namespace SQLEngine
             {
                 return IsNotNull(key);
             }
-            return $"{key}<>{value}";
+            return $"{key} <> {value}";
         }
         public string GreaterThan(string key, string value)
         {
-            return $"{key}>{value}";
+            return $"{key} > {value}";
         }
         public string GreaterEqualThan(string key, string value)
         {
-            return $"{key}>={value}";
+            return $"{key} >= {value}";
         }
         public string LessThan(string key, string value)
         {
-            return $"{key}<{value}";
+            return $"{key} < {value}";
         }
         public string Equal(string key, string value, string alias)
         {
-            return $"{alias}.{key}={value}";
+            return $"{alias}.{key} = {value}";
         }
 
         public string BetWeen(string expression, string starting, string ending)

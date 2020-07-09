@@ -36,10 +36,12 @@ IF(@i < @j)
 BEGIN
     SET @max = @j;
 END
+
 ELSE IF(@i > @j)
 BEGIN
     SET @max=@i;
 END
+
 ELSE
 BEGIN
     SET @max=0;

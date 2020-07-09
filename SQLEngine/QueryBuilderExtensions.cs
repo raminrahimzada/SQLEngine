@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SQLEngine.SqlServer
+namespace SQLEngine
 {
     public static class QueryBuilderExtensions
     {
@@ -9,7 +9,7 @@ namespace SQLEngine.SqlServer
         /// </summary>
         /// <typeparam name="TTable">The type of the t table.</typeparam>
         /// <param name="builder">The builder.</param>
-        public static void DeleteAll<TTable>(this SqlServerQueryBuilder builder)
+        public static void DeleteAll<TTable>(this IQueryBuilder builder)
             where TTable : ITable, new()
         {
             using (var table=new TTable())
@@ -21,7 +21,7 @@ namespace SQLEngine.SqlServer
         public static ISelectWithoutWhereQueryBuilder WhereEquals(this ISelectWithoutFromQueryBuilder builder, string left, string right)
         {
             string whereClause;
-            using (var b = new SqlServerQueryBuilder())
+            using (var b = Query.New)
                 whereClause = b.Helper.Equal(left, right);
             return builder.Where(whereClause);
         }
@@ -29,7 +29,7 @@ namespace SQLEngine.SqlServer
         public static IDeleteExceptWhereQueryBuilder WhereAnd(this IDeleteExceptTableNameQueryBuilder builder,
             params string[] conditions)
         {
-            using (var b = new SqlServerQueryBuilder())
+            using (var b = Query.New)
             {
                 return builder.Where(b.Helper.And(conditions));
             }
@@ -37,14 +37,14 @@ namespace SQLEngine.SqlServer
         public static IDeleteExceptWhereQueryBuilder WhereEquals(this IDeleteExceptTableNameQueryBuilder builder, string left, string right)
         {
             string whereClause;
-            using (var b = new SqlServerQueryBuilder())
+            using (var b = Query.New)
                 whereClause = b.Helper.Equal(left, right);
             return builder.Where(whereClause);
         }
         public static IUpdateNoTableAndValuesAndWhereQueryBuilder WhereEquals(this IUpdateNoTableAndValuesQueryBuilder builder, string left, string right)
         {
             string whereClause;
-            using (var b = new SqlServerQueryBuilder())
+            using (var b = Query.New)
                 whereClause = b.Helper.Equal(left, right);
             return builder.Where(whereClause);
         }
@@ -73,14 +73,7 @@ namespace SQLEngine.SqlServer
             builder.Set(errorMessageVar, $"{SQLKeywords.FORMATMESSAGE}({list.JoinWith(", ")})");
             builder.AddExpression($"{SQLKeywords.RAISERROR}({errorMessageVar}, 18, {SQL_ERROR_STATE}) {SQLKeywords.WITH} {SQLKeywords.NOWAIT}");
         }
-        /// <summary>
-        /// Sets the no count on.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        public static void SetNoCountOn(this SqlServerQueryBuilder builder)
-        {
-            builder.AddExpression("SET NOCOUNT ON;");
-        }
+        
         /// <summary>
         /// Tables the specified builder.
         /// </summary>
@@ -298,7 +291,7 @@ namespace SQLEngine.SqlServer
             }
         }
  
-        public static void Truncate<TTable>(this SqlServerQueryBuilder builder) where TTable : ITable, new()
+        public static void Truncate<TTable>(this IQueryBuilder builder) where TTable : ITable, new()
         {
             using (var table = new TTable())
             {

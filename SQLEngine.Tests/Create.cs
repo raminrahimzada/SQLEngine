@@ -16,8 +16,8 @@ namespace SQLEngine.Tests
         [TestMethod]
         public void TestMethodCreateTable()
         {
-            //just for example
-            using (var b=Query.New)
+            //demonstration of create-table query
+            using (var b = Query.New)
             {
                 string queryFromBuilder = b._create.Table("Employees")
                     .Columns(c => new[]
@@ -43,7 +43,6 @@ namespace SQLEngine.Tests
                         c.Column("Sum").CalculatedColumn("Amount1 + Amount2"),
                     }).ToString()
                     ;
-                ;
             }
         }
     }

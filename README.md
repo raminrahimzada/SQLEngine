@@ -34,4 +34,4 @@ SQL Engine is a library that eases of generating sql queries
                     ExecuteRawSql(sqlQuery);
             }
 ```
-You can see other examples in <a href="https://github.com/raminrahimzada/SQLEngine/tree/master/SQLEngine.Tests">SqlServer.Tests</a>
+You can see other examples(insert,update,delete,drop,if-else,truncate alter and so on.) in <a href="https://github.com/raminrahimzada/SQLEngine/tree/master/SQLEngine.Tests">SqlServer.Tests</a>

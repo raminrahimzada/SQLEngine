@@ -7,7 +7,8 @@ namespace SQLEngine
         IUpdateNoTableSingleValueQueryBuilder Value(string columnName,
             Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> builder);
 
-        IUpdateNoTableSingleValueQueryBuilder Value(string columnName, string columnValue);
+        IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue);
+
         IUpdateNoTableAndValuesAndWhereQueryBuilder Where(string condition);
         //IUpdateNoTableAndValuesAndWhereQueryBuilder Where(Func<AbstractConditionBuilder, AbstractConditionBuilder> builder);
         IUpdateNoTableAndValuesAndWhereQueryBuilder WhereEquals(string left, string right);

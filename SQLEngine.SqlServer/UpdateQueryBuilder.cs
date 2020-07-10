@@ -4,7 +4,13 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer
 {
-    internal class UpdateQueryBuilder : SqlServerQueryBuilder, IUpdateNoTopQueryBuilder, IUpdateNoTableAndTopQueryBuilder, IUpdateNoTableAndValuesAndWhereQueryBuilder, IUpdateQueryBuilder, IUpdateNoTableSingleValueQueryBuilder, IUpdateNoTableQueryBuilder, IUpdateNoTableAndValuesQueryBuilder
+    internal class UpdateQueryBuilder : SqlServerQueryBuilder, IUpdateNoTopQueryBuilder, 
+        IUpdateNoTableAndTopQueryBuilder, 
+        IUpdateNoTableAndValuesAndWhereQueryBuilder,
+        IUpdateQueryBuilder, 
+        IUpdateNoTableSingleValueQueryBuilder, 
+        IUpdateNoTableQueryBuilder, 
+        IUpdateNoTableAndValuesQueryBuilder
     {
         private string _tableName;
         private Dictionary<string, string> _columnsAndValuesDictionary;
@@ -35,10 +41,10 @@ namespace SQLEngine.SqlServer
             _columnsAndValuesDictionary = updateDict;
             return this;
         }
-        public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, string columnValue)
+        public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue)
         {
             if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, string>();
-            _columnsAndValuesDictionary.Add(columnName, columnValue);
+            _columnsAndValuesDictionary.Add(columnName, columnValue.ToSqlString());
             return this;
         }
         public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> builder)

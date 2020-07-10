@@ -106,7 +106,7 @@ namespace SQLEngine.SqlServer
             Writer.WriteLineEx(builder.Invoke(GetDefault<DeclarationQueryBuilder>()).Build());
         }
 
-        public ISqlVariable DeclareRandom(string variableName, string type, ISqlLiteral defaultValue = null)
+        public AbstractSqlVariable DeclareRandom(string variableName, string type, ISqlLiteral defaultValue = null)
         {
             variableName = GenerateRandomVariableName(variableName.ToLowerInvariant());
 
@@ -115,7 +115,7 @@ namespace SQLEngine.SqlServer
 
          
 
-        public ISqlVariable Declare(string variableName, string type, ISqlLiteral defaultValue = null)
+        public AbstractSqlVariable Declare(string variableName, string type, ISqlLiteral defaultValue = null)
         {
             using (var t = new DeclarationQueryBuilder())
             {
@@ -124,7 +124,7 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        public void SetToScopeIdentity(ISqlVariable variable)
+        public void SetToScopeIdentity(AbstractSqlVariable variable)
         {
             Set(variable, SqlServerLiteral.Raw("SCOPE_IDENTITY()"));
         }
@@ -136,14 +136,14 @@ namespace SQLEngine.SqlServer
         //        Writer.WriteLineEx(t.Set(variable).To(right(GetDefault<BinaryExpressionBuilder>()).Build()).Build());
         //    }
         //}
-        public void Set(ISqlVariable variable, ISqlLiteral value)
+        public void Set(AbstractSqlVariable variable, ISqlExpression value)
         {
             using (var t = new SetQueryBuilder())
             {
                 Writer.WriteLineEx(t.Set(variable).To(value).Build());
             }
         } 
-        public void Set(ISqlVariable variable, ISqlVariable value)
+        public void Set(AbstractSqlVariable variable, AbstractSqlVariable value)
         {
             using (var t = new SetQueryBuilder())
             {
@@ -203,7 +203,7 @@ namespace SQLEngine.SqlServer
             Writer.Write("/*");
             Writer.WriteEx(comment);
             Writer.Write("*/ ");
-            Writer.WriteLine("PRINT(" + comment.ToSQL() + ");");
+            //Writer.WriteLine("PRINT(" + comment.ToSQL() + ");");
         }
 
         private static readonly object Sync=new object();
@@ -308,7 +308,7 @@ namespace SQLEngine.SqlServer
 
         }
 
-        public void Print(string expression)
+        public void Print(ISqlExpression expression)
         {
             Writer.Write("print");
             Writer.Write(SQLKeywords.BEGIN_SCOPE);

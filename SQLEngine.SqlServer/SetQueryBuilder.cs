@@ -3,14 +3,14 @@
     internal class SetQueryBuilder : SqlServerQueryBuilder, ISetNeedSetQueryBuilder, ISetNeedToQueryBuilder, 
         ISetNoSetNoToQueryBuilder
     {
-        private ISqlVariable _variable;
+        private AbstractSqlVariable _variable;
         private ISqlExpression _value;
         protected override void ValidateAndThrow()
         {
             base.ValidateAndThrow();
             //TODO
         }
-        public ISetNeedToQueryBuilder Set(ISqlVariable variable)
+        public ISetNeedToQueryBuilder Set(AbstractSqlVariable variable)
         {
             _variable = variable;
             return this;

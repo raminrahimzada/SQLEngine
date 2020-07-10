@@ -10,9 +10,9 @@
         //    params Func<BinaryConditionExpressionBuilder, BinaryConditionExpressionBuilder>[] builders);
 
         //ISelectWithoutWhereQueryBuilder Where(Func<ConditionBuilder, ConditionBuilder> builder);
-        ISelectWithoutWhereQueryBuilder WhereEquals(string left, string right);
-        ISelectWithoutWhereQueryBuilder WhereIDIs(long id);
-        ISelectWithoutWhereQueryBuilder WhereIDIs(string sqlVariable);
+        ISelectWithoutWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression right);
+        //ISelectWithoutWhereQueryBuilder WhereIDIs(long id);
+        //ISelectWithoutWhereQueryBuilder WhereIDIs(ISqlExpression idExpression);
 
 
         //ISelectWithoutWhereQueryBuilder Where(

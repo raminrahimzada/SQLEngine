@@ -155,26 +155,27 @@ namespace SQLEngine.SqlServer
         //    _whereClause = builder.Invoke(GetDefault<BinaryConditionExpressionBuilder>()).Build();
         //    return this;
         //}
-        public ISelectWithoutWhereQueryBuilder WhereEquals(string left, string right)
+        public ISelectWithoutWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression right)
         {
+            var col = new SqlServerColumn(columnName);
             using (var b = Query.New)
-                _whereClause = b.Helper.Equal(left, right);
+                _whereClause = b.Helper.Equal(col, right);
             return this;
         }
 
-        public ISelectWithoutWhereQueryBuilder WhereIDIs(long id)
-        {
-            using (var b = Query.New)
-                _whereClause = b.Helper.Equal("ID", id.ToSQL());
-            return this;
-        }
+        //public ISelectWithoutWhereQueryBuilder WhereIDIs(long id)
+        //{
+        //    using (var b = Query.New)
+        //        _whereClause = b.Helper.Equal("ID", id.ToSQL());
+        //    return this;
+        //}
 
-        public ISelectWithoutWhereQueryBuilder WhereIDIs(string sqlVariable)
-        {
-            using (var b = Query.New)
-                _whereClause = b.Helper.Equal("ID", sqlVariable);
-            return this;
-        }
+        //public ISelectWithoutWhereQueryBuilder WhereIDIs(string sqlVariable)
+        //{
+        //    using (var b = Query.New)
+        //        _whereClause = b.Helper.Equal("ID", sqlVariable);
+        //    return this;
+        //}
         //public ISelectWithoutWhereQueryBuilder Where(Func<ConditionBuilder, ConditionBuilder> builder)
         //{
         //    _whereClause = builder.Invoke(GetDefault<ConditionBuilder>()).Build();
@@ -212,6 +213,21 @@ namespace SQLEngine.SqlServer
         public ISelectQueryBuilder Distinct()
         {
             _hasDistinct = true;
+            return this;
+        }
+
+        public IJoinedQueryBuilder InnerJoin(string alias, string tableName, string mainTableColumnName)
+        {
+            MutateAliasName(ref alias);
+            if (_joinsList == null) _joinsList = new List<JoinModel>();
+            _joinsList.Add(new JoinModel
+            {
+                TableName = tableName,
+                Alias = alias,
+                MainTableColumnName = mainTableColumnName,
+                ReferenceTableColumnName = Query.Settings.IdColumnName,
+                JoinType = SQLKeywords.INNERJOIN
+            });
             return this;
         }
 
@@ -262,6 +278,21 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
+        public IJoinedQueryBuilder RightJoin(string alias, string tableName, string mainTableColumnName)
+        {
+            MutateAliasName(ref alias);
+            if (_joinsList == null) _joinsList = new List<JoinModel>();
+            _joinsList.Add(new JoinModel
+            {
+                TableName = tableName,
+                Alias = alias,
+                MainTableColumnName = mainTableColumnName,
+                ReferenceTableColumnName = Query.Settings.IdColumnName,
+                JoinType = SQLKeywords.RIGHTJOIN,
+            });
+            return this;
+        }
+
         public IJoinedQueryBuilder LeftJoin(string alias, string tableName,
             string mainTableColumnName, string referenceTableColumnName)
         {
@@ -273,6 +304,21 @@ namespace SQLEngine.SqlServer
                 Alias = alias,
                 MainTableColumnName = mainTableColumnName,
                 ReferenceTableColumnName = referenceTableColumnName,
+                JoinType = SQLKeywords.LEFTJOIN
+            });
+            return this;
+        }
+        public IJoinedQueryBuilder LeftJoin(string alias, string tableName,
+            string mainTableColumnName)
+        {
+            MutateAliasName(ref alias);
+            if (_joinsList == null) _joinsList = new List<JoinModel>();
+            _joinsList.Add(new JoinModel
+            {
+                TableName = tableName,
+                Alias = alias,
+                MainTableColumnName = mainTableColumnName,
+                ReferenceTableColumnName = Query.Settings.IdColumnName,
                 JoinType = SQLKeywords.LEFTJOIN
             });
             return this;

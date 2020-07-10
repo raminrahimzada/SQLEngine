@@ -30,8 +30,8 @@ SQL Engine is a library that eases of generating sql queries
                         c.Column("Sum").CalculatedColumn("Amount1 + Amount2"),
                     }).ToString();
                     
-                    //then execute it                    
-                    ExecuteRawSql(sqlQuery);
+                    //then use that query where you want
+                    //ExecuteRawSql(sqlQuery);
             }
 ```
 You can see other examples(insert,update,delete,drop,if-else,truncate alter and so on.) in <a href="https://github.com/raminrahimzada/SQLEngine/tree/master/SQLEngine.Tests">SqlServer.Tests</a>

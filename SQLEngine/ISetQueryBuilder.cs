@@ -2,6 +2,6 @@
 {
     public interface ISetQueryBuilder : IAbstractQueryBuilder
     {
-        ISetNoSetNoToQueryBuilder To(string value);
+        ISetNoSetNoToQueryBuilder To(ISqlExpression value);
     }
 }

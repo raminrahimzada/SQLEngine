@@ -3,6 +3,9 @@
     public interface IJoinedQueryBuilder : ISelectWhereQueryBuilder
     {
         IJoinedQueryBuilder InnerJoin(string alias, string tableName
+            , string mainTableColumnName);
+
+        IJoinedQueryBuilder InnerJoin(string alias, string tableName
             , string mainTableColumnName, string referenceTableColumnName);
         
         IJoinedQueryBuilder InnerJoinRaw(string alias, string tableName
@@ -11,7 +14,12 @@
         IJoinedQueryBuilder RightJoin(string alias, string tableName, string mainTableColumnName,
             string referenceTableColumnName);
 
+        IJoinedQueryBuilder RightJoin(string alias, string tableName, string mainTableColumnName);
+
         IJoinedQueryBuilder LeftJoin(string alias, string tableName,
             string mainTableColumnName, string referenceTableColumnName);
+
+        IJoinedQueryBuilder LeftJoin(string alias, string tableName,
+            string mainTableColumnName);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace SQLEngine
@@ -51,10 +50,7 @@ namespace SQLEngine
             return Build();
         }
 
-        public static implicit operator string(AbstractQueryBuilder queryBuilder)
-        {
-            return queryBuilder.ToSQL();
-        }
+        
 
         public virtual void Dispose()
         {

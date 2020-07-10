@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SQLEngine;
 using SQLEngine.SqlServer;
 
 namespace SQLEngine.Tests
 {
-    [TestClass]
-    public class UnitTestInsert
+    public partial class Test_Query_Builder_Sql_Server
     {
         [TestMethod]
         public void TestMethod_Insert_By_Value()
@@ -30,7 +27,7 @@ namespace SQLEngine.Tests
         {
             using (var q = Query.New)
             {
-                var dict = new Dictionary<string, string>
+                var dict = new Dictionary<string,string>
                 {
                     {"Name", "Ramin".ToSQL()},
                     {"Surname", "Rahimzada".ToSQL()},

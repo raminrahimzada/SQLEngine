@@ -114,6 +114,7 @@
     <Compile Include="ISetNeedToQueryBuilder.cs" />
     <Compile Include="ISetNoSetNoToQueryBuilder.cs" />
     <Compile Include="ISetQueryBuilder.cs" />
+    <Compile Include="ISqlLiteral.cs" />
     <Compile Include="ITruncateNoTableQueryBuilder.cs" />
     <Compile Include="ITruncateQueryBuilder.cs" />
     <Compile Include="IUpdateNoTableAndTopQueryBuilder.cs" />
@@ -126,7 +127,6 @@
     <Compile Include="IndentedTextWriterExtensions.cs" />
     <Compile Include="Query.cs" />
     <Compile Include="QueryBuilderExtensions.cs" />
-    <Compile Include="SQLExtensions.cs" />
     <Compile Include="SQLKeywords.cs" />
     <Compile Include="ITable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

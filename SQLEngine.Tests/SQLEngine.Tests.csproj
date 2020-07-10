@@ -52,10 +52,10 @@
     <Compile Include="QueryAssert.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="DeclareAndSet.cs" />
-    <Compile Include="UnitTestUpdate.cs" />
-    <Compile Include="UnitTestInsert.cs" />
+    <Compile Include="Update.cs" />
+    <Compile Include="Insert.cs" />
     <Compile Include="IfElse.cs" />
-    <Compile Include="UnitTestSelect.cs" />
+    <Compile Include="Select.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

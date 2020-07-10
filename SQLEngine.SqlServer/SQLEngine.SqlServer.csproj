@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractConditionBuilder.cs" />
+    <Compile Include="ConditionFilterQueryHelper.cs" />
+    <Compile Include="SQLExtensions.cs" />
     <Compile Include="SqlServerAbstractQueryBuilder.cs" />
     <Compile Include="AlteredTableQueryBuilder.cs" />
     <Compile Include="AlterQueryBuilder.cs" />
@@ -80,10 +82,13 @@
     <Compile Include="ProcedureArgumentDirectionTypes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlServerColumn.cs" />
     <Compile Include="SqlServerQueryBuilderExtensions.cs" />
     <Compile Include="SelectQueryBuilder.cs" />
     <Compile Include="SetQueryBuilder.cs" />
     <Compile Include="SqlServerQueryBuilder.cs" />
+    <Compile Include="SqlServerLiteral.cs" />
+    <Compile Include="SqlServerVariable.cs" />
     <Compile Include="TruncateQueryBuilder.cs" />
     <Compile Include="UpdateQueryBuilder.cs" />
   </ItemGroup>

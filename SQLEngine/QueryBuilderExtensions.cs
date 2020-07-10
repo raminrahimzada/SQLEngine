@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SQLEngine
+﻿namespace SQLEngine
 {
     public static class QueryBuilderExtensions
     {
@@ -18,13 +16,13 @@ namespace SQLEngine
                 builder.Delete(x => x.Table(tableName));
             }
         }
-        public static ISelectWithoutWhereQueryBuilder WhereEquals(this ISelectWithoutFromQueryBuilder builder, string left, string right)
-        {
-            string whereClause;
-            using (var b = Query.New)
-                whereClause = b.Helper.Equal(left, right);
-            return builder.Where(whereClause);
-        }
+        //public static ISelectWithoutWhereQueryBuilder WhereEquals(this ISelectWithoutFromQueryBuilder builder, string left, string right)
+        //{
+        //    string whereClause;
+        //    using (var b = Query.New)
+        //        whereClause = b.Helper.Equal(left, right);
+        //    return builder.Where(whereClause);
+        //}
 
         public static IDeleteExceptWhereQueryBuilder WhereAnd(this IDeleteExceptTableNameQueryBuilder builder,
             params string[] conditions)
@@ -34,20 +32,20 @@ namespace SQLEngine
                 return builder.Where(b.Helper.And(conditions));
             }
         }
-        public static IDeleteExceptWhereQueryBuilder WhereEquals(this IDeleteExceptTableNameQueryBuilder builder, string left, string right)
-        {
-            string whereClause;
-            using (var b = Query.New)
-                whereClause = b.Helper.Equal(left, right);
-            return builder.Where(whereClause);
-        }
-        public static IUpdateNoTableAndValuesAndWhereQueryBuilder WhereEquals(this IUpdateNoTableAndValuesQueryBuilder builder, string left, string right)
-        {
-            string whereClause;
-            using (var b = Query.New)
-                whereClause = b.Helper.Equal(left, right);
-            return builder.Where(whereClause);
-        }
+        //public static IDeleteExceptWhereQueryBuilder WhereEquals(this IDeleteExceptTableNameQueryBuilder builder, string left, string right)
+        //{
+        //    string whereClause;
+        //    using (var b = Query.New)
+        //        whereClause = b.Helper.Equal(left, right);
+        //    return builder.Where(whereClause);
+        //}
+        //public static IUpdateNoTableAndValuesAndWhereQueryBuilder WhereEquals(this IUpdateNoTableAndValuesQueryBuilder builder, string left, string right)
+        //{
+        //    string whereClause;
+        //    using (var b = Query.New)
+        //        whereClause = b.Helper.Equal(left, right);
+        //    return builder.Where(whereClause);
+        //}
 
         public static IDeleteExceptTableNameQueryBuilder Table<TTable>(this IDeleteQueryBuilder builder)
             where TTable : ITable, new()
@@ -58,21 +56,7 @@ namespace SQLEngine
                 return builder.Table(tableName);
             }            
         }
-        /// <summary>
-        /// Throws the exception.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="exceptionMessage">The exception message.</param>
-        /// <param name="args">The arguments.</param>
-        public static void ThrowException(this IQueryBuilder builder, string exceptionMessage, params string[] args)
-        {
-            const int SQL_ERROR_STATE = 47;
-            var list = new List<string>(args.Length + 1) { exceptionMessage.ToSQL() };
-            list.AddRange(args);
-            var errorMessageVar = builder.DeclareRandom("EXCEPTION", SQLKeywords.NVARCHARMAX);
-            builder.Set(errorMessageVar, $"{SQLKeywords.FORMATMESSAGE}({list.JoinWith(", ")})");
-            builder.AddExpression($"{SQLKeywords.RAISERROR}({errorMessageVar}, 18, {SQL_ERROR_STATE}) {SQLKeywords.WITH} {SQLKeywords.NOWAIT}");
-        }
+        
         
         /// <summary>
         /// Tables the specified builder.

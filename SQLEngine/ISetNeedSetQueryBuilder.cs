@@ -2,6 +2,6 @@
 {
     public interface ISetNeedSetQueryBuilder : ISetQueryBuilder
     {
-        ISetNeedToQueryBuilder Set(string variableName);
+        ISetNeedToQueryBuilder Set(ISqlVariable variableName);
     }
 }

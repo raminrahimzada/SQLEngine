@@ -18,7 +18,7 @@ namespace SQLEngine.SqlServer
         public IDropQueryBuilder _drop => new DropQueryBuilder();
 
 
-        public IConditionFilterQueryHelper Helper { get; } = new ConditionFilterQueryHelper();
+        public IConditionFilterQueryHelper Helper { get; } = new SqlServerConditionFilterQueryHelper();
 
 
         public void Create(Func<ICreateQueryBuilder, ICreateTableQueryBuilder> builder)
@@ -106,49 +106,62 @@ namespace SQLEngine.SqlServer
             Writer.WriteLineEx(builder.Invoke(GetDefault<DeclarationQueryBuilder>()).Build());
         }
 
-        public string DeclareRandom(string variableName, string type, string defaultValue = null)
+        public ISqlVariable DeclareRandom(string variableName, string type, ISqlLiteral defaultValue = null)
         {
             variableName = GenerateRandomVariableName(variableName.ToLowerInvariant());
 
             return Declare(variableName, type, defaultValue);
         }
-        public string Declare(string variableName, string type, string defaultValue = null)
+
+         
+
+        public ISqlVariable Declare(string variableName, string type, ISqlLiteral defaultValue = null)
         {
             using (var t = new DeclarationQueryBuilder())
             {
-                Writer.WriteLineEx(t.Declare(variableName).OfType(type).Default(defaultValue).Build());
-                return variableName.AsSQLVariable();
+                Writer.WriteLineEx(t.Declare(variableName).OfType(type).Default(defaultValue?.ToString()).Build());
+                return new SqlServerVariable(variableName);
             }
         }
 
-        public void SetToScopeIdentity(string variable)
+        public void SetToScopeIdentity(ISqlVariable variable)
         {
-            Set(variable, "SCOPE_IDENTITY()");
+            Set(variable, SqlServerLiteral.Raw("SCOPE_IDENTITY()"));
         }
-        public void Set(string variable, Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> right)
+
+        //public void Set(ISqlVariable variable, Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> right)
+        //{
+        //    using (var t = new SetQueryBuilder())
+        //    {
+        //        Writer.WriteLineEx(t.Set(variable).To(right(GetDefault<BinaryExpressionBuilder>()).Build()).Build());
+        //    }
+        //}
+        public void Set(ISqlVariable variable, ISqlLiteral value)
         {
             using (var t = new SetQueryBuilder())
             {
-                Writer.WriteLineEx(t.Set(variable).To(right(GetDefault<BinaryExpressionBuilder>()).Build()).Build());
+                Writer.WriteLineEx(t.Set(variable).To(value).Build());
             }
-        }
-        public void Set(string variable, string value)
+        } 
+        public void Set(ISqlVariable variable, ISqlVariable value)
         {
             using (var t = new SetQueryBuilder())
             {
                 Writer.WriteLineEx(t.Set(variable).To(value).Build());
             }
         }
-        public void Set(string variable, Func<ICastQueryBuilder, ICastQueryBuilder> q)
-        {
-            using (var t = new SetQueryBuilder())
-            {
-                using (var c = new CastQueryBuilder())
-                {
-                    Writer.WriteLineEx(t.Set(variable).To(q(c).Build()).Build());
-                }
-            }
-        }
+        //public void Set(ISqlVariable variable, Func<ICastQueryBuilder, ICastQueryBuilder> q)
+        //{
+        //    using (var t = new SetQueryBuilder())
+        //    {
+        //        using (var c = new CastQueryBuilder())
+        //        {
+        //            ICastQueryBuilder temp = q(c);
+        //            ISqlExpression x;
+        //            Writer.WriteLineEx(t.Set(variable).To(x).Build());
+        //        }
+        //    }
+        //}
         public void Execute(Func<IExecuteQueryBuilder, IExecuteProcedureNeedArgQueryBuilder> builder)
         {
             Writer.WriteLineEx(builder.Invoke(GetDefault<ExecuteQueryBuilder>()).Build());

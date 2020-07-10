@@ -4,6 +4,10 @@ namespace SQLEngine
 {
     public static class Query
     {
+        public static class Settings
+        {
+            public static string IdColumnName = "Id";
+        }
         private static Func<IQueryBuilder> _builderFunction;
         public static void Setup(Func<IQueryBuilder> builderFunction)
         {

@@ -12,7 +12,7 @@ namespace SQLEngine.Tests
             {
                 return query
                     .Split(splitter.ToCharArray())
-                    .Select(s=>s.ToLower())
+                    .Select(s=>s.ToLowerInvariant())
                     .Select(s => s.Trim(splitter.ToCharArray()))
                     .Where(s => !string.IsNullOrEmpty(s))
                     .ToArray();

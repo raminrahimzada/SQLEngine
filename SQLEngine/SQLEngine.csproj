@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractQueryBuilder.cs" />
+    <Compile Include="AbstractSqlExpression.cs" />
+    <Compile Include="AbstractSqlVariable.cs" />
     <Compile Include="ColumnModel.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IAbstractCreateFunctionQueryBuilder.cs" />
@@ -114,7 +116,8 @@
     <Compile Include="ISetNeedToQueryBuilder.cs" />
     <Compile Include="ISetNoSetNoToQueryBuilder.cs" />
     <Compile Include="ISetQueryBuilder.cs" />
-    <Compile Include="ISqlLiteral.cs" />
+    <Compile Include="AbstractSqlLiteral.cs" />
+    <Compile Include="ISqlExpression.cs" />
     <Compile Include="ITruncateNoTableQueryBuilder.cs" />
     <Compile Include="ITruncateQueryBuilder.cs" />
     <Compile Include="IUpdateNoTableAndTopQueryBuilder.cs" />

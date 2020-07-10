@@ -106,7 +106,7 @@ namespace SQLEngine.SqlServer
             Writer.WriteLineEx(builder.Invoke(GetDefault<DeclarationQueryBuilder>()).Build());
         }
 
-        public AbstractSqlVariable DeclareRandom(string variableName, string type, ISqlLiteral defaultValue = null)
+        public AbstractSqlVariable DeclareRandom(string variableName, string type, AbstractSqlLiteral defaultValue = null)
         {
             variableName = GenerateRandomVariableName(variableName.ToLowerInvariant());
 
@@ -115,7 +115,7 @@ namespace SQLEngine.SqlServer
 
          
 
-        public AbstractSqlVariable Declare(string variableName, string type, ISqlLiteral defaultValue = null)
+        public AbstractSqlVariable Declare(string variableName, string type, AbstractSqlLiteral defaultValue = null)
         {
             using (var t = new DeclarationQueryBuilder())
             {
@@ -144,6 +144,13 @@ namespace SQLEngine.SqlServer
             }
         } 
         public void Set(AbstractSqlVariable variable, AbstractSqlVariable value)
+        {
+            using (var t = new SetQueryBuilder())
+            {
+                Writer.WriteLineEx(t.Set(variable).To(value).Build());
+            }
+        }
+        public void Set(AbstractSqlVariable variable, AbstractSqlLiteral value)
         {
             using (var t = new SetQueryBuilder())
             {

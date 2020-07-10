@@ -21,7 +21,7 @@ namespace SQLEngine.SqlServer
             var list = new List<string>(args.Length + 1) {exceptionMessage.ToSQL().ToSqlString()};
             list.AddRange(args);
             var errorMessageVar = builder.DeclareRandom("EXCEPTION", SQLKeywords.NVARCHARMAX);
-            ISqlLiteral to = SqlServerLiteral.Raw($"{SQLKeywords.FORMATMESSAGE}({list.JoinWith(", ")})");
+            AbstractSqlLiteral to = SqlServerLiteral.Raw($"{SQLKeywords.FORMATMESSAGE}({list.JoinWith(", ")})");
             builder.Set(errorMessageVar, to);
             builder.AddExpression($"{SQLKeywords.RAISERROR}({errorMessageVar}, 18, {SQL_ERROR_STATE}) {SQLKeywords.WITH} {SQLKeywords.NOWAIT}");
         }

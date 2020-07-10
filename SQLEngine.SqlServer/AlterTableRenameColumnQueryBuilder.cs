@@ -1,4 +1,6 @@
-﻿namespace SQLEngine.SqlServer
+﻿using System;
+
+namespace SQLEngine.SqlServer
 {
     internal class AlterTableRenameColumnQueryBuilder : AlterTableQueryBuilder
     {
@@ -13,19 +15,20 @@
 
         public override string Build()
         {
-            using (var t = new ExecuteQueryBuilder())
-            {
-                var fullColumnName = $"{I(SchemaName)}.{I(TableName)}.{I(ColumnName)}";
-                //https://stackoverflow.com/a/9355281/7901692
+            throw new NotImplementedException();
+            //using (var t = new ExecuteQueryBuilder())
+            //{
+            //    var fullColumnName = $"{I(SchemaName)}.{I(TableName)}.{I(ColumnName)}";
+            //    //https://stackoverflow.com/a/9355281/7901692
 
-                var query = t.Procedure("sys.sp_rename")
-                    .Arg("objtype", "COLUMN".ToSQL())
-                    .Arg("objname", fullColumnName.ToSQL())
-                    .Arg("newname", _newColumnName.ToSQL())
-                    .Build();
-                Writer.WriteLine(query);
-            }
-            return base.Build();
+            //    var query = t.Procedure("sys.sp_rename")
+            //        .Arg("objtype", "COLUMN".ToSQL())
+            //        .Arg("objname", fullColumnName.ToSQL())
+            //        .Arg("newname", _newColumnName.ToSQL())
+            //        .Build();
+            //    Writer.WriteLine(query);
+            //}
+            //return base.Build();
         }
     }
 }

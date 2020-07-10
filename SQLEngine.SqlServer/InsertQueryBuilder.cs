@@ -4,7 +4,11 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer
 {
-    internal class InsertQueryBuilder : SqlServerQueryBuilder, IInsertNoIntoWithColumns, IInsertNoValuesQueryBuilder, IInsertNeedValueQueryBuilder,IInsertQueryBuilder, IInsertNoIntoQueryBuilder
+    internal class InsertQueryBuilder : SqlServerQueryBuilder, 
+        IInsertNoIntoWithColumns, IInsertNoValuesQueryBuilder, 
+        IInsertNeedValueQueryBuilder,
+        IInsertQueryBuilder, 
+        IInsertNoIntoQueryBuilder
     {
         private string _tableName;
         private Dictionary<string, string> _columnsAndValuesDictionary;
@@ -49,10 +53,10 @@ namespace SQLEngine.SqlServer
             _tableName = tableName;
             return this;
         }
-        public IInsertNeedValueQueryBuilder Value(string columnName, string columnValue)
+        public IInsertNeedValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue)
         {
             if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, string>();
-            _columnsAndValuesDictionary.Add(columnName, columnValue);
+            _columnsAndValuesDictionary.Add(columnName, columnValue.ToSqlString());
             return this;
         }
 
@@ -142,5 +146,6 @@ namespace SQLEngine.SqlServer
             }
             return base.Build();
         }
+        
     }
 }

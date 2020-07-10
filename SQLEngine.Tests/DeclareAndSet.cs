@@ -12,7 +12,7 @@ namespace SQLEngine.Tests
             {
                 t.Declare("i", "INT", 1.ToSQL());
                 const string query = @"
-DECLARE  @i INT  = 1;
+DECLARE  @i INT  = 1;   
 ";
                 QueryAssert.AreEqual(t.ToString(), query);
             }

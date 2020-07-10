@@ -287,22 +287,23 @@ namespace SQLEngine.SqlServer
 
                             var schemaName = _schemaName;
                             if (string.IsNullOrEmpty(schemaName)) schemaName = "dbo";
+                            //TODO
+                            throw new NotImplementedException();
+                            //var query = t.Procedure("sp_addextendedproperty")
+                            //    .Arg("name", "MS_Description".ToSQL())
+                            //    .Arg("value", model.Description.ToSQL())
 
-                            var query = t.Procedure("sp_addextendedproperty")
-                                .Arg("name", "MS_Description".ToSQL())
-                                .Arg("value", model.Description.ToSQL())
+                            //    .Arg("level0type", "Schema".ToSQL())
+                            //    .Arg("level0name", schemaName.ToSQL())
 
-                                .Arg("level0type", "Schema".ToSQL())
-                                .Arg("level0name", schemaName.ToSQL())
+                            //    .Arg("level1type", "Table".ToSQL())
+                            //    .Arg("level1name", _tableName.ToSQL())
 
-                                .Arg("level1type", "Table".ToSQL())
-                                .Arg("level1name", _tableName.ToSQL())
+                            //    .Arg("level2type", "Column".ToSQL())
+                            //    .Arg("level2name", model.Name.ToSQL())
+                            //    .Build();
 
-                                .Arg("level2type", "Column".ToSQL())
-                                .Arg("level2name", model.Name.ToSQL())
-                                .Build();
-
-                            Writer.Write(query);
+                            //Writer.Write(query);
                         }
                     }
                 }

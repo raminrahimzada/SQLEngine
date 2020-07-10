@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer
 {
-    public class SqlServerLiteral : AbstractSqlExpression,ISqlLiteral
+    public class SqlServerLiteral : AbstractSqlLiteral
     {
         private const string FORMAT = "yyyy-MM-dd HH:mm:ss.fff";
         private const string FORMAT_ONLY_DATE = "yyyy-MM-dd";
@@ -20,46 +20,31 @@ namespace SQLEngine.SqlServer
         }
         public SqlServerLiteral(int i)
         {
-            _rawSqlString = i.ToString();
+            SetFrom(i);
         }
         public SqlServerLiteral(bool b)
         {
-            _rawSqlString = b ? "1" : "0";
+            SetFrom(b);
         }
         public SqlServerLiteral(bool? b)
         {
-            if (b == null)
-            {
-                _rawSqlString = SQLKeywords.NULL;
-                return;
-            }
-            _rawSqlString = b.Value ? "1" : "0";
+          SetFrom(b);
         }
         public SqlServerLiteral(short s)
         {
-            _rawSqlString = s.ToString();
+            SetFrom(s);
         }
         public SqlServerLiteral(long l)
         {
-            _rawSqlString = l.ToString();
+            SetFrom(l);
         }
         public SqlServerLiteral(short? s)
         {
-            if (s == null)
-            {
-                _rawSqlString = SQLKeywords.NULL;
-                return;
-            }
-            _rawSqlString = s.Value.ToString();
+            SetFrom(s);
         }
         public SqlServerLiteral(long? l)
         {
-            if (l == null)
-            {
-                _rawSqlString = SQLKeywords.NULL;
-                return;
-            }
-            _rawSqlString = l.Value.ToString();
+            SetFrom(l);
         }
         
 
@@ -82,23 +67,29 @@ namespace SQLEngine.SqlServer
 
         public SqlServerLiteral(decimal d)
         {
-            _rawSqlString=(d + string.Empty).Replace(',', '.');
+            SetFrom(d);
         }
         public SqlServerLiteral(decimal? d)
         {
-            if (d == null)
-            {
-                _rawSqlString = SQLKeywords.NULL;
-                return;
-            }
-            _rawSqlString=(d.Value + string.Empty).Replace(',', '.');
+            SetFrom(d);
         }
         public SqlServerLiteral(double d)
         {
-            _rawSqlString = (d + string.Empty).Replace(',', '.');
+            SetFrom(d);
         }
 
         public SqlServerLiteral(byte[] data)
+        {
+            SetFrom(data);
+        }
+
+        public SqlServerLiteral(double? d)
+        {
+            SetFrom(d);
+        }
+
+
+        protected override void SetFrom(byte[] data)
         {
             if (data == null)
             {
@@ -108,7 +99,77 @@ namespace SQLEngine.SqlServer
             _rawSqlString = "0x" + BitConverter.ToString(data).Replace("-", string.Empty);
         }
 
-        public SqlServerLiteral(double? d)
+        protected override void SetFrom(int i)
+        {
+            _rawSqlString = i.ToString();
+        }
+
+        protected override void SetFrom(long l)
+        {
+            _rawSqlString = l.ToString();
+        }
+
+        protected override void SetFrom(bool b)
+        {
+            _rawSqlString = b ? "1" : "0";
+        }
+
+        protected override void SetFrom(string s)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void SetFrom(double d)
+        {
+            _rawSqlString = (d + string.Empty).Replace(',', '.');
+        }
+
+        protected override void SetFrom(decimal d)
+        {
+            _rawSqlString = (d + string.Empty).Replace(',', '.');
+        }
+
+        protected override void SetFrom(float f)
+        {
+            _rawSqlString = (f + string.Empty).Replace(',', '.');
+        }
+
+        protected override void SetFrom(short s)
+        {
+            _rawSqlString = s.ToString();
+        }
+
+        protected override void SetFrom(DateTime dt)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void SetFrom(int? i)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void SetFrom(long? l)
+        {
+            if (l == null)
+            {
+                _rawSqlString = SQLKeywords.NULL;
+                return;
+            }
+            _rawSqlString = l.Value.ToString();
+        }
+
+        protected override void SetFrom(bool? b)
+        {
+            if (b == null)
+            {
+                _rawSqlString = SQLKeywords.NULL;
+                return;
+            }
+            _rawSqlString = b.Value ? "1" : "0";
+        }
+
+        protected override void SetFrom(double? d)
         {
             if (d != null)
             {
@@ -120,6 +181,35 @@ namespace SQLEngine.SqlServer
             }
         }
 
+        protected override void SetFrom(decimal? d)
+        {
+            if (d == null)
+            {
+                _rawSqlString = SQLKeywords.NULL;
+                return;
+            }
+            _rawSqlString = (d.Value + string.Empty).Replace(',', '.');
+        }
+
+        protected override void SetFrom(float? f)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void SetFrom(short? s)
+        {
+            if (s == null)
+            {
+                _rawSqlString = SQLKeywords.NULL;
+                return;
+            }
+            _rawSqlString = s.Value.ToString();
+        }
+
+        protected override void SetFrom(DateTime? dt)
+        {
+            throw new NotImplementedException();
+        }
 
         public override string ToSqlString()
         {
@@ -130,10 +220,25 @@ namespace SQLEngine.SqlServer
         {
             
         }
-        public static ISqlLiteral Raw(string rawSqlString)
+        public static AbstractSqlLiteral Raw(string rawSqlString)
         {
             var result = new SqlServerLiteral {_rawSqlString = rawSqlString};
             return result;
+        }
+
+        public static implicit operator string(SqlServerLiteral x)
+        {
+            return x.ToSqlString();
+        }
+
+        public static implicit operator SqlServerLiteral(int x)
+        {
+            return new SqlServerLiteral(x);
+        }
+
+        public override string ToString()
+        {
+            return ToSqlString();
         }
     }
 }

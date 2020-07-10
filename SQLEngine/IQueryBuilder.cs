@@ -26,12 +26,13 @@ namespace SQLEngine
         void AddExpression(string expression);
         void End();
         void Declare(Func<IDeclarationQueryBuilder, IDeclarationQueryBuilder> builder);
-        AbstractSqlVariable DeclareRandom(string variableName, string type, ISqlLiteral defaultValue = null);
-        AbstractSqlVariable Declare(string variableName, string type, ISqlLiteral defaultValue = null);
+        AbstractSqlVariable DeclareRandom(string variableName, string type, AbstractSqlLiteral defaultValue = null);
+        AbstractSqlVariable Declare(string variableName, string type, AbstractSqlLiteral defaultValue = null);
         void SetToScopeIdentity(AbstractSqlVariable variable);
         //void Set(ISqlVariable variable, Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> right);
         void Set(AbstractSqlVariable variable, ISqlExpression value);
         void Set(AbstractSqlVariable variable, AbstractSqlVariable value);
+        void Set(AbstractSqlVariable variable, AbstractSqlLiteral value);
         //void Set(ISqlVariable variable, Func<ICastQueryBuilder, ICastQueryBuilder> q);
         void Execute(Func<IExecuteQueryBuilder, IExecuteProcedureNeedArgQueryBuilder> builder);
         void Insert(Func<IInsertQueryBuilder, IAbstractInsertQueryBuilder> builder);

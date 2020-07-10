@@ -2,6 +2,6 @@
 {
     public interface IInsertNeedValueQueryBuilder : IAbstractInsertQueryBuilder
     {
-        IInsertNeedValueQueryBuilder Value(string columnName, string columnValue);
+        IInsertNeedValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue);
     }
 }

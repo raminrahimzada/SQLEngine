@@ -11,7 +11,7 @@ namespace SQLEngine
 
         IUpdateNoTableAndValuesAndWhereQueryBuilder Where(string condition);
         //IUpdateNoTableAndValuesAndWhereQueryBuilder Where(Func<AbstractConditionBuilder, AbstractConditionBuilder> builder);
-        IUpdateNoTableAndValuesAndWhereQueryBuilder WhereEquals(string left, string right);
+        IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression right);
 
         //IUpdateNoTableAndValuesAndWhereQueryBuilder Where(
         //    Func<BinaryConditionExpressionBuilder, BinaryConditionExpressionBuilder> builder);

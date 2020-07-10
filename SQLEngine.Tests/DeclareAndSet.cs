@@ -10,7 +10,7 @@ namespace SQLEngine.Tests
         {
             using (var t = Query.New)
             {
-                t.Declare("i", "INT", 1.ToSQL());
+                t.Declare("i", "INT", 1);
                 const string query = @"
 DECLARE  @i INT  = 1;   
 ";
@@ -36,7 +36,7 @@ DECLARE  @i INT;
         {
             using (var t = Query.New)
             {
-                var x = t.Declare("x", "INT", 47.ToSQL());
+                var x = t.Declare("x", "INT", 47);
 
                 t.Set(x, 48.ToSQL());
                 const string query = @"

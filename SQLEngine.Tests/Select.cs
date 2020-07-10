@@ -14,7 +14,7 @@ namespace SQLEngine.Tests
                     ._select
                     .Top(1)
                     .From("Users")
-                    .WhereColumnEquals("Id", 17.ToSQL())
+                    .WhereColumnEquals("Id", 17)
                     .ToString();
 
                 var queryThat = @"
@@ -31,7 +31,7 @@ SELECT TOP(1)  *
         {
             using (var q = Query.New)
             {
-                var filter = q.Helper.ColumnGreaterThan("Age", 18.ToSQL());
+                var filter = q.Helper.ColumnGreaterThan("Age", 18);
                 var queryThis = q
                     ._select
                     .Top(1)
@@ -55,7 +55,7 @@ SELECT TOP(1)  Name , Surname
         {
             using (var t = Query.New)
             {
-                var filter = t.Helper.ColumnGreaterThan("Age",18.ToSQL());
+                var filter = t.Helper.ColumnGreaterThan("Age",18);
                 var queryFromBuilder = t._select
                     .Top(1)
                     .From("Users", "U")

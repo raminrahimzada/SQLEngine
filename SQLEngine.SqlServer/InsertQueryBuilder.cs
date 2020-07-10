@@ -11,7 +11,7 @@ namespace SQLEngine.SqlServer
         IInsertNoIntoQueryBuilder
     {
         private string _tableName;
-        private Dictionary<string, string> _columnsAndValuesDictionary;
+        private Dictionary<string, ISqlExpression> _columnsAndValuesDictionary;
         private string[] _valuesList;
         private string[] _columnNames;
         private string _selection;
@@ -55,12 +55,12 @@ namespace SQLEngine.SqlServer
         }
         public IInsertNeedValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue)
         {
-            if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, string>();
-            _columnsAndValuesDictionary.Add(columnName, columnValue.ToSqlString());
+            if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, ISqlExpression>();
+            _columnsAndValuesDictionary.Add(columnName, columnValue);
             return this;
         }
 
-        public IInsertNoValuesQueryBuilder Values(Dictionary<string, string> colsAndValues)
+        public IInsertNoValuesQueryBuilder Values(Dictionary<string, ISqlExpression> colsAndValues)
         {
             _columnsAndValuesDictionary = colsAndValues;
             return this;
@@ -106,7 +106,7 @@ namespace SQLEngine.SqlServer
 
                 Writer.BeginScope();
 
-                Writer.WriteJoined(_columnsAndValuesDictionary.Keys.Select(key => _columnsAndValuesDictionary[key]).ToArray());
+                Writer.WriteJoined(_columnsAndValuesDictionary.Keys.Select(key => _columnsAndValuesDictionary[key].ToSqlString()).ToArray());
                 Writer.EndScope();
                 Writer.Indent--;
             }

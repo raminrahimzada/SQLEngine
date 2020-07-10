@@ -14,10 +14,10 @@ namespace SQLEngine.Tests
                         ._update
                         .Top(5)
                         .Table("Users")
-                        .Value("NAME", "Ramin".ToSQL())
-                        .Value("SURNAME", "Rahimzada".ToSQL())
-                        .Value("AGE", 18.ToSQL())
-                        .WhereEquals("ID", 41.ToSQL())
+                        .Value("NAME", "Ramin")
+                        .Value("SURNAME", "Rahimzada")
+                        .Value("AGE", 18)
+                        .WhereColumnEquals("ID", 41)
                         .ToString()
                     ;
                 const string query =
@@ -36,8 +36,8 @@ namespace SQLEngine.Tests
                             ._update
                             .Top(5)
                             .Table("Users")
-                            .Value("Age", 21.ToSQL())
-                            .WhereEquals("Id", "11")
+                            .Value("Age", 21)
+                            .WhereColumnEquals("Id", 11)
                     ;
                 const string query =
                     "UPDATE TOP(5)  Users SET Age = 21 WHERE Id = 11 ";

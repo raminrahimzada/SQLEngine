@@ -5,7 +5,7 @@ namespace SQLEngine
 {
     public interface IInsertWithValuesQueryBuilder : IAbstractInsertQueryBuilder
     {
-        IInsertNoValuesQueryBuilder Values(Dictionary<string, string> colsAndValues);
+        IInsertNoValuesQueryBuilder Values(Dictionary<string, ISqlExpression> colsAndValues);
         IInsertNoValuesQueryBuilder Values(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> builder);
     }
 }

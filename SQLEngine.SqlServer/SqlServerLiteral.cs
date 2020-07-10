@@ -193,7 +193,12 @@ namespace SQLEngine.SqlServer
 
         protected override void SetFrom(float? f)
         {
-            throw new NotImplementedException();
+            if (f == null)
+            {
+                _rawSqlString = SQLKeywords.NULL;
+                return;
+            }
+            _rawSqlString = (f.Value + string.Empty).Replace(',', '.');
         }
 
         protected override void SetFrom(short? s)
@@ -232,6 +237,34 @@ namespace SQLEngine.SqlServer
         }
 
         public static implicit operator SqlServerLiteral(int x)
+        {
+            return new SqlServerLiteral(x);
+        }
+        public static implicit operator SqlServerLiteral(double x)
+        {
+            return new SqlServerLiteral(x);
+        }
+        public static implicit operator SqlServerLiteral(DateTime x)
+        {
+            return new SqlServerLiteral(x);
+        }
+        public static implicit operator SqlServerLiteral(long x)
+        {
+            return new SqlServerLiteral(x);
+        }
+        public static implicit operator SqlServerLiteral(string x)
+        {
+            return new SqlServerLiteral(x);
+        }
+        public static implicit operator SqlServerLiteral(short x)
+        {
+            return new SqlServerLiteral(x);
+        }
+        public static implicit operator SqlServerLiteral(byte x)
+        {
+            return new SqlServerLiteral(x);
+        }
+        public static implicit operator SqlServerLiteral(byte[] x)
         {
             return new SqlServerLiteral(x);
         }

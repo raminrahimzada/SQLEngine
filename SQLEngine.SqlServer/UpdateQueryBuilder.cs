@@ -81,9 +81,9 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public IUpdateNoTableAndValuesAndWhereQueryBuilder WhereEquals(string left, string right)
+        public IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression right)
         {
-            _whereCondition = left + SQLKeywords.EQUALS + right;
+            _whereCondition = columnName + SQLKeywords.EQUALS + right.ToSqlString();
             return this;
         }
 

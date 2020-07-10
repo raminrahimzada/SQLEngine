@@ -19,8 +19,8 @@ namespace SQLEngine.Tests
 
 
                 q.Comment("Setting values");
-                q.Set(x, 17.ToSQL());
-                q.Set(y, 13.ToSQL());
+                q.Set(x, 17);
+                q.Set(y, 13);
                 
                 
                 q.Comment("doing some calculations");

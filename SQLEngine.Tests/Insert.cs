@@ -12,11 +12,13 @@ namespace SQLEngine.Tests
             using (var q = Query.New)
             {
                 q.Insert(i => i.Into("Users")
-                    .Value("Name", "Ramin".ToSQL())
-                    .Value("Surname", "Rahimzada".ToSQL())
-                    .Value("Age", 26.ToSQL())
+                    .Value("Name", "Ramin")
+                    .Value("Surname", "Rahimzada")
+                    .Value("Age", 26)
+                    .Value("Height", 1.84)
                 );
-                const string query = "INSERT INTO Users (Name,Surname,Age) VALUES (N'Ramin' , N'Rahimzada' , 26)";
+                const string query =
+                    "INSERT INTO Users (Name,Surname,Age,Height) VALUES (N'Ramin' , N'Rahimzada' , 26, 1.84)";
                 
                 QueryAssert.AreEqual(q.ToString(), query);
             }
@@ -27,7 +29,7 @@ namespace SQLEngine.Tests
         {
             using (var q = Query.New)
             {
-                var dict = new Dictionary<string,string>
+                var dict = new Dictionary<string,ISqlExpression>
                 {
                     {"Name", "Ramin".ToSQL()},
                     {"Surname", "Rahimzada".ToSQL()},

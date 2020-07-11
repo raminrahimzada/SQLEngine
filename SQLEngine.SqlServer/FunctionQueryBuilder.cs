@@ -31,7 +31,7 @@ namespace SQLEngine.SqlServer
 
         public FunctionQueryBuilder Argument(string name, string type)
         {
-            _arguments.Add(new ArgumentModel()
+            _arguments.Add(new ArgumentModel
             {
                 Name = name,
                 Type = type

@@ -2,7 +2,8 @@
 {
     public interface ICreateProcedureNoHeaderQueryBuilder : IAbstractQueryBuilder
     {
-        ICreateProcedureWithArgumentQueryBuilder Argument(string argName, string argType);
+        ICreateProcedureWithArgumentQueryBuilder Parameter(string argName, string argType);
+        ICreateProcedureWithArgumentQueryBuilder ParameterOut(string argName, string argType);
 
     }
 }

@@ -8,7 +8,7 @@ namespace SQLEngine.SqlServer
 
         public static SqlServerLiteral From(Guid x)
         {
-            return new SqlServerLiteral()
+            return new SqlServerLiteral
             {
                 _rawSqlString = $"'{x}'"
             };
@@ -17,12 +17,12 @@ namespace SQLEngine.SqlServer
         {
             if (x==null)
             {
-                return new SqlServerLiteral()
+                return new SqlServerLiteral
                 {
                     _rawSqlString = SQLKeywords.NULL
                 };
             }
-            return new SqlServerLiteral()
+            return new SqlServerLiteral
             {
                 _rawSqlString = $"'{x}'"
             };

@@ -37,6 +37,10 @@ namespace SQLEngine.SqlServer
         {
             return EqualTo((AbstractSqlLiteral) (SqlServerLiteral) value);
         }
+        protected override AbstractSqlCondition EqualTo(bool value)
+        {
+            return EqualTo((AbstractSqlLiteral) (SqlServerLiteral) value);
+        }
 
         protected override AbstractSqlCondition EqualTo(byte value)
         {
@@ -85,7 +89,12 @@ namespace SQLEngine.SqlServer
 
         protected override AbstractSqlCondition NotEqualTo(AbstractSqlColumn otherColumn)
         {
-            var rawSqlString = ToSqlString() + " = " + otherColumn.ToSqlString();
+            var rawSqlString = ToSqlString() + " <> " + otherColumn.ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
+        }
+        protected override AbstractSqlCondition NotEqualTo(AbstractSqlVariable variable)
+        {
+            var rawSqlString = ToSqlString() + " <> " + variable.ToSqlString();
             return SqlServerCondition.Raw(rawSqlString);
         }
 
@@ -110,6 +119,10 @@ namespace SQLEngine.SqlServer
         }
 
         protected override AbstractSqlCondition NotEqualTo(DateTime value)
+        {
+            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+        }
+        protected override AbstractSqlCondition NotEqualTo(bool value)
         {
             return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
         }
@@ -189,6 +202,36 @@ namespace SQLEngine.SqlServer
         protected override AbstractSqlCondition LessEqual(AbstractSqlLiteral value)
         {
             var rawSqlString = ToSqlString() + " <= " + value.ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
+        }
+
+        protected override AbstractSqlCondition EqualTo(AbstractSqlVariable variable)
+        {
+            var rawSqlString = ToSqlString() + " = " + variable.ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
+        }
+
+        protected override AbstractSqlCondition GreaterEqual(AbstractSqlVariable variable)
+        {
+            var rawSqlString = ToSqlString() + " >= " + variable.ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
+        }
+
+        protected override AbstractSqlCondition Greater(AbstractSqlVariable variable)
+        {
+            var rawSqlString = ToSqlString() + " > " + variable.ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
+        }
+
+        protected override AbstractSqlCondition Less(AbstractSqlVariable variable)
+        {
+            var rawSqlString = ToSqlString() + " < " + variable.ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
+        }
+
+        protected override AbstractSqlCondition LessEqual(AbstractSqlVariable variable)
+        {
+            var rawSqlString = ToSqlString() + " <= " + variable.ToSqlString();
             return SqlServerCondition.Raw(rawSqlString);
         }
 

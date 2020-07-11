@@ -14,8 +14,11 @@ namespace SQLEngine.Tests
 
                 var x = q.Declare("x", "int");
                 var y = q.Declare("y", "int");
-                var plus = q.Declare("plus", "int");
-                var minus = q.Declare("minus", "int");
+                
+                var add = q.Declare("add", "int");
+                var subtract = q.Declare("subtract", "int");
+                var multiply = q.Declare("multiply", "int");
+                var divide = q.Declare("divide", "int");
 
 
                 q.Comment("Setting values");
@@ -24,35 +27,44 @@ namespace SQLEngine.Tests
                 
                 
                 q.Comment("doing some calculations");
-                q.Set(plus, x + y);
-                q.Set(minus, x - y);
+                q.Set(add, x + y);
+                q.Set(subtract, x - y);
+                q.Set(multiply, x * y);
+                q.Set(divide, x / y);
 
                 q.Comment("printing the results");
 
-                q.Print(plus);
-                q.Print(minus);
+                q.Print(add);
+                q.Print(subtract);
+                q.Print(multiply);
+                q.Print(divide);
                 var query = q.ToString();
 
                 var queryOriginal = @"
 
-/*Declaring variables*/
+/*Declaring variables*/ 
 DECLARE  @x int ;
 DECLARE  @y int ;
-DECLARE  @plus int ;
-DECLARE  @minus int ;
+DECLARE  @add int ;
+DECLARE  @subtract int ;
+DECLARE  @multiply int ;
+DECLARE  @divide int ;
 
-/*Setting values*/
+/*Setting values*/ 
 SET  @x  = 17;
 SET  @y  = 13;
 
-/*doing some calculations*/
-SET  @plus  = (@x + @y);
-SET  @minus  = (@x - @y);
+/*doing some calculations*/ 
+SET  @add  = (@x + @y);
+SET  @subtract  = (@x - @y);
+SET  @multiply  = (@x * @y);
+SET  @divide  = (@x / @y);
 
-
-/*printing the results*/
-print(@plus)
-print(@minus)
+/*printing the results*/ 
+print(@add)
+print(@subtract)
+print(@multiply)
+print(@divide)
 
 
 

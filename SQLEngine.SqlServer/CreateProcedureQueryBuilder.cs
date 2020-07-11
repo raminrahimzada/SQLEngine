@@ -4,6 +4,13 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer
 {
+    internal class SqlServerProcedureBodyQueryBuilder : SqlServerQueryBuilder, IProcedureBodyQueryBuilder
+    {
+        public AbstractSqlVariable Parameter(string name)
+        {
+            return new SqlServerVariable(name);
+        }
+    }
     internal class CreateProcedureQueryBuilder : SqlServerQueryBuilder
     , ICreateProcedureQueryBuilder
     ,ICreateProcedureWithArgumentQueryBuilder
@@ -28,7 +35,7 @@ namespace SQLEngine.SqlServer
         }
 
         private readonly List<ArgumentModel> _arguments;
-        private Action<IQueryBuilder> _bodyBuilder;
+        private Action<IProcedureBodyQueryBuilder> _bodyBuilder;
         private string _schemaName;
         private string _procedureName;
         private string _metaDataHeader;
@@ -38,7 +45,7 @@ namespace SQLEngine.SqlServer
             _arguments = new List<ArgumentModel>();
         }
 
-        public ICreateProcedureWithArgumentQueryBuilder ArgumentOut(string name, string type)
+        public ICreateProcedureWithArgumentQueryBuilder ParameterOut(string name, string type)
         {
             _arguments.Add(new ArgumentModel
             {
@@ -48,7 +55,7 @@ namespace SQLEngine.SqlServer
             });
             return this;
         }
-        public ICreateProcedureWithArgumentQueryBuilder Argument(string name, string type)
+        public ICreateProcedureWithArgumentQueryBuilder Parameter(string name, string type)
         {
             _arguments.Add(new ArgumentModel
             {
@@ -69,7 +76,7 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public ICreateProcedureNeedBodyQueryBuilder Body(Action<IQueryBuilder> builder)
+        public ICreateProcedureNeedBodyQueryBuilder Body(Action<IProcedureBodyQueryBuilder> builder)
         {
             _bodyBuilder = builder;
             return this;
@@ -96,7 +103,7 @@ namespace SQLEngine.SqlServer
             Writer.WriteLine(SQLKeywords.BEGIN);
             Writer.Indent++;
 
-            using (var o = Query.New)
+            using (var o = new SqlServerProcedureBodyQueryBuilder())
             {
                 o.Join(this);
                 _bodyBuilder(o);

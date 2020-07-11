@@ -200,6 +200,12 @@ namespace SQLEngine.SqlServer
             Writer.WriteWithScoped(sql);
             Writer.WriteLine();
         }
+        public void Return(ISqlExpression expression)
+        {
+            Writer.Write(SQLKeywords.RETURN);
+            Writer.WriteWithScoped(expression.ToSqlString());
+            Writer.WriteLine();
+        }
 
         public void Comment(string comment)
         {
@@ -210,6 +216,7 @@ namespace SQLEngine.SqlServer
             Writer.Write("/*");
             Writer.WriteEx(comment);
             Writer.Write("*/ ");
+            Writer.WriteLine("");
             //Writer.WriteLine("PRINT(" + comment.ToSQL() + ");");
         }
 

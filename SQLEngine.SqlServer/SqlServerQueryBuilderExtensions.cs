@@ -6,6 +6,148 @@ namespace SQLEngine.SqlServer
 {
     public static class SqlServerQueryBuilderExtensions
     {
+        private static string DetectSqlType<T>()
+        {
+            var type = typeof(T);
+            {
+                if (type == typeof(int))
+                {
+                    return (SQLKeywords.INT);
+                }
+            }
+            {
+                if (type == typeof(uint))
+                {
+                    return (SQLKeywords.INT);
+                }
+            }
+            {
+                if (type == typeof(long))
+                {
+                    return (SQLKeywords.BIGINT);
+                }
+            }
+            {
+                if (type == typeof(ulong))
+                {
+                    return (SQLKeywords.BIGINT);
+                }
+            }
+
+            {
+                if (type == typeof(byte))
+                {
+                    return (SQLKeywords.TINYINT);
+                }
+            }
+            {
+                if (type == typeof(Guid))
+                {
+                    return (SQLKeywords.UNIQUEIDENTIFIER);
+                }
+            }
+            {
+                if (type == typeof(DateTime))
+                {
+                    return (SQLKeywords.DATETIME);
+                }
+            }
+            {
+                if (type == typeof(string))
+                {
+                    return (SQLKeywords.NVARCHARMAX);
+                }
+            }
+            throw new Exception("Complex type " + type.FullName + " cannot be converted to sql type");
+        }
+
+        public static void Return(this IProcedureBodyQueryBuilder builder, SqlServerLiteral literal)
+        {
+            builder.Return(literal);
+        }
+        public static ICreateProcedureWithArgumentQueryBuilder Parameter<T>(this ICreateProcedureQueryBuilder builder,string argName)
+        {
+            var typeSql = DetectSqlType<T>();
+            return builder.Parameter(argName, typeSql);
+        }
+        public static ICreateProcedureWithArgumentQueryBuilder ParameterOut<T>(
+            this ICreateProcedureQueryBuilder builder,string argName)
+        {
+            var typeSql = DetectSqlType<T>();
+            return builder.ParameterOut(argName, typeSql);
+        }
+        public static ICreateProcedureWithArgumentQueryBuilder Parameter<T>(this ICreateProcedureWithArgumentQueryBuilder builder,string argName)
+        {
+            var typeSql = DetectSqlType<T>();
+            return builder.Parameter(argName, typeSql);
+        }
+        public static ICreateProcedureWithArgumentQueryBuilder ParameterOut<T>(
+            this ICreateProcedureWithArgumentQueryBuilder builder,string argName)
+        {
+            var typeSql = DetectSqlType<T>();
+            return builder.ParameterOut(argName, typeSql);
+        }
+        public static ICreateFunctionNoNameAndParametersAndReturnTypeQueryBuilder Returns<T>(
+            this ICreateFunctionNoNameQueryBuilder builder)
+        {
+            var typeSql = DetectSqlType<T>();
+            return builder.Returns(typeSql);
+        }
+        public static ICreateFunctionNoNameQueryBuilder Parameter<T>(this ICreateFunctionNoNameQueryBuilder builder,
+            string paramName)
+        {
+            var type = typeof(T);
+            {
+                if (type == typeof(int))
+                {
+                    return builder.Parameter(paramName, SQLKeywords.INT);
+                }
+            }
+            {
+                if (type == typeof(uint))
+                {
+                    return builder.Parameter(paramName, SQLKeywords.INT);
+                }
+            }
+            {
+                if (type == typeof(long))
+                {
+                    return builder.Parameter(paramName, SQLKeywords.BIGINT);
+                }
+            }
+            {
+                if (type == typeof(ulong))
+                {
+                    return builder.Parameter(paramName, SQLKeywords.BIGINT);
+                }
+            }
+
+            {
+                if (type == typeof(byte))
+                {
+                    return builder.Parameter(paramName, SQLKeywords.TINYINT);
+                }
+            }
+            {
+                if (type == typeof(Guid))
+                {
+                    return builder.Parameter(paramName, SQLKeywords.UNIQUEIDENTIFIER);
+                }
+            }
+            {
+                if (type == typeof(DateTime))
+                {
+                    return builder.Parameter(paramName, SQLKeywords.DATETIME);
+                }
+            }
+            {
+                if (type == typeof(string))
+                {
+                    return builder.Parameter(paramName, SQLKeywords.NVARCHARMAX);
+                }
+            }
+            throw new Exception("Complex type " + type.FullName + " cannot be converted to sql type");
+        }
         public static void If(this IQueryBuilder builder,AbstractSqlCondition condition)
         {
             builder.If(condition.ToSqlString());
@@ -104,56 +246,57 @@ namespace SQLEngine.SqlServer
         public static AbstractSqlVariable Declare<T>(this IQueryBuilder builder,
             string variableName)
         {
+            var type = typeof(T);
             {
-                if (typeof(T) == typeof(int))
+                if ( type== typeof(int))
                 {
                     return builder.Declare(variableName, SQLKeywords.INT);
                 }
             }
             {
-                if (typeof(T) == typeof(uint))
+                if (type == typeof(uint))
                 {
                     return builder.Declare(variableName, SQLKeywords.INT);
                 }
             }
             {
-                if (typeof(T) == typeof(long))
+                if (type == typeof(long))
                 {
                     return builder.Declare(variableName, SQLKeywords.BIGINT);
                 }
             }
             {
-                if (typeof(T) == typeof(ulong))
+                if (type == typeof(ulong))
                 {
                     return builder.Declare(variableName, SQLKeywords.BIGINT);
                 }
             }
 
             {
-                if (typeof(T) == typeof(byte))
+                if (type == typeof(byte))
                 {
                     return builder.Declare(variableName, SQLKeywords.TINYINT);
                 }
             }
             {
-                if (typeof(T) == typeof(Guid))
+                if (type == typeof(Guid))
                 {
                     return builder.Declare(variableName, SQLKeywords.UNIQUEIDENTIFIER);
                 }
             }
             {
-                if (typeof(T) == typeof(DateTime))
+                if (type == typeof(DateTime))
                 {
                     return builder.Declare(variableName, SQLKeywords.DATETIME);
                 }
             }
             {
-                if (typeof(T) == typeof(string))
+                if (type == typeof(string))
                 {
                     return builder.Declare(variableName, SQLKeywords.NVARCHARMAX);
                 }
             }
-            throw new Exception("Complex type " + typeof(T).FullName + " cannot be converted to sql literal");
+            throw new Exception("Complex type " + type.FullName + " cannot be converted to sql literal");
         }
 
         public static AbstractSqlVariable Declare(this IQueryBuilder builder, 

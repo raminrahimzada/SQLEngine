@@ -2,10 +2,14 @@
 
 namespace SQLEngine
 {
+    public interface IProcedureBodyQueryBuilder : IQueryBuilder
+    {
+        AbstractSqlVariable Parameter(string name);
+    }
     public interface ICreateProcedureWithArgumentQueryBuilder : IAbstractQueryBuilder
     {
-        ICreateProcedureWithArgumentQueryBuilder Argument(string argName, string argType);
-        ICreateProcedureWithArgumentQueryBuilder ArgumentOut(string argName, string argType);
-        ICreateProcedureNeedBodyQueryBuilder Body(Action<IQueryBuilder> body);
+        ICreateProcedureWithArgumentQueryBuilder Parameter(string argName, string argType);
+        ICreateProcedureWithArgumentQueryBuilder ParameterOut(string argName, string argType);
+        ICreateProcedureNeedBodyQueryBuilder Body(Action<IProcedureBodyQueryBuilder> body);
     }
 }

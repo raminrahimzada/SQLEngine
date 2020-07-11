@@ -23,7 +23,7 @@
 
         public static SqlServerCondition Raw(string rawSqlString)
         {
-            return new SqlServerCondition()
+            return new SqlServerCondition
             {
                 _rawSqlString = rawSqlString
             };

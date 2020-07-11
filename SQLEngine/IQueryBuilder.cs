@@ -39,7 +39,8 @@ namespace SQLEngine
         void Update(Func<IUpdateQueryBuilder, IAbstractUpdateQueryBuilder> builder);
         void Delete(Func<IDeleteQueryBuilder, IDeleteQueryBuilder> builder);
         void Return();
-        void Return(string sql);
+        //void Return(string sql);
+        void Return(ISqlExpression expression);
         void Comment(string comment);
         string GenerateRandomVariableName(string beginning);
         void Drop(Func<IDropTableQueryBuilder, IDropTableNoNameNoSchemaNoDBQueryBuilder> builder);

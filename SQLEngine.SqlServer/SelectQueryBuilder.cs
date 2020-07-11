@@ -203,6 +203,11 @@ namespace SQLEngine.SqlServer
             _whereClause = condition;
             return this;
         }
+        public ISelectWithoutWhereQueryBuilder Where(AbstractSqlCondition condition)
+        {
+            _whereClause = condition.ToSqlString();
+            return this;
+        }
 
         public ISelectNoTopQueryBuilder Top(int count)
         {

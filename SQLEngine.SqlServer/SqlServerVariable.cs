@@ -48,6 +48,48 @@
             return SqlServerCondition.Raw(expression);
         }
 
+        public override ISqlExpression Multiply(AbstractSqlVariable variable)
+        {
+            var expression = "(" + this.ToSqlString() + " * " + variable.ToSqlString() + ")";
+            return SqlServerCondition.Raw(expression);
+        }
+
+        public override ISqlExpression Multiply(AbstractSqlLiteral variable)
+        {
+            var expression = "(" + this.ToSqlString() + " * " + variable.ToSqlString() + ")";
+            return SqlServerCondition.Raw(expression);
+        }
+
+        public override ISqlExpression Add(AbstractSqlLiteral literal)
+        {
+            var expression = "(" + this.ToSqlString() + " + " + literal.ToSqlString() + ")";
+            return SqlServerCondition.Raw(expression);
+        }
+
+        public override ISqlExpression Divide(AbstractSqlVariable variable)
+        {
+            var expression = "(" + this.ToSqlString() + " / " + variable.ToSqlString() + ")";
+            return SqlServerCondition.Raw(expression);
+        }
+
+        public override ISqlExpression Subtract(AbstractSqlLiteral literal)
+        {
+            var expression = "(" + this.ToSqlString() + " - " + literal.ToSqlString() + ")";
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override ISqlExpression SubtractReverse(AbstractSqlLiteral literal)
+        {
+            var expression = "(" + literal.ToSqlString() + " - " + this.ToSqlString() + ")";
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override ISqlExpression DivideReverse(AbstractSqlLiteral literal)
+        {
+            var expression = "(" + literal.ToSqlString() + " / " + this.ToSqlString() + ")";
+            return SqlServerCondition.Raw(expression);
+        }
+
         public override string ToString()
         {
             return ToSqlString();

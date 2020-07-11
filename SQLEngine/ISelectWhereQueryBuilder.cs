@@ -3,6 +3,7 @@
     public interface ISelectWhereQueryBuilder : IAbstractSelectQueryBuilder
     {
         ISelectWithoutWhereQueryBuilder Where(string condition);
+        ISelectWithoutWhereQueryBuilder Where(AbstractSqlCondition condition);
 
         ISelectWithoutWhereQueryBuilder WhereAnd(
             params string[] filters);

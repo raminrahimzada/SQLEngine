@@ -1,6 +1,11 @@
-# SQL-Engine
+<img src="https://github.com/raminrahimzada/SQLEngine/blob/master/logo.png?raw=true"/> 
+
+# SQL-Engine 
 SQL Engine is a library that eases of generating cross-dialect sql queries without using any dialect specific keyword
-<br/>You can generate (almost) any sql query with C# expressions (Then configure it to build for MS-SQL , Oracle or other type queries)
+<br/>You can generate (almost) any sql query with C# expressions (Then configure it to build for MS-SQL, Oracle, MySQL or other style queries)
+<br/>So library may be considered as a query abstraction layer on databases
+
+
 
 ## [SqlEngine![NuGet version (SqlEngine)](https://img.shields.io/nuget/v/SqlEngine.svg)](https://www.nuget.org/packages/SQLEngine/)
 ## [SqlEngine.SqlServer![NuGet version (SqlEngine.SqlServer)](https://img.shields.io/nuget/v/SqlEngine.SqlServer.svg)](https://www.nuget.org/packages/SQLEngine.SqlServer/)
@@ -9,11 +14,46 @@ SQL Engine is a library that eases of generating cross-dialect sql queries witho
 ```cs
 Query.Setup<SqlServerQueryBuilder>();
 
-//Query.Setup<OracleQueryBuilder>();--not ready yet
+//Query.Setup<OracleQueryBuilder>();  Not Implemented yet, - Maybe  You can help ?
 ```
 <br/>Usage :
 
-## Demonstration of select-where query
+## Demonstration of simple select-where query
+```sql            
+using (var q = Query.New)
+{
+    var id = q.Column("Id");
+
+    var query = q
+        ._select
+        .Top(1)
+        .From("Users")
+        .Where(id==11)
+        .ToString();
+}
+
+
+//or using strong typed tables
+using (var q = Query.New)
+{
+    var id = q.Column("Id");
+
+    var query = q
+        ._select
+        .Top(1)
+        .From<UserTable>()
+        .Where(id==11)
+        .ToString();
+}
+```
+Above 2 queries will be like that:
+```sql
+SELECT TOP(1)  *
+    FROM Users
+    WHERE Id = 11
+```
+
+## Demonstration of another select-where query
 ```sql            
 using (var q = Query.New)
 {

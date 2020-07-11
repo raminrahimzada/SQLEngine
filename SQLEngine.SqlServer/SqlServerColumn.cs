@@ -275,6 +275,26 @@ namespace SQLEngine.SqlServer
             return LessEqual((SqlServerLiteral)value);
         }
 
+        protected override AbstractSqlCondition Greater(double value)
+        {
+            return Greater((SqlServerLiteral)value);
+        }
+
+        protected override AbstractSqlCondition GreaterEqual(double value)
+        {
+            return GreaterEqual((SqlServerLiteral)value);
+        }
+
+        protected override AbstractSqlCondition Less(double value)
+        {
+            return Less((SqlServerLiteral)value);
+        }
+
+        protected override AbstractSqlCondition LessEqual(double value)
+        {
+            return LessEqual((SqlServerLiteral)value);
+        }
+
         protected override AbstractSqlCondition Greater(long value)
         {
             return Greater((SqlServerLiteral)value);

@@ -80,21 +80,49 @@ SELECT TOP(1)  Name , Surname
             }
         }
         [TestMethod]
+        public void Test_Simple_Select_Complex_Filter_2()
+        {
+            using (var q = Query.New)
+            {
+                var age = q.Column("Age");
+                var height = q.Column("Height");
+
+                var queryThis = q
+                    ._select
+                    .Top(1)
+                    .Selector("Name")
+                    .Selector("Surname")
+                    .From("Users")
+                    .Where(age > 18 & height <= 1)
+                    .ToString();
+
+                var queryThat = @"
+
+SELECT TOP(1)  Name , Surname
+    FROM Users
+    WHERE (Age > 18) and (Height < 1.7)
+
+";
+                QueryAssert.AreEqual(queryThis, queryThat);
+
+            }
+        }
+        [TestMethod]
         public void Test_Select_With_Joins()
         {
             using (var t = Query.New)
             {
-                var filter = t.Helper.ColumnGreaterThan("Age",18);
+                var age = t.Column("Age");
                 var queryFromBuilder = t._select
-                    .Top(1)
-                    .From("Users", "U")
-                    .Selector("Name")
-                    .Selector("Surname")
-                    .InnerJoin("P", "Photos", "UserId")
-                    .LeftJoin("A", "Attachments", "UserId")
-                    .RightJoin("S", "Sales", "UserId")
-                    .Where(filter)
-                    .ToString()
+                        .Top(1)
+                        .From("Users", "U")
+                        .Selector("Name")
+                        .Selector("Surname")
+                        .InnerJoin("P", "Photos", "UserId")
+                        .LeftJoin("A", "Attachments", "UserId")
+                        .RightJoin("S", "Sales", "UserId")
+                        .Where(age > 18)
+                        .ToString()
                     ;
 
                 const string query = @" 

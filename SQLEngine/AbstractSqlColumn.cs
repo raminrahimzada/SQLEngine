@@ -65,6 +65,12 @@ namespace SQLEngine
         protected abstract AbstractSqlCondition GreaterEqual(DateTime value);
         protected abstract AbstractSqlCondition Less(DateTime value);
         protected abstract AbstractSqlCondition LessEqual(DateTime value);
+        
+        
+        protected abstract AbstractSqlCondition Greater(double value);
+        protected abstract AbstractSqlCondition GreaterEqual(double value);
+        protected abstract AbstractSqlCondition Less(double value);
+        protected abstract AbstractSqlCondition LessEqual(double value);
 
 
         protected abstract AbstractSqlCondition Greater(long value);
@@ -223,6 +229,24 @@ namespace SQLEngine
             return x.GreaterEqual(y);
         }
         public static AbstractSqlCondition operator <=(AbstractSqlColumn x, DateTime y)
+        {
+            return x.LessEqual(y);
+        }
+        
+        
+        public static AbstractSqlCondition operator >(AbstractSqlColumn x, double y)
+        {
+            return x.Greater(y);
+        }
+        public static AbstractSqlCondition operator <(AbstractSqlColumn x, double y)
+        {
+            return x.Less(y);
+        }
+        public static AbstractSqlCondition operator >=(AbstractSqlColumn x, double y)
+        {
+            return x.GreaterEqual(y);
+        }
+        public static AbstractSqlCondition operator <=(AbstractSqlColumn x, double y)
         {
             return x.LessEqual(y);
         }

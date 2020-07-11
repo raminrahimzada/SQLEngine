@@ -95,7 +95,7 @@ CREATE VIEW View_Active_Users AS SELECT  *
 
 
                         f.Comment("Sql Server needs that ;) ");
-                        f.Return(0.ToSQL());
+                        f.Return(0);
 
                     }).ToString();
 

@@ -86,6 +86,7 @@ SELECT TOP(1)  Name , Surname
             {
                 var age = q.Column("Age");
                 var height = q.Column("Height");
+                var id = q.Column("Id");
 
                 var queryThis = q
                     ._select
@@ -93,15 +94,14 @@ SELECT TOP(1)  Name , Surname
                     .Selector("Name")
                     .Selector("Surname")
                     .From("Users")
-                    .Where(age > 18 & height <= 1)
+                    .Where(age > 18 & height <= 1.7 & id != 1)
                     .ToString();
 
-                var queryThat = @"
+                const string queryThat = @"
 
 SELECT TOP(1)  Name , Surname
     FROM Users
-    WHERE (Age > 18) and (Height < 1.7)
-
+    WHERE ((Age > 18) AND (Height <= 1.7)) AND (Id = 1)
 ";
                 QueryAssert.AreEqual(queryThis, queryThat);
 

@@ -65,6 +65,10 @@ namespace SQLEngine.SqlServer
         {
             builder.Return(literal);
         }
+        public static void Return(this IFunctionBodyQueryBuilder builder, SqlServerLiteral literal)
+        {
+            builder.Return(literal);
+        }
         public static ICreateProcedureWithArgumentQueryBuilder Parameter<T>(this ICreateProcedureQueryBuilder builder,string argName)
         {
             var typeSql = DetectSqlType<T>();

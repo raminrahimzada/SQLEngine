@@ -51,6 +51,53 @@ SELECT TOP(1)  *
 
             }
         }
+        [TestMethod]
+        public void Test_Simple_Select_Between()
+        {
+            using (var q = Query.New)
+            {
+                var age = q.Column("Age");
+
+                var queryThis = q
+                    ._select
+                    .Top(1)
+                    .From<UserTable>()
+                    .Where(age.Between(10, 60))
+                    .ToString();
+
+                const string queryThat = @"
+SELECT TOP(1) * 
+    FROM Users
+    WHERE (Age BETWEEN 10 AND 60)
+";
+                QueryAssert.AreEqual(queryThis, queryThat);
+
+            }
+        }
+
+        [TestMethod]
+        public void Test_Simple_Select_In()
+        {
+            using (var q = Query.New)
+            {
+                var age = q.Column("Age");
+
+                var queryThis = q
+                    ._select
+                    .Top(1)
+                    .From<UserTable>()
+                    .Where(age.In(11, 22, 33))
+                    .ToString();
+
+                const string queryThat = @"
+SELECT TOP(1) * 
+    FROM Users
+    WHERE Age IN (11,22,33)
+";
+                QueryAssert.AreEqual(queryThis, queryThat);
+
+            }
+        }
 
         [TestMethod]
         public void Test_Simple_Select_With_Alias_1()
@@ -116,7 +163,7 @@ SELECT TOP(1)  Name , Surname
                     .WhereAnd(filter1,filter2)
                     .ToString();
 
-                var queryThat = @"
+                const string queryThat = @"
 
 SELECT TOP(1)  Name , Surname
     FROM Users

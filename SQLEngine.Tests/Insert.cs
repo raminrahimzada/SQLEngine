@@ -60,5 +60,22 @@ namespace SQLEngine.Tests
                 QueryAssert.AreEqual(q.Build(), query);
             }
         }
+
+        [TestMethod]
+        public void TestMethod_Insert_By_Select_Strong_Typed()
+        {
+            using (var q = Query.New)
+            {
+                var queryThat = q._insert
+                    .Into<UserTable>()
+                    .Values(select =>
+                        select
+                            .From<AnotherUsersTable>()
+                    ).ToString();
+               
+                const string query = "INSERT INTO Users  SELECT  *  FROM AnotherUsers";
+                QueryAssert.AreEqual(queryThat, query);
+            }
+        }
     }
 }

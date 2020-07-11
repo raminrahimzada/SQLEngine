@@ -18,9 +18,9 @@
             _topClause = count;
             return this;
         }
-        public IDeleteExceptWhereQueryBuilder Where(string condition)
+        public IDeleteExceptWhereQueryBuilder Where(AbstractSqlCondition condition)
         {
-            _whereCondition = condition;
+            _whereCondition = condition.ToSqlString();
             return this;
         }
         public override string Build()

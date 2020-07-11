@@ -36,4 +36,13 @@
         public string Name => "Users";
         public string PrimaryColumnName => "Id";
     }
+    public class AnotherUsersTable : ITable
+    {
+        public void Dispose()
+        {
+        }
+
+        public string Name => "AnotherUsers";
+        public string PrimaryColumnName => "Id";
+    }
 }

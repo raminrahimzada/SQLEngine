@@ -61,6 +61,90 @@ namespace SQLEngine.SqlServer
             throw new Exception("Complex type " + type.FullName + " cannot be converted to sql type");
         }
 
+        public static IDeleteExceptWhereQueryBuilder Where(this IDeleteExceptTableNameQueryBuilder builder,
+            SqlServerCondition condition)
+        {
+            return builder.Where(condition);
+        }
+        public static AbstractSqlCondition In(this AbstractSqlColumn column
+            , params ISqlExpression[] expressions)
+        {
+            if (expressions.Length == 0)
+            {
+                throw new Exception("At least one element needed in -IN query needed");
+            }
+            var expression =   column.ToSqlString() + " IN (" +
+                            string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
+            
+            return SqlServerCondition.Raw(expression);
+        }
+        public static AbstractSqlCondition In(this AbstractSqlColumn column
+            , params SqlServerLiteral[] expressions)
+        {
+            if (expressions.Length == 0)
+            {
+                throw new Exception("At least one element needed in -IN query needed");
+            }
+            var expression =   column.ToSqlString() + " IN (" +
+                            string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
+            
+            return SqlServerCondition.Raw(expression);
+        }
+
+        public static AbstractSqlCondition NotIn(this AbstractSqlColumn column
+            , params ISqlExpression[] expressions)
+        {
+            if (expressions.Length == 0)
+            {
+                throw new Exception("At least one element needed in -IN query needed");
+            }
+            var expression = column.ToSqlString() + " NOT IN (" +
+                             string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
+
+            return SqlServerCondition.Raw(expression);
+        }
+        public static AbstractSqlCondition NotIn(this AbstractSqlColumn column
+            , IAbstractSelectQueryBuilder selectQuery)
+        {
+            var expression = column.ToSqlString() + " NOT IN (" + selectQuery + ")";
+            return SqlServerCondition.Raw(expression);
+        }
+        public static AbstractSqlCondition In(this AbstractSqlColumn column
+            , IAbstractSelectQueryBuilder selectQuery)
+        {
+            var expression = column.ToSqlString() + "  IN (" + selectQuery + ")";
+            return SqlServerCondition.Raw(expression);
+        }
+        public static AbstractSqlCondition NotIn(this AbstractSqlColumn column
+            , params SqlServerLiteral[] expressions)
+        {
+            if (expressions.Length == 0)
+            {
+                throw new Exception("At least one element needed in -IN query needed");
+            }
+            var expression = column.ToSqlString() + " NOT IN (" +
+                             string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
+
+            return SqlServerCondition.Raw(expression);
+        }
+
+
+        public static AbstractSqlCondition Between(this AbstractSqlColumn column
+            , ISqlExpression from,ISqlExpression to)
+        {
+            var expression = "(" + column.ToSqlString() + " BETWEEN (" + from.ToSqlString() + ") AND (" +
+                             to.ToSqlString() + "))";
+
+            return SqlServerCondition.Raw(expression);
+        }
+        public static AbstractSqlCondition Between(this AbstractSqlColumn column
+            , SqlServerLiteral from, SqlServerLiteral to)
+        {
+            var expression = "(" + column.ToSqlString() + " BETWEEN " + from.ToSqlString() + " AND " +
+                             to.ToSqlString() + ")";
+
+            return SqlServerCondition.Raw(expression);
+        }
 
         public static ISelectWithSelectorQueryBuilder SelectLiteral(this ISelectWithSelectorQueryBuilder builder
             ,SqlServerLiteral literal)
@@ -116,57 +200,8 @@ namespace SQLEngine.SqlServer
         public static ICreateFunctionNoNameQueryBuilder Parameter<T>(this ICreateFunctionNoNameQueryBuilder builder,
             string paramName)
         {
-            var type = typeof(T);
-            {
-                if (type == typeof(int))
-                {
-                    return builder.Parameter(paramName, SQLKeywords.INT);
-                }
-            }
-            {
-                if (type == typeof(uint))
-                {
-                    return builder.Parameter(paramName, SQLKeywords.INT);
-                }
-            }
-            {
-                if (type == typeof(long))
-                {
-                    return builder.Parameter(paramName, SQLKeywords.BIGINT);
-                }
-            }
-            {
-                if (type == typeof(ulong))
-                {
-                    return builder.Parameter(paramName, SQLKeywords.BIGINT);
-                }
-            }
-
-            {
-                if (type == typeof(byte))
-                {
-                    return builder.Parameter(paramName, SQLKeywords.TINYINT);
-                }
-            }
-            {
-                if (type == typeof(Guid))
-                {
-                    return builder.Parameter(paramName, SQLKeywords.UNIQUEIDENTIFIER);
-                }
-            }
-            {
-                if (type == typeof(DateTime))
-                {
-                    return builder.Parameter(paramName, SQLKeywords.DATETIME);
-                }
-            }
-            {
-                if (type == typeof(string))
-                {
-                    return builder.Parameter(paramName, SQLKeywords.NVARCHARMAX);
-                }
-            }
-            throw new Exception("Complex type " + type.FullName + " cannot be converted to sql type");
+            var sqlType = DetectSqlType<T>();
+            return builder.Parameter(paramName, sqlType);
         }
         public static void If(this IQueryBuilder builder,AbstractSqlCondition condition)
         {
@@ -202,12 +237,12 @@ namespace SQLEngine.SqlServer
         public static IInsertNeedValueQueryBuilder Value(this IInsertNoIntoQueryBuilder builder, 
             string columnName, SqlServerLiteral columnValue)
         {
-            return builder.Value(columnName, (AbstractSqlLiteral)columnValue);
+            return builder.Value(columnName, columnValue);
         }
         public static IInsertNeedValueQueryBuilder Value(this IInsertNeedValueQueryBuilder builder, 
             string columnName, SqlServerLiteral columnValue)
         {
-            return builder.Value(columnName, (AbstractSqlLiteral)columnValue);
+            return builder.Value(columnName, columnValue);
         }
         public static AbstractSqlVariable Declare<T>(this IQueryBuilder builder,
             string variableName,  T defaultValue)
@@ -266,57 +301,8 @@ namespace SQLEngine.SqlServer
         public static AbstractSqlVariable Declare<T>(this IQueryBuilder builder,
             string variableName)
         {
-            var type = typeof(T);
-            {
-                if ( type== typeof(int))
-                {
-                    return builder.Declare(variableName, SQLKeywords.INT);
-                }
-            }
-            {
-                if (type == typeof(uint))
-                {
-                    return builder.Declare(variableName, SQLKeywords.INT);
-                }
-            }
-            {
-                if (type == typeof(long))
-                {
-                    return builder.Declare(variableName, SQLKeywords.BIGINT);
-                }
-            }
-            {
-                if (type == typeof(ulong))
-                {
-                    return builder.Declare(variableName, SQLKeywords.BIGINT);
-                }
-            }
-
-            {
-                if (type == typeof(byte))
-                {
-                    return builder.Declare(variableName, SQLKeywords.TINYINT);
-                }
-            }
-            {
-                if (type == typeof(Guid))
-                {
-                    return builder.Declare(variableName, SQLKeywords.UNIQUEIDENTIFIER);
-                }
-            }
-            {
-                if (type == typeof(DateTime))
-                {
-                    return builder.Declare(variableName, SQLKeywords.DATETIME);
-                }
-            }
-            {
-                if (type == typeof(string))
-                {
-                    return builder.Declare(variableName, SQLKeywords.NVARCHARMAX);
-                }
-            }
-            throw new Exception("Complex type " + type.FullName + " cannot be converted to sql literal");
+            var sqlType = DetectSqlType<T>();
+            return builder.Declare(variableName, sqlType);
         }
 
         public static AbstractSqlVariable Declare(this IQueryBuilder builder, 
@@ -326,7 +312,7 @@ namespace SQLEngine.SqlServer
         }
         public static void Set(this IQueryBuilder builder, AbstractSqlVariable variable, SqlServerLiteral value)
         {
-            builder.Set(variable, (AbstractSqlLiteral) value);
+            builder.Set(variable, value);
         }
 
         public static string ColumnGreaterThan(this IConditionFilterQueryHelper helper, string columnName, SqlServerLiteral value)
@@ -356,13 +342,13 @@ namespace SQLEngine.SqlServer
         public static void ThrowException(this IQueryBuilder builder, string exceptionMessage,
             params string[] args)
         {
-            const int SQL_ERROR_STATE = 47;
+            int sqlErrorState = Query.Settings.SQLErrorState;
             var list = new List<string>(args.Length + 1) {exceptionMessage.ToSQL().ToSqlString()};
             list.AddRange(args);
             var errorMessageVar = builder.DeclareRandom("EXCEPTION", SQLKeywords.NVARCHARMAX);
             AbstractSqlLiteral to = SqlServerLiteral.Raw($"{SQLKeywords.FORMATMESSAGE}({list.JoinWith(", ")})");
             builder.Set(errorMessageVar, to);
-            builder.AddExpression($"{SQLKeywords.RAISERROR}({errorMessageVar}, 18, {SQL_ERROR_STATE}) {SQLKeywords.WITH} {SQLKeywords.NOWAIT}");
+            builder.AddExpression($"{SQLKeywords.RAISERROR}({errorMessageVar}, 18, {sqlErrorState}) {SQLKeywords.WITH} {SQLKeywords.NOWAIT}");
         }
     }
 }

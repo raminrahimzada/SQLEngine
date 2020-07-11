@@ -10,6 +10,7 @@ namespace SQLEngine
         IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue);
 
         IUpdateNoTableAndValuesAndWhereQueryBuilder Where(string condition);
+        IUpdateNoTableAndValuesAndWhereQueryBuilder Where(AbstractSqlCondition condition);
         //IUpdateNoTableAndValuesAndWhereQueryBuilder Where(Func<AbstractConditionBuilder, AbstractConditionBuilder> builder);
         IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression right);
 

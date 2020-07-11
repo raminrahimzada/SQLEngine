@@ -75,6 +75,11 @@ namespace SQLEngine.SqlServer
             _whereCondition = condition;
             return this;
         }
+        public IUpdateNoTableAndValuesAndWhereQueryBuilder Where(AbstractSqlCondition condition)
+        {
+            _whereCondition = condition.ToSqlString();
+            return this;
+        }
         public IUpdateNoTableAndValuesAndWhereQueryBuilder Where(Func<AbstractConditionBuilder, AbstractConditionBuilder> builder)
         {
             _whereCondition = builder.Invoke(GetDefault<AbstractConditionBuilder>()).Build();

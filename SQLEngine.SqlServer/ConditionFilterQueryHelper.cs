@@ -50,6 +50,11 @@ namespace SQLEngine.SqlServer
             var col=new SqlServerColumn(columnName);
             return $"{col} > {value}";
         }
+        public string ColumnLessThan(string columnName, ISqlExpression value)
+        {
+            var col=new SqlServerColumn(columnName);
+            return $"{col} < {value}";
+        }
         public string GreaterEqualThan(ISqlExpression key, ISqlExpression value)
         {
             return $"{key} >= {value}";

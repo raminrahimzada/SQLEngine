@@ -4,6 +4,8 @@ namespace SQLEngine
 {
     public abstract class AbstractSqlLiteral: ISqlExpression
     {
+
+
         //protected abstract void SetFrom(byte[] data);
 
         //protected abstract void SetFrom(int i);

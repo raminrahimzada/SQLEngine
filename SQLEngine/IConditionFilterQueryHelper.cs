@@ -10,6 +10,7 @@
         string NotEqual(ISqlExpression key, ISqlExpression value);
         string GreaterThan(ISqlExpression key, ISqlExpression value);
         string ColumnGreaterThan(string columnName, ISqlExpression value);
+        string ColumnLessThan(string columnName, ISqlExpression value);
         string GreaterEqualThan(ISqlExpression key, ISqlExpression value);
         string LessThan(ISqlExpression key, ISqlExpression value);
         //string Equal(string key, ISqlString value, string alias);

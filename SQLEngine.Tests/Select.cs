@@ -27,7 +27,7 @@ SELECT TOP(1)  *
             }
         }
         [TestMethod]
-        public void Test_Simple_Select_2()
+        public void Test_Simple_Select_Simple_Filter()
         {
             using (var q = Query.New)
             {
@@ -45,6 +45,35 @@ SELECT TOP(1)  *
 SELECT TOP(1)  Name , Surname
     FROM Users
     WHERE Age > 18
+";
+                QueryAssert.AreEqual(queryThis, queryThat);
+
+            }
+        }
+
+        [TestMethod]
+        public void Test_Simple_Select_Complex_Filter_1()
+        {
+            using (var q = Query.New)
+            {
+                var filter1 = q.Helper.ColumnGreaterThan("Age", 18);
+                var filter2 = q.Helper.ColumnLessThan("Height", 1.7);
+                
+                var queryThis = q
+                    ._select
+                    .Top(1)
+                    .Selector("Name")
+                    .Selector("Surname")
+                    .From("Users")
+                    .WhereAnd(filter1,filter2)
+                    .ToString();
+
+                var queryThat = @"
+
+SELECT TOP(1)  Name , Surname
+    FROM Users
+    WHERE (Age > 18) and (Height < 1.7)
+
 ";
                 QueryAssert.AreEqual(queryThis, queryThat);
 

@@ -4,9 +4,6 @@ namespace SQLEngine.SqlServer
 {
     public class SqlServerLiteral : AbstractSqlLiteral
     {
-        private const string FORMAT = "yyyy-MM-dd HH:mm:ss.fff";
-        private const string FORMAT_ONLY_DATE = "yyyy-MM-dd";
-
         private string _rawSqlString;
 
         public static SqlServerLiteral From(Guid x)
@@ -46,7 +43,7 @@ namespace SQLEngine.SqlServer
         public static SqlServerLiteral From(DateTime date,bool onlyDate=false)
         {
             var result = new SqlServerLiteral();
-            var str = date.ToString(onlyDate ? FORMAT_ONLY_DATE : FORMAT);
+            var str = date.ToString(onlyDate ? Query.Settings.FORMAT_ONLY_DATE :Query.Settings.FORMAT);
             result._rawSqlString = $"'{str}'";
             return result;
         }
@@ -61,7 +58,7 @@ namespace SQLEngine.SqlServer
                 return result;
             }
 
-            var str = date.Value.ToString(onlyDate ? FORMAT_ONLY_DATE : FORMAT);
+            var str = date.Value.ToString(onlyDate ? Query.Settings.FORMAT_ONLY_DATE : Query.Settings.FORMAT);
             result._rawSqlString = $"'{str}'";
             return result;
         }
@@ -210,6 +207,10 @@ namespace SQLEngine.SqlServer
             return From(x);
         }
         public static implicit operator SqlServerLiteral(double x)
+        {
+            return From(x);
+        }
+        public static implicit operator SqlServerLiteral(bool x)
         {
             return From(x);
         }

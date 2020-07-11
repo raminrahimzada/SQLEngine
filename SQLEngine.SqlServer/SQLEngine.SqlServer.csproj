@@ -83,11 +83,13 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlServerColumn.cs" />
+    <Compile Include="SqlServerCondition.cs" />
     <Compile Include="SqlServerQueryBuilderExtensions.cs" />
     <Compile Include="SelectQueryBuilder.cs" />
     <Compile Include="SetQueryBuilder.cs" />
     <Compile Include="SqlServerQueryBuilder.cs" />
     <Compile Include="SqlServerLiteral.cs" />
+    <Compile Include="SqlServerRawExpression.cs" />
     <Compile Include="SqlServerVariable.cs" />
     <Compile Include="TruncateQueryBuilder.cs" />
     <Compile Include="UpdateQueryBuilder.cs" />

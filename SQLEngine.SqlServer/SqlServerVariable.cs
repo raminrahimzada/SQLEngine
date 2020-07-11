@@ -1,18 +1,5 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    public class SqlServerRawExpression : ISqlExpression
-    {
-        public string Expression { get; set; }
-
-        public SqlServerRawExpression(string expression)
-        {
-            Expression = expression;
-        }
-        public string ToSqlString()
-        {
-            return Expression;
-        }
-    }
     public class SqlServerVariable: AbstractSqlVariable
     {
         public SqlServerVariable(string name)
@@ -35,6 +22,30 @@
         {
             var sql = "(" + ToSqlString() + " - " + y.ToSqlString() + ")";
             return new SqlServerRawExpression(sql);
+        }
+
+        protected override AbstractSqlCondition Greater(AbstractSqlVariable abstractSqlVariable)
+        {
+            var expression = this.ToSqlString() + " > " + abstractSqlVariable.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition GreaterEqual(AbstractSqlVariable abstractSqlVariable)
+        {
+            var expression = this.ToSqlString() + " >= " + abstractSqlVariable.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition Less(AbstractSqlVariable abstractSqlVariable)
+        {
+            var expression = this.ToSqlString() + " < " + abstractSqlVariable.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition LessEqual(AbstractSqlVariable abstractSqlVariable)
+        {
+            var expression = this.ToSqlString() + " <= " + abstractSqlVariable.ToSqlString();
+            return SqlServerCondition.Raw(expression);
         }
 
         public override string ToString()

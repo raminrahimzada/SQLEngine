@@ -324,6 +324,11 @@ namespace SQLEngine.SqlServer
             Writer.WriteLine();
         }
 
+        public AbstractSqlColumn Column(string columnName)
+        {
+            return new SqlServerColumn(columnName);
+        }
+
         public string I(string s)
         {
             //TODO

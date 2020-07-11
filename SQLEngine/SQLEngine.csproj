@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractQueryBuilder.cs" />
+    <Compile Include="AbstractSqlColumn.cs" />
+    <Compile Include="AbstractSqlCondition.cs" />
     <Compile Include="AbstractSqlExpression.cs" />
     <Compile Include="AbstractSqlVariable.cs" />
     <Compile Include="ColumnModel.cs" />

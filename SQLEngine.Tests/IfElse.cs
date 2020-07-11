@@ -9,46 +9,37 @@ namespace SQLEngine.Tests
         [TestMethod]
         public void TestMethod_Simple_If_Else_For_Max_Value()
         {
-            using (var t = Query.New)
+            using (var q = Query.New)
             {
-                var i = t.Declare<int>("i");
-                var j = t.Declare<int>("j");
-                var max = t.Declare<int>("max");
+                var i = q.Declare("i",7);
+                var j = q.Declare("j",9);
+                var max = q.Declare<int>("max");
+
+                q.If(i < j);
+                q.Set(max, j);
                 
-                t.If(t.Helper.LessThan(i, j));
-                t.Begin();
-                t.Set(max, j);
-                t.End();
-                t.ElseIf(t.Helper.GreaterThan(i, j));
-                t.Begin();
-                t.Set(max, i);
-                t.End();
-                t.Else();
-                t.Begin();
-                t.Set(max, 0);
-                t.End();
-              
+                q.ElseIf(i > j);
+                q.Set(max, i);
+                
+                q.Else();
+                q.Set(max, 0);
+
+                var queryThat = q.ToString();
+                ;
                 const string query = @"
-declare @i int;
-declare @j int;
-declare @max int;
+DECLARE  @i INT =7;
+DECLARE  @j INT =9;
+DECLARE  @max INT ;
 
 IF(@i < @j)
-BEGIN
-    SET @max = @j;
-END
-
+    SET  @max  = @j;
 ELSE IF(@i > @j)
-BEGIN
-    SET @max=@i;
-END
-
+    SET  @max  = @i;
 ELSE
-BEGIN
-    SET @max=0;
-END
+    SET  @max  = 0;
+
 ";
-                QueryAssert.AreEqual(t.Build(), query);
+                QueryAssert.AreEqual(queryThat, query);
             }
         }
     }

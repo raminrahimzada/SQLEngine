@@ -6,6 +6,14 @@ namespace SQLEngine.SqlServer
 {
     public static class SqlServerQueryBuilderExtensions
     {
+        public static void If(this IQueryBuilder builder,AbstractSqlCondition condition)
+        {
+            builder.If(condition.ToSqlString());
+        }
+        public static void ElseIf(this IQueryBuilder builder,AbstractSqlCondition condition)
+        {            
+            builder.ElseIf(condition.ToSqlString());
+        }
         public static IInsertNoValuesQueryBuilder Values(this IInsertWithValuesQueryBuilder builder,
             Dictionary<string, SqlServerLiteral> colsAndValues)
         {
@@ -161,6 +169,10 @@ namespace SQLEngine.SqlServer
         public static string ColumnGreaterThan(this IConditionFilterQueryHelper helper, string columnName, SqlServerLiteral value)
         {
             return helper.ColumnGreaterThan(columnName, value);
+        }
+        public static string ColumnLessThan(this IConditionFilterQueryHelper helper, string columnName, SqlServerLiteral value)
+        {
+            return helper.ColumnLessThan(columnName, value);
         }
 
         public static ISelectWithoutWhereQueryBuilder WhereColumnEquals(this ISelectWhereQueryBuilder builder,

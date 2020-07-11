@@ -49,5 +49,6 @@ namespace SQLEngine
         void Print(ISqlExpression expression);
         void Join(AbstractQueryBuilder other);
         string Build();
+        AbstractSqlColumn Column(string columnName);
     }
 }

@@ -7,7 +7,10 @@ namespace SQLEngine
         public static class Settings
         {
             public static string IdColumnName = "Id";
+            public static string FORMAT = "yyyy-MM-dd HH:mm:ss.fff";
+            public static string FORMAT_ONLY_DATE = "yyyy-MM-dd";
         }
+
         private static Func<IQueryBuilder> _builderFunction;
         public static void Setup(Func<IQueryBuilder> builderFunction)
         {

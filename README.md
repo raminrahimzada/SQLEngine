@@ -2,7 +2,8 @@
 SQL Engine is a library that eases of generating cross-dialect sql queries without using any dialect specific keyword
 <br/>You can generate (almost) any sql query with C# expressions (Then configure it to build for MS-SQL , Oracle or other type queries)
 
-## [![NuGet version (SqlEngine)](https://img.shields.io/nuget/v/SqlEngine.svg)](https://www.nuget.org/packages/SQLEngine/)
+## [SqlEngine![NuGet version (SqlEngine)](https://img.shields.io/nuget/v/SqlEngine.svg)](https://www.nuget.org/packages/SQLEngine/)
+## [SqlEngine.SqlServer![NuGet version (SqlEngine.SqlServer)](https://img.shields.io/nuget/v/SqlEngine.SqlServer.svg)](https://www.nuget.org/packages/SQLEngine.SqlServer/)
 
 ## Configuration 
 ```cs

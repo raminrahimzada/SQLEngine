@@ -1,8 +1,10 @@
 # SQL-Engine
-SQL Engine is a library that eases of generating Cross-dialect sql queries without using any dialect specific keyword
-<br/>You can generate (almost) any sql query with C# expressions (Then configure it to build MS-SQL or Oracle type queries  for example)
+SQL Engine is a library that eases of generating cross-dialect sql queries without using any dialect specific keyword
+<br/>You can generate (almost) any sql query with C# expressions (Then configure it to build for MS-SQL , Oracle or other type queries)
 
-### Configuration 
+## [![NuGet version (SqlEngine)](https://img.shields.io/nuget/v/SqlEngine.svg)](https://www.nuget.org/packages/SQLEngine/)
+
+## Configuration 
 ```cs
 Query.Setup<SqlServerQueryBuilder>();
 
@@ -23,7 +25,7 @@ using (var q = Query.New)
         .Selector("Name")
         .Selector("Surname")
         .From("Users")
-        .Where(age > 18 & height <= 1)
+        .Where(age > 18 & height <= 1.7)
         .ToString();
 }
 ```
@@ -31,7 +33,7 @@ Above query will be like that:
 ```sql
 SELECT TOP(1)  Name , Surname
     FROM Users
-    WHERE (Age > 18) and (Height < 1.7)
+    WHERE (Age > 18) and (Height <= 1.7)
 ```
 ## Demostration of left-right-inner joins
 ```cs
@@ -93,4 +95,6 @@ using (var b = Query.New)
 ```
 
 ## You can see other examples(insert,update,delete,drop,if-else,truncate alter and so on.) in <a href="https://github.com/raminrahimzada/SQLEngine/tree/master/SQLEngine.Tests">SqlServer.Tests</a>
+
+
 

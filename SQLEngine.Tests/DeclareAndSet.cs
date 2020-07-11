@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SQLEngine.SqlServer;
 
 namespace SQLEngine.Tests
@@ -8,42 +9,86 @@ namespace SQLEngine.Tests
         [TestMethod]
         public void TestMethod_Declare_And_Init()
         {
-            using (var t = Query.New)
+            using (var q = Query.New)
             {
-                t.Declare("i", "INT", 1);
+                q.Declare("i", "INT", 1);
                 const string query = @"
 DECLARE  @i INT  = 1;   
 ";
-                QueryAssert.AreEqual(t.ToString(), query);
+                QueryAssert.AreEqual(q.ToString(), query);
+            }
+        }
+        
+        [TestMethod]
+        public void TestMethod_Declare_And_Init_2()
+        {
+            using (var q = Query.New)
+            {
+                q.Declare("i", 1);
+                const string query = @"
+DECLARE  @i INT  = 1;   
+";
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
 
         [TestMethod]
         public void TestMethod_Declare_Only()
         {
-            using (var t = Query.New)
+            using (var q = Query.New)
             {
-                t.Declare("i","INT");
+                q.Declare("i","INT");
                 const string query = @"
 DECLARE  @i INT;
 ";
-                QueryAssert.AreEqual(t.ToString(), query);
+                QueryAssert.AreEqual(q.ToString(), query);
+            }
+        }
+        
+        [TestMethod]
+        public void TestMethod_Declare_Only_2()
+        {
+            using (var q = Query.New)
+            {
+                q.Declare<int>("i");
+                const string query = @"
+DECLARE  @i INT;
+";
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
 
         [TestMethod]
         public void TestMethod_Declare_And_Set()
         {
-            using (var t = Query.New)
+            using (var q = Query.New)
             {
-                var x = t.Declare("x", "INT", 47);
+                var x = q.Declare("x", 47);
 
-                t.Set(x, 48.ToSQL());
+                q.Set(x, 48);
                 const string query = @"
 declare @x int = 47
 SET @x = 48
 ";
-                QueryAssert.AreEqual(t.ToString(), query);
+                QueryAssert.AreEqual(q.ToString(), query);
+            }
+        }
+
+        [TestMethod]
+        public void TestMethod_Declare_And_Set_Guid()
+        {
+            using (var q = Query.New)
+            {
+                var x = q.Declare<Guid>("x");
+
+                q.Set(x, Guid.Empty);
+                const string query = @"
+
+declare @x UNIQUEIDENTIFIER
+
+SET @x = '00000000-0000-0000-0000-000000000000'
+";
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
     }

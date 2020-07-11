@@ -1,9 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SQLEngine.SqlServer
 {
     public static class SqlServerQueryBuilderExtensions
     {
+        public static IInsertNoValuesQueryBuilder Values(this IInsertWithValuesQueryBuilder builder,
+            Dictionary<string, SqlServerLiteral> colsAndValues)
+        {
+            var colsAndValuesReformed = colsAndValues.ToDictionary(x => x.Key, x => x.Value as ISqlExpression);
+            return builder.Values(colsAndValuesReformed);
+        }
         public static IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(this IUpdateNoTableSingleValueQueryBuilder builder,
             string columnName, SqlServerLiteral right)
         {
@@ -30,6 +38,114 @@ namespace SQLEngine.SqlServer
             string columnName, SqlServerLiteral columnValue)
         {
             return builder.Value(columnName, (AbstractSqlLiteral)columnValue);
+        }
+        public static AbstractSqlVariable Declare<T>(this IQueryBuilder builder,
+            string variableName,  T defaultValue)
+        {
+            {
+                if (defaultValue is int i)
+                {
+                    return builder.Declare(variableName, SQLKeywords.INT, i);
+                }
+            }
+            {
+                if (defaultValue is uint i)
+                {
+                    return builder.Declare(variableName, SQLKeywords.INT, i);
+                }
+            }
+            {
+                if (defaultValue is long i)
+                {
+                    return builder.Declare(variableName, SQLKeywords.BIGINT, i);
+                }
+            }
+            {
+                if (defaultValue is ulong i)
+                {
+                    return builder.Declare(variableName, SQLKeywords.BIGINT, i);
+                }
+            }
+
+            {
+                if (defaultValue is byte i)
+                {
+                    return builder.Declare(variableName, SQLKeywords.TINYINT, i);
+                }                
+            }
+            {
+                if (defaultValue is Guid i)
+                {
+                    return builder.Declare(variableName, SQLKeywords.UNIQUEIDENTIFIER, i);
+                }
+            }
+            {
+                if (defaultValue is DateTime i)
+                {
+                    return builder.Declare(variableName, SQLKeywords.DATETIME, i);
+                }
+            }
+            {
+                if (defaultValue is string i)
+                {
+                    return builder.Declare(variableName, SQLKeywords.NVARCHARMAX, i);
+                }
+            }
+            throw new Exception("Complex type " + typeof(T).FullName + " cannot be converted to sql literal");
+        }
+        public static AbstractSqlVariable Declare<T>(this IQueryBuilder builder,
+            string variableName)
+        {
+            {
+                if (typeof(T) == typeof(int))
+                {
+                    return builder.Declare(variableName, SQLKeywords.INT);
+                }
+            }
+            {
+                if (typeof(T) == typeof(uint))
+                {
+                    return builder.Declare(variableName, SQLKeywords.INT);
+                }
+            }
+            {
+                if (typeof(T) == typeof(long))
+                {
+                    return builder.Declare(variableName, SQLKeywords.BIGINT);
+                }
+            }
+            {
+                if (typeof(T) == typeof(ulong))
+                {
+                    return builder.Declare(variableName, SQLKeywords.BIGINT);
+                }
+            }
+
+            {
+                if (typeof(T) == typeof(byte))
+                {
+                    return builder.Declare(variableName, SQLKeywords.TINYINT);
+                }
+            }
+            {
+                if (typeof(T) == typeof(Guid))
+                {
+                    return builder.Declare(variableName, SQLKeywords.UNIQUEIDENTIFIER);
+                }
+            }
+            {
+                if (typeof(T) == typeof(DateTime))
+                {
+                    return builder.Declare(variableName, SQLKeywords.DATETIME);
+                }
+            }
+            {
+                if (typeof(T) == typeof(string))
+                {
+                    return builder.Declare(variableName, SQLKeywords.NVARCHARMAX);
+                }
+            }
+            throw new Exception("Complex type " + typeof(T).FullName + " cannot be converted to sql literal");
         }
 
         public static AbstractSqlVariable Declare(this IQueryBuilder builder, 

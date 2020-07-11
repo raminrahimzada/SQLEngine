@@ -6,78 +6,78 @@ namespace SQLEngine.SqlServer
     {
         public static SqlServerLiteral ToSQL(this int i)
         {
-            return new SqlServerLiteral(i);
+            return SqlServerLiteral.From(i);
         }
 
         public static SqlServerLiteral ToSQL(this short s)
         {
-            return new SqlServerLiteral(s);
+            return SqlServerLiteral.From(s);
         }
 
         public static SqlServerLiteral ToSQL(this decimal d)
         {
-            return new SqlServerLiteral(d);
+            return SqlServerLiteral.From(d);
         }
 
         public static SqlServerLiteral ToSQL(this double d)
         {
-            return new SqlServerLiteral(d);
+            return SqlServerLiteral.From(d);
         }
 
         public static SqlServerLiteral ToSQL(this byte b)
         {
-            return new SqlServerLiteral(b);
+            return SqlServerLiteral.From(b);
         }
         public static SqlServerLiteral ToSQL(this long b)
         {
-            return new SqlServerLiteral(b);
+            return SqlServerLiteral.From(b);
         }
         public static SqlServerLiteral ToSQL(this byte[] data)
         {
-            return new SqlServerLiteral(data);
+            return SqlServerLiteral.From(data);
         }
         public static SqlServerLiteral ToSQL(this string str, bool isUnicode = true)
         {
-            return new SqlServerLiteral(str);
+            return SqlServerLiteral.From(str, isUnicode);
         }
 
         public static SqlServerLiteral ToSQL(this DateTime? date)
         {
-            return new SqlServerLiteral(date);
+            return SqlServerLiteral.From(date);
         }
 
         public static SqlServerLiteral ToSQL(this bool b)
         {
-            return new SqlServerLiteral(b);
+            return SqlServerLiteral.From(b);
         }
         public static SqlServerLiteral ToSQL(this bool? b)
         {
-            return new SqlServerLiteral(b);
+            return SqlServerLiteral.From(b);
         }
         public static SqlServerLiteral ToSQL(this double? d)
         {
-            return new SqlServerLiteral(d);
+            return SqlServerLiteral.From(d);
         }
         public static SqlServerLiteral ToSQL(this decimal? d)
         {
-            return new SqlServerLiteral(d);
+            return SqlServerLiteral.From(d);
         }
         public static SqlServerLiteral ToSQL(this short? s)
         {
-            return new SqlServerLiteral(s);
+            return SqlServerLiteral.From(s);
         }
 
         public static SqlServerLiteral ToSQL(this int? i)
         {
-            return new SqlServerLiteral(i);
+            return SqlServerLiteral.From(i);
         }
         public static SqlServerLiteral ToSQL(this long? l)
         {
-            return new SqlServerLiteral(l);
+            return SqlServerLiteral.From(l);
         }
         public static SqlServerLiteral ToSQL(this DateTime date, bool onlyDate = false)
         {
-            return new SqlServerLiteral(date, onlyDate);
+            return SqlServerLiteral.From(date, onlyDate);
         }
 
         public static string AsSQLVariable(this string variableName)

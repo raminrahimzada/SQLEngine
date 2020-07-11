@@ -110,10 +110,10 @@ namespace SQLEngine.SqlServer
         {
             MutateAliasName(ref alias);
             if (_selectors == null) _selectors = new List<string>();
-            if (SQLKeywords.GetAll().Any(k => k == alias.ToUpperInvariant()))
-            {
-                alias = SQLKeywords.BEGIN_SCOPE + alias + SQLKeywords.END_SCOPE;
-            }
+            //if (SQLKeywords.GetAll().Any(k => k == alias.ToUpperInvariant()))
+            //{
+            //    alias = SQLKeywords.BEGIN_SCOPE + alias + SQLKeywords.END_SCOPE;
+            //}
             _selectors.Add($"{selector} {SQLKeywords.AS} {alias}" );
             return this;
         }

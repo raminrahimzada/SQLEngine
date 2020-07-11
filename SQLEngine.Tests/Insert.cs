@@ -29,11 +29,11 @@ namespace SQLEngine.Tests
         {
             using (var q = Query.New)
             {
-                var dict = new Dictionary<string,ISqlExpression>
+                var dict = new Dictionary<string,SqlServerLiteral>
                 {
-                    {"Name", "Ramin".ToSQL()},
-                    {"Surname", "Rahimzada".ToSQL()},
-                    {"Age", 26.ToSQL()},
+                    {"Name", "Ramin"},
+                    {"Surname", "Rahimzada"},
+                    {"Age", 26},
                 };
                 q.Insert(i => i
                     .Into("Users")

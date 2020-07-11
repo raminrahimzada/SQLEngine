@@ -5,20 +5,15 @@ using System.Reflection;
 
 namespace SQLEngine
 {
-    //TODO do not remove unused const fields
-    //bcs they considered as keyword an we need them in generating sql queries
     public static class SQLKeywords
     {
-        public const string OBJECT_ID = "OBJECT_ID";
-        public const string SUM = "SUM";
+        public const string UNIQUEIDENTIFIER= "UNIQUEIDENTIFIER";
         public const string WHILE = "WHILE";
         public const string CURSOR= "CURSOR";
         public const string FETCH = "FETCH";
-        public const string WRITE = "WRITE";
         public const string INTO = "INTO";
         public const string NEXT = "NEXT";
         public const string FETCH_STATUS = "@@FETCH_STATUS";
-        public const string SCHEMA_ID= "SCHEMA_ID";
         public const string UNION = "UNION";
         public const string ALL = "ALL";
         public const string FORMATMESSAGE = "FORMATMESSAGE";
@@ -26,8 +21,6 @@ namespace SQLEngine
         public const string NOWAIT = "NOWAIT";
         public const string LIKE = "LIKE";
         public const string ESCAPE = "ESCAPE";
-        public const string USER_ID = "USER_ID";
-        public const string USER_NAME = "USER_NAME";
         public const string CASE = "CASE";
         public const string WHEN = "WHEN";
         public const string THEN = "THEN";
@@ -47,10 +40,8 @@ namespace SQLEngine
         public const string BIT = "BIT";
         public const string DATE = "DATE";
         public const string TINYINT = "TINYINT";
-        public const string VARBINARY = "VARBINARY";
         public const string VARBINARYMAX = "VARBINARY(MAX)";
         public const string SMALLINT = "SMALLINT";
-
 
         public const string DEFAULT_PK_OPTIONS = "PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF,IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON";
         public const string NONCLUSTERED = "NONCLUSTERED";
@@ -144,37 +135,6 @@ namespace SQLEngine
         public const string ORDER = "ORDER";
         public const string BY = "BY";
 
-        public static List<string> AllKeywords { get; }
-        static SQLKeywords()
-        {
-            AllKeywords = GetAll().ToList();
-        }
-        public static IEnumerable<string> GetAll()
-        {
-            ArrayList constants = new ArrayList();
-            var type = typeof(SQLKeywords);
-            FieldInfo[] fieldInfos = type.GetFields(
-                // Gets all public and static fields
 
-                BindingFlags.Public | BindingFlags.Static |
-                // This tells it to get the fields from all base types as well
-
-                BindingFlags.FlattenHierarchy);
-
-            // Go through the list and only pick out the constants
-            foreach (FieldInfo fi in fieldInfos)
-                // IsLiteral determines if its value is written at 
-                //   compile time and not changeable
-                // IsInitOnly determines if the field can be set 
-                //   in the body of the constructor
-                // for C# a field which is readonly keyword would have both true 
-                //   but a const field would have only IsLiteral equal to true
-                if (fi.IsLiteral && !fi.IsInitOnly)
-                    constants.Add(fi);
-
-            // Return an array of FieldInfos
-            var fields = (FieldInfo[])constants.ToArray(typeof(FieldInfo));
-            return fields.Select(f => f.GetValue(null)).ToArray().OfType<string>();
-        }
     }
 }

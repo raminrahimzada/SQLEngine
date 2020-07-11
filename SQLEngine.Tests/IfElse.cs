@@ -11,9 +11,9 @@ namespace SQLEngine.Tests
         {
             using (var t = Query.New)
             {
-                var i = t.Declare("i", "INT");
-                var j = t.Declare("j", "INT");
-                var max = t.Declare("max", "INT");
+                var i = t.Declare<int>("i");
+                var j = t.Declare<int>("j");
+                var max = t.Declare<int>("max");
                 
                 t.If(t.Helper.LessThan(i, j));
                 t.Begin();
@@ -25,7 +25,7 @@ namespace SQLEngine.Tests
                 t.End();
                 t.Else();
                 t.Begin();
-                t.Set(max, 0.ToSQL());
+                t.Set(max, 0);
                 t.End();
               
                 const string query = @"

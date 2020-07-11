@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using System.Linq.Expressions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SQLEngine.SqlServer;
 
 namespace SQLEngine.Tests
@@ -26,6 +28,52 @@ SELECT TOP(1)  *
 
             }
         }
+
+        [TestMethod]
+        public void Test_Simple_Select_2()
+        {
+            using (var q = Query.New)
+            {
+                var userName = q.Column("UserName");
+                var queryThis = q
+                    ._select
+                    .Top(1)
+                    .From<UserTable>()
+                    .Where(userName == "admin")
+                    .ToString();
+
+                var queryThat = @"
+SELECT TOP(1)  * 
+    FROM Users
+    WHERE UserName = N'admin'
+";
+                QueryAssert.AreEqual(queryThis, queryThat);
+
+            }
+        }
+
+        [TestMethod]
+        public void Test_Simple_Select_With_Alias_1()
+        {
+            using (var q = Query.New)
+            {
+                var userName = q.Column("UserName", "U");
+                var queryThis = q
+                    ._select
+                    .Top(1)
+                    .From<UserTable>("U")
+                    .Where(userName == "admin")
+                    .ToString();
+
+                var queryThat = @"
+SELECT TOP(1)   * 
+    FROM Users AS U
+    WHERE U.UserName = N'admin'
+";
+                QueryAssert.AreEqual(queryThis, queryThat);
+
+            }
+        }
         [TestMethod]
         public void Test_Simple_Select_Simple_Filter()
         {
@@ -35,8 +83,8 @@ SELECT TOP(1)  *
                 var queryThis = q
                     ._select
                     .Top(1)
-                    .Selector("Name")
-                    .Selector("Surname")
+                    .Select("Name")
+                    .Select("Surname")
                     .From("Users")
                     .Where(filter)
                     .ToString();
@@ -62,8 +110,8 @@ SELECT TOP(1)  Name , Surname
                 var queryThis = q
                     ._select
                     .Top(1)
-                    .Selector("Name")
-                    .Selector("Surname")
+                    .Select("Name")
+                    .Select("Surname")
                     .From("Users")
                     .WhereAnd(filter1,filter2)
                     .ToString();
@@ -91,8 +139,8 @@ SELECT TOP(1)  Name , Surname
                 var queryThis = q
                     ._select
                     .Top(1)
-                    .Selector("Name")
-                    .Selector("Surname")
+                    .Select("Name")
+                    .Select("Surname")
                     .From("Users")
                     .Where(age > 18 & height <= 1.7 & id != 1)
                     .ToString();
@@ -116,8 +164,8 @@ SELECT TOP(1)  Name , Surname
                 var queryFromBuilder = t._select
                         .Top(1)
                         .From("Users", "U")
-                        .Selector("Name")
-                        .Selector("Surname")
+                        .Select("Name")
+                        .Select("Surname")
                         .InnerJoin("P", "Photos", "UserId")
                         .LeftJoin("A", "Attachments", "UserId")
                         .RightJoin("S", "Sales", "UserId")
@@ -132,6 +180,69 @@ SELECT TOP(1)  Name , Surname
 	LEFT JOIN	Attachments AS A ON U.UserId = A.Id
 	RIGHT JOIN	Sales AS S ON U.UserId = S.Id
     WHERE Age > 18
+";
+
+                QueryAssert.AreEqual(queryFromBuilder, query);
+            }
+        }
+        [TestMethod]
+        public void Test_Select_With_Joins_With_Alias()
+        {
+            using (var t = Query.New)
+            {
+                var age = t.Column("Age", "U");
+                var photoUrl = t.Column("Url", "P");
+                var queryFromBuilder = t._select
+                        .Top(1)
+                        .Select(age)
+                        .Select(photoUrl, "PhotoUrl")
+                        .From("Users", "U")
+                        .InnerJoin("P", "Photos", "UserId")
+                        .LeftJoin("A", "Attachments", "UserId")
+                        .RightJoin("S", "Sales", "UserId")
+                        .Where(age > 18)
+                        .ToString()
+                    ;
+
+                const string query = @" 
+SELECT TOP(1)  U.Age , P.Url as PhotoUrl
+    FROM Users AS U
+	INNER JOIN	Photos AS P ON U.UserId = P.Id
+	LEFT JOIN	Attachments AS A ON U.UserId = A.Id
+	RIGHT JOIN	Sales AS S ON U.UserId = S.Id
+    WHERE U.Age > 18
+";
+
+                QueryAssert.AreEqual(queryFromBuilder, query);
+            }
+        }
+
+        [TestMethod]
+        public void Test_Select_With_Joins_With_Alias_And_Strong_Typed()
+        {
+            using (var t = Query.New)
+            {
+                var age = t.Column("Age", "U");
+                var photoUrl = t.Column("Url", "P");
+                var queryFromBuilder = t._select
+                        .Top(1)
+                        .Select(age)
+                        .Select(photoUrl, "PhotoUrl")
+                        .From<UserTable>("U")
+                        .InnerJoin<PhotosTable>("P", "UserId")
+                        .LeftJoin<AttachmentsTable>("A", "UserId")
+                        .RightJoin<SalesTable>("S","UserId")
+                        .Where(age > 18)
+                        .ToString()
+                    ;
+
+                const string query = @" 
+SELECT TOP(1)  U.Age , P.Url as PhotoUrl
+    FROM Users AS U
+	INNER JOIN	Photos AS P ON U.UserId = P.Id
+	LEFT JOIN	Attachments AS A ON U.UserId = A.Id
+	RIGHT JOIN	Sales AS S ON U.UserId = S.Id
+    WHERE U.Age > 18
 ";
 
                 QueryAssert.AreEqual(queryFromBuilder, query);

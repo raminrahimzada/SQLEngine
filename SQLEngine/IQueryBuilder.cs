@@ -51,5 +51,6 @@ namespace SQLEngine
         void Join(AbstractQueryBuilder other);
         string Build();
         AbstractSqlColumn Column(string columnName);
+        AbstractSqlColumn Column(string columnName,string tableAlias);
     }
 }

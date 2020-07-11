@@ -3,6 +3,20 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer
 {
+    public class SqlServerColumnWithTableAlias : SqlServerColumn
+    {
+        private readonly string _tableAlias;
+
+        public SqlServerColumnWithTableAlias(string name,string tableAlias) : base(name)
+        {
+            _tableAlias = tableAlias;
+        }
+
+        public override string ToSqlString()
+        {
+            return _tableAlias + "." + base.ToSqlString();
+        }
+    }
     public class SqlServerColumn : AbstractSqlColumn
     {
         public SqlServerColumn(string name)

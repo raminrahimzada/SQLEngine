@@ -2,8 +2,11 @@
 
 namespace SQLEngine
 {
+#pragma warning disable 660,661
     public abstract class AbstractSqlColumn : ISqlExpression
+#pragma warning restore 660,661
     {
+        //TODO Refactor this, too much bottleneck codes here 
         public string Name { get; set; }
         public abstract string ToSqlString();
 
@@ -318,6 +321,14 @@ namespace SQLEngine
             return column.NotEqualTo(value);
         }
         public static AbstractSqlCondition operator ==(AbstractSqlColumn column, byte value)
+        {
+            return column.EqualTo(value);
+        }
+        public static AbstractSqlCondition operator !=(AbstractSqlColumn column, byte[] value)
+        {
+            return column.NotEqualTo(value);
+        }
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, byte[] value)
         {
             return column.EqualTo(value);
         }

@@ -191,7 +191,17 @@
                 var ID = table.PrimaryColumnName;
                 return builder.LeftJoin(alias, tableName, mainTableColumnName, ID);
             }
-                
+        }
+        public static IJoinedQueryBuilder RightJoin<TTable>(this IJoinedQueryBuilder builder, string alias,
+             string mainTableColumnName)
+            where TTable : ITable, new()
+        {
+            using (var table = new TTable())
+            {
+                var tableName = table.Name;
+                var ID = table.PrimaryColumnName;
+                return builder.RightJoin(alias, tableName, mainTableColumnName, ID);
+            }
         }
       
         public static IJoinedQueryBuilder InnerJoin<TTable>(this ISelectWithoutFromQueryBuilder builder, string alias,
@@ -283,20 +293,20 @@
             }
         }
   
-        public static ISelectWithSelectorQueryBuilder SelectorAll(this ISelectQueryBuilder builder, string tableAlias = null)
-        {
-            if (string.IsNullOrEmpty(tableAlias))
-                return builder.Selector(SQLKeywords.WILCARD);
+        //public static ISelectWithSelectorQueryBuilder SelectorAll(this ISelectQueryBuilder builder, string tableAlias = null)
+        //{
+        //    if (string.IsNullOrEmpty(tableAlias))
+        //        return builder.SelectColumn(SQLKeywords.WILCARD);
 
-            return builder.SelectorCol(tableAlias, SQLKeywords.WILCARD);
-        }
-        public static ISelectWithSelectorQueryBuilder SelectorAll(this ISelectWithSelectorQueryBuilder builder, string tableAlias = null)
-        {
-            if (string.IsNullOrEmpty(tableAlias))
-                return builder.Selector(SQLKeywords.WILCARD);
+        //    return builder.SelectColumn(tableAlias, SQLKeywords.WILCARD);
+        //}
+        //public static ISelectWithSelectorQueryBuilder SelectorAll(this ISelectWithSelectorQueryBuilder builder, string tableAlias = null)
+        //{
+        //    if (string.IsNullOrEmpty(tableAlias))
+        //        return builder.SelectColumn(SQLKeywords.WILCARD);
 
-            return builder.SelectorCol(tableAlias, SQLKeywords.WILCARD);
-        }
+        //    return builder.SelectCol(tableAlias, SQLKeywords.WILCARD);
+        //}
         public static IJoinedQueryBuilder LeftJoin(this ISelectWithoutFromQueryBuilder builder, string alias, string tableName,
             string mainTableColumnName,string ID)
         {

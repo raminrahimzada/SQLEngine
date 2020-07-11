@@ -43,7 +43,7 @@ namespace SQLEngine.SqlServer
         public static SqlServerLiteral From(DateTime date,bool onlyDate=false)
         {
             var result = new SqlServerLiteral();
-            var str = date.ToString(onlyDate ? Query.Settings.FORMAT_ONLY_DATE :Query.Settings.FORMAT);
+            var str = date.ToString(onlyDate ? Query.Settings.DateFormat :Query.Settings.DateTimeFormat);
             result._rawSqlString = $"'{str}'";
             return result;
         }
@@ -58,7 +58,7 @@ namespace SQLEngine.SqlServer
                 return result;
             }
 
-            var str = date.Value.ToString(onlyDate ? Query.Settings.FORMAT_ONLY_DATE : Query.Settings.FORMAT);
+            var str = date.Value.ToString(onlyDate ? Query.Settings.DateFormat : Query.Settings.DateTimeFormat);
             result._rawSqlString = $"'{str}'";
             return result;
         }

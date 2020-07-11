@@ -335,6 +335,10 @@ namespace SQLEngine.SqlServer
         {
             return new SqlServerColumn(columnName);
         }
+        public AbstractSqlColumn Column(string columnName,string tableAlias)
+        {
+            return new SqlServerColumnWithTableAlias(columnName, tableAlias);
+        }
 
         public string I(string s)
         {

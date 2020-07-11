@@ -6,9 +6,11 @@ namespace SQLEngine
     {
         public static class Settings
         {
-            public static string IdColumnName = "Id";
-            public static string FORMAT = "yyyy-MM-dd HH:mm:ss.fff";
-            public static string FORMAT_ONLY_DATE = "yyyy-MM-dd";
+            public static string DefaultIdColumnName = "Id";
+            public static string DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
+            public static string DateFormat = "yyyy-MM-dd";
+            public static byte DefaultPrecision = 18;
+            public static byte DefaultScale = 4;
         }
 
         private static Func<IQueryBuilder> _builderFunction;

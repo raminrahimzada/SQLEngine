@@ -78,35 +78,41 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public ISelectWithSelectorQueryBuilder SelectorAssign(string left, Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> right)
+        public ISelectWithSelectorQueryBuilder SelectAssign(string left, Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> right)
         {
             using (var q = new BinaryExpressionBuilder())
             {
-                return SelectorAssign(left, right(q).Build());
+                return SelectAssign(left, right(q).Build());
             }
         }
-        public ISelectWithSelectorQueryBuilder SelectorAssign(string left, string right)
+        public ISelectWithSelectorQueryBuilder SelectAssign(string left, string right)
         {
             if (_selectors == null) _selectors = new List<string>();
             var query = left + " = " + right;
             _selectors.Add(query);
             return this;
         }
-        public ISelectWithSelectorQueryBuilder Selector(string selector)
+        public ISelectWithSelectorQueryBuilder Select(ISqlExpression expression)
         {
             if (_selectors == null) _selectors = new List<string>();
-            _selectors.Add(selector);
+            _selectors.Add(expression.ToSqlString());
+            return this;
+        }
+        public ISelectWithSelectorQueryBuilder Select(AbstractSqlColumn column)
+        {
+            if (_selectors == null) _selectors = new List<string>();
+            _selectors.Add(column.ToSqlString());
             return this;
         }
 
-        public ISelectWithSelectorQueryBuilder Selector(Func<ICaseWhenNeedWhenQueryBuilder, ICaseWhenNeedWhenQueryBuilder> selectorBuilder, string alias)
-        {
-            MutateAliasName(ref alias);
-            var selection = selectorBuilder(GetDefault<CaseWhenQueryBuilder>()).Build();
-            return Selector(selection, alias);
-        }
+        //public ISelectWithSelectorQueryBuilder Select(Func<ICaseWhenNeedWhenQueryBuilder, ICaseWhenNeedWhenQueryBuilder> selectorBuilder, string alias)
+        //{
+        //    MutateAliasName(ref alias);
+        //    var selection = selectorBuilder(GetDefault<CaseWhenQueryBuilder>()).Build();
+        //    return Select(selection, alias);
+        //}
 
-        public ISelectWithSelectorQueryBuilder Selector(string selector, string alias)
+        public ISelectWithSelectorQueryBuilder Select(ISqlExpression selector, string alias)
         {
             MutateAliasName(ref alias);
             if (_selectors == null) _selectors = new List<string>();
@@ -118,24 +124,24 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public ISelectWithSelectorQueryBuilder Selector(Func<IConditionFilterQueryHelper, string> helperBuilder)
-        {
-            using (var builder = Query.New)
-            {
-                return Selector(helperBuilder(builder.Helper));
-            }
-        }
+        //public ISelectWithSelectorQueryBuilder Select(Func<IConditionFilterQueryHelper, string> helperBuilder)
+        //{
+        //    using (var builder = Query.New)
+        //    {
+        //        return Select(helperBuilder(builder.Helper));
+        //    }
+        //}
 
-        public ISelectWithSelectorQueryBuilder Selector(Func<IConditionFilterQueryHelper, string> helperBuilder, string alias)
-        {
-            MutateAliasName(ref alias);
-            using (var builder = Query.New)
-            {
-                return Selector(helperBuilder(builder.Helper), alias);
-            }
-        }
+        //public ISelectWithSelectorQueryBuilder Select(Func<IConditionFilterQueryHelper, string> helperBuilder, string alias)
+        //{
+        //    MutateAliasName(ref alias);
+        //    using (var builder = Query.New)
+        //    {
+        //        return Select(helperBuilder(builder.Helper), alias);
+        //    }
+        //}
 
-        public ISelectWithSelectorQueryBuilder SelectorCol(string tableAlias, string columnName, string alias = null)
+        public ISelectWithSelectorQueryBuilder SelectCol(string tableAlias, string columnName, string alias = null)
         {
             MutateAliasName(ref alias);
             if (_selectors == null) _selectors = new List<string>();
@@ -230,7 +236,7 @@ namespace SQLEngine.SqlServer
                 TableName = tableName,
                 Alias = alias,
                 MainTableColumnName = mainTableColumnName,
-                ReferenceTableColumnName = Query.Settings.IdColumnName,
+                ReferenceTableColumnName = Query.Settings.DefaultIdColumnName,
                 JoinType = SQLKeywords.INNERJOIN
             });
             return this;
@@ -292,7 +298,7 @@ namespace SQLEngine.SqlServer
                 TableName = tableName,
                 Alias = alias,
                 MainTableColumnName = mainTableColumnName,
-                ReferenceTableColumnName = Query.Settings.IdColumnName,
+                ReferenceTableColumnName = Query.Settings.DefaultIdColumnName,
                 JoinType = SQLKeywords.RIGHTJOIN,
             });
             return this;
@@ -323,7 +329,7 @@ namespace SQLEngine.SqlServer
                 TableName = tableName,
                 Alias = alias,
                 MainTableColumnName = mainTableColumnName,
-                ReferenceTableColumnName = Query.Settings.IdColumnName,
+                ReferenceTableColumnName = Query.Settings.DefaultIdColumnName,
                 JoinType = SQLKeywords.LEFTJOIN
             });
             return this;

@@ -12,7 +12,9 @@
         IColumnQueryBuilder Binary(string columnName);
         IColumnQueryBuilder Byte(string columnName);
         IColumnQueryBuilder String(string columnName, bool isUniCode = true, bool isVariable = true);
-        IColumnQueryBuilder Decimal(string columnName, byte precision = 18, byte scale = 4);
+        
+        IColumnQueryBuilder Decimal(string columnName);
+        IColumnQueryBuilder Decimal(string columnName, byte precision, byte scale);
         IColumnQueryBuilder Bool(string columnName);
         IColumnQueryBuilder Short(string columnName);
     }

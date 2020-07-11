@@ -1,9 +1,9 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal class ColumnsCreateQueryBuilder : SqlServerQueryBuilder, IColumnsCreateQueryBuilder
+    internal class ColumnsCreateQueryBuilder : AbstractQueryBuilder, IColumnsCreateQueryBuilder
     {
-        public byte DefaultPrecision => 18;
-        public byte DefaultScale => 4;
+        public byte DefaultPrecision => Query.Settings.DefaultPrecision;
+        public byte DefaultScale => Query.Settings.DefaultScale;
 
         public IColumnQueryBuilder Column(string columnName)
         {
@@ -44,7 +44,11 @@
             return GetDefault<ColumnQueryBuilder>().Name(columnName).Type(type);
         }
 
-        public IColumnQueryBuilder Decimal(string columnName, byte precision = 18, byte scale = 4)
+        public IColumnQueryBuilder Decimal(string columnName)
+        {
+            return GetDefault<ColumnQueryBuilder>().Name(columnName).Type(SQLKeywords.DECIMAL).Precision(DefaultPrecision).Scale(DefaultScale);
+        }
+        public IColumnQueryBuilder Decimal(string columnName, byte precision , byte scale )
         {
             return GetDefault<ColumnQueryBuilder>().Name(columnName).Type(SQLKeywords.DECIMAL).Precision(precision).Scale(scale);
         }

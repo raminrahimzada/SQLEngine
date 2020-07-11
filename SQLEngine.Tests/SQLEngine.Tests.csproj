@@ -58,6 +58,7 @@
     <Compile Include="IfElse.cs" />
     <Compile Include="Select.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserTable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -7,7 +7,7 @@ namespace SQLEngine.Tests
     public partial class Test_Query_Builder_Sql_Server
     {
         [TestMethod]
-        public void TestMethod_Declare_And_Init()
+        public void Test_Declare_And_Init()
         {
             using (var q = Query.New)
             {
@@ -20,7 +20,7 @@ DECLARE  @i INT  = 1;
         }
         
         [TestMethod]
-        public void TestMethod_Declare_And_Init_2()
+        public void Test_Declare_And_Init_2()
         {
             using (var q = Query.New)
             {
@@ -33,7 +33,7 @@ DECLARE  @i INT  = 1;
         }
 
         [TestMethod]
-        public void TestMethod_Declare_Only()
+        public void Test_Declare_Only()
         {
             using (var q = Query.New)
             {
@@ -46,7 +46,7 @@ DECLARE  @i INT;
         }
         
         [TestMethod]
-        public void TestMethod_Declare_Only_2()
+        public void Test_Declare_Only_2()
         {
             using (var q = Query.New)
             {
@@ -59,7 +59,7 @@ DECLARE  @i INT;
         }
 
         [TestMethod]
-        public void TestMethod_Declare_And_Set()
+        public void Test_Declare_And_Set()
         {
             using (var q = Query.New)
             {
@@ -75,7 +75,7 @@ SET @x = 48
         }
 
         [TestMethod]
-        public void TestMethod_Declare_And_Set_Guid()
+        public void Test_Declare_And_Set_Guid()
         {
             using (var q = Query.New)
             {

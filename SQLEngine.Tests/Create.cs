@@ -15,7 +15,7 @@ namespace SQLEngine.Tests
         }
 
         [TestMethod]
-        public void TestMethod_Create_Table()
+        public void Test_Create_Table()
         {
             //demonstration of create-table query
             using (var b = Query.New)
@@ -48,7 +48,7 @@ namespace SQLEngine.Tests
         }
 
         [TestMethod]
-        public void TestMethod_Create_View()
+        public void Test_Create_View()
         {
             using (var q = Query.New)
             {
@@ -74,7 +74,7 @@ CREATE VIEW View_Active_Users AS SELECT  *
         }
 
         [TestMethod]
-        public void TestMethod_Create_Function()
+        public void Test_Create_Function()
         {
             using (var q = Query.New)
             {
@@ -120,7 +120,7 @@ END
         }
 
         [TestMethod]
-        public void TestMethod_Create_Procedure()
+        public void Test_Create_Procedure()
         {
             using (var q = Query.New)
             {

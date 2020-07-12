@@ -341,11 +341,11 @@ namespace SQLEngine.SqlServer
             return new SqlServerColumnWithTableAlias(columnName, tableAlias);
         }
 
-        public string I(string s)
-        {
-            //TODO
-            return s;
-        }
+        //public string I(string s)
+        //{
+        //    //TODO
+        //    return s;
+        //}
     }
 }
 #pragma warning restore IDE1006 // Naming Styles

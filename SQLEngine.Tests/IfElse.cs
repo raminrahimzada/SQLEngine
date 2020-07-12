@@ -7,7 +7,7 @@ namespace SQLEngine.Tests
     public partial class Test_Query_Builder_Sql_Server
     {
         [TestMethod]
-        public void TestMethod_Simple_If_Else_For_Max_Value()
+        public void Test_Simple_If_Else_For_Max_Value()
         {
             using (var q = Query.New)
             {

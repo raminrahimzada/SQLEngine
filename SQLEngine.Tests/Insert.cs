@@ -7,7 +7,7 @@ namespace SQLEngine.Tests
     public partial class Test_Query_Builder_Sql_Server
     {
         [TestMethod]
-        public void TestMethod_Insert_By_Value()
+        public void Test_Insert_By_Value()
         {
             using (var q = Query.New)
             {
@@ -25,7 +25,7 @@ namespace SQLEngine.Tests
         }
 
         [TestMethod]
-        public void TestMethod_Insert_By_Dictionary()
+        public void Test_Insert_By_Dictionary()
         {
             using (var q = Query.New)
             {
@@ -46,7 +46,7 @@ namespace SQLEngine.Tests
         }
        
         [TestMethod]
-        public void TestMethod_Insert_By_Select()
+        public void Test_Insert_By_Select()
         {
             using (var q = Query.New)
             {
@@ -62,7 +62,7 @@ namespace SQLEngine.Tests
         }
 
         [TestMethod]
-        public void TestMethod_Insert_By_Select_Strong_Typed()
+        public void Test_Insert_By_Select_Strong_Typed()
         {
             using (var q = Query.New)
             {

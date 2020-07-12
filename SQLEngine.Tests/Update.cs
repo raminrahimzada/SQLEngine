@@ -53,7 +53,7 @@ namespace SQLEngine.Tests
             }
         }
         [TestMethod]
-        public void TestMethod_Update_Filter_2()
+        public void Test_Update_Filter_2()
         {
             using (var t =Query.New)
             {
@@ -80,7 +80,7 @@ namespace SQLEngine.Tests
 
 
         [TestMethod]
-        public void TestMethod_Update_Filter_3()
+        public void Test_Update_Filter_3()
         {
             using (var t = Query.New)
             {
@@ -106,7 +106,7 @@ namespace SQLEngine.Tests
         }
         
         [TestMethod]
-        public void TestMethod_Update_Filter_4()
+        public void Test_Update_Filter_4()
         {
             using (var t = Query.New)
             {

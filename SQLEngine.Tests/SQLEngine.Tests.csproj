@@ -49,6 +49,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Alter.cs" />
+    <Compile Include="Drop.cs" />
     <Compile Include="Delete.cs" />
     <Compile Include="Complex_Queries.cs" />
     <Compile Include="QueryAssert.cs" />

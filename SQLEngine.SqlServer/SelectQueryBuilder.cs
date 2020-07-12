@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer
 {
-    internal class SelectQueryBuilder : SqlServerQueryBuilder, ISelectQueryBuilder, ISelectNoTopQueryBuilder,
+    internal class SelectQueryBuilder : AbstractQueryBuilder, ISelectQueryBuilder, ISelectNoTopQueryBuilder,
         ISelectWithoutFromQueryBuilder,
         ISelectWithoutWhereQueryBuilder
 

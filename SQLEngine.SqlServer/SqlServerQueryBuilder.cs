@@ -12,6 +12,7 @@ namespace SQLEngine.SqlServer
         public IUpdateQueryBuilder _update => new UpdateQueryBuilder();
         public IDeleteQueryBuilder _delete => new DeleteQueryBuilder();
         public IInsertQueryBuilder _insert => new InsertQueryBuilder();
+        public IAlterQueryBuilder _alter => new AlterQueryBuilder();
         
         public ICreateQueryBuilder _create => new CreateQueryBuilder();
         

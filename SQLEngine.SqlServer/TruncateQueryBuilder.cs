@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal class TruncateQueryBuilder : SqlServerQueryBuilder, ITruncateQueryBuilder, ITruncateNoTableQueryBuilder
+    internal class TruncateQueryBuilder : AbstractQueryBuilder, ITruncateQueryBuilder, ITruncateNoTableQueryBuilder
     {
         private string _tableName;
         public ITruncateNoTableQueryBuilder Table(string tableName)

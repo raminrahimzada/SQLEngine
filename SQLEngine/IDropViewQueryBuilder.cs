@@ -2,6 +2,7 @@
 {
     public interface IDropViewQueryBuilder : IAbstractQueryBuilder
     {
-        IDropViewQueryBuilder View(string viewName);
+        IDropViewNoNameQueryBuilder View(string viewName);
+        IDropViewNoSchemaQueryBuilder FromSchema(string schema);
     }
 }

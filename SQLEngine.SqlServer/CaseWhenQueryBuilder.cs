@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer
 {
-    internal class CaseWhenQueryBuilder : SqlServerQueryBuilder, ICaseWhenNeedWhenQueryBuilder, ICaseWhenNeedThenQueryBuilder
+    internal class CaseWhenQueryBuilder : AbstractQueryBuilder, ICaseWhenNeedWhenQueryBuilder, ICaseWhenNeedThenQueryBuilder
     {
         private readonly List<string> _casesList = new List<string>();
         private string _currentWhen = string.Empty;

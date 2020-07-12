@@ -7,7 +7,7 @@ namespace SQLEngine.Tests
     public partial class Test_Query_Builder_Sql_Server
     {
         [TestMethod]
-        public void TestMethod5()
+        public void Test_Update_1()
         {
             using (var t = Query.New)
             {
@@ -28,7 +28,7 @@ namespace SQLEngine.Tests
             }
         }
         [TestMethod]
-        public void TestMethod_Update_Filter_1()
+        public void Test_Update_Filter_1()
         {
             using (var t =Query.New)
             {

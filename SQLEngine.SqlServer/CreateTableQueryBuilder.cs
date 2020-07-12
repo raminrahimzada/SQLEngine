@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer
 {
-    internal class CreateTableQueryBuilder : SqlServerQueryBuilder, ICreateTableQueryBuilder
+    internal class CreateTableQueryBuilder : AbstractQueryBuilder, ICreateTableQueryBuilder
     {
         private string _tableName;
         private string _schemaName;

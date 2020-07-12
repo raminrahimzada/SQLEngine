@@ -56,6 +56,7 @@
     <Compile Include="IAbstractQueryBuilder.cs" />
     <Compile Include="IAbstractSelectQueryBuilder.cs" />
     <Compile Include="IAbstractUpdateQueryBuilder.cs" />
+    <Compile Include="IAlterQueryBuilder.cs" />
     <Compile Include="IBinaryExpressionBuilder.cs" />
     <Compile Include="IBinaryExpressionNopBuilder.cs" />
     <Compile Include="ICaseWhenNeedThenQueryBuilder.cs" />
@@ -85,9 +86,15 @@
     <Compile Include="IDeleteExceptTopQueryBuilder.cs" />
     <Compile Include="IDeleteExceptWhereQueryBuilder.cs" />
     <Compile Include="IDeleteQueryBuilder.cs" />
+    <Compile Include="IDropDatabaseNoNameQueryBuilder.cs" />
+    <Compile Include="IDropDatabaseQueryBuilder.cs" />
+    <Compile Include="IDropFunctionNoSchemaQueryBuilder.cs" />
     <Compile Include="IDropFunctionQueryBuilder.cs" />
     <Compile Include="IDropQueryBuilder.cs" />
     <Compile Include="IDropTableQueryBuilder.cs" />
+    <Compile Include="IDropViewNoNameQueryBuilder.cs" />
+    <Compile Include="IDropViewNoSchemaNoDatabase.cs" />
+    <Compile Include="IDropViewNoSchemaQueryBuilder.cs" />
     <Compile Include="IDropViewQueryBuilder.cs" />
     <Compile Include="IExceptDefaultValueNameDeclarationQueryBuilder.cs" />
     <Compile Include="IExceptVariableNameDeclarationQueryBuilder.cs" />

@@ -5,7 +5,6 @@ namespace SQLEngine.Tests
 {
     public partial class Test_Query_Builder_Sql_Server
     {
-
         [TestMethod]
         public void Test_Delete_Table_1()
         {

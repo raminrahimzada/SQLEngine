@@ -9,6 +9,7 @@ namespace SQLEngine
         IDeleteQueryBuilder _delete { get; }
         IInsertQueryBuilder _insert { get; }
         ICreateQueryBuilder _create { get; }
+        IAlterQueryBuilder _alter { get; }
         IDropQueryBuilder _drop { get; }
         IConditionFilterQueryHelper Helper { get; }
         void Create(Func<ICreateQueryBuilder, ICreateTableQueryBuilder> builder);

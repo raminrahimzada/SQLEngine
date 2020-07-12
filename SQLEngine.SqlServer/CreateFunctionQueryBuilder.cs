@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SQLEngine.SqlServer
 {
-    internal class CreateFunctionQueryBuilder : SqlServerQueryBuilder, 
+    internal class CreateFunctionQueryBuilder : AbstractQueryBuilder, 
         IAbstractCreateFunctionQueryBuilder, 
         ICreateFunctionQueryBuilder,
         ICreateFunctionNoNameQueryBuilder,

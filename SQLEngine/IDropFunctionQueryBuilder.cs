@@ -2,6 +2,7 @@
 {
     public interface IDropFunctionQueryBuilder : IAbstractQueryBuilder
     {
-        IDropFunctionQueryBuilder FunctionName(string funcName);
+        //IDropFunctionQueryBuilder FunctionName(string funcName);
+        IDropFunctionNoSchemaQueryBuilder Schema(string schemaName);
     }
 }

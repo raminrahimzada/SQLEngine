@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer
 {
-    internal class FunctionQueryBuilder : SqlServerQueryBuilder
+    internal class FunctionQueryBuilder : AbstractQueryBuilder
     {
         class ArgumentModel
         {

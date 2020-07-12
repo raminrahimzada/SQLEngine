@@ -29,6 +29,7 @@ namespace SQLEngine
         public const string RETURN = "RETURN";
         public const string DATETIME = "DATETIME";
         public const string DROP = "DROP";
+        public const string DATABASE = "DATABASE";
         public const string INT = "INT";
         public const string BIGINT = "BIGINT";
         public const string NVARCHAR = "NVARCHAR";

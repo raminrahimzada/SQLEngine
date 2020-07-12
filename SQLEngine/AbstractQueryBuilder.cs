@@ -7,6 +7,7 @@ namespace SQLEngine
 {
     public abstract class AbstractQueryBuilder : IAbstractQueryBuilder
     {
+
         protected IndentedTextWriter Writer { get; private set; }
 
         private StringBuilder _stringBuilder;
@@ -63,5 +64,10 @@ namespace SQLEngine
             throw new Exception(message);
         }
 
+        //TODO identifier
+        public string I(string name)
+        {
+            return name;
+        }
     }
 }

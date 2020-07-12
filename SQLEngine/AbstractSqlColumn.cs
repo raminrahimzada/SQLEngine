@@ -68,8 +68,8 @@ namespace SQLEngine
         protected abstract AbstractSqlCondition GreaterEqual(DateTime value);
         protected abstract AbstractSqlCondition Less(DateTime value);
         protected abstract AbstractSqlCondition LessEqual(DateTime value);
-        
-        
+
+
         protected abstract AbstractSqlCondition Greater(double value);
         protected abstract AbstractSqlCondition GreaterEqual(double value);
         protected abstract AbstractSqlCondition Less(double value);
@@ -235,8 +235,8 @@ namespace SQLEngine
         {
             return x.LessEqual(y);
         }
-        
-        
+
+
         public static AbstractSqlCondition operator >(AbstractSqlColumn x, double y)
         {
             return x.Greater(y);
@@ -259,102 +259,145 @@ namespace SQLEngine
 
         public static AbstractSqlCondition operator ==(AbstractSqlColumn column, AbstractSqlColumn otherColumn)
         {
-            return column.EqualTo(otherColumn);
+            return column?.EqualTo(otherColumn);
         }
 
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, AbstractSqlColumn otherColumn)
         {
-            return column.NotEqualTo(otherColumn);
+            return column?.NotEqualTo(otherColumn);
         }
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, AbstractSqlVariable otherColumn)
         {
-            return column.NotEqualTo(otherColumn);
+            return column?.NotEqualTo(otherColumn);
         }
         public static AbstractSqlCondition operator ==(AbstractSqlColumn column, AbstractSqlVariable otherColumn)
         {
-            return column.EqualTo(otherColumn);
+            return column?.EqualTo(otherColumn);
+        }
+
+
+        public static AbstractSqlCondition operator !=(AbstractSqlColumn column, AbstractSqlLiteral literal)
+        {
+            return column?.NotEqualTo(literal);
+        }
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, AbstractSqlLiteral literal)
+        {
+            return column?.EqualTo(literal);
         }
 
 
         public static AbstractSqlCondition operator ==(AbstractSqlColumn column, DateTime value)
         {
-            return column.EqualTo(value);
+            return column?.EqualTo(value);
         }
 
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, DateTime value)
         {
-            return column.NotEqualTo(value);
+            return column?.NotEqualTo(value);
         }
         public static AbstractSqlCondition operator ==(AbstractSqlColumn column, int value)
         {
-            return column.EqualTo(value);
+            return column?.EqualTo(value);
         }
         public static AbstractSqlCondition operator ==(AbstractSqlColumn column, bool value)
         {
-            return column.EqualTo(value);
+            return column?.EqualTo(value);
         }
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, bool value)
         {
-            return column.NotEqualTo(value);
+            return column?.NotEqualTo(value);
         }
 
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, int value)
         {
-            return column.NotEqualTo(value);
+            return column?.NotEqualTo(value);
         }
         public static AbstractSqlCondition operator ==(AbstractSqlColumn column, long value)
         {
-            return column.EqualTo(value);
+            return column?.EqualTo(value);
         }
 
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, long value)
         {
-            return column.NotEqualTo(value);
+            return column?.NotEqualTo(value);
         }
+        public static AbstractSqlCondition operator !=(AbstractSqlColumn column, decimal value)
+        {
+            return column?.NotEqualTo(value);
+        }
+        public static AbstractSqlCondition operator !=(AbstractSqlColumn column, double value)
+        {
+            return column?.NotEqualTo(value);
+        }
+
+        public static AbstractSqlCondition operator !=(AbstractSqlColumn column, float value)
+        {
+            return column?.NotEqualTo(value);
+        }
+
+
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, decimal value)
+        {
+            return column?.EqualTo(value);
+        }
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, double value)
+        {
+            return column?.EqualTo(value);
+        }
+
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, float value)
+        {
+            return column?.EqualTo(value);
+        }
+
+
+
+
+
         public static AbstractSqlCondition operator ==(AbstractSqlColumn column, short value)
         {
-            return column.EqualTo(value);
+            return column?.EqualTo(value);
         }
 
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, short value)
         {
-            return column.NotEqualTo(value);
+            return column?.NotEqualTo(value);
         }
         public static AbstractSqlCondition operator ==(AbstractSqlColumn column, byte value)
         {
-            return column.EqualTo(value);
+            return column?.EqualTo(value);
         }
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, byte[] value)
         {
-            return column.NotEqualTo(value);
+            return column?.NotEqualTo(value);
         }
         public static AbstractSqlCondition operator ==(AbstractSqlColumn column, byte[] value)
         {
-            return column.EqualTo(value);
+            return column?.EqualTo(value);
         }
 
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, byte value)
         {
-            return column.NotEqualTo(value);
+            return column?.NotEqualTo(value);
         }
         public static AbstractSqlCondition operator ==(AbstractSqlColumn column, Guid value)
         {
-            return column.EqualTo(value);
+            return column?.EqualTo(value);
         }
 
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, Guid value)
         {
-            return column.NotEqualTo(value);
+            return column?.NotEqualTo(value);
         }
 
         public static AbstractSqlCondition operator ==(AbstractSqlColumn column, string value)
         {
-            return column.EqualTo(value);
+            return column?.EqualTo(value);
         }
 
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, string value)
         {
-            return column.NotEqualTo(value);
+            return column?.NotEqualTo(value);
         }
     }
 }

@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractConditionBuilder.cs" />
+    <Compile Include="AlterTableAddColumnQueryBuilder.cs" />
     <Compile Include="SqlServerConditionFilterQueryHelper.cs" />
     <Compile Include="DropDatabaseQueryBuilder.cs" />
     <Compile Include="FunctionBodyQueryBuilder.cs" />

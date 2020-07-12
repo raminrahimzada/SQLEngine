@@ -4,7 +4,7 @@ using System.Text;
     
 namespace SQLEngine.SqlServer
 {
-    public class SqlServerConditionFilterQueryHelper : IConditionFilterQueryHelper
+    internal class SqlServerConditionFilterQueryHelper : IConditionFilterQueryHelper
     {
         public string IsNull(ISqlExpression key)
         {

@@ -50,7 +50,7 @@ namespace SQLEngine.SqlServer
             using (var builder= new FunctionBodyQueryBuilder())
             {
                 body(builder);
-                this._body = builder.Build();
+                _body = builder.Build();
                 return this;
             }
         }

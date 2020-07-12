@@ -45,7 +45,7 @@ namespace SQLEngine
             {
                 if (_builderFunction == null)
                 {
-                    throw new Exception("Please use QueryBuilderFactory.Use to setup");
+                    throw new Exception("Please use Query.Use to setup");
                 }
 
                 return _builderFunction();

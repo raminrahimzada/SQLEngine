@@ -3,7 +3,6 @@
     internal class DropDatabaseQueryBuilder : AbstractQueryBuilder, IDropDatabaseNoNameQueryBuilder, IDropDatabaseQueryBuilder
     {
         private string _databaseName;
-        
 
         public override string Build()
         {
@@ -16,7 +15,7 @@
 
         public IDropDatabaseNoNameQueryBuilder Database(string databaseName)
         {
-            this._databaseName = databaseName;
+            _databaseName = databaseName;
             return this;
         }
     }

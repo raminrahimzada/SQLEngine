@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    public class SqlServerColumnWithTableAlias : SqlServerColumn
+    internal class SqlServerColumnWithTableAlias : SqlServerColumn
     {
         private readonly string _tableAlias;
 

@@ -1,43 +1,42 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SQLEngine.SqlServer;
 
 namespace SQLEngine.Tests
 {
     public partial class Test_Query_Builder_Sql_Server
     {
         [TestMethod]
-        public void Test_Alter_Table_1()
-        {
-            using (var t = Query.New)
-            {
-                var queryThat = t
-                    ._alter
-                    .Table("Users")
-                    .AddColumn("Age","int")
-                    //.DropColumn("Age")
-                    //.RenameColumn("Age","Age_Of_User")
-                    //.AlterColumn("Weight", newType: "DECIMAL", precision: 18, scale:4,maxLength:20, isFixedLength: true,isUnicode:true)
-                        .ToString()
-                    ;
-                const string query =
-                    @"
-ALTER TABLE  Users  ADD  COLUMN  Age  int 
-";
-
-                QueryAssert.AreEqual(queryThat, query);
-            }
-        }
-        [TestMethod]
-        public void Test_Alter_Table_2()
+        public void Test_Alter_Table_AddColumn()
         {
             using (var t = Query.New)
             {
                 var queryThat = t
                         ._alter
                         .Table("Users")
-                        //.AddColumn("Age", "int")
+                        .AddColumn("Age")
+                        .NotNull()
+                        .OfType("DECIMAL")
+                        .Size(18, 4)
+                        .DefaultValue(18.ToSQL())
+                        .ToString()
+                    ;
+                const string query =
+                    @"
+ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
+";
+
+                QueryAssert.AreEqual(queryThat, query);
+            }
+        }
+        [TestMethod]
+        public void Test_Alter_Table_DropColumn()
+        {
+            using (var t = Query.New)
+            {
+                var queryThat = t
+                        ._alter
+                        .Table("Users")
                         .DropColumn("Age")
-                        //.RenameColumn("Age","Age_Of_User")
-                        //.AlterColumn("Weight", newType: "DECIMAL", precision: 18, scale:4,maxLength:20, isFixedLength: true,isUnicode:true)
                         .ToString()
                     ;
                 const string query =
@@ -49,17 +48,15 @@ ALTER TABLE  Users  DROP  COLUMN  Age
             }
         }
         [TestMethod]
-        public void Test_Alter_Table_3()
+        public void Test_Alter_Table_RenameColumn()
         {
             using (var t = Query.New)
             {
                 var queryThat = t
                         ._alter
                         .Table("Users")
-                        //.AddColumn("Age", "int")
-                        //.DropColumn("Age")
-                        .RenameColumn("Age","Age_Of_User")
-                        //.AlterColumn("Weight", newType: "DECIMAL", precision: 18, scale:4,maxLength:20, isFixedLength: true,isUnicode:true)
+                        .RenameColumn("Age")
+                        .To("Age_Of_User")
                         .ToString()
                     ;
                 const string query =
@@ -75,22 +72,23 @@ EXECUTE sys.sp_rename  @objtype=N'COLUMN'
             }
         }
         [TestMethod]
-        public void Test_Alter_Table_4()
+        public void Test_Alter_Table_AlterColumn()
         {
             using (var t = Query.New)
             {
                 var queryThat = t
                         ._alter
                         .Table("Users")
-                        //.AddColumn("Age", "int")
-                        //.DropColumn("Age")
-                        //.RenameColumn("Age","Age_Of_User")
-                        .AlterColumn("Name", newType: "varchar",false,15)
+                        .AlterColumn("Name")
+                        .NewType("VARCHAR")
+                        .NotNull()
+                        .Size(15)
+                        .DefaultValue("Anonymous".ToSQL())
                         .ToString()
                     ;
                 const string query =
                     @"
-ALTER TABLE Users ALTER COLUMN Name varchar(15) NOT  NULL 
+ALTER TABLE Users ALTER COLUMN Name VARCHAR(15) NOT NULL  DEFAULT ( N'Anonymous' )
 ";
 
                 QueryAssert.AreEqual(queryThat, query);
@@ -98,25 +96,47 @@ ALTER TABLE Users ALTER COLUMN Name varchar(15) NOT  NULL
         }
         
         [TestMethod]
-        public void Test_Alter_Table_5()
+        public void Test_Alter_Table_AlterColumn_Decimal()
         {
             using (var t = Query.New)
             {
                 var queryThat = t
                         ._alter
                         .Table("Users")
-                        //.AddColumn("Age", "int")
-                        //.DropColumn("Age")
-                        //.RenameColumn("Age","Age_Of_User")
-                        .AlterColumn("Weight", newType: "decimal",true,18,4)
+                        .AlterColumn("Weight")
+                        .NewType("decimal")
+                        .NotNull()
+                        .Size(18, 4)
                         .ToString()
                     ;
                 const string query =
                     @"
-ALTER TABLE Users ALTER COLUMN Weight decimal(18,4) NULL 
+ALTER TABLE Users ALTER COLUMN Weight decimal(18,4) NOT NULL 
 ";
 
                 QueryAssert.AreEqual(queryThat, query);
+            }
+        }
+
+
+        [TestMethod]
+        public void Test_Alter_Table_1()
+        {
+            using (var t = Query.New)
+            {
+//                var queryThat = t
+//                        ._alter
+//                        .Table("Users")
+//                        .AddIndex("IX_Unique_Email")
+//                        .On("Email")
+//                        .ToString()
+//                    ;
+//                const string query =
+//                    @"
+//ALTER TABLE  Users  ADD  COLUMN  Age  int 
+//";
+
+//                QueryAssert.AreEqual(queryThat, query);
             }
         }
     }

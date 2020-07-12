@@ -11,13 +11,13 @@
 
         public override AbstractSqlCondition And(AbstractSqlCondition condition)
         {
-            var result = "(" + this.ToSqlString() + ") AND (" + condition.ToSqlString() + ")";
+            var result = "(" + ToSqlString() + ") AND (" + condition.ToSqlString() + ")";
             return Raw(result);
         }
 
         public override AbstractSqlCondition Or(AbstractSqlCondition condition)
         {
-            var result = "(" + this.ToSqlString() + ") OR (" + condition.ToSqlString() + ")";
+            var result = "(" + ToSqlString() + ") OR (" + condition.ToSqlString() + ")";
             return Raw(result);
         }
 

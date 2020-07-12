@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    public class SqlServerVariable: AbstractSqlVariable
+    internal class SqlServerVariable: AbstractSqlVariable
     {
         public SqlServerVariable(string name)
         {
@@ -26,67 +26,67 @@
 
         protected override AbstractSqlCondition Greater(AbstractSqlVariable abstractSqlVariable)
         {
-            var expression = this.ToSqlString() + " > " + abstractSqlVariable.ToSqlString();
+            var expression = ToSqlString() + " > " + abstractSqlVariable.ToSqlString();
             return SqlServerCondition.Raw(expression);
         }
 
         protected override AbstractSqlCondition GreaterEqual(AbstractSqlVariable abstractSqlVariable)
         {
-            var expression = this.ToSqlString() + " >= " + abstractSqlVariable.ToSqlString();
+            var expression = ToSqlString() + " >= " + abstractSqlVariable.ToSqlString();
             return SqlServerCondition.Raw(expression);
         }
 
         protected override AbstractSqlCondition Less(AbstractSqlVariable abstractSqlVariable)
         {
-            var expression = this.ToSqlString() + " < " + abstractSqlVariable.ToSqlString();
+            var expression = ToSqlString() + " < " + abstractSqlVariable.ToSqlString();
             return SqlServerCondition.Raw(expression);
         }
 
         protected override AbstractSqlCondition LessEqual(AbstractSqlVariable abstractSqlVariable)
         {
-            var expression = this.ToSqlString() + " <= " + abstractSqlVariable.ToSqlString();
+            var expression = ToSqlString() + " <= " + abstractSqlVariable.ToSqlString();
             return SqlServerCondition.Raw(expression);
         }
 
         public override ISqlExpression Multiply(AbstractSqlVariable variable)
         {
-            var expression = "(" + this.ToSqlString() + " * " + variable.ToSqlString() + ")";
+            var expression = "(" + ToSqlString() + " * " + variable.ToSqlString() + ")";
             return SqlServerCondition.Raw(expression);
         }
 
         public override ISqlExpression Multiply(AbstractSqlLiteral variable)
         {
-            var expression = "(" + this.ToSqlString() + " * " + variable.ToSqlString() + ")";
+            var expression = "(" + ToSqlString() + " * " + variable.ToSqlString() + ")";
             return SqlServerCondition.Raw(expression);
         }
 
         public override ISqlExpression Add(AbstractSqlLiteral literal)
         {
-            var expression = "(" + this.ToSqlString() + " + " + literal.ToSqlString() + ")";
+            var expression = "(" + ToSqlString() + " + " + literal.ToSqlString() + ")";
             return SqlServerCondition.Raw(expression);
         }
 
         public override ISqlExpression Divide(AbstractSqlVariable variable)
         {
-            var expression = "(" + this.ToSqlString() + " / " + variable.ToSqlString() + ")";
+            var expression = "(" + ToSqlString() + " / " + variable.ToSqlString() + ")";
             return SqlServerCondition.Raw(expression);
         }
 
         public override ISqlExpression Subtract(AbstractSqlLiteral literal)
         {
-            var expression = "(" + this.ToSqlString() + " - " + literal.ToSqlString() + ")";
+            var expression = "(" + ToSqlString() + " - " + literal.ToSqlString() + ")";
             return SqlServerCondition.Raw(expression);
         }
 
         protected override ISqlExpression SubtractReverse(AbstractSqlLiteral literal)
         {
-            var expression = "(" + literal.ToSqlString() + " - " + this.ToSqlString() + ")";
+            var expression = "(" + literal.ToSqlString() + " - " + ToSqlString() + ")";
             return SqlServerCondition.Raw(expression);
         }
 
         protected override ISqlExpression DivideReverse(AbstractSqlLiteral literal)
         {
-            var expression = "(" + literal.ToSqlString() + " / " + this.ToSqlString() + ")";
+            var expression = "(" + literal.ToSqlString() + " / " + ToSqlString() + ")";
             return SqlServerCondition.Raw(expression);
         }
 

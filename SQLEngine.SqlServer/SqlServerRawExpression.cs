@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    public class SqlServerRawExpression : ISqlExpression
+    internal class SqlServerRawExpression : ISqlExpression
     {
         public string Expression { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    public class FunctionBodyQueryBuilder : SqlServerQueryBuilder, IFunctionBodyQueryBuilder
+    internal class FunctionBodyQueryBuilder : SqlServerQueryBuilder, IFunctionBodyQueryBuilder
     {
         public AbstractSqlVariable Param(string name)
         {

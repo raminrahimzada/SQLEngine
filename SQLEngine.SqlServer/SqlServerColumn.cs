@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer
 {
-    public class SqlServerColumn : AbstractSqlColumn
+    internal class SqlServerColumn : AbstractSqlColumn
     {
         public SqlServerColumn(string name)
         {

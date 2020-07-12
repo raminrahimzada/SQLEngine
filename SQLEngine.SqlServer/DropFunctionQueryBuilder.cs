@@ -14,7 +14,7 @@
         }
         public IDropFunctionNoSchemaQueryBuilder Schema(string schemaName)
         {
-            this._schemaName = schemaName;
+            _schemaName = schemaName;
             return this;
         }
         public override string Build()

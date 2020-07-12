@@ -37,7 +37,7 @@
 
         public IDropViewNoSchemaNoDatabase FromDB(string dbName)
         {
-            this._dbName = dbName;
+            _dbName = dbName;
             return this;
         }
 

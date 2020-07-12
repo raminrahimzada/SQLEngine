@@ -1,34 +1,46 @@
-﻿//using System;
+﻿namespace SQLEngine.SqlServer
+{
+    internal class AlterTableRenameColumnQueryBuilder:AbstractQueryBuilder
+        , IAlterTableNoNameRenameColumnQueryBuilder
+        , IAlterTableNoNameRenameColumnNoNewNameQueryBuilder
+    {
+        private string _tableName;
+        private string _columnNewName;
+        private string _columnName;
 
-//namespace SQLEngine.SqlServer
-//{
-//    internal class AlterTableRenameColumnQueryBuilder : AlterTableQueryBuilder
-//    {
-//        internal string ColumnName;
-//        private string _newColumnName;
+        public AlterTableRenameColumnQueryBuilder Table(string tableName)
+        {
+            _tableName = tableName;
+            return this;
+        }
 
-//        public AlterTableRenameColumnQueryBuilder To(string newName)
-//        {
-//            _newColumnName = newName;
-//            return this;
-//        }
+        public IAlterTableNoNameRenameColumnNoNewNameQueryBuilder To(string newName)
+        {
+            _columnNewName = newName;
+            return this;
+        }
 
-//        public override string Build()
-//        {
-//            throw new NotImplementedException();
-//            //using (var t = new ExecuteQueryBuilder())
-//            //{
-//            //    var fullColumnName = $"{I(SchemaName)}.{I(TableName)}.{I(ColumnName)}";
-//            //    //https://stackoverflow.com/a/9355281/7901692
+        public AlterTableRenameColumnQueryBuilder Column(string columnName)
+        {
+            _columnName = columnName;
+            return this;
+        }
 
-//            //    var query = t.Procedure("sys.sp_rename")
-//            //        .Arg("objtype", "COLUMN".ToSQL())
-//            //        .Arg("objname", fullColumnName.ToSQL())
-//            //        .Arg("newname", _newColumnName.ToSQL())
-//            //        .Build();
-//            //    Writer.WriteLine(query);
-//            //}
-//            //return base.Build();
-//        }
-//    }
-//}
+        public override string Build()
+        {
+            using (var t = new ExecuteQueryBuilder())
+            {
+                var fullColumnName = $"{I(_tableName)}.{I(_columnName)}";
+                //https://stackoverflow.com/a/9355281/7901692
+
+                var query = t.Procedure("sys.sp_rename")
+                    .Arg("objtype", "COLUMN".ToSQL())
+                    .Arg("objname", fullColumnName.ToSQL())
+                    .Arg("newname", _columnNewName.ToSQL())
+                    .Build();
+                Writer.WriteLine(query);
+            }
+            return base.Build();
+        }
+    }
+}

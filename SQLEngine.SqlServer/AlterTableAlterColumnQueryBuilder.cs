@@ -1,56 +1,95 @@
-﻿//namespace SQLEngine.SqlServer
-//{
-//    internal class AlterTableAlterColumnQueryBuilder : AbstractQueryBuilder
-//    {
-//        internal string SchemaName; 
-//        internal string TableName;
-//        internal string ColumnName;
+﻿namespace SQLEngine.SqlServer
+{
+    internal class AlterTableAlterColumnQueryBuilder : AbstractQueryBuilder
+        , IAlterTableNoNameAlterColumnQueryBuilder
+        , IAlterTableNoNameAlterColumnNoNewTypeQueryBuilder
+        , IAlterTableNoNameAlterColumnNoNewTypeNoNullableQueryBuilder
+        , IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeQueryBuilder
+        , IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeNoDefaultValueQueryBuilder
+    {
+        private string _tableName;
+        private string _columnName;
+        private string _newType;
+        private bool? _canBeNull;
+        private byte? _size;
+        private byte? _scale;
+        private ISqlExpression _defaultValue;
 
-//        private string _type;
-//        private bool? _nullable;
-//        private string _asExpression;
-//        private bool? _asExpressionPersisted;
+        public AlterTableAlterColumnQueryBuilder Table(string tableName)
+        {
+            _tableName = tableName;
+            return this;
+        }
 
+        public AlterTableAlterColumnQueryBuilder Column(string columnName)
+        {
+            _columnName = columnName;
+            return this;
+        }
 
-//        public AlterTableAlterColumnQueryBuilder Type(string type)
-//        {
-//            _type = type;
-//            return this;
-//        }
+        public override string Build()
+        {
+            Writer.Write(SQLKeywords.ALTER);
+            Writer.Write2(SQLKeywords.TABLE);
+            Writer.Write(_tableName);
+            Writer.Write2(SQLKeywords.ALTER);
+            Writer.Write(SQLKeywords.COLUMN);
+            Writer.Write2(_columnName);
+            Writer.Write(_newType);
 
-//        public AlterTableAlterColumnQueryBuilder Nullable(bool nullable = true)
-//        {
-//            _nullable = nullable;
-//            return this;
-//        }
+            if (_size != null)
+            {
+                Writer.Write(SQLKeywords.BEGIN_SCOPE);
+                Writer.Write(_size);
+                if (_scale != null)
+                {
+                    Writer.Write(SQLKeywords.COMMA);
+                    Writer.Write(_scale);
+                }
+                Writer.Write(SQLKeywords.END_SCOPE);
+            }
+            if (_canBeNull != null)
+            {
+                if (!_canBeNull.Value)
+                {
+                    Writer.Write2(SQLKeywords.NOT);
+                }
+                Writer.Write2(SQLKeywords.NULL);
+            }
 
-//        public AlterTableAlterColumnQueryBuilder As(string expression, bool isPersisted)
-//        {
-//            _asExpression = expression;
-//            _asExpressionPersisted = isPersisted;
-//            return this;
-//        }
+            if (_defaultValue != null)
+            {
+                Writer.Write2(SQLKeywords.DEFAULT);
+                Writer.Write(SQLKeywords.BEGIN_SCOPE);
+                Writer.Write2(_defaultValue.ToSqlString());
+                Writer.Write(SQLKeywords.END_SCOPE);
+            }
+            return base.Build();
+        }
 
-//        public override string Build()
-//        {
-//            Writer.Write(SQLKeywords.ALTER);
-//            Writer.Write2(SQLKeywords.TABLE);
-//            if (!string.IsNullOrEmpty(SchemaName))
-//            {
-//                Writer.Write(I(SchemaName));
-//                Writer.Write(SQLKeywords.DOT);
-//            }
+        public IAlterTableNoNameAlterColumnNoNewTypeQueryBuilder NewType(string newType)
+        {
+            _newType = newType;
+            return this;
+        }
 
-//            Writer.Write(I(TableName));
-//            Writer.Write(SQLKeywords.SPACE);
-//            Writer.Write(SQLKeywords.ALTER);
-//            Writer.Write(SQLKeywords.COLUMN);
-//            Writer.Write2(I(ColumnName));
-//            Writer.Write2(_type);
+        public IAlterTableNoNameAlterColumnNoNewTypeNoNullableQueryBuilder NotNull(bool notNull = true)
+        {
+            _canBeNull = !notNull;
+            return this;
+        }
 
-//            Writer.Write(SQLKeywords.SEMICOLON);
+        public IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeQueryBuilder Size(byte size, byte? scale = null)
+        {
+            _size = size;
+            _scale = scale;
+            return this;
+        }
 
-//            return base.Build();
-//        }
-//    }
-//}
+        public IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeNoDefaultValueQueryBuilder DefaultValue(ISqlExpression expression)
+        {
+            _defaultValue = expression;
+            return this;
+        }
+    }
+}

@@ -19,7 +19,7 @@ namespace SQLEngine.SqlServer
             {
                 return new SqlServerLiteral
                 {
-                    _rawSqlString = SQLKeywords.NULL
+                    _rawSqlString = C.NULL
                 };
             }
             return new SqlServerLiteral
@@ -30,7 +30,7 @@ namespace SQLEngine.SqlServer
         public static SqlServerLiteral From(string str,bool isUnicode=true)
         {
             var result = new SqlServerLiteral();
-            if (str == null) result._rawSqlString = SQLKeywords.NULL;
+            if (str == null) result._rawSqlString = C.NULL;
             else
             {
                 str = str.Replace("'", "''");
@@ -54,7 +54,7 @@ namespace SQLEngine.SqlServer
 
             if (date == null)
             {
-                result._rawSqlString = SQLKeywords.NULL;
+                result._rawSqlString = C.NULL;
                 return result;
             }
 
@@ -69,7 +69,7 @@ namespace SQLEngine.SqlServer
         {
             if (data == null)
             {
-                _rawSqlString = SQLKeywords.NULL;
+                _rawSqlString = C.NULL;
                 return;
             }
             _rawSqlString = "0x" + BitConverter.ToString(data).Replace("-", string.Empty);
@@ -114,7 +114,7 @@ namespace SQLEngine.SqlServer
         {
             if (i == null)
             {
-                _rawSqlString = SQLKeywords.NULL;
+                _rawSqlString = C.NULL;
                 return;
             }
             _rawSqlString = i.Value.ToString();
@@ -124,7 +124,7 @@ namespace SQLEngine.SqlServer
         {
             if (l == null)
             {
-                _rawSqlString = SQLKeywords.NULL;
+                _rawSqlString = C.NULL;
                 return;
             }
             _rawSqlString = l.Value.ToString();
@@ -134,7 +134,7 @@ namespace SQLEngine.SqlServer
         {
             if (b == null)
             {
-                _rawSqlString = SQLKeywords.NULL;
+                _rawSqlString = C.NULL;
                 return;
             }
             _rawSqlString = b.Value ? "1" : "0";
@@ -148,7 +148,7 @@ namespace SQLEngine.SqlServer
             }
             else
             {
-                _rawSqlString = SQLKeywords.NULL;
+                _rawSqlString = C.NULL;
             }
         }
 
@@ -156,7 +156,7 @@ namespace SQLEngine.SqlServer
         {
             if (d == null)
             {
-                _rawSqlString = SQLKeywords.NULL;
+                _rawSqlString = C.NULL;
                 return;
             }
             _rawSqlString = (d.Value + string.Empty).Replace(',', '.');
@@ -166,7 +166,7 @@ namespace SQLEngine.SqlServer
         {
             if (f == null)
             {
-                _rawSqlString = SQLKeywords.NULL;
+                _rawSqlString = C.NULL;
                 return;
             }
             _rawSqlString = (f.Value + string.Empty).Replace(',', '.');
@@ -176,7 +176,7 @@ namespace SQLEngine.SqlServer
         {
             if (s == null)
             {
-                _rawSqlString = SQLKeywords.NULL;
+                _rawSqlString = C.NULL;
                 return;
             }
             _rawSqlString = s.Value.ToString();

@@ -136,10 +136,8 @@
     <Compile Include="IUpdateNoTableSingleValueQueryBuilder.cs" />
     <Compile Include="IUpdateNoTopQueryBuilder.cs" />
     <Compile Include="IUpdateQueryBuilder.cs" />
-    <Compile Include="IndentedTextWriterExtensions.cs" />
     <Compile Include="Query.cs" />
     <Compile Include="QueryBuilderExtensions.cs" />
-    <Compile Include="SQLKeywords.cs" />
     <Compile Include="ITable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

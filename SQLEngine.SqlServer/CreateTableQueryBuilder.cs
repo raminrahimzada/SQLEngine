@@ -58,18 +58,18 @@ namespace SQLEngine.SqlServer
             ValidateAndThrow();
 
             var cols = _columns.Select(c => c.Model).ToArray();
-            Writer.Write(SQLKeywords.CREATE);
-            Writer.Write2(SQLKeywords.TABLE);
+            Writer.Write(C.CREATE);
+            Writer.Write2(C.TABLE);
             if (!string.IsNullOrEmpty(_schemaName))
             {
                 Writer.Write(I(_schemaName));
-                Writer.Write(SQLKeywords.DOT);
+                Writer.Write(C.DOT);
             }
             
             Writer.Write(I(_tableName));
 
-            Writer.Write(SQLKeywords.SPACE);
-            Writer.Write2(SQLKeywords.BEGIN_SCOPE);
+            Writer.Write(C.SPACE);
+            Writer.Write2(C.BEGIN_SCOPE);
             Writer.Indent++;
             Writer.WriteLine();
 
@@ -77,10 +77,10 @@ namespace SQLEngine.SqlServer
             {
                 var columnQuery = columnQueryBuilder.Build();
                 Writer.Write(columnQuery);
-                Writer.WriteLine(SQLKeywords.COMMA);
+                Writer.WriteLine(C.COMMA);
             }
             Writer.Indent--;
-            Writer.Write2(SQLKeywords.END_SCOPE);
+            Writer.Write2(C.END_SCOPE);
             Writer.WriteLine();
 
             //PK list
@@ -103,26 +103,26 @@ namespace SQLEngine.SqlServer
                                      pkList.FirstOrDefault(x => x.PrimaryKeyName == pkGroup.Key)?.Name;
                             ;
                         }
-                        Writer.Write(SQLKeywords.ALTER);
-                        Writer.Write2(SQLKeywords.TABLE);
+                        Writer.Write(C.ALTER);
+                        Writer.Write2(C.TABLE);
                         Writer.Write2(I(_tableName));
-                        Writer.Write2(SQLKeywords.ADD);
-                        Writer.Write2(SQLKeywords.CONSTRAINT);
+                        Writer.Write2(C.ADD);
+                        Writer.Write2(C.CONSTRAINT);
                         Writer.Write2(I(pkName));
-                        Writer.Write2(SQLKeywords.PRIMARY);
-                        Writer.Write2(SQLKeywords.KEY);
-                        Writer.Write2(SQLKeywords.CLUSTERED);
+                        Writer.Write2(C.PRIMARY);
+                        Writer.Write2(C.KEY);
+                        Writer.Write2(C.CLUSTERED);
                         Writer.WriteLine();
-                        Writer.Write2(SQLKeywords.BEGIN_SCOPE);
+                        Writer.Write2(C.BEGIN_SCOPE);
                         Writer.WriteLine();
                         Writer.Indent++;
                         Writer.WriteLineJoined(pkGroup.Select(pkg => I(pkg.Name)).ToArray());
                         Writer.Indent--;
-                        Writer.Write2(SQLKeywords.END_SCOPE);
-                        Writer.Write(SQLKeywords.WITH);
-                        Writer.WriteScoped(SQLKeywords.DEFAULT_PK_OPTIONS);
-                        Writer.Write2(SQLKeywords.ON);
-                        Writer.WriteScoped(SQLKeywords.PRIMARY, SQLKeywords.BEGIN_SQUARE, SQLKeywords.END_SQUARE);
+                        Writer.Write2(C.END_SCOPE);
+                        Writer.Write(C.WITH);
+                        Writer.WriteScoped(C.DEFAULT_PK_OPTIONS);
+                        Writer.Write2(C.ON);
+                        Writer.WriteScoped(C.PRIMARY, C.BEGIN_SQUARE, C.END_SQUARE);
                         Writer.WriteLine();
                     }
                 }
@@ -153,29 +153,29 @@ namespace SQLEngine.SqlServer
                     foreach (var ukName in ukList)
                     {
                         var ukGroup = cols.Where(c => c.UniqueKeyName == ukName).ToArray();
-                        Writer.Write(SQLKeywords.ALTER);
-                        Writer.Write2(SQLKeywords.TABLE);
+                        Writer.Write(C.ALTER);
+                        Writer.Write2(C.TABLE);
                         Writer.Write2(I(_tableName));
-                        Writer.Write2(SQLKeywords.ADD);
-                        Writer.Write2(SQLKeywords.CONSTRAINT);
+                        Writer.Write2(C.ADD);
+                        Writer.Write2(C.CONSTRAINT);
                         Writer.Write2(I(ukName));
-                        Writer.Write2(SQLKeywords.UNIQUE);
-                        Writer.Write2(SQLKeywords.NONCLUSTERED);
+                        Writer.Write2(C.UNIQUE);
+                        Writer.Write2(C.NONCLUSTERED);
                         Writer.WriteLine();
-                        Writer.Write2(SQLKeywords.BEGIN_SCOPE);
+                        Writer.Write2(C.BEGIN_SCOPE);
                         Writer.Indent++;
                         Writer.WriteLine();
-                        Writer.WriteLineJoined(ukGroup.Select(pkg => pkg.Name + SQLKeywords.SPACE +
-                                                                     (pkg.IsUniqueKeyOrderDescending ? SQLKeywords.DESC : SQLKeywords.ASC))
+                        Writer.WriteLineJoined(ukGroup.Select(pkg => pkg.Name + C.SPACE +
+                                                                     (pkg.IsUniqueKeyOrderDescending ? C.DESC : C.ASC))
                             .ToArray());
 
 
                         Writer.Indent--;
-                        Writer.Write2(SQLKeywords.END_SCOPE);
-                        Writer.Write(SQLKeywords.WITH);
-                        Writer.WriteScoped(SQLKeywords.DEFAULT_PK_OPTIONS);
-                        Writer.Write2(SQLKeywords.ON);
-                        Writer.WriteScoped(SQLKeywords.PRIMARY, SQLKeywords.BEGIN_SQUARE, SQLKeywords.END_SQUARE);
+                        Writer.Write2(C.END_SCOPE);
+                        Writer.Write(C.WITH);
+                        Writer.WriteScoped(C.DEFAULT_PK_OPTIONS);
+                        Writer.Write2(C.ON);
+                        Writer.WriteScoped(C.PRIMARY, C.BEGIN_SQUARE, C.END_SQUARE);
                         Writer.WriteLine();
 
                     }
@@ -207,34 +207,34 @@ namespace SQLEngine.SqlServer
                             .Replace("[", "")
                             .Replace("]", "")
                             ;
-                        Writer.Write(SQLKeywords.ALTER);
-                        Writer.Write2(SQLKeywords.TABLE);
+                        Writer.Write(C.ALTER);
+                        Writer.Write2(C.TABLE);
                         Writer.Write(I(_tableName));
-                        Writer.Write2(SQLKeywords.WITH);
-                        Writer.Write2(SQLKeywords.CHECK);
-                        Writer.Write2(SQLKeywords.ADD);
-                        Writer.Write2(SQLKeywords.CONSTRAINT);
+                        Writer.Write2(C.WITH);
+                        Writer.Write2(C.CHECK);
+                        Writer.Write2(C.ADD);
+                        Writer.Write2(C.CONSTRAINT);
                         Writer.Write2(I(fkName));
-                        Writer.Write2(SQLKeywords.FOREIGN);
-                        Writer.Write2(SQLKeywords.KEY);
+                        Writer.Write2(C.FOREIGN);
+                        Writer.Write2(C.KEY);
                         Writer.WriteScoped(I(fk.Name));
-                        Writer.Write2(SQLKeywords.REFERENCES);
+                        Writer.Write2(C.REFERENCES);
                         Writer.WriteLine(I(fk.ForeignKeyTableName));
-                        Writer.Write(SQLKeywords.BEGIN_SCOPE);
+                        Writer.Write(C.BEGIN_SCOPE);
                         Writer.WriteLine();
                         Writer.Indent++;
                         Writer.Write(I(fk.ForeignKeyColumnName));
                         Writer.WriteLine();
                         Writer.Indent--;
-                        Writer.Write(SQLKeywords.END_SCOPE);
+                        Writer.Write(C.END_SCOPE);
 
                         Writer.WriteLine();
 
-                        Writer.Write(SQLKeywords.ALTER);
-                        Writer.Write2(SQLKeywords.TABLE);
+                        Writer.Write(C.ALTER);
+                        Writer.Write2(C.TABLE);
                         Writer.Write(I(_tableName));
-                        Writer.Write2(SQLKeywords.CHECK);
-                        Writer.Write2(SQLKeywords.CONSTRAINT);
+                        Writer.Write2(C.CHECK);
+                        Writer.Write2(C.CONSTRAINT);
                         Writer.Write2(I(fkName));
                         Writer.WriteLine();
                     }
@@ -259,15 +259,15 @@ namespace SQLEngine.SqlServer
                             defaultConstraintName = "DF_" + _tableName + df.Name;
                         }
 
-                        Writer.Write(SQLKeywords.ALTER);
-                        Writer.Write2(SQLKeywords.TABLE);
+                        Writer.Write(C.ALTER);
+                        Writer.Write2(C.TABLE);
                         Writer.Write(I(_tableName));
-                        Writer.Write2(SQLKeywords.ADD);
-                        Writer.Write2(SQLKeywords.CONSTRAINT);
+                        Writer.Write2(C.ADD);
+                        Writer.Write2(C.CONSTRAINT);
                         Writer.Write2(I(defaultConstraintName));
-                        Writer.Write2(SQLKeywords.DEFAULT);
+                        Writer.Write2(C.DEFAULT);
                         Writer.WriteScoped(df.DefaultValue);
-                        Writer.Write2(SQLKeywords.FOR);
+                        Writer.Write2(C.FOR);
                         Writer.WriteLine(I(df.Name));
                         Writer.WriteLine();
                     }

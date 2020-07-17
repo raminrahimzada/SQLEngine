@@ -15,7 +15,7 @@ namespace SQLEngine.SqlServer
         }
         public ICaseWhenNeedThenQueryBuilder WhenEquals(string columnName, string expression)
         {
-            _currentWhen = columnName + " " + SQLKeywords.EQUALS + " " + expression;
+            _currentWhen = columnName + " " + C.EQUALS + " " + expression;
             return this;
         }
         public ICaseWhenNeedWhenQueryBuilder Then(string @then)
@@ -30,12 +30,12 @@ namespace SQLEngine.SqlServer
         }
         public ICaseWhenNeedWhenQueryBuilder ThenColumn(string tableAlias, string columnName)
         {
-            return Then(tableAlias + SQLKeywords.DOT + columnName);
+            return Then(tableAlias + C.DOT + columnName);
         }
 
         private void Add()
         {
-            string @case = $"{SQLKeywords.WHEN} {_currentWhen} {SQLKeywords.THEN} {_currentThen}";
+            string @case = $"{C.WHEN} {_currentWhen} {C.THEN} {_currentThen}";
             _casesList.Add(@case);
             _currentWhen = string.Empty;
             _currentThen = string.Empty;
@@ -44,15 +44,15 @@ namespace SQLEngine.SqlServer
         public override string Build()
         {
             Writer.WriteLine();
-            Writer.Write(SQLKeywords.BEGIN_SCOPE);
-            Writer.Write(SQLKeywords.CASE);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.BEGIN_SCOPE);
+            Writer.Write(C.CASE);
+            Writer.Write(C.SPACE);
             foreach (string @case in _casesList)
             {
                 Writer.WriteLine(@case);
             }
-            Writer.Write(SQLKeywords.END);
-            Writer.Write(SQLKeywords.END_SCOPE);
+            Writer.Write(C.END);
+            Writer.Write(C.END_SCOPE);
             return base.Build();
         }
     }

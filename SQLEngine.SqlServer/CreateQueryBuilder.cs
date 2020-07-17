@@ -1,18 +1,14 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal class CreateQueryBuilder :SqlServerQueryBuilder, ICreateQueryBuilder
+    internal class CreateQueryBuilder : AbstractQueryBuilder, ICreateQueryBuilder
     {
         public ICreateTableQueryBuilder Table(string tableName)
         {
-            ICreateTableQueryBuilder defaultValue = GetDefault<CreateTableQueryBuilder>();
-            defaultValue.Name(tableName);
-            return defaultValue;
+            return  GetDefault<CreateTableQueryBuilder>().Name(tableName);
         }
-
         public ICreateFunctionNoNameQueryBuilder Function(string funcName)
         {
-            ICreateFunctionQueryBuilder defaultValue = GetDefault<CreateFunctionQueryBuilder>();
-            return defaultValue.Name(funcName);
+            return GetDefault<CreateFunctionQueryBuilder>().Name(funcName);
         }
 
         public ICreateProcedureNoNameQueryBuilder Procedure(string procName)
@@ -23,6 +19,16 @@
         public ICreateViewNoNameQueryBuilder View(string viewName)
         {
             return GetDefault<CreateViewQueryBuilder>().Name(viewName);
+        }
+
+        public ICreateIndexNoNameQueryBuilder Index(string indexName)
+        {
+            return GetDefault<CreateIndexQueryBuilder>().Name(indexName);
+        }
+
+        public ICreateDatabaseNoNameQueryBuilder Database(string databaseName)
+        {
+            return GetDefault<CreateDatabaseQueryBuilder>().Name(databaseName);
         }
     }
 }

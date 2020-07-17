@@ -38,13 +38,13 @@ namespace SQLEngine.SqlServer
             if (string.IsNullOrWhiteSpace(alias)) return;
             if (alias.All(char.IsLetterOrDigit)) return;
             if (
-                alias.StartsWith(SQLKeywords.BEGIN_SQUARE) &&
-                alias.EndsWith(SQLKeywords.END_SQUARE)
+                alias.StartsWith(C.BEGIN_SQUARE) &&
+                alias.EndsWith(C.END_SQUARE)
             )
                 return;
-            alias = alias.Replace(SQLKeywords.BEGIN_SQUARE, "\\" + SQLKeywords.BEGIN_SQUARE);
-            alias = alias.Replace(SQLKeywords.END_SQUARE, "\\" + SQLKeywords.END_SQUARE);
-            alias = string.Concat(SQLKeywords.BEGIN_SQUARE, alias, SQLKeywords.END_SQUARE);
+            alias = alias.Replace(C.BEGIN_SQUARE, "\\" + C.BEGIN_SQUARE);
+            alias = alias.Replace(C.END_SQUARE, "\\" + C.END_SQUARE);
+            alias = string.Concat(C.BEGIN_SQUARE, alias, C.END_SQUARE);
         }
 
         public ISelectWithoutFromQueryBuilder FromSubQuery(string query, string alias)
@@ -120,7 +120,7 @@ namespace SQLEngine.SqlServer
             //{
             //    alias = SQLKeywords.BEGIN_SCOPE + alias + SQLKeywords.END_SCOPE;
             //}
-            _selectors.Add($"{selector} {SQLKeywords.AS} {alias}" );
+            _selectors.Add($"{selector} {C.AS} {alias}" );
             return this;
         }
 
@@ -147,7 +147,7 @@ namespace SQLEngine.SqlServer
             if (_selectors == null) _selectors = new List<string>();
             _selectors.Add(string.IsNullOrEmpty(alias)
                 ? $"{tableAlias}.{columnName}"
-                : $"{tableAlias}.{columnName} {SQLKeywords.AS} {alias}");
+                : $"{tableAlias}.{columnName} {C.AS} {alias}");
             return this;
         }
 
@@ -237,7 +237,7 @@ namespace SQLEngine.SqlServer
                 Alias = alias,
                 MainTableColumnName = mainTableColumnName,
                 ReferenceTableColumnName = Query.Settings.DefaultIdColumnName,
-                JoinType = SQLKeywords.INNERJOIN
+                JoinType = C.INNERJOIN
             });
             return this;
         }
@@ -253,7 +253,7 @@ namespace SQLEngine.SqlServer
                 Alias = alias,
                 MainTableColumnName = mainTableColumnName,
                 ReferenceTableColumnName = referenceTableColumnName,
-                JoinType = SQLKeywords.INNERJOIN
+                JoinType = C.INNERJOIN
             });
             return this;
         }
@@ -267,7 +267,7 @@ namespace SQLEngine.SqlServer
                 TableName = tableName,
                 Alias = alias,
                 RawCondition=condition,
-                JoinType = SQLKeywords.INNERJOIN
+                JoinType = C.INNERJOIN
             });
             return this;
         }
@@ -283,7 +283,7 @@ namespace SQLEngine.SqlServer
                 Alias = alias,
                 MainTableColumnName = mainTableColumnName,
                 ReferenceTableColumnName = referenceTableColumnName,
-                JoinType = SQLKeywords.RIGHTJOIN,
+                JoinType = C.RIGHTJOIN,
 
             });
             return this;
@@ -299,7 +299,7 @@ namespace SQLEngine.SqlServer
                 Alias = alias,
                 MainTableColumnName = mainTableColumnName,
                 ReferenceTableColumnName = Query.Settings.DefaultIdColumnName,
-                JoinType = SQLKeywords.RIGHTJOIN,
+                JoinType = C.RIGHTJOIN,
             });
             return this;
         }
@@ -315,7 +315,7 @@ namespace SQLEngine.SqlServer
                 Alias = alias,
                 MainTableColumnName = mainTableColumnName,
                 ReferenceTableColumnName = referenceTableColumnName,
-                JoinType = SQLKeywords.LEFTJOIN
+                JoinType = C.LEFTJOIN
             });
             return this;
         }
@@ -330,7 +330,7 @@ namespace SQLEngine.SqlServer
                 Alias = alias,
                 MainTableColumnName = mainTableColumnName,
                 ReferenceTableColumnName = Query.Settings.DefaultIdColumnName,
-                JoinType = SQLKeywords.LEFTJOIN
+                JoinType = C.LEFTJOIN
             });
             return this;
         }
@@ -338,16 +338,16 @@ namespace SQLEngine.SqlServer
         public override string Build()
         {
             ValidateAndThrow();
-            Writer.Write(SQLKeywords.SELECT);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.SELECT);
+            Writer.Write(C.SPACE);
             if (_hasDistinct != null)
             {
-                Writer.Write(SQLKeywords.DISTINCT);
+                Writer.Write(C.DISTINCT);
                 Writer.Write2();
             }
             if (_topClause != null)
             {
-                Writer.Write(SQLKeywords.TOP);
+                Writer.Write(C.TOP);
                 Writer.WriteScoped(_topClause.Value.ToString());
                 Writer.Write2();
             }
@@ -356,7 +356,7 @@ namespace SQLEngine.SqlServer
             if (!hasSelector)
             {
                 //no selector then select *
-                Writer.Write2(SQLKeywords.WILCARD);
+                Writer.Write2(C.WILCARD);
             }
             else
             {
@@ -372,24 +372,24 @@ namespace SQLEngine.SqlServer
 
             Writer.WriteLine();
             Writer.Indent++;
-            Writer.Write(SQLKeywords.FROM);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.FROM);
+            Writer.Write(C.SPACE);
             if (string.IsNullOrWhiteSpace(_mainTableQuery))
             {
                 Writer.Write(I(_mainTableName));
             }
             else
             {
-                Writer.Write(SQLKeywords.BEGIN_SCOPE);
-                Writer.Write(SQLKeywords.SPACE);
+                Writer.Write(C.BEGIN_SCOPE);
+                Writer.Write(C.SPACE);
                 Writer.Write(_mainTableQuery);
-                Writer.Write(SQLKeywords.SPACE);
-                Writer.Write(SQLKeywords.END_SCOPE);
+                Writer.Write(C.SPACE);
+                Writer.Write(C.END_SCOPE);
             }
             Writer.Indent--;
             if (!string.IsNullOrEmpty(_mainTableAliasName))
             {
-                Writer.Write2(SQLKeywords.AS);
+                Writer.Write2(C.AS);
                 Writer.Write(_mainTableAliasName);
             }
 
@@ -406,18 +406,18 @@ namespace SQLEngine.SqlServer
             {
                 Writer.WriteLine();
                 Writer.Indent++;
-                Writer.Write(SQLKeywords.WHERE);
-                Writer.Write(SQLKeywords.SPACE);
+                Writer.Write(C.WHERE);
+                Writer.Write(C.SPACE);
                 Writer.Write(_whereClause);
                 Writer.Indent--;
             }
 
             if (_orderByClauses != null && _orderByClauses.Any())
             {
-                Writer.Write(SQLKeywords.ORDER);
-                Writer.Write2(SQLKeywords.BY);
+                Writer.Write(C.ORDER);
+                Writer.Write2(C.BY);
                 var orderByClauses = _orderByClauses.Select(tuple =>
-                    I(tuple.Item2) + SQLKeywords.SPACE + (tuple.Item1 ? SQLKeywords.ASC : SQLKeywords.DESC));
+                    I(tuple.Item2) + C.SPACE + (tuple.Item1 ? C.ASC : C.DESC));
                 Writer.Write(orderByClauses.JoinWith());
             }
 
@@ -425,8 +425,8 @@ namespace SQLEngine.SqlServer
             {
                 Writer.WriteLine();
                 Writer.Indent++;
-                Writer.Write(SQLKeywords.GROUPBY);
-                Writer.Write(SQLKeywords.SPACE);
+                Writer.Write(C.GROUPBY);
+                Writer.Write(C.SPACE);
                 Writer.Write(_groupBy);
                 Writer.Indent--;
             }
@@ -435,8 +435,8 @@ namespace SQLEngine.SqlServer
             {
                 Writer.WriteLine();
                 Writer.Indent++;
-                Writer.Write(SQLKeywords.HAVING);
-                Writer.Write(SQLKeywords.SPACE);
+                Writer.Write(C.HAVING);
+                Writer.Write(C.SPACE);
                 Writer.Write(_having);
                 Writer.Indent--;
             }
@@ -453,12 +453,12 @@ namespace SQLEngine.SqlServer
                     if (!string.IsNullOrEmpty(model.Alias))
                     {
                         return
-                            $"{model.JoinType}\t{I(model.TableName)} {SQLKeywords.AS} {model.Alias} {SQLKeywords.ON} {model.RawCondition}";
+                            $"{model.JoinType}\t{I(model.TableName)} {C.AS} {model.Alias} {C.ON} {model.RawCondition}";
                     }
                     else
                     {
                         return
-                            $"{model.JoinType}\t{I(model.TableName)} {SQLKeywords.ON} {model.RawCondition}";
+                            $"{model.JoinType}\t{I(model.TableName)} {C.ON} {model.RawCondition}";
                     }
                 }
                 else
@@ -466,12 +466,12 @@ namespace SQLEngine.SqlServer
                     if (!string.IsNullOrEmpty(model.Alias))
                     {
                         return
-                            $"{model.JoinType}\t{I(model.TableName)} {SQLKeywords.AS} {model.Alias} {SQLKeywords.ON} {model.RawCondition}";
+                            $"{model.JoinType}\t{I(model.TableName)} {C.AS} {model.Alias} {C.ON} {model.RawCondition}";
                     }
                     else
                     {
                         return
-                            $"{model.JoinType}\t{I(model.TableName)} {SQLKeywords.ON} {model.RawCondition}";
+                            $"{model.JoinType}\t{I(model.TableName)} {C.ON} {model.RawCondition}";
                     }
                 }
             }
@@ -482,12 +482,12 @@ namespace SQLEngine.SqlServer
                 if (!string.IsNullOrEmpty(model.Alias))
                 {
                     return
-                        $"{model.JoinType}\t{I(model.TableName)} {SQLKeywords.AS} {model.Alias} {SQLKeywords.ON} {_mainTableAliasName}.{model.MainTableColumnName} = {model.Alias}.{model.ReferenceTableColumnName}";
+                        $"{model.JoinType}\t{I(model.TableName)} {C.AS} {model.Alias} {C.ON} {_mainTableAliasName}.{model.MainTableColumnName} = {model.Alias}.{model.ReferenceTableColumnName}";
                 }
                 else
                 {
                     return
-                        $"{model.JoinType}\t{I(model.TableName)} {SQLKeywords.ON} {I(_mainTableName)}.{model.MainTableColumnName} = {I(model.TableName)}.{model.ReferenceTableColumnName}";
+                        $"{model.JoinType}\t{I(model.TableName)} {C.ON} {I(_mainTableName)}.{model.MainTableColumnName} = {I(model.TableName)}.{model.ReferenceTableColumnName}";
                 }
             }
             else
@@ -495,12 +495,12 @@ namespace SQLEngine.SqlServer
                 if (!string.IsNullOrEmpty(model.Alias))
                 {
                     return
-                        $"{model.JoinType}\t{I(model.TableName)} {SQLKeywords.AS} {model.Alias} {SQLKeywords.ON} {I(_mainTableName)}.{model.MainTableColumnName} = {model.Alias}.{model.ReferenceTableColumnName}";
+                        $"{model.JoinType}\t{I(model.TableName)} {C.AS} {model.Alias} {C.ON} {I(_mainTableName)}.{model.MainTableColumnName} = {model.Alias}.{model.ReferenceTableColumnName}";
                 }
                 else
                 {
                     return
-                        $"{model.JoinType}\t{I(model.TableName)} {SQLKeywords.ON} {_mainTableName}.{model.MainTableColumnName} = {I(model.TableName)}.{model.ReferenceTableColumnName}";
+                        $"{model.JoinType}\t{I(model.TableName)} {C.ON} {_mainTableName}.{model.MainTableColumnName} = {I(model.TableName)}.{model.ReferenceTableColumnName}";
                 }
             }
         }

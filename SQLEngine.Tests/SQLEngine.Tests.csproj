@@ -49,7 +49,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Alter.cs" />
+    <Compile Include="Alter.Column.cs" />
     <Compile Include="Drop.cs" />
     <Compile Include="Delete.cs" />
     <Compile Include="Complex_Queries.cs" />

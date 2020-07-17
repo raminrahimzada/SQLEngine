@@ -1,17 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
-namespace SQLEngine
+﻿namespace SQLEngine.SqlServer
 {
-    public static class SQLKeywords
+    /// <summary>
+    /// Represents constant strings
+    /// </summary>
+    public static class C
     {
-        public const string UNIQUEIDENTIFIER= "UNIQUEIDENTIFIER";
+        public const string BEGIN_SCOPE = "(";
+        public const string END_SCOPE = ")";
+        public const string SPACE = " ";
+
+        public const string DELETE = "DELETE";
+        public const string IF = "IF";
+        public const string INDEX = "INDEX";
+        public const string UNIQUEIDENTIFIER = "UNIQUEIDENTIFIER";
         public const string WHILE = "WHILE";
-        public const string CURSOR= "CURSOR";
+        public const string CURSOR = "CURSOR";
         public const string FETCH = "FETCH";
-        public const string INTO = "INTO";
         public const string NEXT = "NEXT";
         public const string FETCH_STATUS = "@@FETCH_STATUS";
         public const string UNION = "UNION";
@@ -78,26 +82,22 @@ namespace SQLEngine
         public const string TABLE = "TABLE";
         public const string TRUNCATE = "TRUNCATE";
         public const string COLUMN = "COLUMN";
-        public const string INSERT_INTO = "INSERT INTO";
+        public const string INSERT = "INSERT";
+        public const string INTO = "INTO";
         public const string OR = "OR";
-        public const string SPACE = " ";
         public const string DISTINCT = "DISTINCT";
         public const string CLOSE = "CLOSE";
         public const string DEALLOCATE = "DEALLOCATE";
         public const string DOT = ".";
-        public const string BEGIN_SCOPE = "(";
         public const string BEGIN_SQUARE = "[";
         public const string END_SQUARE = "]";
-        public const string END_SCOPE = ")";
         public const string RETURNS = "RETURNS";
         public const string DECLARE = "DECLARE";
         public const string OPEN = "OPEN";
-        public const string DELETE = "DELETE";
         public const string CAST = "CAST";
         public const string VARIABLE_HEADER = "@";
         public const string BEGIN = "BEGIN";
         public const string END = "END";
-        public const string IF = "IF";
         public const string GROUPBY = "GROUP BY";
         public const string INNERJOIN = "INNER JOIN";
         public const string LEFTJOIN = "LEFT JOIN";
@@ -110,23 +110,12 @@ namespace SQLEngine
         public const string COMMA = ",";
         public const string SEMICOLON = ";";
         public const string UPDATE = "UPDATE";
-        public const string NOTEQUALS = "<>";
-        public const string LESS = "<";
-        public const string LESSOREQUAL = "<=";
-        public const string GREATOREQUAL = ">=";
-        public const string GREAT = ">";
-        public const string ELSEIF = "ELSE IF";
         public const string ELSE = "ELSE";
         public const string EXISTS = "EXISTS";
         public const string SET = "SET";
-        public const string BETWEEN = "BETWEEN";
-        public const string AND = "AND";
         public const string ABS = "ABS";
         public const string IS = "IS";
-        public const string ISNULL = "ISNULL";//used as function
-        public const string ISNOTNULL = "IS NOT NULL";
         public const string IN = "IN";
-        public const string NOTIN = "NOT IN";
         public const string TOP = "TOP";
         public const string FROM = "FROM";
         public const string SELECT = "SELECT";
@@ -135,7 +124,5 @@ namespace SQLEngine
         public const string EXECUTE = "EXECUTE";
         public const string ORDER = "ORDER";
         public const string BY = "BY";
-
-
     }
 }

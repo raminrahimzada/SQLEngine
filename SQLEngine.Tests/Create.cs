@@ -1,6 +1,4 @@
-﻿using System;
-using System.Security.Cryptography.X509Certificates;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SQLEngine.SqlServer;
 
 namespace SQLEngine.Tests
@@ -160,6 +158,47 @@ END
 
 ";
                 QueryAssert.AreEqual(procedureQuery, originalQuery);
+            }
+        }
+
+        [TestMethod]
+        public void Test_Create_Index()
+        {
+            using (var t = Query.New)
+            {
+                var queryThat = t
+                        ._create
+                        .Index("IX_Unique_Email")
+                        .OnTable("Users")
+                        .Columns("Email")
+                        .Unique()
+                        .ToString()
+                    ;
+                const string query =
+                    @"
+                CREATE UNIQUE  INDEX IX_Unique_Email ON Users ( Email ) 
+                ";
+
+                QueryAssert.AreEqual(queryThat, query);
+            }
+        }
+        
+        [TestMethod]
+        public void Test_Create_Database()
+        {
+            using (var t = Query.New)
+            {
+                var queryThat = t
+                        ._create
+                        .Database("FacebookDB")
+                        .ToString()
+                    ;
+                const string query =
+                    @"
+                CREATE DATABASE FacebookDB
+                ";
+
+                QueryAssert.AreEqual(queryThat, query);
             }
         }
     }

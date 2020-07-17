@@ -66,30 +66,30 @@ namespace SQLEngine.SqlServer
         }
         public override string Build()
         {
-            Writer.Write(SQLKeywords.CREATE);
-            Writer.Write2(SQLKeywords.FUNCTION);
+            Writer.Write(C.CREATE);
+            Writer.Write2(C.FUNCTION);
             if (!string.IsNullOrEmpty(_schemaName))
             {
                 Writer.Write(I(_schemaName));
-                Writer.Write(SQLKeywords.DOT);
+                Writer.Write(C.DOT);
             }
             Writer.WriteLine(I(_functionName));
-            Writer.WriteLine(SQLKeywords.BEGIN_SCOPE);
+            Writer.WriteLine(C.BEGIN_SCOPE);
             Writer.Indent++;
             Writer.WriteJoined(_arguments.Select(a => a.Build()));
             Writer.Indent--;
             Writer.WriteLine();
-            Writer.WriteLine(SQLKeywords.END_SCOPE);
-            Writer.Write(SQLKeywords.RETURNS);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.WriteLine(C.END_SCOPE);
+            Writer.Write(C.RETURNS);
+            Writer.Write(C.SPACE);
             if (_schemaBuilding)
             {
-                Writer.Write2(SQLKeywords.WITH);
-                Writer.Write2(SQLKeywords.SCHEMABINDING);
+                Writer.Write2(C.WITH);
+                Writer.Write2(C.SCHEMABINDING);
             }
             Writer.WriteLine(_returnType);
-            Writer.WriteLine(SQLKeywords.AS);
-            Writer.WriteLine(SQLKeywords.BEGIN);
+            Writer.WriteLine(C.AS);
+            Writer.WriteLine(C.BEGIN);
             Writer.Indent++;
 
             using (var o = Query.New)
@@ -97,7 +97,7 @@ namespace SQLEngine.SqlServer
                 o.Join(this);
                 _bodyBuilder(o);
                 Writer.Indent--;
-                Writer.WriteLine(SQLKeywords.END);
+                Writer.WriteLine(C.END);
                 return base.Build();
             }
         }

@@ -19,15 +19,15 @@
         }
         public override string Build()
         {
-            Writer.Write(SQLKeywords.DROP);
-            Writer.Write2(SQLKeywords.FUNCTION);
+            Writer.Write(C.DROP);
+            Writer.Write2(C.FUNCTION);
             if (!string.IsNullOrWhiteSpace(_schemaName))
             {
                 Writer.Write(_schemaName);
-                Writer.Write(SQLKeywords.DOT);
+                Writer.Write(C.DOT);
             }
             Writer.Write(I(_functionName));
-            Writer.Write(SQLKeywords.SEMICOLON);
+            Writer.Write(C.SEMICOLON);
             return base.Build();
         }
     }

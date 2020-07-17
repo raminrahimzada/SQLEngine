@@ -17,7 +17,7 @@ namespace SQLEngine.Tests
                         .NotNull()
                         .OfType("DECIMAL")
                         .Size(18, 4)
-                        .DefaultValue(18.ToSQL())
+                        .DefaultValue(18)
                         .ToString()
                     ;
                 const string query =
@@ -64,8 +64,6 @@ ALTER TABLE  Users  DROP  COLUMN  Age
 EXECUTE sys.sp_rename  @objtype=N'COLUMN'
 	,@objname=N'Users.Age'
 	,@newname=N'Age_Of_User';
-
-
 ";
 
                 QueryAssert.AreEqual(queryThat, query);
@@ -80,10 +78,10 @@ EXECUTE sys.sp_rename  @objtype=N'COLUMN'
                         ._alter
                         .Table("Users")
                         .AlterColumn("Name")
-                        .NewType("VARCHAR")
+                        .Type("VARCHAR")
                         .NotNull()
                         .Size(15)
-                        .DefaultValue("Anonymous".ToSQL())
+                        .DefaultValue("Anonymous")
                         .ToString()
                     ;
                 const string query =
@@ -102,9 +100,9 @@ ALTER TABLE Users ALTER COLUMN Name VARCHAR(15) NOT NULL  DEFAULT ( N'Anonymous'
             {
                 var queryThat = t
                         ._alter
-                        .Table("Users")
+                        .Table<UserTable>() //another form you can use
                         .AlterColumn("Weight")
-                        .NewType("decimal")
+                        .Type("decimal")
                         .NotNull()
                         .Size(18, 4)
                         .ToString()
@@ -118,26 +116,5 @@ ALTER TABLE Users ALTER COLUMN Weight decimal(18,4) NOT NULL
             }
         }
 
-
-        [TestMethod]
-        public void Test_Alter_Table_1()
-        {
-            using (var t = Query.New)
-            {
-//                var queryThat = t
-//                        ._alter
-//                        .Table("Users")
-//                        .AddIndex("IX_Unique_Email")
-//                        .On("Email")
-//                        .ToString()
-//                    ;
-//                const string query =
-//                    @"
-//ALTER TABLE  Users  ADD  COLUMN  Age  int 
-//";
-
-//                QueryAssert.AreEqual(queryThat, query);
-            }
-        }
     }
 }

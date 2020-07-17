@@ -24,13 +24,13 @@
 
         public override string Build()
         {
-            Writer.Write(SQLKeywords.SET);
+            Writer.Write(C.SET);
             Writer.Write2();
             Writer.Write(_variable.ToSqlString());
-            Writer.Write(SQLKeywords.SPACE);
-            Writer.Write2(SQLKeywords.EQUALS);
+            Writer.Write(C.SPACE);
+            Writer.Write2(C.EQUALS);
             Writer.Write(_value.ToSqlString());
-            Writer.Write(SQLKeywords.SEMICOLON);
+            Writer.Write(C.SEMICOLON);
             return base.Build();
         }
     }

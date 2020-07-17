@@ -51,7 +51,7 @@ namespace SQLEngine.SqlServer
 
         public IColumnQueryBuilder MaxLength(int? maxLen)
         {
-            Model.MaxLength = maxLen == null ? SQLKeywords.MAX : maxLen.ToString();
+            Model.MaxLength = maxLen == null ? C.MAX : maxLen.ToString();
             return this;
         }
 
@@ -99,9 +99,9 @@ namespace SQLEngine.SqlServer
             Writer.Write(I(Model.Name));
             if (!string.IsNullOrEmpty(Model.CalculatedColumnExpression))
             {
-                Writer.Write2(SQLKeywords.AS);
+                Writer.Write2(C.AS);
                 Writer.WriteScoped(Model.CalculatedColumnExpression);
-                if (Model.IsPersisted ?? false) Writer.Write2(SQLKeywords.PERSISTED);
+                if (Model.IsPersisted ?? false) Writer.Write2(C.PERSISTED);
                 return base.Build();
             }
             Writer.Write2(Model.Type);
@@ -109,50 +109,50 @@ namespace SQLEngine.SqlServer
             if (Model.MaxLength != null)
             {
                 Writer.WriteScoped(Model.MaxLength);
-                Writer.Write(SQLKeywords.SPACE);
+                Writer.Write(C.SPACE);
             }
             else
             {
-                if (((IList)new[] { SQLKeywords.NVARCHAR, SQLKeywords.VARCHAR, SQLKeywords.NCHAR, SQLKeywords.CHAR }).Contains(Model.Type))
+                if (((IList)new[] { C.NVARCHAR, C.VARCHAR, C.NCHAR, C.CHAR }).Contains(Model.Type))
                 {
-                    Writer.Write(SQLKeywords.BEGIN_SCOPE);
-                    Writer.Write(SQLKeywords.MAX);
-                    Writer.Write(SQLKeywords.END_SCOPE);
-                    Writer.Write(SQLKeywords.SPACE);
+                    Writer.Write(C.BEGIN_SCOPE);
+                    Writer.Write(C.MAX);
+                    Writer.Write(C.END_SCOPE);
+                    Writer.Write(C.SPACE);
                 }
             }
-            if (Model.Type == SQLKeywords.DECIMAL)
+            if (Model.Type == C.DECIMAL)
             {
-                Writer.Write(SQLKeywords.BEGIN_SCOPE);
+                Writer.Write(C.BEGIN_SCOPE);
                 Writer.Write(Model.Precision);
-                Writer.Write(SQLKeywords.COMMA);
+                Writer.Write(C.COMMA);
                 Writer.Write(Model.Scale);
-                Writer.Write(SQLKeywords.END_SCOPE);
-                Writer.Write(SQLKeywords.SPACE);
+                Writer.Write(C.END_SCOPE);
+                Writer.Write(C.SPACE);
             }
             if (Model.IsIdentity ?? false)
             {
-                Writer.Write(SQLKeywords.IDENTITY);
-                Writer.Write(SQLKeywords.BEGIN_SCOPE);
+                Writer.Write(C.IDENTITY);
+                Writer.Write(C.BEGIN_SCOPE);
                 Writer.Write(Model.IdentityStart);
-                Writer.Write(SQLKeywords.COMMA);
+                Writer.Write(C.COMMA);
                 Writer.Write(Model.IdentityStep);
-                Writer.Write(SQLKeywords.END_SCOPE);
+                Writer.Write(C.END_SCOPE);
             }
 
             if (Model.NotNull ?? false)
             {
-                Writer.Write2(SQLKeywords.NOT);
+                Writer.Write2(C.NOT);
             }
-            Writer.Write(SQLKeywords.NULL);
+            Writer.Write(C.NULL);
 
             if (!string.IsNullOrEmpty(Model.CheckExpression))
             {
-                Writer.Write2(SQLKeywords.CHECK);
-                Writer.Write2(SQLKeywords.BEGIN_SCOPE);
+                Writer.Write2(C.CHECK);
+                Writer.Write2(C.BEGIN_SCOPE);
                 Writer.Write(Model.CheckExpression);
-                Writer.Write2(SQLKeywords.END_SCOPE);
-                Writer.Write(SQLKeywords.SPACE);
+                Writer.Write2(C.END_SCOPE);
+                Writer.Write(C.SPACE);
             }
             return base.Build();
         }

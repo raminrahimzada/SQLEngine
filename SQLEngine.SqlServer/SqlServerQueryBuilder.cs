@@ -39,14 +39,14 @@ namespace SQLEngine.SqlServer
 
         public void Union()
         {
-            Writer.WriteLineEx(SQLKeywords.UNION);
+            Writer.WriteLineEx(C.UNION);
         }
 
         public void UnionAll()
         {
-            Writer.WriteLine(SQLKeywords.UNION);
-            Writer.WriteLine(SQLKeywords.SPACE);
-            Writer.WriteLine(SQLKeywords.ALL);
+            Writer.WriteLine(C.UNION);
+            Writer.WriteLine(C.SPACE);
+            Writer.WriteLine(C.ALL);
         }
 
         public void Truncate(string tableName)
@@ -64,30 +64,30 @@ namespace SQLEngine.SqlServer
         }
         public void If(string condition)
         {
-            Writer.Write(SQLKeywords.IF);
-            Writer.Write(SQLKeywords.BEGIN_SCOPE);
+            Writer.Write(C.IF);
+            Writer.Write(C.BEGIN_SCOPE);
             Writer.Write(condition);
-            Writer.WriteLine(SQLKeywords.END_SCOPE);
+            Writer.WriteLine(C.END_SCOPE);
         }
 
         public void ElseIf(string condition)
         {
-            Writer.Write(SQLKeywords.ELSE);
-            Writer.Write(SQLKeywords.SPACE);
-            Writer.Write(SQLKeywords.IF);
-            Writer.Write(SQLKeywords.BEGIN_SCOPE);
+            Writer.Write(C.ELSE);
+            Writer.Write(C.SPACE);
+            Writer.Write(C.IF);
+            Writer.Write(C.BEGIN_SCOPE);
             Writer.Write(condition);
-            Writer.WriteLine(SQLKeywords.END_SCOPE);
+            Writer.WriteLine(C.END_SCOPE);
         }
 
         public void Else()
         {
-            Writer.WriteLine(SQLKeywords.ELSE);
+            Writer.WriteLine(C.ELSE);
         }
 
         public void Begin()
         {
-            Writer.WriteLine(SQLKeywords.BEGIN);
+            Writer.WriteLine(C.BEGIN);
             Writer.Indent++;
         }
 
@@ -99,7 +99,7 @@ namespace SQLEngine.SqlServer
         public void End()
         {
             Writer.Indent--;
-            Writer.WriteLine(SQLKeywords.END);
+            Writer.WriteLine(C.END);
         }
 
         public void Declare(Func<IDeclarationQueryBuilder, IDeclarationQueryBuilder> builder)
@@ -192,18 +192,18 @@ namespace SQLEngine.SqlServer
 
         public void Return()
         {
-            Writer.Write(SQLKeywords.RETURN);
-            Writer.WriteLine(SQLKeywords.SEMICOLON);
+            Writer.Write(C.RETURN);
+            Writer.WriteLine(C.SEMICOLON);
         }
         public void Return(string sql)
         {
-            Writer.Write(SQLKeywords.RETURN);
+            Writer.Write(C.RETURN);
             Writer.WriteWithScoped(sql);
             Writer.WriteLine();
         }
         public void Return(ISqlExpression expression)
         {
-            Writer.Write(SQLKeywords.RETURN);
+            Writer.Write(C.RETURN);
             Writer.WriteWithScoped(expression.ToSqlString());
             Writer.WriteLine();
         }
@@ -251,73 +251,73 @@ namespace SQLEngine.SqlServer
         public void Cursor(string selection,string[] intoVariables,Action<IQueryBuilder> body)
         {
             var variableName = "__cursor_" + Guid.NewGuid().ToString().Replace("-", "");
-            Writer.Write(SQLKeywords.DECLARE);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.DECLARE);
+            Writer.Write(C.SPACE);
             Writer.Write(variableName);
-            Writer.Write(SQLKeywords.SPACE);
-            Writer.Write(SQLKeywords.CURSOR);
-            Writer.Write(SQLKeywords.SPACE);
-            Writer.Write(SQLKeywords.FOR);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.SPACE);
+            Writer.Write(C.CURSOR);
+            Writer.Write(C.SPACE);
+            Writer.Write(C.FOR);
+            Writer.Write(C.SPACE);
             Writer.Write(selection);
             Writer.WriteLine();
             
-            Writer.Write(SQLKeywords.OPEN);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.OPEN);
+            Writer.Write(C.SPACE);
             Writer.Write(variableName);
             
             Writer.WriteLine();
-            Writer.Write(SQLKeywords.FETCH);
-            Writer.Write(SQLKeywords.SPACE);
-            Writer.Write(SQLKeywords.NEXT);
-            Writer.Write(SQLKeywords.SPACE);
-            Writer.Write(SQLKeywords.FROM);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.FETCH);
+            Writer.Write(C.SPACE);
+            Writer.Write(C.NEXT);
+            Writer.Write(C.SPACE);
+            Writer.Write(C.FROM);
+            Writer.Write(C.SPACE);
             Writer.Write(variableName);
-            Writer.Write(SQLKeywords.SPACE);
-            Writer.Write(SQLKeywords.INTO);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.SPACE);
+            Writer.Write(C.INTO);
+            Writer.Write(C.SPACE);
             Writer.Write(intoVariables.JoinWith());
             
             Writer.WriteLine();
-            Writer.Write(SQLKeywords.WHILE);
-            Writer.Write(SQLKeywords.SPACE);
-            Writer.Write(SQLKeywords.FETCH_STATUS);
-            Writer.Write(SQLKeywords.EQUALS);
+            Writer.Write(C.WHILE);
+            Writer.Write(C.SPACE);
+            Writer.Write(C.FETCH_STATUS);
+            Writer.Write(C.EQUALS);
             Writer.Write(0L.ToSQL());
             
             Writer.WriteLine();
 
-            Writer.Write(SQLKeywords.BEGIN);
+            Writer.Write(C.BEGIN);
             Writer.WriteLine();
             Indent++;
             body(this);
             Writer.WriteLine();
-            Writer.Write(SQLKeywords.FETCH);
-            Writer.Write(SQLKeywords.SPACE);
-            Writer.Write(SQLKeywords.NEXT);
-            Writer.Write(SQLKeywords.SPACE);
-            Writer.Write(SQLKeywords.FROM);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.FETCH);
+            Writer.Write(C.SPACE);
+            Writer.Write(C.NEXT);
+            Writer.Write(C.SPACE);
+            Writer.Write(C.FROM);
+            Writer.Write(C.SPACE);
             Writer.Write(variableName);
-            Writer.Write(SQLKeywords.SPACE);
-            Writer.Write(SQLKeywords.INTO);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.SPACE);
+            Writer.Write(C.INTO);
+            Writer.Write(C.SPACE);
             Writer.Write(intoVariables.JoinWith());
             
             Writer.WriteLine();
 
             Indent--;
-            Writer.Write(SQLKeywords.END);
+            Writer.Write(C.END);
             Writer.WriteLine();
 
-            Writer.Write(SQLKeywords.CLOSE);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.CLOSE);
+            Writer.Write(C.SPACE);
             Writer.Write(variableName);
             Writer.WriteLine();
 
-            Writer.Write(SQLKeywords.DEALLOCATE);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.DEALLOCATE);
+            Writer.Write(C.SPACE);
             Writer.Write(variableName);
             Writer.WriteLine();
 
@@ -326,9 +326,9 @@ namespace SQLEngine.SqlServer
         public void Print(ISqlExpression expression)
         {
             Writer.Write("print");
-            Writer.Write(SQLKeywords.BEGIN_SCOPE);
+            Writer.Write(C.BEGIN_SCOPE);
             Writer.Write(expression);
-            Writer.Write(SQLKeywords.END_SCOPE);
+            Writer.Write(C.END_SCOPE);
             Writer.WriteLine();
         }
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SQLEngine.SqlServer;
 
 namespace SQLEngine.Tests

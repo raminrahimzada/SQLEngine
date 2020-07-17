@@ -22,7 +22,7 @@ namespace SQLEngine.SqlServer
             public string Build()
             {
                 if (Direction == ProcedureArgumentDirectionTypes.OUT)
-                    return Name.AsSQLVariable() + " " + Type + " " + SQLKeywords.OUTPUT;
+                    return Name.AsSQLVariable() + " " + Type + " " + C.OUTPUT;
                 return Name.AsSQLVariable() + " " + Type;
             }
         }
@@ -78,22 +78,22 @@ namespace SQLEngine.SqlServer
         {
             if (!string.IsNullOrEmpty(_metaDataHeader))
                 Writer.WriteLine(_metaDataHeader);
-            Writer.Write(SQLKeywords.CREATE);
-            Writer.Write2(SQLKeywords.PROCEDURE);
+            Writer.Write(C.CREATE);
+            Writer.Write2(C.PROCEDURE);
             if (!string.IsNullOrEmpty(_schemaName))
             {
                 Writer.Write(I(_schemaName));
-                Writer.Write(SQLKeywords.DOT);
+                Writer.Write(C.DOT);
             }
             Writer.WriteLine(I(_procedureName));
-            Writer.WriteLine(SQLKeywords.BEGIN_SCOPE);
+            Writer.WriteLine(C.BEGIN_SCOPE);
             Writer.Indent++;
             Writer.WriteJoined(_arguments.Select(a => a.Build()), ",", true);
             Writer.Indent--;
             Writer.WriteLine();
-            Writer.WriteLine(SQLKeywords.END_SCOPE);
-            Writer.WriteLine(SQLKeywords.AS);
-            Writer.WriteLine(SQLKeywords.BEGIN);
+            Writer.WriteLine(C.END_SCOPE);
+            Writer.WriteLine(C.AS);
+            Writer.WriteLine(C.BEGIN);
             Writer.Indent++;
 
             using (var o = new SqlServerProcedureBodyQueryBuilder())
@@ -101,7 +101,7 @@ namespace SQLEngine.SqlServer
                 o.Join(this);
                 _bodyBuilder(o);
                 Writer.Indent--;
-                Writer.WriteLine(SQLKeywords.END);
+                Writer.WriteLine(C.END);
                 return base.Build();
             }
         }

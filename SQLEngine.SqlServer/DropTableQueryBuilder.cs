@@ -45,20 +45,20 @@
 
         public override string Build()
         {
-            Writer.Write(SQLKeywords.DROP);
-            Writer.Write2(SQLKeywords.TABLE);
+            Writer.Write(C.DROP);
+            Writer.Write2(C.TABLE);
             if (!string.IsNullOrEmpty(_databaseName))
             {
                 Writer.Write(I(_databaseName));
-                Writer.Write(SQLKeywords.DOT);
+                Writer.Write(C.DOT);
             }
             if (!string.IsNullOrEmpty(_schemaName))
             {
                 Writer.Write(I(_schemaName));
-                Writer.Write(SQLKeywords.DOT);
+                Writer.Write(C.DOT);
             }
             Writer.Write(I(_tableName));
-            Writer.Write(SQLKeywords.SEMICOLON);
+            Writer.Write(C.SEMICOLON);
 
             return base.Build();
         }

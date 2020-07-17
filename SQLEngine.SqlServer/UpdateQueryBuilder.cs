@@ -88,7 +88,7 @@ namespace SQLEngine.SqlServer
 
         public IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression right)
         {
-            _whereCondition = columnName + SQLKeywords.EQUALS + right.ToSqlString();
+            _whereCondition = columnName + C.EQUALS + right.ToSqlString();
             return this;
         }
 
@@ -102,17 +102,17 @@ namespace SQLEngine.SqlServer
         {
             Validate();
 
-            Writer.Write2(SQLKeywords.UPDATE);
+            Writer.Write2(C.UPDATE);
             if (_topClause != null)
             {
-                Writer.Write(SQLKeywords.TOP);
+                Writer.Write(C.TOP);
                 Writer.WriteScoped(_topClause.Value.ToString());
-                Writer.Write(SQLKeywords.SPACE);
+                Writer.Write(C.SPACE);
             }
             Writer.Write(I(_tableName));
             Writer.WriteLine();
             Writer.Indent++;
-            Writer.Write2(SQLKeywords.SET);
+            Writer.Write2(C.SET);
             if (_columnsAndValuesDictionary != null)
             {
                 var keys = _columnsAndValuesDictionary.Keys.ToArray();
@@ -121,17 +121,17 @@ namespace SQLEngine.SqlServer
                     var key = keys[i];
                     var value = _columnsAndValuesDictionary[key];
                     Writer.Write(I(key));
-                    Writer.Write2(SQLKeywords.EQUALS);
+                    Writer.Write2(C.EQUALS);
                     Writer.Write(value);
                     if (i != _columnsAndValuesDictionary.Count - 1)
-                        Writer.Write2(SQLKeywords.COMMA);
+                        Writer.Write2(C.COMMA);
                 }
             }
 
             if (!string.IsNullOrEmpty(_whereCondition))
             {
                 Writer.WriteLine();
-                Writer.Write2(SQLKeywords.WHERE);
+                Writer.Write2(C.WHERE);
                 Writer.WriteScoped(_whereCondition);
             }
             Writer.Indent--;

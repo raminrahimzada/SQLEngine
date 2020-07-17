@@ -8,7 +8,6 @@
 
     public interface IAlterTableQueryBuilder : IAbstractQueryBuilder
     {
-
     }
 
     public interface IAlterTableNoNameAddColumnNoNameNoTypeNameNoSizeNoDefaultValueQueryBuilder : IAbstractQueryBuilder
@@ -64,7 +63,7 @@
     }
     public interface IAlterTableNoNameAlterColumnQueryBuilder : IAbstractQueryBuilder
     {
-        IAlterTableNoNameAlterColumnNoNewTypeQueryBuilder NewType(string newType);
+        IAlterTableNoNameAlterColumnNoNewTypeQueryBuilder Type(string newType);
     }
 
     public interface IAlterTableNoNameRenameColumnNoNewNameQueryBuilder : IAbstractQueryBuilder
@@ -76,10 +75,6 @@
         IAlterTableNoNameRenameColumnNoNewNameQueryBuilder To(string newName);
     }
     public interface IAlterTableNoNameDropColumnQueryBuilder : IAbstractQueryBuilder
-    {
-
-    }
-    public interface IAlterTableNoNameAddColumnQueryBuilder : IAbstractQueryBuilder
     {
 
     }

@@ -84,10 +84,10 @@ namespace SQLEngine.SqlServer
         {
             ValidateAndThrow();
 
-            Writer.Write(SQLKeywords.INSERT_INTO);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.INSERT);
+            Writer.Write2(C.INTO);
             Writer.Write(I(_tableName));
-            Writer.Write2(SQLKeywords.SPACE);
+            Writer.Write2(C.SPACE);
 
             var columnNamesSafe = _columnNames?.Select(I).ToArray();
             if (_columnsAndValuesDictionary != null)
@@ -100,7 +100,7 @@ namespace SQLEngine.SqlServer
                 Writer.WriteLine();
                 Writer.Indent--;
 
-                Writer.Write(SQLKeywords.VALUES);
+                Writer.Write(C.VALUES);
                 Writer.WriteLine();
                 Writer.Indent++;
 
@@ -118,7 +118,7 @@ namespace SQLEngine.SqlServer
                     Writer.WriteJoined(columnNamesSafe);
                     Writer.EndScope();
                 }
-                Writer.Write(SQLKeywords.SPACE);
+                Writer.Write(C.SPACE);
                 Writer.Write(_selection);
             }
             else //normal model 
@@ -135,7 +135,7 @@ namespace SQLEngine.SqlServer
                 }
                 Writer.WriteLine();
 
-                Writer.Write(SQLKeywords.VALUES);
+                Writer.Write(C.VALUES);
                 Writer.WriteLine();
                 Writer.Indent++;
 

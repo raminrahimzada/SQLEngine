@@ -6,9 +6,9 @@
 
         public override string Build()
         {
-            Writer.Write(SQLKeywords.DROP);
-            Writer.Write(SQLKeywords.DATABASE);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.DROP);
+            Writer.Write(C.DATABASE);
+            Writer.Write(C.SPACE);
             Writer.Write(_databaseName);
             return base.Build();
         }

@@ -51,8 +51,8 @@ namespace SQLEngine.SqlServer
         public override string Build()
         {
             ValidateAndThrow();
-            Writer.Write(SQLKeywords.EXECUTE);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.EXECUTE);
+            Writer.Write(C.SPACE);
 
             Writer.Write(_withScope ? I(_procedureName) : _procedureName);
 
@@ -69,25 +69,25 @@ namespace SQLEngine.SqlServer
                         var value = p.Item2;
                         var direction = p.Item3;
 
-                        Writer.Write(SQLKeywords.VARIABLE_HEADER);
+                        Writer.Write(C.VARIABLE_HEADER);
                         Writer.Write(key);
-                        Writer.Write(SQLKeywords.EQUALS);
+                        Writer.Write(C.EQUALS);
                         Writer.Write(value);
                         if (direction == ProcedureArgumentDirectionTypes.OUT)
                         {
-                            Writer.Write2(SQLKeywords.OUTPUT);
+                            Writer.Write2(C.OUTPUT);
                         }
                         if (i != _parametersDictionary.Count - 1)
                         {
                             Writer.WriteNewLine();
-                            Writer.Write(SQLKeywords.COMMA);
+                            Writer.Write(C.COMMA);
                         }
                         i++;
                     }
                 }
             }
 
-            Writer.WriteLine(SQLKeywords.SEMICOLON);
+            Writer.WriteLine(C.SEMICOLON);
             return base.Build();
         }
     }

@@ -16,19 +16,19 @@
         }
         public override string Build()
         {
-            Writer.Write(SQLKeywords.DROP);
-            Writer.Write(SQLKeywords.SPACE);
-            Writer.Write(SQLKeywords.VIEW);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.DROP);
+            Writer.Write(C.SPACE);
+            Writer.Write(C.VIEW);
+            Writer.Write(C.SPACE);
             if (!string.IsNullOrWhiteSpace(_dbName))
             {
                 Writer.Write(_dbName);
-                Writer.Write(SQLKeywords.DOT);
+                Writer.Write(C.DOT);
             }
             if (!string.IsNullOrWhiteSpace(_schemaName))
             {
                 Writer.Write(_schemaName);
-                Writer.Write(SQLKeywords.DOT);
+                Writer.Write(C.DOT);
             }
             Writer.Write(_viewName);
 

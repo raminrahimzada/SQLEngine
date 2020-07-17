@@ -49,6 +49,10 @@
   <ItemGroup>
     <Compile Include="AbstractConditionBuilder.cs" />
     <Compile Include="AlterTableAddColumnQueryBuilder.cs" />
+    <Compile Include="CreateDatabaseQueryBuilder.cs" />
+    <Compile Include="CreateIndexQueryBuilder.cs" />
+    <Compile Include="C.cs" />
+    <Compile Include="IndentedTextWriterExtensions.cs" />
     <Compile Include="SqlServerConditionFilterQueryHelper.cs" />
     <Compile Include="DropDatabaseQueryBuilder.cs" />
     <Compile Include="FunctionBodyQueryBuilder.cs" />

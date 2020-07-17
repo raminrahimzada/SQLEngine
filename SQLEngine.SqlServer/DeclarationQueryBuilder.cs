@@ -41,20 +41,20 @@
         }
         public override string Build()
         {
-            Writer.Write(SQLKeywords.DECLARE);
+            Writer.Write(C.DECLARE);
             Writer.Write2();
-            Writer.Write(SQLKeywords.VARIABLE_HEADER);
+            Writer.Write(C.VARIABLE_HEADER);
             Writer.Write(_variableName);
             Writer.Write2(_type);
             if (!string.IsNullOrEmpty(_defaultValue))
             {
-                Writer.Write2(SQLKeywords.EQUALS);
-                Writer.Write(SQLKeywords.BEGIN_SCOPE);
+                Writer.Write2(C.EQUALS);
+                Writer.Write(C.BEGIN_SCOPE);
                 Writer.Write(_defaultValue);
-                Writer.Write(SQLKeywords.END_SCOPE);
+                Writer.Write(C.END_SCOPE);
             }
 
-            Writer.Write(SQLKeywords.SEMICOLON);
+            Writer.Write(C.SEMICOLON);
             return base.Build();
         }
     }

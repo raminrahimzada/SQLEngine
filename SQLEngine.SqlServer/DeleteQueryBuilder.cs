@@ -26,20 +26,20 @@
         public override string Build()
         {
             ValidateAndThrow();
-            Writer.Write2(SQLKeywords.DELETE);
+            Writer.Write2(C.DELETE);
             if (_topClause != null)
             {
-                Writer.Write(SQLKeywords.TOP);
+                Writer.Write(C.TOP);
                 Writer.WriteScoped(_topClause.Value.ToString());
                 Writer.Write2();
             }
-            Writer.Write2(SQLKeywords.FROM);
+            Writer.Write2(C.FROM);
 
             Writer.Write(I(_tableName));
 
             if (!string.IsNullOrEmpty(_whereCondition))
             {
-                Writer.Write2(SQLKeywords.WHERE);
+                Writer.Write2(C.WHERE);
                 Writer.WriteScoped(_whereCondition);
             }
             return base.Build();

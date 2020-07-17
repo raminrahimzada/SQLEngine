@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SQLEngine
+﻿namespace SQLEngine
 {
     public abstract class AbstractSqlLiteral: ISqlExpression
     {

@@ -1,7 +1,7 @@
 ﻿using System.CodeDom.Compiler;
 using System.Collections.Generic;
 
-namespace SQLEngine
+namespace SQLEngine.SqlServer
 {
     public static class IndentedTextWriterExtensions
     {
@@ -13,11 +13,11 @@ namespace SQLEngine
         }
         public static void BeginScope(this IndentedTextWriter writer)
         {
-            writer.Write(SQLKeywords.BEGIN_SCOPE);
+            writer.Write(C.BEGIN_SCOPE);
         }
         public static void EndScope(this IndentedTextWriter writer)
         {
-            writer.Write(SQLKeywords.END_SCOPE);
+            writer.Write(C.END_SCOPE);
         }
         public static void WriteLineComment(this IndentedTextWriter writer, string comment)
         {
@@ -31,18 +31,11 @@ namespace SQLEngine
             writer.Write("*/");
         }
         public static void WriteScoped(this IndentedTextWriter writer, string expression,
-            string beginScope = SQLKeywords.BEGIN_SCOPE, string endScope = SQLKeywords.END_SCOPE)
+            string beginScope = C.BEGIN_SCOPE, string endScope = C.END_SCOPE)
         {
             writer.Write(beginScope);
             writer.Write(expression);
             writer.Write(endScope);
-        }
-        public static void WriteScoped(this IndentedTextWriter writer, string[] expressionArray)
-        {
-            var expression = string.Join(" , ", expressionArray);
-            writer.Write(SQLKeywords.BEGIN_SCOPE);
-            writer.Write(expression);
-            writer.Write(SQLKeywords.END_SCOPE);
         }
         public static void WriteJoined(this IndentedTextWriter writer, IEnumerable<string> expressionArray, string joiner = " , ", bool useNewLine = false)
         {
@@ -99,19 +92,7 @@ namespace SQLEngine
         }
         public static void Write2(this IndentedTextWriter writer, string expression = "")
         {
-            writer.WriteScoped(expression, SQLKeywords.SPACE, SQLKeywords.SPACE);
-            //writer.Write(SPACE);
-            //writer.Write(expression);
-            //writer.Write(SPACE);
+            writer.WriteScoped(expression, C.SPACE, C.SPACE);
         }
-        public static void WriteWithBeginEnd(this IndentedTextWriter writer, string expression)
-        {
-            writer.WriteLine(SQLKeywords.BEGIN);
-            writer.Indent++;
-            writer.WriteLine(expression);
-            writer.Indent--;
-            writer.WriteLine(SQLKeywords.END);
-        }
-
     }
 }

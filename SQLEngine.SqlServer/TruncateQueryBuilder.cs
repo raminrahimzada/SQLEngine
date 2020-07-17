@@ -11,8 +11,8 @@
 
         public override string Build()
         {
-            Writer.Write(SQLKeywords.TRUNCATE);
-            Writer.Write2(SQLKeywords.TABLE);
+            Writer.Write(C.TRUNCATE);
+            Writer.Write2(C.TABLE);
             Writer.Write(I(_tableName));
             return base.Build();
         }

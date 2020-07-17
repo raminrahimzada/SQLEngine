@@ -57,32 +57,32 @@ namespace SQLEngine.SqlServer
 
         public override string Build()
         {
-            Writer.Write(SQLKeywords.CREATE);
-            Writer.Write(SQLKeywords.SPACE);
-            Writer.Write(SQLKeywords.FUNCTION);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.CREATE);
+            Writer.Write(C.SPACE);
+            Writer.Write(C.FUNCTION);
+            Writer.Write(C.SPACE);
             if (!string.IsNullOrEmpty(_schemaName))
             {
                 Writer.Write(_schemaName);
-                Writer.Write(SQLKeywords.DOT);
+                Writer.Write(C.DOT);
             }
             Writer.Write(_name);
             Writer.WriteLine();
-            Writer.WriteLine(SQLKeywords.BEGIN_SCOPE);
+            Writer.WriteLine(C.BEGIN_SCOPE);
             Indent++;
             Writer.WriteLineJoined(_parameters);
             Indent--;
-            Writer.WriteLine(SQLKeywords.END_SCOPE);
-            Writer.Write(SQLKeywords.RETURNS);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.WriteLine(C.END_SCOPE);
+            Writer.Write(C.RETURNS);
+            Writer.Write(C.SPACE);
             Writer.Write(_returnType);
             Writer.WriteLine();
-            Writer.Write(SQLKeywords.BEGIN);
+            Writer.Write(C.BEGIN);
             Writer.WriteLine();
             Indent++;
             Writer.WriteEx(_body);
             Indent--;
-            Writer.Write(SQLKeywords.END);
+            Writer.Write(C.END);
             
             return base.Build();
         }

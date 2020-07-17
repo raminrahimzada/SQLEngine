@@ -12,55 +12,67 @@ namespace SQLEngine.SqlServer
             {
                 if (type == typeof(int))
                 {
-                    return (SQLKeywords.INT);
+                    return (C.INT);
                 }
             }
             {
                 if (type == typeof(uint))
                 {
-                    return (SQLKeywords.INT);
+                    return (C.INT);
                 }
             }
             {
                 if (type == typeof(long))
                 {
-                    return (SQLKeywords.BIGINT);
+                    return (C.BIGINT);
                 }
             }
             {
                 if (type == typeof(ulong))
                 {
-                    return (SQLKeywords.BIGINT);
+                    return (C.BIGINT);
                 }
             }
 
             {
                 if (type == typeof(byte))
                 {
-                    return (SQLKeywords.TINYINT);
+                    return (C.TINYINT);
                 }
             }
             {
                 if (type == typeof(Guid))
                 {
-                    return (SQLKeywords.UNIQUEIDENTIFIER);
+                    return (C.UNIQUEIDENTIFIER);
                 }
             }
             {
                 if (type == typeof(DateTime))
                 {
-                    return (SQLKeywords.DATETIME);
+                    return (C.DATETIME);
                 }
             }
             {
                 if (type == typeof(string))
                 {
-                    return (SQLKeywords.NVARCHARMAX);
+                    return (C.NVARCHARMAX);
                 }
             }
             throw new Exception("Complex type " + type.FullName + " cannot be converted to sql type");
         }
 
+        public static IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeNoDefaultValueQueryBuilder DefaultValue(
+            this IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeQueryBuilder builder,
+            SqlServerLiteral literal)
+        {
+            return builder.DefaultValue(literal);
+        }
+        public static IAlterTableNoNameAddColumnNoNameNoTypeNameNoSizeNoDefaultValueQueryBuilder DefaultValue(
+            this IAlterTableNoNameAddColumnNoNameNoTypeNameNoSizeQueryBuilder builder,
+            SqlServerLiteral literal)
+        {
+            return builder.DefaultValue(literal);
+        }
         public static IDeleteExceptWhereQueryBuilder Where(this IDeleteExceptTableNameQueryBuilder builder,
             SqlServerCondition condition)
         {
@@ -250,50 +262,50 @@ namespace SQLEngine.SqlServer
             {
                 if (defaultValue is int i)
                 {
-                    return builder.Declare(variableName, SQLKeywords.INT, i);
+                    return builder.Declare(variableName, C.INT, i);
                 }
             }
             {
                 if (defaultValue is uint i)
                 {
-                    return builder.Declare(variableName, SQLKeywords.INT, i);
+                    return builder.Declare(variableName, C.INT, i);
                 }
             }
             {
                 if (defaultValue is long i)
                 {
-                    return builder.Declare(variableName, SQLKeywords.BIGINT, i);
+                    return builder.Declare(variableName, C.BIGINT, i);
                 }
             }
             {
                 if (defaultValue is ulong i)
                 {
-                    return builder.Declare(variableName, SQLKeywords.BIGINT, i);
+                    return builder.Declare(variableName, C.BIGINT, i);
                 }
             }
 
             {
                 if (defaultValue is byte i)
                 {
-                    return builder.Declare(variableName, SQLKeywords.TINYINT, i);
+                    return builder.Declare(variableName, C.TINYINT, i);
                 }                
             }
             {
                 if (defaultValue is Guid i)
                 {
-                    return builder.Declare(variableName, SQLKeywords.UNIQUEIDENTIFIER, i);
+                    return builder.Declare(variableName, C.UNIQUEIDENTIFIER, i);
                 }
             }
             {
                 if (defaultValue is DateTime i)
                 {
-                    return builder.Declare(variableName, SQLKeywords.DATETIME, i);
+                    return builder.Declare(variableName, C.DATETIME, i);
                 }
             }
             {
                 if (defaultValue is string i)
                 {
-                    return builder.Declare(variableName, SQLKeywords.NVARCHARMAX, i);
+                    return builder.Declare(variableName, C.NVARCHARMAX, i);
                 }
             }
             throw new Exception("Complex type " + typeof(T).FullName + " cannot be converted to sql literal");
@@ -345,10 +357,10 @@ namespace SQLEngine.SqlServer
             int sqlErrorState = Query.Settings.SQLErrorState;
             var list = new List<string>(args.Length + 1) {exceptionMessage.ToSQL().ToSqlString()};
             list.AddRange(args);
-            var errorMessageVar = builder.DeclareRandom("EXCEPTION", SQLKeywords.NVARCHARMAX);
-            AbstractSqlLiteral to = SqlServerLiteral.Raw($"{SQLKeywords.FORMATMESSAGE}({list.JoinWith(", ")})");
+            var errorMessageVar = builder.DeclareRandom("EXCEPTION", C.NVARCHARMAX);
+            AbstractSqlLiteral to = SqlServerLiteral.Raw($"{C.FORMATMESSAGE}({list.JoinWith(", ")})");
             builder.Set(errorMessageVar, to);
-            builder.AddExpression($"{SQLKeywords.RAISERROR}({errorMessageVar}, 18, {sqlErrorState}) {SQLKeywords.WITH} {SQLKeywords.NOWAIT}");
+            builder.AddExpression($"{C.RAISERROR}({errorMessageVar}, 18, {sqlErrorState}) {C.WITH} {C.NOWAIT}");
         }
     }
 }

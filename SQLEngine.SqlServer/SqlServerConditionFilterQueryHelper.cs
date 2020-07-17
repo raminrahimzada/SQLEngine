@@ -18,7 +18,7 @@ namespace SQLEngine.SqlServer
         public string ColumnEquals(string columnName, ISqlExpression value)
         {
             var col=new SqlServerColumn(columnName);
-            if (String.Equals(value.ToString(), SQLKeywords.NULL, StringComparison.InvariantCultureIgnoreCase))
+            if (String.Equals(value.ToString(), C.NULL, StringComparison.InvariantCultureIgnoreCase))
             {
                 return IsNull(col);
             }
@@ -27,7 +27,7 @@ namespace SQLEngine.SqlServer
 
         public string Equal(ISqlExpression key, ISqlExpression value)
         {
-            if (String.Equals(value.ToString(), SQLKeywords.NULL, StringComparison.InvariantCultureIgnoreCase))
+            if (String.Equals(value.ToString(), C.NULL, StringComparison.InvariantCultureIgnoreCase))
             {
                 return IsNull(key);
             }
@@ -35,7 +35,7 @@ namespace SQLEngine.SqlServer
         }
         public string NotEqual(ISqlExpression key, ISqlExpression value)
         {
-            if (String.Equals(value.ToString(), SQLKeywords.NULL, StringComparison.InvariantCultureIgnoreCase))
+            if (String.Equals(value.ToString(), C.NULL, StringComparison.InvariantCultureIgnoreCase))
             {
                 return IsNotNull(key);
             }
@@ -124,20 +124,20 @@ namespace SQLEngine.SqlServer
             var sb = new StringBuilder();
             sb.Append("" + columnName + " NOT IN (");
             sb.Append(string.Join(",", values));
-            sb.Append(SQLKeywords.END_SCOPE);
+            sb.Append(C.END_SCOPE);
             return sb.ToString();
         }
 
         public string Exists(string selection)
         {
-            return string.Concat(SQLKeywords.EXISTS, SQLKeywords.BEGIN_SCOPE, selection,
-                SQLKeywords.END_SCOPE);
+            return string.Concat(C.EXISTS, C.BEGIN_SCOPE, selection,
+                C.END_SCOPE);
         }
 
         public string NotExists(string selection)
         {
-            return string.Concat(SQLKeywords.NOT, SQLKeywords.SPACE, SQLKeywords.EXISTS, SQLKeywords.BEGIN_SCOPE, selection,
-                SQLKeywords.END_SCOPE);
+            return string.Concat(C.NOT, C.SPACE, C.EXISTS, C.BEGIN_SCOPE, selection,
+                C.END_SCOPE);
         }
 
         public string LessThanOrEqual(string left, string right)
@@ -149,18 +149,18 @@ namespace SQLEngine.SqlServer
         {
             var sb = new StringBuilder();
             sb.Append(expression);
-            sb.Append(SQLKeywords.SPACE);
-            sb.Append(SQLKeywords.NOT);
-            sb.Append(SQLKeywords.SPACE);
-            sb.Append(SQLKeywords.LIKE);
-            sb.Append(SQLKeywords.SPACE);
+            sb.Append(C.SPACE);
+            sb.Append(C.NOT);
+            sb.Append(C.SPACE);
+            sb.Append(C.LIKE);
+            sb.Append(C.SPACE);
             sb.Append(regex.ToSQL());
             if (!string.IsNullOrEmpty(escape))
             {
-                sb.Append(SQLKeywords.ESCAPE);
-                sb.Append(SQLKeywords.SPACE);
+                sb.Append(C.ESCAPE);
+                sb.Append(C.SPACE);
                 sb.Append(escape.ToSQL());
-                sb.Append(SQLKeywords.SPACE);
+                sb.Append(C.SPACE);
             }
 
             return sb.ToString();
@@ -169,16 +169,16 @@ namespace SQLEngine.SqlServer
         {
             var sb = new StringBuilder();
             sb.Append(expression);
-            sb.Append(SQLKeywords.SPACE);
-            sb.Append(SQLKeywords.LIKE);
-            sb.Append(SQLKeywords.SPACE);
+            sb.Append(C.SPACE);
+            sb.Append(C.LIKE);
+            sb.Append(C.SPACE);
             sb.Append(regex.ToSQL());
             if (!string.IsNullOrEmpty(escape))
             {
-                sb.Append(SQLKeywords.ESCAPE);
-                sb.Append(SQLKeywords.SPACE);
+                sb.Append(C.ESCAPE);
+                sb.Append(C.SPACE);
                 sb.Append(escape.ToSQL());
-                sb.Append(SQLKeywords.SPACE);
+                sb.Append(C.SPACE);
             }
 
             return sb.ToString();
@@ -191,8 +191,8 @@ namespace SQLEngine.SqlServer
 
         public string Cast(ISqlExpression expression, string asType)
         {
-            return string.Concat(SQLKeywords.CAST, SQLKeywords.BEGIN_SCOPE, expression, SQLKeywords.SPACE,
-                SQLKeywords.AS, SQLKeywords.SPACE, asType, SQLKeywords.END_SCOPE);
+            return string.Concat(C.CAST, C.BEGIN_SCOPE, expression, C.SPACE,
+                C.AS, C.SPACE, asType, C.END_SCOPE);
         }
     }
 }

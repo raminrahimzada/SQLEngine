@@ -6,5 +6,7 @@
         ICreateFunctionNoNameQueryBuilder Function(string funcName);
         ICreateProcedureNoNameQueryBuilder Procedure(string procName);
         ICreateViewNoNameQueryBuilder View(string viewName);
+        ICreateIndexNoNameQueryBuilder Index(string indexName);
+        ICreateDatabaseNoNameQueryBuilder Database(string databaseName);
     }
 }

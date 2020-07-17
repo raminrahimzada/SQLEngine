@@ -34,9 +34,9 @@ namespace SQLEngine.SqlServer
         public override string Build()
         {
             Writer.Write(_functionName);//do not use I here
-            Writer.Write(SQLKeywords.BEGIN_SCOPE);
+            Writer.Write(C.BEGIN_SCOPE);
             Writer.WriteJoined(_arguments);
-            Writer.Write(SQLKeywords.END_SCOPE);
+            Writer.Write(C.END_SCOPE);
             return base.Build();
         }
     }

@@ -33,12 +33,12 @@
         public override string Build()
         {
 
-            Writer.Write(SQLKeywords.CAST);
-            Writer.Write(SQLKeywords.BEGIN_SCOPE);
+            Writer.Write(C.CAST);
+            Writer.Write(C.BEGIN_SCOPE);
             Writer.Write(_expression);
-            Writer.Write2(SQLKeywords.AS);
+            Writer.Write2(C.AS);
             Writer.Write(_type);
-            Writer.Write(SQLKeywords.END_SCOPE);
+            Writer.Write(C.END_SCOPE);
 
             return base.Build();
         }

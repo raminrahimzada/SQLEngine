@@ -19,14 +19,14 @@
 
         public override string Build()
         {
-            Writer.Write(SQLKeywords.CREATE);
-            Writer.Write(SQLKeywords.SPACE);
-            Writer.Write(SQLKeywords.VIEW);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.CREATE);
+            Writer.Write(C.SPACE);
+            Writer.Write(C.VIEW);
+            Writer.Write(C.SPACE);
             Writer.Write(_viewName);
-            Writer.Write(SQLKeywords.SPACE);
-            Writer.Write(SQLKeywords.AS);
-            Writer.Write(SQLKeywords.SPACE);
+            Writer.Write(C.SPACE);
+            Writer.Write(C.AS);
+            Writer.Write(C.SPACE);
             Writer.Write(_viewBody);
 
             return base.Build();

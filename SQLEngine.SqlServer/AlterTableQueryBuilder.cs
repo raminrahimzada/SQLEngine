@@ -20,11 +20,11 @@
 
         public IAlterTableNoNameDropColumnQueryBuilder DropColumn(string columnName)
         {
-            Writer.Write(SQLKeywords.ALTER);
-            Writer.Write2(SQLKeywords.TABLE);
+            Writer.Write(C.ALTER);
+            Writer.Write2(C.TABLE);
             Writer.Write2(_tableName);
-            Writer.Write2(SQLKeywords.DROP);
-            Writer.Write2(SQLKeywords.COLUMN);
+            Writer.Write2(C.DROP);
+            Writer.Write2(C.COLUMN);
             Writer.Write2(columnName);
             return this;
         }

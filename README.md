@@ -86,7 +86,7 @@ using (var q = Query.New)
         .Selector("Surname")
         .From("Users")
         .Where(age > 18 & height <= 1.7)
-        .ToString();
+        ;
     
     var query = q.ToString();
 }
@@ -109,8 +109,7 @@ var age = t.Column("Age");
             .InnerJoin("P", "Photos", "UserId")
             .LeftJoin("A", "Attachments", "UserId")
             .RightJoin("S", "Sales", "UserId")
-            .Where(age > 18)
-            .ToString()
+            .Where(age > 18)            
         ;
 	
   var query = q.ToString();

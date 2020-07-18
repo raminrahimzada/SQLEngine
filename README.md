@@ -45,7 +45,7 @@ using (var q = Query.New)
         .Top(1)
         .From("Users")
         .Where(id==11)
-        .ToString();
+        .OrderBy(id);
  
      var query = q.ToString();
 }
@@ -60,7 +60,8 @@ using (var q = Query.New)
         .Select
         .Top(1)
         .From<UserTable>()
-        .Where(id==11);
+        .Where(id==11)
+	.OrderBy(id);
 
      var query = q.ToString();
 }
@@ -70,6 +71,7 @@ Above 2 queries will be like that:
 SELECT TOP(1)  *
     FROM Users
     WHERE Id = 11
+    ORDER BY Id
 ```
 
 ## Demonstration of another select-where query

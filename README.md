@@ -5,9 +5,15 @@ SQL Engine is a library that eases of generating cross-dialect sql queries witho
 <br/>You can generate (almost) any sql query with C# expressions (Then configure it to build for MS-SQL, Oracle, MySQL or other style queries)
 <br/>So library may be considered as a query abstraction layer on databases
 
+| | |
+| --- | --- |
+| **Build** | [![Build status](https://ci.appveyor.com/api/projects/status/r75p0yn5uo6colgk?svg=true&branch=master)](https://ci.appveyor.com/project/raminrahimzada/SQLEngine) |
+| **Coverage** | <sup>Coveralls</sup> [![Coverage Status](https://coveralls.io/repos/github/raminrahimzada/SQLEngine/badge.svg?branch=master)](https://coveralls.io/github/raminrahimzada/SQLEngine?branch=master)  <sup>SonarCloud</sup> [![SonarCloud](https://sonarcloud.io/api/project_badges/measure?project=SQLEngine&metric=coverage)](https://sonarcloud.io/dashboard?id=SQLEngine) | 
+| **Quality** | [![SonarCloud](https://sonarcloud.io/api/project_badges/measure?project=SQLEngine&metric=alert_status)](https://sonarcloud.io/dashboard?id=SQLEngine) [![GitHub issues](https://img.shields.io/github/issues-raw/raminrahimzada/SQLEngine.svg)](https://github.com/raminrahimzada/SQLEngine/issues) | 
+| **Nuget** | [![Nuget](https://buildstats.info/nuget/SQLEngine)](http://nuget.org/packages/SQLEngine) |
 
 
-## [SqlEngine![NuGet version (SqlEngine)](https://img.shields.io/nuget/v/SqlEngine.svg)](https://www.nuget.org/packages/SQLEngine/)
+
 ## [SqlEngine.SqlServer![NuGet version (SqlEngine.SqlServer)](https://img.shields.io/nuget/v/SqlEngine.SqlServer.svg)](https://www.nuget.org/packages/SQLEngine.SqlServer/)
 
 ## Configuration 

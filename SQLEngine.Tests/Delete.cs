@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SQLEngine.SqlServer;
 
 namespace SQLEngine.Tests
@@ -13,7 +14,7 @@ namespace SQLEngine.Tests
                 var id = b.Column("Id");
                 
                 var queryThat = b
-                    ._delete
+                    .Delete
                     .Table("Users")
                     .Where(id == 111)
                     .ToString();
@@ -32,7 +33,7 @@ DELETE from Users WHERE Id = 111
                 var id = b.Column("Id");
 
                 var queryThat=b
-                    ._delete
+                    .Delete
                     .Table<UserTable>()
                     .Where(id == 111)
                     .ToString();
@@ -51,7 +52,7 @@ DELETE from Users WHERE Id = 111
             {
                 var id = b.Column("Id");
 
-                var queryThat = b._delete
+                var queryThat = b.Delete
                     .Top(10)
                     .Table<UserTable>()
                     .Where(id == 111)
@@ -67,22 +68,22 @@ DELETE TOP(10) from Users WHERE Id = 111
         [TestMethod]
         public void Test_Delete_Table_4()
         {
-            using (var b = Query.New)
+            using (var q = Query.New)
             {
-                var id = b.Column("Id");
-                var isBlocked = b.Column("IsBlocked");
+                var id = q.Column("Id");
+                var isBlocked = q.Column("IsBlocked");
 
-                var blockedUserIdList = b
-                        ._select
-                        .From<AttachmentsTable>()
-                        .Select("UserId")
-                        .Where(isBlocked == true)
-                    ;
-                var deleteQuery = b
-                    ._delete
+
+                void BlockedUserIdList(ISelectQueryBuilder _) =>
+                    _.Select("UserId")
+                        .From("Attachments")
+                        .Where(isBlocked == true);
+
+                var deleteQuery = q
+                    .Delete
                     .Top(10)
                     .Table<UserTable>()
-                    .Where(id.In(blockedUserIdList))
+                    .Where(id.In(BlockedUserIdList))
                     .ToString();
 
                 var query = @"

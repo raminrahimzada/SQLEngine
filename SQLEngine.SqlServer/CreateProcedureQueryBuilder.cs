@@ -28,7 +28,8 @@ namespace SQLEngine.SqlServer
         }
 
         private readonly List<ArgumentModel> _arguments;
-        private Action<IProcedureBodyQueryBuilder> _bodyBuilder;
+        //private Action<IProcedureBodyQueryBuilder> _bodyBuilder;
+        private string _body;
         private string _schemaName;
         private string _procedureName;
         private string _metaDataHeader;
@@ -71,7 +72,12 @@ namespace SQLEngine.SqlServer
 
         public ICreateProcedureNeedBodyQueryBuilder Body(Action<IProcedureBodyQueryBuilder> builder)
         {
-            _bodyBuilder = builder;
+            using (var t=new SqlServerProcedureBodyQueryBuilder())
+            {
+                builder(t);
+                _body = t.Build();
+            }
+            //_bodyBuilder = builder;
             return this;
         }
         public override string Build()
@@ -95,15 +101,12 @@ namespace SQLEngine.SqlServer
             Writer.WriteLine(C.AS);
             Writer.WriteLine(C.BEGIN);
             Writer.Indent++;
+            
+            Writer.WriteLine(_body);
 
-            using (var o = new SqlServerProcedureBodyQueryBuilder())
-            {
-                o.Join(this);
-                _bodyBuilder(o);
-                Writer.Indent--;
-                Writer.WriteLine(C.END);
-                return base.Build();
-            }
+            Writer.Indent--;
+            Writer.WriteLine(C.END);
+            return base.Build();
         }
 
         public ICreateProcedureNoHeaderQueryBuilder Header(string metaDataHeader)

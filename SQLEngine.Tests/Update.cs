@@ -12,7 +12,7 @@ namespace SQLEngine.Tests
             using (var t = Query.New)
             {
                 var queryThat = t
-                        ._update
+                        .Update
                         .Top(5)
                         .Table("Users")
                         .Value("NAME", "Ramin")
@@ -36,7 +36,7 @@ namespace SQLEngine.Tests
 
                 var queryThat =
                         t
-                            ._update
+                            .Update
                             .Top(5)
                             .Table("Users")
                             .Value("Age", 21)
@@ -61,7 +61,7 @@ namespace SQLEngine.Tests
 
                 var queryThat =
                         t
-                            ._update
+                            .Update
                             .Top(5)
                             .Table("Users")
                             .Value("CanWatchMovie", true)
@@ -88,7 +88,7 @@ namespace SQLEngine.Tests
 
                 var queryThat =
                         t
-                            ._update
+                            .Update
                             .Top(5)
                             .Table("Users")
                             .Value("Blocked", true)
@@ -113,7 +113,7 @@ namespace SQLEngine.Tests
                 var id = t.Column("Id");
                 var queryThat =
                         t
-                            ._update
+                            .Update
                             .Top(5)
                             .Table("Users")
                             .Value("Blocked", true)

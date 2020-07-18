@@ -1,4 +1,8 @@
 ﻿using System;
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 // ReSharper disable UnusedMemberInSuper.Global
 // ReSharper disable InconsistentNaming
@@ -6,106 +10,150 @@
 
 namespace SQLEngine.SqlServer
 {
-    public class SqlServerQueryBuilder : AbstractQueryBuilder, IQueryBuilder
+    public class SqlServerQueryBuilder : IQueryBuilder
     {
-        public ISelectQueryBuilder _select => new SelectQueryBuilder();
-        public IUpdateQueryBuilder _update => new UpdateQueryBuilder();
-        public IDeleteQueryBuilder _delete => new DeleteQueryBuilder();
-        public IInsertQueryBuilder _insert => new InsertQueryBuilder();
-        public IAlterQueryBuilder _alter => new AlterQueryBuilder();
+        private readonly List<IAbstractQueryBuilder> _list = new List<IAbstractQueryBuilder>();
         
-        public ICreateQueryBuilder _create => new CreateQueryBuilder();
+
+        //public void Join(AbstractQueryBuilder other)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public override string ToString()
+        {
+            return this.Build();
+        }
+
+        public  string Build()
+        {
+            var sb = new StringBuilder();
+            foreach (var builder in _list)
+            {
+                sb.AppendLine(builder.Build());
+            }
+            return sb.ToString();
+        }
+
         
-        public IDropQueryBuilder _drop => new DropQueryBuilder();
+        //public ISelectQueryBuilder Select => new SelectQueryBuilder();
+        private T _Add<T>(T item) where T : IAbstractQueryBuilder
+        {
+            _list.Add(item);
+            return item;
+        }
+
+        public ISelectQueryBuilder Select => _Add(new SelectQueryBuilder());
+        public IUpdateQueryBuilder Update => _Add(new UpdateQueryBuilder());
+        public IDeleteQueryBuilder Delete => _Add(new DeleteQueryBuilder());
+        public IInsertQueryBuilder Insert => _Add(new InsertQueryBuilder());
+        public IAlterQueryBuilder Alter => _Add(new AlterQueryBuilder());
+        
+        public ICreateQueryBuilder Create => _Add(new CreateQueryBuilder());
+        
+        public IDropQueryBuilder Drop => _Add(new DropQueryBuilder());
 
 
         public IConditionFilterQueryHelper Helper { get; } = new SqlServerConditionFilterQueryHelper();
 
 
-        public void Create(Func<ICreateQueryBuilder, ICreateTableQueryBuilder> builder)
-        {
-            Writer.WriteLineEx(builder.Invoke(GetDefault<CreateQueryBuilder>()).Build());
-        }
-        public void Create(Func<ICreateQueryBuilder, IAbstractCreateFunctionQueryBuilder> builder)
-        {
-            Writer.WriteLineEx(builder.Invoke(GetDefault<CreateQueryBuilder>()).Build());
-        }
+        //public void Create(Func<ICreateQueryBuilder, ICreateTableQueryBuilder> builder)
+        //{
+        //    Writer.WriteLineEx(builder.Invoke(GetDefault<CreateQueryBuilder>()).Build());
+        //}
+        //public void Create(Func<ICreateQueryBuilder, IAbstractCreateFunctionQueryBuilder> builder)
+        //{
+        //    Writer.WriteLineEx(builder.Invoke(GetDefault<CreateQueryBuilder>()).Build());
+        //}
 
 
-        public void Select(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> builder)
-        {
-            Writer.WriteLineEx(builder.Invoke(GetDefault<SelectQueryBuilder>()).Build());
-        }
+        //public void Select(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> builder)
+        //{
+        //    Writer.WriteLineEx(builder.Invoke(GetDefault<SelectQueryBuilder>()).Build());
+        //}
 
-        public void Union()
-        {
-            Writer.WriteLineEx(C.UNION);
-        }
+        //public void Union()
+        //{
+        //    _list.Add(new );
+        //    Writer.WriteLineEx(C.UNION);
+        //}
 
-        public void UnionAll()
-        {
-            Writer.WriteLine(C.UNION);
-            Writer.WriteLine(C.SPACE);
-            Writer.WriteLine(C.ALL);
-        }
+        //public void UnionAll()
+        //{
+        //    Writer.WriteLine(C.UNION);
+        //    Writer.WriteLine(C.SPACE);
+        //    Writer.WriteLine(C.ALL);
+        //}
 
         public void Truncate(string tableName)
         {
-            Writer.WriteLineEx(GetDefault<TruncateQueryBuilder>().Table(tableName).Build());
+            using (var t=new TruncateQueryBuilder())
+            {
+                var expression = t.Table(tableName).Build();
+                _list.Add(new RawStringQueryBuilder(Writer => Writer.WriteLineEx(expression)));
+            }
         }
 
-        public void IfOr(params string[] conditions)
+        public IIfQueryBuilder IfOr(params AbstractSqlCondition[] conditions)
         {
-            If(Helper.Or(conditions));
+            var str = conditions.Select(x => x.ToSqlString()).ToArray();
+            var xx = Helper.Or(str);
+            var condition = SqlServerCondition.Raw(xx);
+            return If(condition);
         }
-        public void IfAnd(params string[] conditions)
+        public IIfQueryBuilder IfAnd(params AbstractSqlCondition[] conditions)
         {
-            If(Helper.And(conditions));
+            var str = conditions.Select(x => x.ToSqlString()).ToArray();
+            var xx = Helper.And(str);
+            var condition = SqlServerCondition.Raw(xx);
+            return If(condition);
         }
-        public void If(string condition)
+        public IIfQueryBuilder If(AbstractSqlCondition condition)
         {
-            Writer.Write(C.IF);
-            Writer.Write(C.BEGIN_SCOPE);
-            Writer.Write(condition);
-            Writer.WriteLine(C.END_SCOPE);
+            return _Add(new IfQueryBuilder(condition));            
         }
 
-        public void ElseIf(string condition)
+        public IElseIfQueryBuilder ElseIf(AbstractSqlCondition condition)
         {
-            Writer.Write(C.ELSE);
-            Writer.Write(C.SPACE);
-            Writer.Write(C.IF);
-            Writer.Write(C.BEGIN_SCOPE);
-            Writer.Write(condition);
-            Writer.WriteLine(C.END_SCOPE);
+            return _Add(new ElseIfQueryBuilder(condition));
+            
         }
 
         public void Else()
         {
-            Writer.WriteLine(C.ELSE);
+            _list.Add(new RawStringQueryBuilder(w => w.Write(C.ELSE)));
         }
 
         public void Begin()
         {
-            Writer.WriteLine(C.BEGIN);
-            Writer.Indent++;
+            _list.Add(new RawStringQueryBuilder(w =>
+            {
+                w.WriteLine(C.BEGIN);
+                w.Indent++;
+            }));
         }
 
         public void AddExpression(string expression)
         {
-            Writer.WriteLineEx(expression);
+            _list.Add(new RawStringQueryBuilder(w =>
+            {
+                w.WriteLine(expression);
+            }));
         }
 
         public void End()
         {
-            Writer.Indent--;
-            Writer.WriteLine(C.END);
+            _list.Add(new RawStringQueryBuilder(w =>
+            {
+                w.WriteLine(C.END);
+                w.Indent--;
+            }));
         }
 
-        public void Declare(Func<IDeclarationQueryBuilder, IDeclarationQueryBuilder> builder)
-        {
-            Writer.WriteLineEx(builder.Invoke(GetDefault<DeclarationQueryBuilder>()).Build());
-        }
+        //public void Declare(Func<IDeclarationQueryBuilder, IDeclarationQueryBuilder> builder)
+        //{
+        //    Writer.WriteLineEx(builder.Invoke(GetDefault<DeclarationQueryBuilder>()).Build());
+        //}
 
         public AbstractSqlVariable DeclareRandom(string variableName, string type, AbstractSqlLiteral defaultValue = null)
         {
@@ -114,13 +162,14 @@ namespace SQLEngine.SqlServer
             return Declare(variableName, type, defaultValue);
         }
 
-         
+
 
         public AbstractSqlVariable Declare(string variableName, string type, AbstractSqlLiteral defaultValue = null)
         {
             using (var t = new DeclarationQueryBuilder())
             {
-                Writer.WriteLineEx(t.Declare(variableName).OfType(type).Default(defaultValue?.ToString()).Build());
+                var expression = t.Declare(variableName).OfType(type).Default(defaultValue?.ToString()).Build();
+                _list.Add(new RawStringQueryBuilder(Writer => Writer.WriteLineEx(expression)));
                 return new SqlServerVariable(variableName);
             }
         }
@@ -130,32 +179,28 @@ namespace SQLEngine.SqlServer
             Set(variable, SqlServerLiteral.Raw("SCOPE_IDENTITY()"));
         }
 
-        //public void Set(ISqlVariable variable, Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> right)
-        //{
-        //    using (var t = new SetQueryBuilder())
-        //    {
-        //        Writer.WriteLineEx(t.Set(variable).To(right(GetDefault<BinaryExpressionBuilder>()).Build()).Build());
-        //    }
-        //}
         public void Set(AbstractSqlVariable variable, ISqlExpression value)
         {
             using (var t = new SetQueryBuilder())
             {
-                Writer.WriteLineEx(t.Set(variable).To(value).Build());
+                var expression = t.Set(variable).To(value).Build();
+                _list.Add(new RawStringQueryBuilder(Writer => Writer.WriteLineEx(expression)));
             }
-        } 
+        }
         public void Set(AbstractSqlVariable variable, AbstractSqlVariable value)
         {
             using (var t = new SetQueryBuilder())
             {
-                Writer.WriteLineEx(t.Set(variable).To(value).Build());
+                var expression = t.Set(variable).To(value).Build();
+                _list.Add(new RawStringQueryBuilder(Writer => Writer.WriteLineEx(expression)));
             }
         }
         public void Set(AbstractSqlVariable variable, AbstractSqlLiteral value)
         {
             using (var t = new SetQueryBuilder())
             {
-                Writer.WriteLineEx(t.Set(variable).To(value).Build());
+                var expression = t.Set(variable).To(value).Build();
+                _list.Add(new RawStringQueryBuilder(Writer => Writer.WriteLineEx(expression)));
             }
         }
         //public void Set(ISqlVariable variable, Func<ICastQueryBuilder, ICastQueryBuilder> q)
@@ -170,42 +215,52 @@ namespace SQLEngine.SqlServer
         //        }
         //    }
         //}
-        public void Execute(Func<IExecuteQueryBuilder, IExecuteProcedureNeedArgQueryBuilder> builder)
-        {
-            Writer.WriteLineEx(builder.Invoke(GetDefault<ExecuteQueryBuilder>()).Build());
-        }
+        //public void Execute(Func<IExecuteQueryBuilder, IExecuteProcedureNeedArgQueryBuilder> builder)
+        //{
+        //    Writer.WriteLineEx(builder.Invoke(GetDefault<ExecuteQueryBuilder>()).Build());
+        //}
 
-        public void Insert(Func<IInsertQueryBuilder, IAbstractInsertQueryBuilder> builder)
-        {
-            Writer.WriteLineEx(builder.Invoke(GetDefault<InsertQueryBuilder>()).Build());
-        }
+        //public void Insert(Func<IInsertQueryBuilder, IAbstractInsertQueryBuilder> builder)
+        //{
+        //    Writer.WriteLineEx(builder.Invoke(GetDefault<InsertQueryBuilder>()).Build());
+        //}
 
-        public void Update(Func<IUpdateQueryBuilder, IAbstractUpdateQueryBuilder> builder)
-        {
-            Writer.WriteLineEx(builder.Invoke(GetDefault<UpdateQueryBuilder>()).Build());
-        }
+        //public void Update(Func<IUpdateQueryBuilder, IAbstractUpdateQueryBuilder> builder)
+        //{
+        //    Writer.WriteLineEx(builder.Invoke(GetDefault<UpdateQueryBuilder>()).Build());
+        //}
 
-        public void Delete(Func<IDeleteQueryBuilder, IDeleteQueryBuilder> builder)
-        {
-            Writer.WriteLineEx(builder.Invoke(GetDefault<DeleteQueryBuilder>()).Build());
-        }
+        //public void Delete(Func<IDeleteQueryBuilder, IDeleteQueryBuilder> builder)
+        //{
+        //    Writer.WriteLineEx(builder.Invoke(GetDefault<DeleteQueryBuilder>()).Build());
+        //}
 
         public void Return()
         {
-            Writer.Write(C.RETURN);
-            Writer.WriteLine(C.SEMICOLON);
+            _list.Add(new RawStringQueryBuilder(writer =>
+            {
+                writer.Write(C.RETURN);
+                writer.WriteLine(C.SEMICOLON);
+            }));
         }
         public void Return(string sql)
         {
-            Writer.Write(C.RETURN);
-            Writer.WriteWithScoped(sql);
-            Writer.WriteLine();
+            _list.Add(new RawStringQueryBuilder(writer =>
+            {
+                writer.Write(C.RETURN);
+                writer.WriteWithScoped(sql);
+                writer.WriteLine();
+            }));
+            
         }
         public void Return(ISqlExpression expression)
         {
-            Writer.Write(C.RETURN);
-            Writer.WriteWithScoped(expression.ToSqlString());
-            Writer.WriteLine();
+            _list.Add(new RawStringQueryBuilder(writer =>
+            {
+                writer.Write(C.RETURN);
+                writer.WriteWithScoped(expression.ToSqlString());
+                writer.WriteLine();
+            }));
         }
 
         public void Comment(string comment)
@@ -214,11 +269,15 @@ namespace SQLEngine.SqlServer
             {
                 comment = comment.Replace("*/", "*\\/");
             }
-            Writer.Write("/*");
-            Writer.WriteEx(comment);
-            Writer.Write("*/ ");
-            Writer.WriteLine("");
-            //Writer.WriteLine("PRINT(" + comment.ToSQL() + ");");
+            _list.Add(new RawStringQueryBuilder(writer =>
+            {
+                writer.Write("/*");
+                writer.WriteEx(comment);
+                writer.Write("*/ ");
+                writer.WriteLine("");
+                //writer.WriteLine("PRINT(" + comment.ToSQL() + ");");
+            }));
+            
         }
 
         private static readonly object Sync=new object();
@@ -234,102 +293,109 @@ namespace SQLEngine.SqlServer
         }
 
 
-        public void Drop(Func<IDropTableQueryBuilder, IDropTableNoNameNoSchemaNoDBQueryBuilder> builder)
-        {
-            Writer.WriteLineEx(builder.Invoke(GetDefault<DropTableQueryBuilder>()).Build());
-        }
+        //public void Drop(Func<IDropTableQueryBuilder, IDropTableNoNameNoSchemaNoDBQueryBuilder> builder)
+        //{
+        //    Writer.WriteLineEx(builder.Invoke(GetDefault<DropTableQueryBuilder>()).Build());
+        //}
 
-        public void Drop(Func<IDropTableQueryBuilder, IDropTableNoNameQueryBuilder> builder)
-        {
-            Writer.WriteLineEx(builder.Invoke(GetDefault<DropTableQueryBuilder>()).Build());
-        }
-        public void Drop(Func<IDropViewQueryBuilder, IDropViewQueryBuilder> builder)
-        {
-            Writer.WriteLineEx(builder.Invoke(GetDefault<DropViewQueryBuilder>()).Build());
-        }
+        //public void Drop(Func<IDropTableQueryBuilder, IDropTableNoNameQueryBuilder> builder)
+        //{
+        //    Writer.WriteLineEx(builder.Invoke(GetDefault<DropTableQueryBuilder>()).Build());
+        //}
+        //public void Drop(Func<IDropViewQueryBuilder, IDropViewQueryBuilder> builder)
+        //{
+        //    Writer.WriteLineEx(builder.Invoke(GetDefault<DropViewQueryBuilder>()).Build());
+        //}
 
         public void Cursor(string selection,string[] intoVariables,Action<IQueryBuilder> body)
         {
-            var variableName = "__cursor_" + Guid.NewGuid().ToString().Replace("-", "");
-            Writer.Write(C.DECLARE);
-            Writer.Write(C.SPACE);
-            Writer.Write(variableName);
-            Writer.Write(C.SPACE);
-            Writer.Write(C.CURSOR);
-            Writer.Write(C.SPACE);
-            Writer.Write(C.FOR);
-            Writer.Write(C.SPACE);
-            Writer.Write(selection);
-            Writer.WriteLine();
-            
-            Writer.Write(C.OPEN);
-            Writer.Write(C.SPACE);
-            Writer.Write(variableName);
-            
-            Writer.WriteLine();
-            Writer.Write(C.FETCH);
-            Writer.Write(C.SPACE);
-            Writer.Write(C.NEXT);
-            Writer.Write(C.SPACE);
-            Writer.Write(C.FROM);
-            Writer.Write(C.SPACE);
-            Writer.Write(variableName);
-            Writer.Write(C.SPACE);
-            Writer.Write(C.INTO);
-            Writer.Write(C.SPACE);
-            Writer.Write(intoVariables.JoinWith());
-            
-            Writer.WriteLine();
-            Writer.Write(C.WHILE);
-            Writer.Write(C.SPACE);
-            Writer.Write(C.FETCH_STATUS);
-            Writer.Write(C.EQUALS);
-            Writer.Write(0L.ToSQL());
-            
-            Writer.WriteLine();
+            _list.Add(new RawStringQueryBuilder(Writer =>
+            {
+                var variableName = "__cursor_" + Guid.NewGuid().ToString().Replace("-", "");
+                Writer.Write(C.DECLARE);
+                Writer.Write(C.SPACE);
+                Writer.Write(variableName);
+                Writer.Write(C.SPACE);
+                Writer.Write(C.CURSOR);
+                Writer.Write(C.SPACE);
+                Writer.Write(C.FOR);
+                Writer.Write(C.SPACE);
+                Writer.Write(selection);
+                Writer.WriteLine();
 
-            Writer.Write(C.BEGIN);
-            Writer.WriteLine();
-            Indent++;
-            body(this);
-            Writer.WriteLine();
-            Writer.Write(C.FETCH);
-            Writer.Write(C.SPACE);
-            Writer.Write(C.NEXT);
-            Writer.Write(C.SPACE);
-            Writer.Write(C.FROM);
-            Writer.Write(C.SPACE);
-            Writer.Write(variableName);
-            Writer.Write(C.SPACE);
-            Writer.Write(C.INTO);
-            Writer.Write(C.SPACE);
-            Writer.Write(intoVariables.JoinWith());
-            
-            Writer.WriteLine();
+                Writer.Write(C.OPEN);
+                Writer.Write(C.SPACE);
+                Writer.Write(variableName);
 
-            Indent--;
-            Writer.Write(C.END);
-            Writer.WriteLine();
+                Writer.WriteLine();
+                Writer.Write(C.FETCH);
+                Writer.Write(C.SPACE);
+                Writer.Write(C.NEXT);
+                Writer.Write(C.SPACE);
+                Writer.Write(C.FROM);
+                Writer.Write(C.SPACE);
+                Writer.Write(variableName);
+                Writer.Write(C.SPACE);
+                Writer.Write(C.INTO);
+                Writer.Write(C.SPACE);
+                Writer.Write(intoVariables.JoinWith());
 
-            Writer.Write(C.CLOSE);
-            Writer.Write(C.SPACE);
-            Writer.Write(variableName);
-            Writer.WriteLine();
+                Writer.WriteLine();
+                Writer.Write(C.WHILE);
+                Writer.Write(C.SPACE);
+                Writer.Write(C.FETCH_STATUS);
+                Writer.Write(C.EQUALS);
+                Writer.Write(0L.ToString());
 
-            Writer.Write(C.DEALLOCATE);
-            Writer.Write(C.SPACE);
-            Writer.Write(variableName);
-            Writer.WriteLine();
+                Writer.WriteLine();
 
+                Writer.Write(C.BEGIN);
+                Writer.WriteLine();
+                Writer.Indent++;
+                //TODO
+                //body(this);
+                Writer.WriteLine();
+                Writer.Write(C.FETCH);
+                Writer.Write(C.SPACE);
+                Writer.Write(C.NEXT);
+                Writer.Write(C.SPACE);
+                Writer.Write(C.FROM);
+                Writer.Write(C.SPACE);
+                Writer.Write(variableName);
+                Writer.Write(C.SPACE);
+                Writer.Write(C.INTO);
+                Writer.Write(C.SPACE);
+                Writer.Write(intoVariables.JoinWith());
+
+                Writer.WriteLine();
+
+                Writer.Indent--;
+                Writer.Write(C.END);
+                Writer.WriteLine();
+
+                Writer.Write(C.CLOSE);
+                Writer.Write(C.SPACE);
+                Writer.Write(variableName);
+                Writer.WriteLine();
+
+                Writer.Write(C.DEALLOCATE);
+                Writer.Write(C.SPACE);
+                Writer.Write(variableName);
+                Writer.WriteLine();
+            }));
         }
 
         public void Print(ISqlExpression expression)
         {
-            Writer.Write("print");
-            Writer.Write(C.BEGIN_SCOPE);
-            Writer.Write(expression);
-            Writer.Write(C.END_SCOPE);
-            Writer.WriteLine();
+            _list.Add(new RawStringQueryBuilder(writer =>
+            {
+                writer.Write("print");
+                writer.Write(C.BEGIN_SCOPE);
+                writer.Write(expression);
+                writer.Write(C.END_SCOPE);
+                writer.WriteLine();
+            }));
+            
         }
 
         public AbstractSqlColumn Column(string columnName)
@@ -340,12 +406,14 @@ namespace SQLEngine.SqlServer
         {
             return new SqlServerColumnWithTableAlias(columnName, tableAlias);
         }
-
-        //public string I(string s)
-        //{
-        //    //TODO
-        //    return s;
-        //}
+        public void Dispose()
+        {
+            foreach (var builder in _list)
+            {
+                builder.Dispose();
+            }
+            _list.Clear();
+        }
     }
 }
 #pragma warning restore IDE1006 // Naming Styles

@@ -1,5 +1,63 @@
-﻿namespace SQLEngine.SqlServer
+﻿using System;
+using System.CodeDom.Compiler;
+
+namespace SQLEngine.SqlServer
 {
+    
+    internal class IfQueryBuilder : AbstractQueryBuilder, IIfQueryBuilder
+    {
+        private readonly AbstractSqlCondition _condition;
+
+        public IfQueryBuilder(AbstractSqlCondition condition)
+        {
+            _condition = condition;
+        }
+
+        public override string Build()
+        {
+            Writer.Write(C.IF);
+            Writer.Write(C.BEGIN_SCOPE);
+            Writer.Write(_condition.ToSqlString());
+            Writer.WriteLine(C.END_SCOPE);
+            return base.Build();
+        }
+    }
+
+    public class RawStringQueryBuilder : AbstractQueryBuilder, IElseIfQueryBuilder
+    {
+        private readonly Action<IndentedTextWriter> _func;
+
+        public RawStringQueryBuilder(Action<IndentedTextWriter> func)
+        {
+            _func = func;
+        }
+
+        public override string Build()
+        {
+            _func(Writer);
+            return base.Build();
+        }
+    }
+    internal class ElseIfQueryBuilder : AbstractQueryBuilder, IElseIfQueryBuilder
+    {
+        private readonly AbstractSqlCondition _condition;
+
+        public ElseIfQueryBuilder(AbstractSqlCondition condition)
+        {
+            _condition = condition;
+        }
+
+        public override string Build()
+        {
+            Writer.Write(C.ELSE);
+            Writer.Write(C.SPACE);
+            Writer.Write(C.IF);
+            Writer.Write(C.BEGIN_SCOPE);
+            Writer.Write(_condition.ToSqlString());
+            Writer.WriteLine(C.END_SCOPE);
+            return base.Build();
+        }
+    }
     internal class SetQueryBuilder : AbstractQueryBuilder, ISetNeedSetQueryBuilder, ISetNeedToQueryBuilder, 
         ISetNoSetNoToQueryBuilder
     {

@@ -13,7 +13,7 @@
             using (var table=new TTable())
             {
                 var tableName = table.Name;
-                builder.Delete(x => x.Table(tableName));
+                builder.Delete.Table(tableName);
             }
         }
         //public static ISelectWithoutWhereQueryBuilder WhereEquals(this ISelectWithoutFromQueryBuilder builder, string left, string right)

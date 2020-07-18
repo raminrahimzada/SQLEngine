@@ -11,12 +11,13 @@ namespace SQLEngine.Tests
         {
             using (var q = Query.New)
             {
-                q.Insert(i => i.Into("Users")
+                q.Insert
+                    .Into("Users")
                     .Value("Name", "Ramin")
                     .Value("Surname", "Rahimzada")
                     .Value("Age", 26)
                     .Value("Height", 1.84)
-                );
+                    ;
                 const string query =
                     "INSERT INTO Users (Name,Surname,Age,Height) VALUES (N'Ramin' , N'Rahimzada' , 26, 1.84)";
                 
@@ -35,10 +36,10 @@ namespace SQLEngine.Tests
                     {"Surname", "Rahimzada"},
                     {"Age", 26},
                 };
-                q.Insert(i => i
+                q.Insert
                     .Into("Users")
                     .Values(dict)
-                );
+                    ;
 
                 const string query = "INSERT INTO Users(Name , Surname , Age) VALUES (N'Ramin' , N'Rahimzada' , 26)";
                 QueryAssert.AreEqual(q.Build(), query);
@@ -50,12 +51,13 @@ namespace SQLEngine.Tests
         {
             using (var q = Query.New)
             {
-                q.Insert(insert =>
-                    insert.Into("Users")
-                        .Values(
-                            select => select.From("Users_Backup")
-                        )
-                );
+                q
+                    .Insert
+                    .Into("Users")
+                    .Values(
+                        select => select.From("Users_Backup")
+                    )
+                    ;
                 const string query = "INSERT INTO Users  SELECT  *  FROM Users_Backup";
                 QueryAssert.AreEqual(q.Build(), query);
             }
@@ -66,7 +68,7 @@ namespace SQLEngine.Tests
         {
             using (var q = Query.New)
             {
-                var queryThat = q._insert
+                var queryThat = q.Insert
                     .Into<UserTable>()
                     .Values(select =>
                         select

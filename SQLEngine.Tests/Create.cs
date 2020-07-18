@@ -18,7 +18,7 @@ namespace SQLEngine.Tests
             //demonstration of create-table query
             using (var b = Query.New)
             {
-                string queryFromBuilder = b._create.Table("Employees")
+                string queryFromBuilder = b.Create.Table("Employees")
                     .Columns(c => new[]
                     {
                         c.Long("ID").Identity(),
@@ -52,12 +52,16 @@ namespace SQLEngine.Tests
             {
                 var isBlocked = q.Column("IsBlocked");
 
-                var viewSelection = q._select
+                q.Select
                     .From("Users")
                     .Where(isBlocked == false)
-                    .ToString();
-                
-                var view = q._create
+                    ;
+                //TODO
+                const string viewSelection = @"
+SELECT  * 
+    FROM Users
+    WHERE IsBlocked = 0";
+                var view = q.Create
                     .View("View_Active_Users")
                     .As(viewSelection)
                     .ToString();
@@ -76,7 +80,7 @@ CREATE VIEW View_Active_Users AS SELECT  *
         {
             using (var q = Query.New)
             {
-                var function=q._create
+                var function=q.Create
                     .Function("max")
                     .Parameter<int>("x")
                     .Parameter<int>("y")
@@ -122,24 +126,22 @@ END
         {
             using (var q = Query.New)
             {
-                var procedureQuery = q._create
+                q.Create
                     .Procedure("getUserInfo")
                     .Schema("dbo")
                     .Parameter<int>("userId")
                     .Body(f =>
                     {
-                        var userId = f.Parameter("userId");//procedure parameter
-                        var idColumn = f.Column("Id");//column of table
+                        var userId = f.Parameter("userId"); //procedure parameter
+                        var idColumn = f.Column("Id"); //column of table
 
-                        f.Select(select => select
+                        f.Select
                             .Top(1)
                             .From("Users")
-                            .Where(idColumn == userId) //equality condition
-                        );
+                            .Where(idColumn == userId); //equality condition
 
                         f.Return(0);
-                    })
-                    .ToString();
+                    });
 
                 const string originalQuery = @"
 CREATE PROCEDURE dbo.getUserInfo
@@ -157,7 +159,7 @@ END
 
 
 ";
-                QueryAssert.AreEqual(procedureQuery, originalQuery);
+                QueryAssert.AreEqual(q.ToString(), originalQuery);
             }
         }
 
@@ -167,7 +169,7 @@ END
             using (var t = Query.New)
             {
                 var queryThat = t
-                        ._create
+                        .Create
                         .Index("IX_Unique_Email")
                         .OnTable("Users")
                         .Columns("Email")
@@ -189,7 +191,7 @@ END
             using (var t = Query.New)
             {
                 var queryThat = t
-                        ._create
+                        .Create
                         .Database("FacebookDB")
                         .ToString()
                     ;

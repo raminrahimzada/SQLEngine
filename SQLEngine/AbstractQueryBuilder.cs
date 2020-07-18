@@ -5,6 +5,14 @@ using System.Text;
 
 namespace SQLEngine
 {
+    public interface IIfQueryBuilder : IAbstractQueryBuilder
+    {
+
+    }
+    public interface IElseIfQueryBuilder : IAbstractQueryBuilder
+    {
+
+    }
     public abstract class AbstractQueryBuilder : IAbstractQueryBuilder
     {
 

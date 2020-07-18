@@ -55,12 +55,39 @@ namespace SQLEngine.SqlServer
             {
                 if (type == typeof(string))
                 {
-                    return (C.NVARCHARMAX);
+                    return (C.NVARCHAR);
+                }
+            }
+            {
+                if (type == typeof(decimal))
+                {
+                    return (C.DECIMAL);
                 }
             }
             throw new Exception("Complex type " + type.FullName + " cannot be converted to sql type");
         }
 
+        public static IAlterTableNoNameAddColumnNoNameNoTypeNameNoSizeNoDefaultValueQueryBuilder DefaultValue(
+            this IAlterTableNoNameAddColumnNoNameNoTypeNameQueryBuilder builder,
+
+            SqlServerLiteral literal)
+        {
+            return builder.DefaultValue(literal);
+        }
+        public static IAlterTableNoNameAddColumnNoNameNoTypeNameQueryBuilder OfType
+        <T>(
+            this IAlterTableNoNameAddColumnNoNameQueryBuilder builder)
+        {
+            var sqlType = DetectSqlType<T>();
+            return builder.OfType(sqlType);
+        }
+        public static IAlterTableNoNameAddColumnNoNameNoTypeNameQueryBuilder OfType
+        <T>(
+            this IAlterTableNoNameAddColumnNoNameNoNullableQueryBuilder builder)
+        {
+            var sqlType = DetectSqlType<T>();
+            return builder.OfType(sqlType);
+        }
         public static IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeNoDefaultValueQueryBuilder DefaultValue(
             this IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeQueryBuilder builder,
             SqlServerLiteral literal)
@@ -100,6 +127,19 @@ namespace SQLEngine.SqlServer
             var expression =   column.ToSqlString() + " IN (" +
                             string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
             
+            return SqlServerCondition.Raw(expression);
+        }
+        public static AbstractSqlCondition In(this AbstractSqlColumn column
+            , Action<ISelectQueryBuilder> builderFunc)
+        {
+            string selection;
+            using (var builder=new SelectQueryBuilder())
+            {
+                builderFunc(builder);
+                selection = builder.Build();
+            }
+
+            var expression = $"{column.ToSqlString()} IN ({selection})";
             return SqlServerCondition.Raw(expression);
         }
 
@@ -217,11 +257,11 @@ namespace SQLEngine.SqlServer
         }
         public static void If(this IQueryBuilder builder,AbstractSqlCondition condition)
         {
-            builder.If(condition.ToSqlString());
+            builder.If(condition);
         }
         public static void ElseIf(this IQueryBuilder builder,AbstractSqlCondition condition)
         {            
-            builder.ElseIf(condition.ToSqlString());
+            builder.ElseIf(condition);
         }
         public static IInsertNoValuesQueryBuilder Values(this IInsertWithValuesQueryBuilder builder,
             Dictionary<string, SqlServerLiteral> colsAndValues)

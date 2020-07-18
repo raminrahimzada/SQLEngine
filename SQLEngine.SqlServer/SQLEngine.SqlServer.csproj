@@ -56,7 +56,7 @@
     <Compile Include="SqlServerConditionFilterQueryHelper.cs" />
     <Compile Include="DropDatabaseQueryBuilder.cs" />
     <Compile Include="FunctionBodyQueryBuilder.cs" />
-    <Compile Include="SQLExtensions.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="SqlServerHelper.cs" />
     <Compile Include="AlteredTableQueryBuilder.cs" />
     <Compile Include="AlterQueryBuilder.cs" />
@@ -87,7 +87,6 @@
     <Compile Include="FunctionQueryBuilder.cs" />
     <Compile Include="InsertQueryBuilder.cs" />
     <Compile Include="ProcedureArgumentDirectionTypes.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlServerColumn.cs" />
     <Compile Include="SqlServerColumnWithTableAlias.cs" />

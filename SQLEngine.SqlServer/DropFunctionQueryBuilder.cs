@@ -12,7 +12,7 @@
             _functionName = funcName;
             return this;
         }
-        public IDropFunctionNoSchemaQueryBuilder Schema(string schemaName)
+        public IDropFunctionNoSchemaQueryBuilder FromSchema(string schemaName)
         {
             _schemaName = schemaName;
             return this;

@@ -10,11 +10,11 @@ namespace SQLEngine.Tests
             using (var b = Query.New)
             {
                 var dropQuery = b
-                        ._drop
-                        .Function("fn_max")
-                        .Schema("dbo")
-                        .Build();
-                var query = @"
+                    .Drop
+                    .Function("fn_max")
+                    .FromSchema("dbo")
+                    .ToString();
+                const string query = @"
 DROP FUNCTION dbo.fn_max;
 ";
                 QueryAssert.AreEqual(dropQuery, query);
@@ -26,11 +26,11 @@ DROP FUNCTION dbo.fn_max;
             using (var b = Query.New)
             {
                 var dropQuery = b
-                    ._drop
+                    .Drop
                     .Table("Users")
                     .FromSchema("dbo")
-                    .Build();
-                var query = @"
+                    .ToString();
+                const string query = @"
 DROP TABLE dbo.Users 
 ";
                 QueryAssert.AreEqual(dropQuery, query);
@@ -42,12 +42,12 @@ DROP TABLE dbo.Users
             using (var b = Query.New)
             {
                 var dropQuery = b
-                    ._drop
+                    .Drop
                     .Table("Users")
                     .FromSchema("dbo")
                     .FromDB("facebook")
-                    .Build();
-                var query = @"
+                    .ToString();
+                const string query = @"
 DROP TABLE facebook.dbo.Users 
 ";
                 QueryAssert.AreEqual(dropQuery, query);
@@ -59,10 +59,10 @@ DROP TABLE facebook.dbo.Users
             using (var b = Query.New)
             {
                 var dropQuery = b
-                    ._drop
+                    .Drop
                     .Table<UserTable>()
-                    .Build();
-                var query = @"
+                    .ToString();
+                const string query = @"
 DROP TABLE Users 
 ";
                 QueryAssert.AreEqual(dropQuery, query);
@@ -74,12 +74,12 @@ DROP TABLE Users
             using (var b = Query.New)
             {
                 var dropQuery = b
-                    ._drop
+                    .Drop
                     .Table<UserTable>()
                     .FromSchema("dbo")
                     .FromDB("facebook")
-                    .Build();
-                var query = @"
+                    .ToString();
+                const string query = @"
 DROP TABLE facebook.dbo.Users 
 ";
                 QueryAssert.AreEqual(dropQuery, query);
@@ -90,11 +90,11 @@ DROP TABLE facebook.dbo.Users
             using (var b = Query.New)
             {
                 var dropQuery = b
-                    ._drop
+                    .Drop
                     .View("VW_Users")
                     .FromSchema("dbo")
-                    .Build();
-                var query = @"
+                    .ToString();
+                const string query = @"
 DROP VIEW dbo.VW_Users 
 ";
                 QueryAssert.AreEqual(dropQuery, query);
@@ -106,12 +106,12 @@ DROP VIEW dbo.VW_Users
             using (var b = Query.New)
             {
                 var dropQuery = b
-                    ._drop
+                    .Drop
                     .View("VW_Users")
                     .FromSchema("dbo")
                     .FromDB("facebook")
-                    .Build();
-                var query = @"
+                    .ToString();
+                const string query = @"
 DROP VIEW facebook.dbo.VW_Users
 ";
                 QueryAssert.AreEqual(dropQuery, query);
@@ -124,10 +124,10 @@ DROP VIEW facebook.dbo.VW_Users
             using (var b = Query.New)
             {
                 var dropQuery = b
-                    ._drop
+                    .Drop
                     .Database("facebook")
-                    .Build();
-                var query = @"
+                    .ToString();
+                const string query = @"
 DROP DATABASE facebook
 ";
                 QueryAssert.AreEqual(dropQuery, query);

@@ -94,7 +94,6 @@ namespace SQLEngine.SqlServer
 
             using (var o = Query.New)
             {
-                o.Join(this);
                 _bodyBuilder(o);
                 Writer.Indent--;
                 Writer.WriteLine(C.END);

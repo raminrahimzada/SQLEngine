@@ -6,16 +6,50 @@ namespace SQLEngine.Tests
     public partial class Test_Query_Builder_Sql_Server
     {
         [TestMethod]
+        public void Test_Experimental()
+        {
+            using (var t=new SqlServerQueryBuilder())
+            {
+                
+            }
+
+        }
+
+        [TestMethod]
         public void Test_Alter_Table_AddColumn()
         {
             using (var t = Query.New)
             {
                 var queryThat = t
-                        ._alter
+                        .Alter
                         .Table("Users")
                         .AddColumn("Age")
                         .NotNull()
                         .OfType("DECIMAL")
+                        .Size(18, 4)
+                        .DefaultValue(18)
+                        .ToString()
+                    ;
+                const string query =
+                    @"
+ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
+";
+
+                QueryAssert.AreEqual(queryThat, query);
+            }
+        }
+
+        [TestMethod]
+        public void Test_Alter_Table_AddColumn_OfType_Strong_Typed()
+        {
+            using (var t = Query.New)
+            {
+                var queryThat = t
+                        .Alter
+                        .Table("Users")
+                        .AddColumn("Age")
+                        .NotNull()
+                        .OfType<decimal>()
                         .Size(18, 4)
                         .DefaultValue(18)
                         .ToString()
@@ -34,7 +68,7 @@ ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
             using (var t = Query.New)
             {
                 var queryThat = t
-                        ._alter
+                        .Alter
                         .Table("Users")
                         .DropColumn("Age")
                         .ToString()
@@ -53,7 +87,7 @@ ALTER TABLE  Users  DROP  COLUMN  Age
             using (var t = Query.New)
             {
                 var queryThat = t
-                        ._alter
+                        .Alter
                         .Table("Users")
                         .RenameColumn("Age")
                         .To("Age_Of_User")
@@ -75,7 +109,7 @@ EXECUTE sys.sp_rename  @objtype=N'COLUMN'
             using (var t = Query.New)
             {
                 var queryThat = t
-                        ._alter
+                        .Alter
                         .Table("Users")
                         .AlterColumn("Name")
                         .Type("VARCHAR")
@@ -99,7 +133,7 @@ ALTER TABLE Users ALTER COLUMN Name VARCHAR(15) NOT NULL  DEFAULT ( N'Anonymous'
             using (var t = Query.New)
             {
                 var queryThat = t
-                        ._alter
+                        .Alter
                         .Table<UserTable>() //another form you can use
                         .AlterColumn("Weight")
                         .Type("decimal")

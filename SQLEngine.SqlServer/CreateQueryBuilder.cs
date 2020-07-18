@@ -2,33 +2,61 @@
 {
     internal class CreateQueryBuilder : AbstractQueryBuilder, ICreateQueryBuilder
     {
+        private IAbstractQueryBuilder _innerBuilder;
+
+        public CreateQueryBuilder()
+        {
+            
+        }
+        public override string Build()
+        {
+            return _innerBuilder.Build();
+        }
+
+        public override string ToString()
+        {
+            return Build();
+        }
+
         public ICreateTableQueryBuilder Table(string tableName)
         {
-            return  GetDefault<CreateTableQueryBuilder>().Name(tableName);
+            var x = GetDefault<CreateTableQueryBuilder>().Name(tableName);
+            _innerBuilder = x;
+            return x;
         }
         public ICreateFunctionNoNameQueryBuilder Function(string funcName)
         {
-            return GetDefault<CreateFunctionQueryBuilder>().Name(funcName);
+            var x = GetDefault<CreateFunctionQueryBuilder>().Name(funcName);
+            _innerBuilder = x;
+            return x;
         }
 
         public ICreateProcedureNoNameQueryBuilder Procedure(string procName)
         {
-            return GetDefault<CreateProcedureQueryBuilder>().Name(procName);
+            var x = GetDefault<CreateProcedureQueryBuilder>().Name(procName);
+            _innerBuilder = x;
+            return x;
         }
 
         public ICreateViewNoNameQueryBuilder View(string viewName)
         {
-            return GetDefault<CreateViewQueryBuilder>().Name(viewName);
+            var x = GetDefault<CreateViewQueryBuilder>().Name(viewName);
+            _innerBuilder = x;
+            return x;
         }
 
         public ICreateIndexNoNameQueryBuilder Index(string indexName)
         {
-            return GetDefault<CreateIndexQueryBuilder>().Name(indexName);
+            var x = GetDefault<CreateIndexQueryBuilder>().Name(indexName);
+            _innerBuilder = x;
+            return x;
         }
 
         public ICreateDatabaseNoNameQueryBuilder Database(string databaseName)
         {
-            return GetDefault<CreateDatabaseQueryBuilder>().Name(databaseName);
+            var x=GetDefault<CreateDatabaseQueryBuilder>().Name(databaseName);
+            _innerBuilder = x;
+            return x;
         }
     }
 }

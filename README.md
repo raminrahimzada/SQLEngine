@@ -8,8 +8,7 @@ SQL Engine is a library that eases of generating cross-dialect sql queries witho
 | | |
 | --- | --- |
 | **Build** | [![Build status](https://ci.appveyor.com/api/projects/status/r75p0yn5uo6colgk?svg=true&branch=master)](https://ci.appveyor.com/project/raminrahimzada/SQLEngine) |
-| **Coverage** | <sup>Coveralls</sup> [![Coverage Status](https://coveralls.io/repos/github/raminrahimzada/SQLEngine/badge.svg?branch=master)](https://coveralls.io/github/raminrahimzada/SQLEngine?branch=master)  <sup>SonarCloud</sup> [![SonarCloud](https://sonarcloud.io/api/project_badges/measure?project=SQLEngine&metric=coverage)](https://sonarcloud.io/dashboard?id=SQLEngine) | 
-| **Quality** | [![SonarCloud](https://sonarcloud.io/api/project_badges/measure?project=SQLEngine&metric=alert_status)](https://sonarcloud.io/dashboard?id=SQLEngine) [![GitHub issues](https://img.shields.io/github/issues-raw/raminrahimzada/SQLEngine.svg)](https://github.com/raminrahimzada/SQLEngine/issues) | 
+| **Quality** | [![SonarCloud](https://sonarcloud.io/api/project_badges/measure?project=raminrahimzada_SQLEngine&metric=alert_status)](https://sonarcloud.io/dashboard?id=SQLEngine) [![GitHub issues](https://img.shields.io/github/issues-raw/raminrahimzada/SQLEngine.svg)](https://github.com/raminrahimzada/SQLEngine/issues) | 
 | **Nuget** | [![Nuget](https://buildstats.info/nuget/SQLEngine)](http://nuget.org/packages/SQLEngine) |
 
 

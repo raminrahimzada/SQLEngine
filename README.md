@@ -11,15 +11,26 @@ SQL Engine is a library that eases of generating cross-dialect sql queries witho
 | **Quality** | [![SonarCloud](https://sonarcloud.io/api/project_badges/measure?project=raminrahimzada_SQLEngine&metric=alert_status)](https://sonarcloud.io/dashboard?id=SQLEngine) [![GitHub issues](https://img.shields.io/github/issues-raw/raminrahimzada/SQLEngine.svg)](https://github.com/raminrahimzada/SQLEngine/issues) | 
 | **Nuget** | [![Nuget](https://buildstats.info/nuget/SQLEngine)](http://nuget.org/packages/SQLEngine) |
 
-
-
-## [SqlEngine.SqlServer![NuGet version (SqlEngine.SqlServer)](https://img.shields.io/nuget/v/SqlEngine.SqlServer.svg)](https://www.nuget.org/packages/SQLEngine.SqlServer/)
+# Database Providers:
+| | |
+| --- | --- |
+|SqlEngine.SqlServer| [![NuGet version (SqlEngine.SqlServer)](https://img.shields.io/nuget/v/SqlEngine.SqlServer.svg)](https://www.nuget.org/packages/SQLEngine.SqlServer/) |
+|SqlEngine.Oracle|... |
+|SqlEngine.MySql| ... |
+|SqlEngine.PostgreSql| ... |
+|SqlEngine.Sqlite| ... |
+ 
 
 ## Configuration 
 ```cs
 Query.Setup<SqlServerQueryBuilder>();
 
-//Query.Setup<OracleQueryBuilder>();  Not Implemented yet, - Maybe  You can help ?
+//in development
+//Query.Setup<OracleQueryBuilder>();  
+//Query.Setup<MySqlQueryBuilder>(); 
+//Query.Setup<OracleQueryBuilder>(); 
+//Query.Setup<PostgreSqlQueryBuilder>(); 
+//Query.Setup<SqliteQueryBuilder>(); 
 ```
 <br/>Usage :
 
@@ -141,6 +152,7 @@ using (var b = Query.New)
 ```
 
 ## You can see other examples(insert,update,delete,drop,if-else,truncate alter and so on.) in <a href="https://github.com/raminrahimzada/SQLEngine/tree/master/SQLEngine.Tests">SqlServer.Tests</a>
+
 
 
 

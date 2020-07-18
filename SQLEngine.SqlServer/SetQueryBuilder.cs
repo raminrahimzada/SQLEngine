@@ -34,6 +34,7 @@ namespace SQLEngine.SqlServer
 
         public override string Build()
         {
+            Clear();
             _func(Writer);
             return base.Build();
         }

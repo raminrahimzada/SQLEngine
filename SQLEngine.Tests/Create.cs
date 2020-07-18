@@ -18,7 +18,7 @@ namespace SQLEngine.Tests
             //demonstration of create-table query
             using (var b = Query.New)
             {
-                string queryFromBuilder = b.Create.Table("Employees")
+                b.Create.Table("Employees")
                     .Columns(c => new[]
                     {
                         c.Long("ID").Identity(),
@@ -27,21 +27,22 @@ namespace SQLEngine.Tests
 
                         c.String("Name").MaxLength(50).Unique(),
                         c.Decimal("Weight"),
-                        
+
                         //custom column with all props
                         c.Column("Age").Type("INT").Check("Age>1 && Age<100"),
                         c.Datetime("BirthDate").DefaultValue("GETDATE()"),
                         c.Bool("HasDriverLicense"),
-                      
+
 
                         // two column index
-                        c.Int("Amount1").Unique("IX_Amount1_Amount2",descending:true),
+                        c.Int("Amount1").Unique("IX_Amount1_Amount2", descending: true),
                         c.Int("Amount2").Unique("IX_Amount1_Amount2"),
 
                         //calculated column
                         c.Column("Sum").CalculatedColumn("Amount1 + Amount2"),
-                    }).ToString()
-                    ;
+                    });
+                var query = b.ToString();
+                //TODO
             }
         }
 

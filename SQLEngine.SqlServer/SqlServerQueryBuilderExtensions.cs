@@ -67,6 +67,87 @@ namespace SQLEngine.SqlServer
             throw new Exception("Complex type " + type.FullName + " cannot be converted to sql type");
         }
 
+        public static ISelectOrderBuilder OrderBy(this ISelectWithoutWhereQueryBuilder builder, string columnName)
+        {
+            return builder.OrderBy(new SqlServerColumn(columnName));
+        }
+
+        public static ISelectOrderBuilder OrderByDesc(this ISelectWithoutWhereQueryBuilder builder, string columnName)
+        {
+            return builder.OrderByDesc(new SqlServerColumn(columnName));
+        }
+
+        public static ISelectOrderBuilder OrderBy(this ISelectWithoutWhereQueryBuilder builder,AbstractSqlColumn column)
+        {
+            return builder.OrderBy(column);
+        }
+
+        public static ISelectOrderBuilder OrderByDesc(this ISelectWithoutWhereQueryBuilder builder, AbstractSqlColumn column)
+        {
+            return builder.OrderByDesc(column);
+        }
+        public static ISelectWithSelectorQueryBuilder SelectAssign(this ISelectWithSelectorQueryBuilder builder, AbstractSqlVariable left, SqlServerLiteral literal)
+        {
+            return builder.SelectAssign(left, literal);
+        }
+        public static ISelectWithSelectorQueryBuilder SelectAssign(this ISelectWithSelectorQueryBuilder builder, AbstractSqlVariable left, AbstractSqlColumn column)
+        {
+            return builder.SelectAssign(left, column);
+        }
+        public static IAggregateFunctionBuilder Min(this IAggregateFunctionBuilder builder, string columnName)
+        {
+            return builder.Min(new SqlServerColumn(columnName));
+        }
+
+        public static IAggregateFunctionBuilder Max(this IAggregateFunctionBuilder builder, string columnName)
+        {
+            return builder.Max(new SqlServerColumn(columnName));
+        }
+
+        public static IAggregateFunctionBuilder Count(this IAggregateFunctionBuilder builder, string columnName)
+        {
+            return builder.Count(new SqlServerColumn(columnName));
+        }
+
+        public static IAggregateFunctionBuilder Sum(this IAggregateFunctionBuilder builder, string columnName)
+        {
+            return builder.Sum(new SqlServerColumn(columnName));
+        }
+
+        public static IAggregateFunctionBuilder Avg(this IAggregateFunctionBuilder builder, string columnName)
+        {
+            return builder.Avg(new SqlServerColumn(columnName));
+        }
+
+
+
+        public static ISelectWithoutFromAndGroupQueryBuilder GroupBy(this ISelectWithoutFromQueryBuilder builder,
+            params string[] columnNames)
+        {
+            var cols = columnNames
+                .Select(columnName => new SqlServerColumn(columnName))
+                .Cast<AbstractSqlColumn>()
+                .ToArray();
+            var result = builder.GroupBy(cols[0]);
+            for (int i = 1; i < cols.Length; i++)
+            {
+                result = result.GroupBy(cols[0]);
+            }
+
+            return result;
+        }
+        public static ISelectWithoutFromAndGroupQueryBuilder GroupBy(this ISelectWithoutFromQueryBuilder builder,
+            string columnName)
+        {
+            return builder
+                .GroupBy(new SqlServerColumn(columnName));
+        }
+        public static ISelectWithoutFromAndGroupQueryBuilder GroupByDesc(this ISelectWithoutFromQueryBuilder builder,
+            string columnName)
+        {
+            return builder
+                .GroupByDesc(new SqlServerColumn(columnName));
+        }
         public static IAlterTableNoNameAddColumnNoNameNoTypeNameNoSizeNoDefaultValueQueryBuilder DefaultValue(
             this IAlterTableNoNameAddColumnNoNameNoTypeNameQueryBuilder builder,
 

@@ -41,6 +41,7 @@
         }
         public override string Build()
         {
+            Clear();
             Writer.Write(C.DECLARE);
             Writer.Write2();
             Writer.Write(C.VARIABLE_HEADER);

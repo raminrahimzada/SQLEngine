@@ -17,6 +17,7 @@ namespace SQLEngine.SqlServer
 
         public override string ToSqlString()
         {
+            if (Name == C.WILCARD) return Name;
             if (!Name.All(char.IsLetterOrDigit)) return "[" + Name + "]";
             return Name;
         }

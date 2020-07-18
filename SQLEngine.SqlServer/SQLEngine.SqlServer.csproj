@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractConditionBuilder.cs" />
+    <Compile Include="AggregateFunctionBuilder.cs" />
     <Compile Include="AlterTableAddColumnQueryBuilder.cs" />
     <Compile Include="CreateDatabaseQueryBuilder.cs" />
     <Compile Include="CreateIndexQueryBuilder.cs" />

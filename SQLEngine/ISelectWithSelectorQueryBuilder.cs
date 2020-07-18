@@ -4,13 +4,14 @@ namespace SQLEngine
 {
     public interface ISelectWithSelectorQueryBuilder : IJoinedQueryBuilder
     {
-        ISelectWithSelectorQueryBuilder SelectAssign(string left,
-            Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> right);
+        //ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left,
+        //    Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> right);
 
-        ISelectWithSelectorQueryBuilder SelectAssign(string left, string right);
+        ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left, ISqlExpression right);
 
         ISelectWithSelectorQueryBuilder Select(AbstractSqlColumn column);
         ISelectWithSelectorQueryBuilder Select(ISqlExpression expression);
+        //ISelectWithSelectorQueryBuilder Select(IAggregateFunctionBuilder aggregate);
 
         //ISelectWithSelectorQueryBuilder Select(Func<ICaseWhenNeedWhenQueryBuilder, ICaseWhenNeedWhenQueryBuilder> selectorBuilder, string alias);
         ISelectWithSelectorQueryBuilder Select(ISqlExpression selector, string alias);
@@ -21,6 +22,6 @@ namespace SQLEngine
         ISelectWithoutFromQueryBuilder From(string tableName, string alias);
         ISelectWithoutFromQueryBuilder From(string tableName);
         ISelectWithoutFromQueryBuilder FromSubQuery(string query, string alias);
-
+        ISelectWithSelectorQueryBuilder Select(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate);
     }
 }

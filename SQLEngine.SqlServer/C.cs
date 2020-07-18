@@ -5,6 +5,10 @@
     /// </summary>
     public static class C
     {
+        public const string MIN = "MIN";
+        public const string AVG = "AVG";
+        public const string SUM = "SUM";
+        public const string COUNT = "COUNT";
         public const string BEGIN_SCOPE = "(";
         public const string END_SCOPE = ")";
         public const string SPACE = " ";
@@ -98,7 +102,7 @@
         public const string VARIABLE_HEADER = "@";
         public const string BEGIN = "BEGIN";
         public const string END = "END";
-        public const string GROUPBY = "GROUP BY";
+        public const string GROUP = "GROUP";
         public const string INNERJOIN = "INNER JOIN";
         public const string LEFTJOIN = "LEFT JOIN";
         public const string RIGHTJOIN = "RIGHT JOIN";

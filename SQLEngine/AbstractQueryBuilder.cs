@@ -20,6 +20,10 @@ namespace SQLEngine
 
         private StringBuilder _stringBuilder;
 
+        protected void Clear()
+        {
+            _stringBuilder.Clear();
+        }
         public void Join(AbstractQueryBuilder other)
         {
             Writer = other.Writer;

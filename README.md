@@ -40,12 +40,14 @@ using (var q = Query.New)
 {
     var id = q.Column("Id");
 
-    var query = q
-        ._select
+    q
+        .Select
         .Top(1)
         .From("Users")
         .Where(id==11)
         .ToString();
+ 
+     var query = q.ToString();
 }
 
 
@@ -54,12 +56,13 @@ using (var q = Query.New)
 {
     var id = q.Column("Id");
 
-    var query = q
-        ._select
+    q
+        .Select
         .Top(1)
         .From<UserTable>()
-        .Where(id==11)
-        .ToString();
+        .Where(id==11);
+
+     var query = q.ToString();
 }
 ```
 Above 2 queries will be like that:
@@ -76,14 +79,16 @@ using (var q = Query.New)
     var age = q.Column("Age");
     var height = q.Column("Height");
 
-    var query = q
-        ._select
+    q
+        .Select
         .Top(1)
         .Selector("Name")
         .Selector("Surname")
         .From("Users")
         .Where(age > 18 & height <= 1.7)
         .ToString();
+    
+    var query = q.ToString();
 }
 ```
 Above query will be like that:
@@ -95,7 +100,8 @@ SELECT TOP(1)  Name , Surname
 ## Demostration of left-right-inner joins
 ```cs
 var age = t.Column("Age");
-    var queryFromBuilder = t._select
+    t
+	    .Select
             .Top(1)
             .From("Users", "U")
             .Selector("Name")
@@ -106,6 +112,8 @@ var age = t.Column("Age");
             .Where(age > 18)
             .ToString()
         ;
+	
+  var query = q.ToString();
 ```        
 And the result will be
 ```sql
@@ -122,7 +130,9 @@ SELECT TOP(1)  Name , Surname
 ```sql            
 using (var b = Query.New)
 {
-    string sqlQuery = b._create.Table("Employees")
+    b
+        .Create
+        .Table("Employees")
         .Columns(c => new[]
         {
             c.Long("ID").Identity(),
@@ -144,10 +154,9 @@ using (var b = Query.New)
 
             //calculated column
             c.Column("Sum").CalculatedColumn("Amount1 + Amount2"),
-        }).ToString();
-
-        //then use that query where you want
-        //ExecuteRawSql(sqlQuery);
+        });
+        
+        var query = q.ToString();	
 }
 ```
 

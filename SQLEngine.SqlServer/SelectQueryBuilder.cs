@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace SQLEngine.SqlServer
 {
@@ -14,6 +15,33 @@ namespace SQLEngine.SqlServer
         ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder
 
     {
+        internal sealed class OrderByQueryModel
+        {
+            private readonly IAbstractQueryBuilder _internalBuilder;
+            private readonly bool? isDesc;
+            public OrderByQueryModel(AggregateFunctionBuilder aggregateFunction,bool? isDesc=false)
+            {
+                _internalBuilder = aggregateFunction;
+                this.isDesc = isDesc;
+            }
+
+            public OrderByQueryModel(ISqlExpression expression, bool? isDesc = false)
+            {
+                string expressionSql = expression.ToSqlString();
+                _internalBuilder = new RawStringQueryBuilder(w => w.Write(expressionSql));
+                this.isDesc = isDesc;
+            }
+
+            public void Build(ISqlWriter Writer)
+            {
+                _internalBuilder.Build(Writer);
+                if (isDesc??false)
+                {
+                    Writer.Write(C.SPACE);
+                    Writer.Write(C.DESC);
+                }
+            }
+        }
         private sealed class JoinModel
         {
             public string TableName { get; set; }
@@ -23,18 +51,54 @@ namespace SQLEngine.SqlServer
             public string MainTableColumnName { get; set; }
             public string RawCondition { get; set; }
         }
+        internal class SelectorCollection
+        {
+            private readonly List<string> _rawSqlQueryList = new List<string>();
 
+            public void Add(IAbstractQueryBuilder abstractQueryBuilder)
+            {                
+                var writer = SqlWriter.New;
+                abstractQueryBuilder.Build(writer);
+                _rawSqlQueryList.Add(writer.Build());
+                writer.Dispose();
+            }
+
+            public void Add(ISqlExpression expression)
+            {
+                _rawSqlQueryList.Add(expression.ToSqlString());
+            }
+
+            public void Add(OrderByQueryModel orderByQueryModel)
+            {
+                var writer = SqlWriter.New;
+                orderByQueryModel.Build(writer);
+                _rawSqlQueryList.Add(writer.Build());
+                writer.Dispose();
+            }
+
+            public void Add(string rawExpression)
+            {
+                _rawSqlQueryList.Add(rawExpression);
+            }
+
+            public int Count => _rawSqlQueryList.Count;
+
+            public string[] ToArray()
+            {
+                return _rawSqlQueryList.ToArray();
+            }
+        }
         private string _mainTableName;
         private string _mainTableQuery;
         private string _mainTableAliasName;
-        private List<string> _selectors;
+        private readonly SelectorCollection _selectors = new SelectorCollection();
         private string _whereClause;
         private int? _topClause;
         private bool? _hasDistinct;
         private List<JoinModel> _joinsList;
 
         private string _having;
-        private readonly List<Tuple<bool, string>> _orderByClauses = new List<Tuple<bool, string>>();
+        private readonly List<OrderByQueryModel> _orderByClauses = new List<OrderByQueryModel>();
         private readonly List<string> _groupByClauses=new List<string>();
 
         private static void MutateAliasName(ref string alias)
@@ -84,31 +148,24 @@ namespace SQLEngine.SqlServer
         public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left,
             ISqlExpression right)
         {
-            if (_selectors == null) _selectors = new List<string>();
-            var query = left + " = " + right.ToSqlString();
-            _selectors.Add(query);
+            _selectors.Add(new BinaryExpressionBuilder().Assign(left,right));
             return this;
         }
         public ISelectWithSelectorQueryBuilder Select(ISqlExpression expression)
         {
-            if (_selectors == null) _selectors = new List<string>();
-            _selectors.Add(expression.ToSqlString());
+            _selectors.Add(expression);
             return this;
         }
         public ISelectWithSelectorQueryBuilder Select(AbstractSqlColumn column)
         {
-            if (_selectors == null) _selectors = new List<string>();
-            _selectors.Add(column.ToSqlString());
+            _selectors.Add(column);
             return this;
         }
         public ISelectWithSelectorQueryBuilder Select(Action<IAggregateFunctionBuilder> body)
         {
-            if (_selectors == null) _selectors = new List<string>();
-            using (var a=new AggregateFunctionBuilder())
-            {
-                body(a);
-                _selectors.Add(a.Build());
-            }
+            var a = new AggregateFunctionBuilder();
+            body(a);
+            _selectors.Add(new OrderByQueryModel(a));
             return this;
         }
 
@@ -122,7 +179,6 @@ namespace SQLEngine.SqlServer
         public ISelectWithSelectorQueryBuilder Select(ISqlExpression selector, string alias)
         {
             MutateAliasName(ref alias);
-            if (_selectors == null) _selectors = new List<string>();
             //if (SQLKeywords.GetAll().Any(k => k == alias.ToUpperInvariant()))
             //{
             //    alias = SQLKeywords.BEGIN_SCOPE + alias + SQLKeywords.END_SCOPE;
@@ -151,7 +207,6 @@ namespace SQLEngine.SqlServer
         public ISelectWithSelectorQueryBuilder SelectCol(string tableAlias, string columnName, string alias = null)
         {
             MutateAliasName(ref alias);
-            if (_selectors == null) _selectors = new List<string>();
             _selectors.Add(string.IsNullOrEmpty(alias)
                 ? $"{tableAlias}.{columnName}"
                 : $"{tableAlias}.{columnName} {C.AS} {alias}");
@@ -342,94 +397,93 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
             ValidateAndThrow();
-            Clear();
-            Writer.Write(C.SELECT);
-            Writer.Write(C.SPACE);
+            writer.Write(C.SELECT);
+            writer.Write(C.SPACE);
             if (_hasDistinct != null)
             {
-                Writer.Write(C.DISTINCT);
-                Writer.Write2();
+                writer.Write(C.DISTINCT);
+                writer.Write2();
             }
             if (_topClause != null)
             {
-                Writer.Write(C.TOP);
-                Writer.WriteScoped(_topClause.Value.ToString());
-                Writer.Write2();
+                writer.Write(C.TOP);
+                writer.WriteScoped(_topClause.Value.ToString());
+                writer.Write2();
             }
 
             var hasSelector = _selectors != null && _selectors.Count > 0;
             if (!hasSelector)
             {
                 //no selector then select *
-                Writer.Write2(C.WILCARD);
+                writer.Write2(C.WILCARD);
             }
             else
             {
-                Writer.WriteJoined(_selectors.ToArray());
+                writer.WriteJoined(_selectors.ToArray());
             }
 
             //simple select -> select 1 as A 'test' as B
             if (string.IsNullOrWhiteSpace(_mainTableName))
             {
                 if (string.IsNullOrWhiteSpace(_mainTableQuery))
-                    return base.Build();
+                    return;
             }
 
-            Writer.WriteLine();
-            Writer.Indent++;
-            Writer.Write(C.FROM);
-            Writer.Write(C.SPACE);
+            writer.WriteLine();
+            writer.Indent++;
+            writer.Write(C.FROM);
+            writer.Write(C.SPACE);
             if (string.IsNullOrWhiteSpace(_mainTableQuery))
             {
-                Writer.Write(I(_mainTableName));
+                writer.Write(I(_mainTableName));
             }
             else
             {
-                Writer.Write(C.BEGIN_SCOPE);
-                Writer.Write(C.SPACE);
-                Writer.Write(_mainTableQuery);
-                Writer.Write(C.SPACE);
-                Writer.Write(C.END_SCOPE);
+                writer.Write(C.BEGIN_SCOPE);
+                writer.Write(C.SPACE);
+                writer.Write(_mainTableQuery);
+                writer.Write(C.SPACE);
+                writer.Write(C.END_SCOPE);
             }
-            Writer.Indent--;
+            writer.Indent--;
             if (!string.IsNullOrEmpty(_mainTableAliasName))
             {
-                Writer.Write2(C.AS);
-                Writer.Write(_mainTableAliasName);
+                writer.Write2(C.AS);
+                writer.Write(_mainTableAliasName);
             }
 
             if (_joinsList != null)
             {
                 foreach (var joinModel in _joinsList)
                 {
-                    Writer.WriteNewLine();
-                    Writer.Write(JoinQuery(joinModel));
+                    writer.WriteNewLine();
+                    writer.Write(JoinQuery(joinModel));
                 }
             }
 
             if (!string.IsNullOrEmpty(_whereClause))
             {
-                Writer.WriteLine();
-                Writer.Indent++;
-                Writer.Write(C.WHERE);
-                Writer.Write(C.SPACE);
-                Writer.Write(_whereClause);
-                Writer.Indent--;
+                writer.WriteLine();
+                writer.Indent++;
+                writer.Write(C.WHERE);
+                writer.Write(C.SPACE);
+                writer.Write(_whereClause);
+                writer.Indent--;
             }
 
             
 
             if (_groupByClauses.Any())
             {
-                Writer.WriteLine();
-                Writer.Indent++;
-                Writer.Write(C.GROUP);
-                Writer.Write(C.SPACE);
-                Writer.Write(C.BY);
-                Writer.Write(C.SPACE);
+                writer.WriteLine();
+                writer.Indent++;
+                writer.Write(C.GROUP);
+                writer.Write(C.SPACE);
+                writer.Write(C.BY);
+                writer.Write(C.SPACE);
                 bool first = true;
                 foreach (var groupByClause in _groupByClauses)
                 {
@@ -439,45 +493,56 @@ namespace SQLEngine.SqlServer
                     }
                     else
                     {
-                        Writer.Write(C.COMMA);
+                        writer.Write(C.COMMA);
                     }
-                    Writer.Write(groupByClause);
+                    writer.Write(groupByClause);
                 }
-                Writer.Write(C.SPACE);
+                writer.Write(C.SPACE);
 
-                Writer.Indent--;
+                writer.Indent--;
             }
 
             if (!string.IsNullOrEmpty(_having))
             {
-                Writer.WriteLine();
-                Writer.Indent++;
-                Writer.Write(C.HAVING);
-                Writer.Write(C.SPACE);
-                Writer.Write(_having);
-                Writer.Indent--;
+                writer.WriteLine();
+                writer.Indent++;
+                writer.Write(C.HAVING);
+                writer.Write(C.SPACE);
+                writer.Write(_having);
+                writer.Indent--;
             }
             if (_orderByClauses != null && _orderByClauses.Any())
             {
-                Writer.WriteLine();
-                Writer.Indent++;
-                Writer.Write(C.ORDER);
-                Writer.Write2(C.BY);
-                var orderByClauses = _orderByClauses.Select(tuple =>
-                    I(tuple.Item2) + C.SPACE + (tuple.Item1 ? C.ASC : C.DESC));
-                Writer.Write(orderByClauses.JoinWith());
+                writer.WriteLine();
+                writer.Indent++;
+                writer.Write(C.ORDER);
+                writer.Write2(C.BY);
+                bool first = true;
+
+                foreach (var orderByClause in _orderByClauses)
+                {
+                    if (first)
+                    {
+                        first = false;
+                    }
+                    else
+                    {
+                        writer.Write(C.COMMA);
+                    }
+
+                    orderByClause.Build(writer);
+                }
             }
-            return base.Build();
         }
 
         public ISelectOrderBuilder OrderBy(ISqlExpression expression)
         {
-            _orderByClauses.Add(new Tuple<bool, string>(true, expression.ToSqlString()));
+            _orderByClauses.Add(new OrderByQueryModel(expression));
             return this;
         }
         public ISelectOrderBuilder OrderByDesc(ISqlExpression expression)
         {
-            _orderByClauses.Add(new Tuple<bool, string>(false, expression.ToSqlString()));
+            _orderByClauses.Add(new OrderByQueryModel(expression, true));
             return this;
         }
 
@@ -505,11 +570,9 @@ namespace SQLEngine.SqlServer
             using (var b=new AggregateFunctionBuilder())
             {
                 aggregate(b);
-                if (_selectors == null) _selectors = new List<string>();
-                _selectors.Add(b.Build());
+                _selectors.Add(new OrderByQueryModel(b));
                 return this;
             }
-            
         }
         private string JoinQuery(JoinModel model)
         {
@@ -572,14 +635,13 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        public ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder OrderBy(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate)
+        public ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder 
+            OrderBy(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate)
         {
-            using (var b=new AggregateFunctionBuilder())
-            {
-                aggregate(b);
-                _orderByClauses.Add(new Tuple<bool, string>(true, b.Build()));
-                return this;
-            }
+            var b = new AggregateFunctionBuilder();
+            aggregate(b);
+            _orderByClauses.Add(new OrderByQueryModel(b));
+            return this;
         }
 
         public ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder OrderByDesc(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate)
@@ -587,7 +649,7 @@ namespace SQLEngine.SqlServer
             using (var b = new AggregateFunctionBuilder())
             {
                 aggregate(b);
-                _orderByClauses.Add(new Tuple<bool, string>(false, b.Build()));
+                _orderByClauses.Add(new OrderByQueryModel(b, false));
                 return this;
             }
         }

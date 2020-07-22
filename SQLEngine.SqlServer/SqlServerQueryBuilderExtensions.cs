@@ -5,7 +5,7 @@ using System.Linq;
 namespace SQLEngine.SqlServer
 {
     public static class SqlServerQueryBuilderExtensions
-    {
+    {        
         private static string DetectSqlType<T>()
         {
             var type = typeof(T);
@@ -67,6 +67,16 @@ namespace SQLEngine.SqlServer
             throw new Exception("Complex type " + type.FullName + " cannot be converted to sql type");
         }
 
+
+        public static void Print(this IQueryBuilder builder, SqlServerLiteral literal)
+        {
+            builder.Print(literal);
+        }
+        public static IColumnQueryBuilder Column<T>(this IColumnsCreateQueryBuilder builder,string columnName)
+        {
+            var sqlType = DetectSqlType<T>();
+            return builder.Column(columnName).Type(sqlType);
+        }
         public static ISelectOrderBuilder OrderBy(this ISelectWithoutWhereQueryBuilder builder, string columnName)
         {
             return builder.OrderBy(new SqlServerColumn(columnName));
@@ -213,15 +223,20 @@ namespace SQLEngine.SqlServer
         public static AbstractSqlCondition In(this AbstractSqlColumn column
             , Action<ISelectQueryBuilder> builderFunc)
         {
-            string selection;
+            var writer = SqlWriter.New;
+            writer.Write(column.ToSqlString());
+            writer.Write(C.SPACE);
+            writer.Write(C.IN);
+            writer.Write(C.SPACE);
+            writer.Write(C.BEGIN_SCOPE);
             using (var builder=new SelectQueryBuilder())
             {
                 builderFunc(builder);
-                selection = builder.Build();
+                builder.Build(writer);
             }
+            writer.Write(C.END_SCOPE);
 
-            var expression = $"{column.ToSqlString()} IN ({selection})";
-            return SqlServerCondition.Raw(expression);
+            return SqlServerCondition.Raw(writer.Build());
         }
 
         public static AbstractSqlCondition NotIn(this AbstractSqlColumn column

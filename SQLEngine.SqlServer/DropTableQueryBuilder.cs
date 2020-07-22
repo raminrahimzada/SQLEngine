@@ -3,7 +3,7 @@
     internal class DropTableQueryBuilder : AbstractQueryBuilder, 
         IDropTableQueryBuilder, IDropTableNoNameQueryBuilder,
         IDropTableNoNameNoSchemaQueryBuilder,
-        IDropTableNoNameNoSchemaNoDBQueryBuilder
+        IDropTableNoNameNoSchemaNoDbQueryBuilder
     {
         private string _databaseName;
         private string _tableName;
@@ -21,7 +21,7 @@
             _schemaName = schemaName;
             return this;
         }
-        public IDropTableNoNameNoSchemaNoDBQueryBuilder FromDB(string databaseName)
+        public IDropTableNoNameNoSchemaNoDbQueryBuilder FromDB(string databaseName)
         {
             _databaseName = databaseName;
             return this;
@@ -43,24 +43,22 @@
             base.ValidateAndThrow();
         }
 
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
-            Writer.Write(C.DROP);
-            Writer.Write2(C.TABLE);
+            writer.Write(C.DROP);
+            writer.Write2(C.TABLE);
             if (!string.IsNullOrEmpty(_databaseName))
             {
-                Writer.Write(I(_databaseName));
-                Writer.Write(C.DOT);
+                writer.Write(I(_databaseName));
+                writer.Write(C.DOT);
             }
             if (!string.IsNullOrEmpty(_schemaName))
             {
-                Writer.Write(I(_schemaName));
-                Writer.Write(C.DOT);
+                writer.Write(I(_schemaName));
+                writer.Write(C.DOT);
             }
-            Writer.Write(I(_tableName));
-            Writer.Write(C.SEMICOLON);
-
-            return base.Build();
+            writer.Write(I(_tableName));
+            writer.Write(C.SEMICOLON);
         }
     }
 }

@@ -48,6 +48,54 @@
             return SqlServerCondition.Raw(expression);
         }
 
+        protected override AbstractSqlCondition Greater(AbstractSqlColumn column)
+        {
+            var expression = ToSqlString() + " > " + column.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition GreaterEqual(AbstractSqlColumn column)
+        {
+            var expression = ToSqlString() + " >= " + column.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition Less(AbstractSqlColumn column)
+        {
+            var expression = ToSqlString() + " < " + column.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition LessEqual(AbstractSqlColumn column)
+        {
+            var expression = ToSqlString() + " <= " + column.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition EqualsTo(AbstractSqlColumn column)
+        {
+            var expression = ToSqlString() + " = " + column.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition NotEqualsTo(AbstractSqlColumn column)
+        {
+            var expression = ToSqlString() + " <> " + column.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition EqualsTo(AbstractSqlVariable variable)
+        {
+            var expression = ToSqlString() + " = " + variable.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition NotEqualsTo(AbstractSqlVariable variable)
+        {
+            var expression = ToSqlString() + " <> " + variable.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
         public override ISqlExpression Multiply(AbstractSqlVariable variable)
         {
             var expression = "(" + ToSqlString() + " * " + variable.ToSqlString() + ")";

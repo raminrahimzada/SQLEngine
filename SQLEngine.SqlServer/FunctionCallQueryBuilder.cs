@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SQLEngine.SqlServer
 {
@@ -22,22 +21,21 @@ namespace SQLEngine.SqlServer
             _arguments.Add(argument);
             return this;
         }
-        public IFunctionCallNeedArgQueryBuilder Arg(Func<FunctionCallQueryBuilder, FunctionCallQueryBuilder> builder)
+        //public IFunctionCallNeedArgQueryBuilder Arg(Func<FunctionCallQueryBuilder, FunctionCallQueryBuilder> builder)
+        //{
+        //    using (var f = GetDefault<FunctionCallQueryBuilder>())
+        //    {
+        //        var expression = builder(f);
+        //        _arguments.Add(expression);
+        //    }
+        //    return this;
+        //}
+        public override void Build(ISqlWriter writer)
         {
-            using (var f = GetDefault<FunctionCallQueryBuilder>())
-            {
-                var expression = builder(f).Build();
-                _arguments.Add(expression);
-            }
-            return this;
-        }
-        public override string Build()
-        {
-            Writer.Write(_functionName);//do not use I here
-            Writer.Write(C.BEGIN_SCOPE);
-            Writer.WriteJoined(_arguments);
-            Writer.Write(C.END_SCOPE);
-            return base.Build();
+            writer.Write(_functionName);//do not use I here
+            writer.Write(C.BEGIN_SCOPE);
+            writer.WriteJoined(_arguments);
+            writer.Write(C.END_SCOPE);
         }
     }
 }

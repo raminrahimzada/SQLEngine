@@ -4,6 +4,6 @@ namespace SQLEngine
 {
     public interface IAbstractQueryBuilder : IDisposable
     {
-        string Build();
+        void Build(ISqlWriter writer);
     }
 }

@@ -1,10 +1,11 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal class ExecuteQueryBuilder : AbstractQueryBuilder, IExecuteQueryBuilder
+    internal class ExecuteQueryBuilder :  IExecuteQueryBuilder
     {
         public IExecuteProcedureNeedArgQueryBuilder Procedure(string procedureName, bool withScope = true)
         {
-            return GetDefault<ExecuteProcedureQueryBuilder>().Name(procedureName, withScope);
+            var b = new ExecuteProcedureQueryBuilder();
+            return b.Name(procedureName, withScope);
         }
     }
 }

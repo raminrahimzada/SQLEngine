@@ -53,19 +53,18 @@
             return this;
         }
 
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
-            Clear();
-            Writer.Write(_functionName);
-            Writer.Write(C.BEGIN_SCOPE);
+            writer.Write(_functionName);
+            writer.Write(C.BEGIN_SCOPE);
             if (_isDistinct.HasValue)
             {
-                Writer.Write(_isDistinct.Value ? C.DISTINCT : C.ALL);
-                Writer.Write(C.SPACE);
+                writer.Write(_isDistinct.Value ? C.DISTINCT : C.ALL);
+                writer.Write(C.SPACE);
             }
-            Writer.Write(_expression.ToSqlString());
-            Writer.Write(C.END_SCOPE);
-            return base.Build();
+            writer.Write(_expression.ToSqlString());
+            writer.Write(C.END_SCOPE);
         }
+
     }
 }

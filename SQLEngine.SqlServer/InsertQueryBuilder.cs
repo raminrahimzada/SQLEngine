@@ -65,6 +65,21 @@ namespace SQLEngine.SqlServer
             _columnsAndValuesDictionary = colsAndValues;
             return this;
         }
+
+        public IInsertNoValuesQueryBuilder Values(Action<ISelectQueryBuilder> builder)
+        {
+            using (var writer=CreateNewWriter())
+            using (var select=new SelectQueryBuilder())
+            {
+                builder(select);
+                select.Build(writer);
+                _selection = writer.Build();
+            }
+
+            return this;
+        }
+
+
         public IInsertNoValuesQueryBuilder Values(params string[] values)
         {
             _valuesList = values;
@@ -75,76 +90,71 @@ namespace SQLEngine.SqlServer
             _columnNames = columnNames;
             return this;
         }
-        public IInsertNoValuesQueryBuilder Values(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> builder)
-        {
-            _selection = builder.Invoke(GetDefault<SelectQueryBuilder>()).Build();
-            return this;
-        }
-        public override string Build()
+        
+        public override void Build(ISqlWriter writer)
         {
             ValidateAndThrow();
 
-            Writer.Write(C.INSERT);
-            Writer.Write2(C.INTO);
-            Writer.Write(I(_tableName));
-            Writer.Write2(C.SPACE);
+            writer.Write(C.INSERT);
+            writer.Write2(C.INTO);
+            writer.Write(I(_tableName));
+            writer.Write2(C.SPACE);
 
             var columnNamesSafe = _columnNames?.Select(I).ToArray();
             if (_columnsAndValuesDictionary != null)
             {
-                Writer.WriteLine();
-                Writer.Indent++;
-                Writer.BeginScope();
-                Writer.WriteJoined(_columnsAndValuesDictionary.Keys.Select(I).ToArray());
-                Writer.EndScope();
-                Writer.WriteLine();
-                Writer.Indent--;
+                writer.WriteLine();
+                writer.Indent++;
+                writer.BeginScope();
+                writer.WriteJoined(_columnsAndValuesDictionary.Keys.Select(I).ToArray());
+                writer.EndScope();
+                writer.WriteLine();
+                writer.Indent--;
 
-                Writer.Write(C.VALUES);
-                Writer.WriteLine();
-                Writer.Indent++;
+                writer.Write(C.VALUES);
+                writer.WriteLine();
+                writer.Indent++;
 
-                Writer.BeginScope();
+                writer.BeginScope();
 
-                Writer.WriteJoined(_columnsAndValuesDictionary.Keys.Select(key => _columnsAndValuesDictionary[key].ToSqlString()).ToArray());
-                Writer.EndScope();
-                Writer.Indent--;
+                writer.WriteJoined(_columnsAndValuesDictionary.Keys.Select(key => _columnsAndValuesDictionary[key].ToSqlString()).ToArray());
+                writer.EndScope();
+                writer.Indent--;
             }
             else if (!string.IsNullOrEmpty(_selection))//selection mode
             {
                 if (_columnNames != null)
                 {
-                    Writer.BeginScope();
-                    Writer.WriteJoined(columnNamesSafe);
-                    Writer.EndScope();
+                    writer.BeginScope();
+                    writer.WriteJoined(columnNamesSafe);
+                    writer.EndScope();
                 }
-                Writer.Write(C.SPACE);
-                Writer.Write(_selection);
+                writer.Write(C.SPACE);
+                writer.Write(_selection);
             }
             else //normal model 
             {
                 if (_columnNames != null)
                 {
-                    Writer.WriteLine();
-                    Writer.Indent++;
-                    Writer.BeginScope();
-                    Writer.WriteJoined(columnNamesSafe);
-                    Writer.EndScope();
-                    Writer.Indent--;
+                    writer.WriteLine();
+                    writer.Indent++;
+                    writer.BeginScope();
+                    writer.WriteJoined(columnNamesSafe);
+                    writer.EndScope();
+                    writer.Indent--;
 
                 }
-                Writer.WriteLine();
+                writer.WriteLine();
 
-                Writer.Write(C.VALUES);
-                Writer.WriteLine();
-                Writer.Indent++;
+                writer.Write(C.VALUES);
+                writer.WriteLine();
+                writer.Indent++;
 
-                Writer.BeginScope();
-                Writer.WriteJoined(_valuesList);
-                Writer.EndScope();
-                Writer.Indent--;
+                writer.BeginScope();
+                writer.WriteJoined(_valuesList);
+                writer.EndScope();
+                writer.Indent--;
             }
-            return base.Build();
         }
         
     }

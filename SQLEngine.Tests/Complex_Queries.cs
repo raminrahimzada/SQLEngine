@@ -38,9 +38,9 @@ namespace SQLEngine.Tests
                 q.Print(subtract);
                 q.Print(multiply);
                 q.Print(divide);
-                var query = q.ToString();
+                
 
-                var queryOriginal = @"
+                var query = @"
 
 /*Declaring variables*/ 
 DECLARE  @x int ;
@@ -69,7 +69,7 @@ print(@divide)
 
 
 ";
-                QueryAssert.AreEqual(query, queryOriginal);
+                QueryAssert.AreEqual(q.ToString(), query);
 
             }
         }

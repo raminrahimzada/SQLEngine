@@ -1,13 +1,15 @@
-﻿namespace SQLEngine.SqlServer
+﻿using System;
+
+namespace SQLEngine.SqlServer
 {
     internal class CreateViewQueryBuilder : AbstractQueryBuilder, ICreateViewNoNameQueryBuilder,
         ICreateViewNoNameNoBodyQueryBuilder
     {
         private string _viewName;
-        private string _viewBody;
-        public ICreateViewNoNameNoBodyQueryBuilder As(string selection)
+        private Action<ISelectQueryBuilder> _selectionBuilder;
+        public ICreateViewNoNameNoBodyQueryBuilder As(Action<ISelectQueryBuilder> selectionBuilder)
         {
-            _viewBody = selection;
+            _selectionBuilder = selectionBuilder;
             return this;
         }
 
@@ -17,19 +19,21 @@
             return this;
         }
 
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
-            Writer.Write(C.CREATE);
-            Writer.Write(C.SPACE);
-            Writer.Write(C.VIEW);
-            Writer.Write(C.SPACE);
-            Writer.Write(_viewName);
-            Writer.Write(C.SPACE);
-            Writer.Write(C.AS);
-            Writer.Write(C.SPACE);
-            Writer.Write(_viewBody);
-
-            return base.Build();
+            writer.Write(C.CREATE);
+            writer.Write(C.SPACE);
+            writer.Write(C.VIEW);
+            writer.Write(C.SPACE);
+            writer.Write(_viewName);
+            writer.Write(C.SPACE);
+            writer.Write(C.AS);
+            writer.Write(C.SPACE);
+            using (var sb=new SelectQueryBuilder())
+            {
+                _selectionBuilder(sb);
+                sb.Build(writer);
+            }
         }
     }
 }

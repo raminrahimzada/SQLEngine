@@ -53,15 +53,17 @@
     <Compile Include="Drop.cs" />
     <Compile Include="Delete.cs" />
     <Compile Include="Complex_Queries.cs" />
+    <Compile Include="PhotosTable.cs" />
     <Compile Include="QueryAssert.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="DeclareAndSet.cs" />
+    <Compile Include="SalesTable.cs" />
     <Compile Include="Update.cs" />
     <Compile Include="Insert.cs" />
     <Compile Include="IfElse.cs" />
     <Compile Include="Select.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserTable.cs" />
+    <Compile Include="_ExampleStrongTypedTables.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

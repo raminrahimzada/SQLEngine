@@ -66,9 +66,9 @@ SELECT TOP(1)  *
 
                 const string queryThat = @"
 SELECT TOP(1)   * 
-        FROM Users
-        WHERE Age = 17
-        ORDER BY Id ASC
+    FROM Users
+    WHERE Age = 17
+    ORDER BY Id
 
 ";
                 QueryAssert.AreEqual(q.ToString(), queryThat);
@@ -99,14 +99,10 @@ SELECT TOP(1)   *
 
                 const string queryThat = @"
 DECLARE  @myCreatedDate DATETIME ;
-
-SELECT TOP(1)  @myCreatedDate = CreatedDate
-                                FROM Users
-                                WHERE Id = 17
-                                ORDER BY Id ASC
-
-
-
+SELECT TOP(1)  @myCreatedDate=CreatedDate
+    FROM Users
+    WHERE Id = 17
+    ORDER BY Id
 ";
                 QueryAssert.AreEqual(q.ToString(), queryThat);
 
@@ -431,13 +427,10 @@ SELECT TOP(1)  Age , COUNT(U.*)
 
                 string query = @"
 SELECT TOP(1)  Age , COUNT(U.*)
-                FROM Users AS U
-                GROUP BY Age 
-                HAVING count(Age) > 5
-                ORDER BY COUNT(Id) DESC
-
-
-
+    FROM Users AS U
+    GROUP BY Age 
+    HAVING count(Age) > 5
+    ORDER BY COUNT(Id)
 ";
                 QueryAssert.AreEqual(q.ToString(), query);
 

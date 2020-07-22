@@ -4,13 +4,12 @@
     {
         private string _databaseName;
 
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
-            Writer.Write(C.DROP);
-            Writer.Write(C.DATABASE);
-            Writer.Write(C.SPACE);
-            Writer.Write(_databaseName);
-            return base.Build();
+            writer.Write(C.DROP);
+            writer.Write(C.DATABASE);
+            writer.Write(C.SPACE);
+            writer.Write(_databaseName);
         }
 
         public IDropDatabaseNoNameQueryBuilder Database(string databaseName)

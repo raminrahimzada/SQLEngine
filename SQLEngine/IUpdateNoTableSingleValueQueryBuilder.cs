@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace SQLEngine
+﻿namespace SQLEngine
 {
     public interface IUpdateNoTableSingleValueQueryBuilder : IAbstractUpdateQueryBuilder
     {
-        IUpdateNoTableSingleValueQueryBuilder Value(string columnName,
-            Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> builder);
+        //IUpdateNoTableSingleValueQueryBuilder Value(string columnName,
+        //    Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> builder);
 
         IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue);
 

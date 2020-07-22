@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SQLEngine.SqlServer
 {
-    internal class ExecuteProcedureQueryBuilder : ExecuteQueryBuilder, IExecuteProcedureNeedNameQueryBuilder, IExecuteProcedureNeedArgQueryBuilder
+    internal class ExecuteProcedureQueryBuilder : AbstractQueryBuilder, IExecuteProcedureNeedNameQueryBuilder, IExecuteProcedureNeedArgQueryBuilder
     {
         private string _procedureName;
         private bool _withScope;
@@ -48,15 +48,15 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
             ValidateAndThrow();
-            Writer.Write(C.EXECUTE);
-            Writer.Write(C.SPACE);
+            writer.Write(C.EXECUTE);
+            writer.Write(C.SPACE);
 
-            Writer.Write(_withScope ? I(_procedureName) : _procedureName);
+            writer.Write(_withScope ? I(_procedureName) : _procedureName);
 
-            Writer.Write2();
+            writer.Write2();
 
             if (_parametersDictionary != null)
             {
@@ -69,26 +69,25 @@ namespace SQLEngine.SqlServer
                         var value = p.Item2;
                         var direction = p.Item3;
 
-                        Writer.Write(C.VARIABLE_HEADER);
-                        Writer.Write(key);
-                        Writer.Write(C.EQUALS);
-                        Writer.Write(value);
+                        writer.Write(C.VARIABLE_HEADER);
+                        writer.Write(key);
+                        writer.Write(C.EQUALS);
+                        writer.Write(value);
                         if (direction == ProcedureArgumentDirectionTypes.OUT)
                         {
-                            Writer.Write2(C.OUTPUT);
+                            writer.Write2(C.OUTPUT);
                         }
                         if (i != _parametersDictionary.Count - 1)
                         {
-                            Writer.WriteNewLine();
-                            Writer.Write(C.COMMA);
+                            writer.WriteNewLine();
+                            writer.Write(C.COMMA);
                         }
                         i++;
                     }
                 }
             }
 
-            Writer.WriteLine(C.SEMICOLON);
-            return base.Build();
+            writer.WriteLine(C.SEMICOLON);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace SQLEngine.SqlServer
@@ -47,13 +46,13 @@ namespace SQLEngine.SqlServer
             _columnsAndValuesDictionary.Add(columnName, columnValue.ToSqlString());
             return this;
         }
-        public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> builder)
-        {
-            var columnValue = builder(GetDefault<BinaryExpressionBuilder>()).Build();
-            if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, string>();
-            _columnsAndValuesDictionary.Add(columnName, columnValue);
-            return this;
-        }
+        //public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> builder)
+        //{
+        //    var columnValue = builder(GetDefault<BinaryExpressionBuilder>()).Build();
+        //    if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, string>();
+        //    _columnsAndValuesDictionary.Add(columnName, columnValue);
+        //    return this;
+        //}
 
         //public UpdateQueryBuilder Columns(params string[] columnNames)
         //{
@@ -80,11 +79,11 @@ namespace SQLEngine.SqlServer
             _whereCondition = condition.ToSqlString();
             return this;
         }
-        public IUpdateNoTableAndValuesAndWhereQueryBuilder Where(Func<AbstractConditionBuilder, AbstractConditionBuilder> builder)
-        {
-            _whereCondition = builder.Invoke(GetDefault<AbstractConditionBuilder>()).Build();
-            return this;
-        }
+        //public IUpdateNoTableAndValuesAndWhereQueryBuilder Where(Func<AbstractConditionBuilder, AbstractConditionBuilder> builder)
+        //{
+        //    _whereCondition = builder.Invoke(GetDefault<AbstractConditionBuilder>()).Build();
+        //    return this;
+        //}
 
         public IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression right)
         {
@@ -98,21 +97,21 @@ namespace SQLEngine.SqlServer
         //    return this;
         //}
 
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
             Validate();
 
-            Writer.Write2(C.UPDATE);
+            writer.Write2(C.UPDATE);
             if (_topClause != null)
             {
-                Writer.Write(C.TOP);
-                Writer.WriteScoped(_topClause.Value.ToString());
-                Writer.Write(C.SPACE);
+                writer.Write(C.TOP);
+                writer.WriteScoped(_topClause.Value.ToString());
+                writer.Write(C.SPACE);
             }
-            Writer.Write(I(_tableName));
-            Writer.WriteLine();
-            Writer.Indent++;
-            Writer.Write2(C.SET);
+            writer.Write(I(_tableName));
+            writer.WriteLine();
+            writer.Indent++;
+            writer.Write2(C.SET);
             if (_columnsAndValuesDictionary != null)
             {
                 var keys = _columnsAndValuesDictionary.Keys.ToArray();
@@ -120,23 +119,23 @@ namespace SQLEngine.SqlServer
                 {
                     var key = keys[i];
                     var value = _columnsAndValuesDictionary[key];
-                    Writer.Write(I(key));
-                    Writer.Write2(C.EQUALS);
-                    Writer.Write(value);
+                    writer.Write(I(key));
+                    writer.Write2(C.EQUALS);
+                    writer.Write(value);
                     if (i != _columnsAndValuesDictionary.Count - 1)
-                        Writer.Write2(C.COMMA);
+                        writer.Write2(C.COMMA);
                 }
             }
 
             if (!string.IsNullOrEmpty(_whereCondition))
             {
-                Writer.WriteLine();
-                Writer.Write2(C.WHERE);
-                Writer.WriteScoped(_whereCondition);
+                writer.WriteLine();
+                writer.Write2(C.WHERE);
+                writer.WriteScoped(_whereCondition);
             }
-            Writer.Indent--;
-
-            return base.Build();
+            writer.Indent--;
         }
+
+      
     }
 }

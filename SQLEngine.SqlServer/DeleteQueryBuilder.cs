@@ -23,26 +23,25 @@
             _whereCondition = condition.ToSqlString();
             return this;
         }
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
             ValidateAndThrow();
-            Writer.Write2(C.DELETE);
+            writer.Write2(C.DELETE);
             if (_topClause != null)
             {
-                Writer.Write(C.TOP);
-                Writer.WriteScoped(_topClause.Value.ToString());
-                Writer.Write2();
+                writer.Write(C.TOP);
+                writer.WriteScoped(_topClause.Value.ToString());
+                writer.Write2();
             }
-            Writer.Write2(C.FROM);
+            writer.Write2(C.FROM);
 
-            Writer.Write(I(_tableName));
+            writer.Write(I(_tableName));
 
             if (!string.IsNullOrEmpty(_whereCondition))
             {
-                Writer.Write2(C.WHERE);
-                Writer.WriteScoped(_whereCondition);
+                writer.Write2(C.WHERE);
+                writer.WriteScoped(_whereCondition);
             }
-            return base.Build();
         }
     }
 }

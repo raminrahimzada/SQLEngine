@@ -13,6 +13,60 @@
         protected abstract AbstractSqlCondition GreaterEqual(AbstractSqlVariable abstractSqlVariable);
         protected abstract AbstractSqlCondition Less(AbstractSqlVariable abstractSqlVariable);
         protected abstract AbstractSqlCondition LessEqual(AbstractSqlVariable abstractSqlVariable);
+        
+        
+        protected abstract AbstractSqlCondition Greater(AbstractSqlColumn column);
+        protected abstract AbstractSqlCondition GreaterEqual(AbstractSqlColumn column);
+        protected abstract AbstractSqlCondition Less(AbstractSqlColumn column);
+        protected abstract AbstractSqlCondition LessEqual(AbstractSqlColumn column);
+
+
+        public static AbstractSqlCondition operator ==(AbstractSqlVariable x, AbstractSqlColumn y)
+        {
+            return x.EqualsTo(y);
+        }
+
+        protected abstract AbstractSqlCondition EqualsTo(AbstractSqlColumn column);
+        protected abstract AbstractSqlCondition NotEqualsTo(AbstractSqlColumn column);
+        
+        protected abstract AbstractSqlCondition EqualsTo(AbstractSqlVariable variable);
+        protected abstract AbstractSqlCondition NotEqualsTo(AbstractSqlVariable variable);
+
+        public static AbstractSqlCondition operator !=(AbstractSqlVariable x, AbstractSqlColumn y)
+        {
+            return x.NotEqualsTo(y);
+        }
+        public static AbstractSqlCondition operator ==(AbstractSqlVariable x, AbstractSqlVariable y)
+        {
+            return x.EqualsTo(y);
+        }
+
+        public static AbstractSqlCondition operator !=(AbstractSqlVariable x, AbstractSqlVariable y)
+        {
+            return x.NotEqualsTo(y);
+        }
+
+
+        public static AbstractSqlCondition operator <(AbstractSqlVariable x, AbstractSqlColumn y)
+        {
+            return x.Less(y);
+        }
+        public static AbstractSqlCondition operator <=(AbstractSqlVariable x, AbstractSqlColumn y)
+        {
+            return x.LessEqual(y);
+        }
+
+        public static AbstractSqlCondition operator >(AbstractSqlVariable x, AbstractSqlColumn y)
+        {
+            return x.Greater(y);
+        }
+        public static AbstractSqlCondition operator >=(AbstractSqlVariable x, AbstractSqlColumn y)
+        {
+            return x.GreaterEqual(y);
+        }
+
+
+
 
 
         public static AbstractSqlCondition operator <(AbstractSqlVariable x, AbstractSqlVariable y)

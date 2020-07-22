@@ -94,67 +94,66 @@ namespace SQLEngine.SqlServer
 
 
 
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
-            Writer.Write(I(Model.Name));
+            writer.Write(I(Model.Name));
             if (!string.IsNullOrEmpty(Model.CalculatedColumnExpression))
             {
-                Writer.Write2(C.AS);
-                Writer.WriteScoped(Model.CalculatedColumnExpression);
-                if (Model.IsPersisted ?? false) Writer.Write2(C.PERSISTED);
-                return base.Build();
+                writer.Write2(C.AS);
+                writer.WriteScoped(Model.CalculatedColumnExpression);
+                if (Model.IsPersisted ?? false) writer.Write2(C.PERSISTED);
+                return;
             }
-            Writer.Write2(Model.Type);
+            writer.Write2(Model.Type);
 
             if (Model.MaxLength != null)
             {
-                Writer.WriteScoped(Model.MaxLength);
-                Writer.Write(C.SPACE);
+                writer.WriteScoped(Model.MaxLength);
+                writer.Write(C.SPACE);
             }
             else
             {
                 if (((IList)new[] { C.NVARCHAR, C.VARCHAR, C.NCHAR, C.CHAR }).Contains(Model.Type))
                 {
-                    Writer.Write(C.BEGIN_SCOPE);
-                    Writer.Write(C.MAX);
-                    Writer.Write(C.END_SCOPE);
-                    Writer.Write(C.SPACE);
+                    writer.Write(C.BEGIN_SCOPE);
+                    writer.Write(C.MAX);
+                    writer.Write(C.END_SCOPE);
+                    writer.Write(C.SPACE);
                 }
             }
             if (Model.Type == C.DECIMAL)
             {
-                Writer.Write(C.BEGIN_SCOPE);
-                Writer.Write(Model.Precision);
-                Writer.Write(C.COMMA);
-                Writer.Write(Model.Scale);
-                Writer.Write(C.END_SCOPE);
-                Writer.Write(C.SPACE);
+                writer.Write(C.BEGIN_SCOPE);
+                writer.Write(Model.Precision);
+                writer.Write(C.COMMA);
+                writer.Write(Model.Scale);
+                writer.Write(C.END_SCOPE);
+                writer.Write(C.SPACE);
             }
             if (Model.IsIdentity ?? false)
             {
-                Writer.Write(C.IDENTITY);
-                Writer.Write(C.BEGIN_SCOPE);
-                Writer.Write(Model.IdentityStart);
-                Writer.Write(C.COMMA);
-                Writer.Write(Model.IdentityStep);
-                Writer.Write(C.END_SCOPE);
+                writer.Write(C.IDENTITY);
+                writer.Write(C.BEGIN_SCOPE);
+                writer.Write(Model.IdentityStart);
+                writer.Write(C.COMMA);
+                writer.Write(Model.IdentityStep);
+                writer.Write(C.END_SCOPE);
             }
 
             if (Model.NotNull ?? false)
             {
-                Writer.Write2(C.NOT);
+                writer.Write2(C.NOT);
             }
-            Writer.Write(C.NULL);
+            writer.Write(C.NULL);
 
             if (!string.IsNullOrEmpty(Model.CheckExpression))
             {
-                Writer.Write2(C.CHECK);
-                Writer.Write2(C.BEGIN_SCOPE);
-                Writer.Write(Model.CheckExpression);
-                Writer.Write2(C.END_SCOPE);
-                Writer.Write(C.SPACE);
+                writer.Write2(C.CHECK);
+                writer.Write2(C.BEGIN_SCOPE);
+                writer.Write(Model.CheckExpression);
+                writer.Write2(C.END_SCOPE);
+                writer.Write(C.SPACE);
             }
-            return base.Build();
         }
 
         protected override void ValidateAndThrow()

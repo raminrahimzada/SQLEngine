@@ -1,8 +1,6 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 // ReSharper disable UnusedMemberInSuper.Global
 // ReSharper disable InconsistentNaming
@@ -27,12 +25,12 @@ namespace SQLEngine.SqlServer
 
         public  string Build()
         {
-            var sb = new StringBuilder();
+            var Writer = SqlWriter.New;
             foreach (var builder in _list)
             {
-                sb.AppendLine(builder.Build());
+                builder.Build(Writer);
             }
-            return sb.ToString();
+            return Writer.Build();
         }
 
         
@@ -87,11 +85,9 @@ namespace SQLEngine.SqlServer
 
         public void Truncate(string tableName)
         {
-            using (var t=new TruncateQueryBuilder())
-            {
-                var expression = t.Table(tableName).Build();
-                _list.Add(new RawStringQueryBuilder(Writer => Writer.WriteLineEx(expression)));
-            }
+            var t = new TruncateQueryBuilder();
+            var expression = t.Table(tableName);
+            _list.Add(expression);
         }
 
         public IIfQueryBuilder IfOr(params AbstractSqlCondition[] conditions)
@@ -166,10 +162,10 @@ namespace SQLEngine.SqlServer
 
         public AbstractSqlVariable Declare(string variableName, string type, AbstractSqlLiteral defaultValue = null)
         {
-            using (var t = new DeclarationQueryBuilder())
+            var t = new DeclarationQueryBuilder();
             {
-                var expression = t.Declare(variableName).OfType(type).Default(defaultValue?.ToString()).Build();
-                _list.Add(new RawStringQueryBuilder(Writer => Writer.WriteLineEx(expression)));
+                var expression = t.Declare(variableName).OfType(type).Default(defaultValue?.ToSqlString());
+                _list.Add(expression);
                 return new SqlServerVariable(variableName);
             }
         }
@@ -183,24 +179,24 @@ namespace SQLEngine.SqlServer
         {
             using (var t = new SetQueryBuilder())
             {
-                var expression = t.Set(variable).To(value).Build();
-                _list.Add(new RawStringQueryBuilder(Writer => Writer.WriteLineEx(expression)));
+                var expression = t.Set(variable).To(value);
+                _list.Add(expression);
             }
         }
         public void Set(AbstractSqlVariable variable, AbstractSqlVariable value)
         {
             using (var t = new SetQueryBuilder())
             {
-                var expression = t.Set(variable).To(value).Build();
-                _list.Add(new RawStringQueryBuilder(Writer => Writer.WriteLineEx(expression)));
+                var expression = t.Set(variable).To(value);
+                _list.Add(expression);
             }
         }
         public void Set(AbstractSqlVariable variable, AbstractSqlLiteral value)
         {
             using (var t = new SetQueryBuilder())
             {
-                var expression = t.Set(variable).To(value).Build();
-                _list.Add(new RawStringQueryBuilder(Writer => Writer.WriteLineEx(expression)));
+                var expression = t.Set(variable).To(value);
+                _list.Add(expression);
             }
         }
         //public void Set(ISqlVariable variable, Func<ICastQueryBuilder, ICastQueryBuilder> q)
@@ -258,7 +254,7 @@ namespace SQLEngine.SqlServer
             _list.Add(new RawStringQueryBuilder(writer =>
             {
                 writer.Write(C.RETURN);
-                writer.WriteWithScoped(expression.ToSqlString());
+                writer.Write(expression.ToSqlString());
                 writer.WriteLine();
             }));
         }
@@ -391,7 +387,7 @@ namespace SQLEngine.SqlServer
             {
                 writer.Write("print");
                 writer.Write(C.BEGIN_SCOPE);
-                writer.Write(expression);
+                writer.Write(expression.ToSqlString());
                 writer.Write(C.END_SCOPE);
                 writer.WriteLine();
             }));

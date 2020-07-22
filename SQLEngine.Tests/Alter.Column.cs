@@ -20,22 +20,21 @@ namespace SQLEngine.Tests
         {
             using (var t = Query.New)
             {
-                var queryThat = t
-                        .Alter
-                        .Table("Users")
-                        .AddColumn("Age")
-                        .NotNull()
-                        .OfType("DECIMAL")
-                        .Size(18, 4)
-                        .DefaultValue(18)
-                        .ToString()
-                    ;
+                t
+                    .Alter
+                    .Table("Users")
+                    .AddColumn("Age")
+                    .NotNull()
+                    .OfType("DECIMAL")
+                    .Size(18, 4)
+                    .DefaultValue(18);
+
                 const string query =
                     @"
 ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ";
 
-                QueryAssert.AreEqual(queryThat, query);
+                QueryAssert.AreEqual(t.Build(), query);
             }
         }
 
@@ -44,7 +43,7 @@ ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
         {
             using (var t = Query.New)
             {
-                var queryThat = t
+                t
                         .Alter
                         .Table("Users")
                         .AddColumn("Age")
@@ -52,14 +51,13 @@ ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
                         .OfType<decimal>()
                         .Size(18, 4)
                         .DefaultValue(18)
-                        .ToString()
                     ;
                 const string query =
                     @"
 ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ";
 
-                QueryAssert.AreEqual(queryThat, query);
+                QueryAssert.AreEqual(t.ToString(), query);
             }
         }
         [TestMethod]
@@ -67,18 +65,17 @@ ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
         {
             using (var t = Query.New)
             {
-                var queryThat = t
+                t
                         .Alter
                         .Table("Users")
                         .DropColumn("Age")
-                        .ToString()
                     ;
                 const string query =
                     @"
 ALTER TABLE  Users  DROP  COLUMN  Age 
 ";
 
-                QueryAssert.AreEqual(queryThat, query);
+                QueryAssert.AreEqual(t.ToString(), query);
             }
         }
         [TestMethod]
@@ -86,12 +83,11 @@ ALTER TABLE  Users  DROP  COLUMN  Age
         {
             using (var t = Query.New)
             {
-                var queryThat = t
+                t
                         .Alter
                         .Table("Users")
                         .RenameColumn("Age")
                         .To("Age_Of_User")
-                        .ToString()
                     ;
                 const string query =
                     @"
@@ -100,7 +96,7 @@ EXECUTE sys.sp_rename  @objtype=N'COLUMN'
 	,@newname=N'Age_Of_User';
 ";
 
-                QueryAssert.AreEqual(queryThat, query);
+                QueryAssert.AreEqual(t.ToString(), query);
             }
         }
         [TestMethod]
@@ -108,7 +104,7 @@ EXECUTE sys.sp_rename  @objtype=N'COLUMN'
         {
             using (var t = Query.New)
             {
-                var queryThat = t
+                t
                         .Alter
                         .Table("Users")
                         .AlterColumn("Name")
@@ -116,14 +112,13 @@ EXECUTE sys.sp_rename  @objtype=N'COLUMN'
                         .NotNull()
                         .Size(15)
                         .DefaultValue("Anonymous")
-                        .ToString()
                     ;
                 const string query =
                     @"
 ALTER TABLE Users ALTER COLUMN Name VARCHAR(15) NOT NULL  DEFAULT ( N'Anonymous' )
 ";
 
-                QueryAssert.AreEqual(queryThat, query);
+                QueryAssert.AreEqual(t.ToString(), query);
             }
         }
         
@@ -132,21 +127,20 @@ ALTER TABLE Users ALTER COLUMN Name VARCHAR(15) NOT NULL  DEFAULT ( N'Anonymous'
         {
             using (var t = Query.New)
             {
-                var queryThat = t
+                t
                         .Alter
                         .Table<UserTable>() //another form you can use
                         .AlterColumn("Weight")
                         .Type("decimal")
                         .NotNull()
                         .Size(18, 4)
-                        .ToString()
                     ;
                 const string query =
                     @"
 ALTER TABLE Users ALTER COLUMN Weight decimal(18,4) NOT NULL 
 ";
 
-                QueryAssert.AreEqual(queryThat, query);
+                QueryAssert.AreEqual(t.ToString(), query);
             }
         }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SQLEngine.SqlServer;
 
 namespace SQLEngine.Tests
@@ -9,20 +8,20 @@ namespace SQLEngine.Tests
         [TestMethod]
         public void Test_Delete_Table_1()
         {
-            using (var b = Query.New)
+            using (var q = Query.New)
             {
-                var id = b.Column("Id");
+                var id = q.Column("Id");
                 
-                var queryThat = b
+                q
                     .Delete
                     .Table("Users")
                     .Where(id == 111)
-                    .ToString();
+                    ;
 
                 var query = @"
 DELETE from Users WHERE Id = 111
 ";
-                QueryAssert.AreEqual(queryThat, query);
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
         [TestMethod]
@@ -32,16 +31,16 @@ DELETE from Users WHERE Id = 111
             {
                 var id = b.Column("Id");
 
-                var queryThat=b
+                b
                     .Delete
                     .Table<UserTable>()
                     .Where(id == 111)
-                    .ToString();
+                    ;
 
                 const string query = @"
 DELETE from Users WHERE Id = 111
 ";
-                QueryAssert.AreEqual(queryThat, query);
+                QueryAssert.AreEqual(b.ToString(), query);
             }
         }
         
@@ -52,16 +51,16 @@ DELETE from Users WHERE Id = 111
             {
                 var id = b.Column("Id");
 
-                var queryThat = b.Delete
+                b.Delete
                     .Top(10)
                     .Table<UserTable>()
                     .Where(id == 111)
-                    .ToString();
+                    ;
 
                 var query = @"
 DELETE TOP(10) from Users WHERE Id = 111
 ";
-                QueryAssert.AreEqual(queryThat, query);
+                QueryAssert.AreEqual(b.ToString(), query);
             }
         }
 
@@ -79,12 +78,12 @@ DELETE TOP(10) from Users WHERE Id = 111
                         .From("Attachments")
                         .Where(isBlocked == true);
 
-                var deleteQuery = q
+                q
                     .Delete
                     .Top(10)
                     .Table<UserTable>()
                     .Where(id.In(BlockedUserIdList))
-                    .ToString();
+                    ;
 
                 var query = @"
 DELETE TOP(10)   FROM Users 
@@ -95,7 +94,7 @@ WHERE
         WHERE IsBlocked = 1)
 )
 ";
-                QueryAssert.AreEqual(deleteQuery, query);
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
     }

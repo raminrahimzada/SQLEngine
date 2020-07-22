@@ -3,7 +3,7 @@
 //    internal class AlterTableDropConstraintQueryBuilder : AlteredTableQueryBuilder
 //    {
 //        internal string ConstraintName;
-//        public override string Build()
+//        public override void Build(ISqlWriter Writer)
 //        {
 //            Writer.Write(SQLKeywords.ALTER);
 //            Writer.Write2(SQLKeywords.TABLE);
@@ -20,7 +20,7 @@
 //            Writer.Write(I(ConstraintName));
 //            Writer.Write(SQLKeywords.SEMICOLON);
 
-//            return base.Build();
+//            return;
 //        }
 //    }
 //}

@@ -53,7 +53,10 @@
     <Compile Include="CreateDatabaseQueryBuilder.cs" />
     <Compile Include="CreateIndexQueryBuilder.cs" />
     <Compile Include="C.cs" />
+    <Compile Include="ElseIfQueryBuilder.cs" />
+    <Compile Include="IfQueryBuilder.cs" />
     <Compile Include="IndentedTextWriterExtensions.cs" />
+    <Compile Include="RawStringQueryBuilder.cs" />
     <Compile Include="SqlServerConditionFilterQueryHelper.cs" />
     <Compile Include="DropDatabaseQueryBuilder.cs" />
     <Compile Include="FunctionBodyQueryBuilder.cs" />

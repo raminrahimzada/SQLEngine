@@ -35,7 +35,7 @@ namespace SQLEngine.SqlServer
 
         public ICreateTableQueryBuilder Columns(Func<IColumnsCreateQueryBuilder, IColumnQueryBuilder[]> action)
         {
-            var columnsBuilder = GetDefault<ColumnsCreateQueryBuilder>();
+            var columnsBuilder = New<ColumnsCreateQueryBuilder>();
             var current = action(columnsBuilder);
             _columns.AddRange(current);
             return this;
@@ -53,35 +53,34 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
             ValidateAndThrow();
 
             var cols = _columns.Select(c => c.Model).ToArray();
-            Writer.Write(C.CREATE);
-            Writer.Write2(C.TABLE);
+            writer.Write(C.CREATE);
+            writer.Write2(C.TABLE);
             if (!string.IsNullOrEmpty(_schemaName))
             {
-                Writer.Write(I(_schemaName));
-                Writer.Write(C.DOT);
+                writer.Write(I(_schemaName));
+                writer.Write(C.DOT);
             }
             
-            Writer.Write(I(_tableName));
+            writer.Write(I(_tableName));
 
-            Writer.Write(C.SPACE);
-            Writer.Write2(C.BEGIN_SCOPE);
-            Writer.Indent++;
-            Writer.WriteLine();
+            writer.Write(C.SPACE);
+            writer.Write2(C.BEGIN_SCOPE);
+            writer.Indent++;
+            writer.WriteLine();
 
             foreach (var columnQueryBuilder in _columns)
             {
-                var columnQuery = columnQueryBuilder.Build();
-                Writer.Write(columnQuery);
-                Writer.WriteLine(C.COMMA);
+                columnQueryBuilder.Build(writer);
+                writer.WriteLine(C.COMMA);
             }
-            Writer.Indent--;
-            Writer.Write2(C.END_SCOPE);
-            Writer.WriteLine();
+            writer.Indent--;
+            writer.Write2(C.END_SCOPE);
+            writer.WriteLine();
 
             //PK list
             {
@@ -91,8 +90,8 @@ namespace SQLEngine.SqlServer
                     var pkGroups = pkList.GroupBy(pk => pk.PrimaryKeyName).ToArray();
                     if (pkGroups.Any())
                     {
-                        Writer.WriteLineComment($"Primary Keys List {_tableName}");
-                        Writer.WriteLine();
+                        writer.WriteLineComment($"Primary Keys List {_tableName}");
+                        writer.WriteLine();
                     }
                     foreach (var pkGroup in pkGroups)
                     {
@@ -103,30 +102,30 @@ namespace SQLEngine.SqlServer
                                      pkList.FirstOrDefault(x => x.PrimaryKeyName == pkGroup.Key)?.Name;
                             ;
                         }
-                        Writer.Write(C.ALTER);
-                        Writer.Write2(C.TABLE);
-                        Writer.Write2(I(_tableName));
-                        Writer.Write2(C.ADD);
-                        Writer.Write2(C.CONSTRAINT);
-                        Writer.Write2(I(pkName));
-                        Writer.Write2(C.PRIMARY);
-                        Writer.Write2(C.KEY);
-                        Writer.Write2(C.CLUSTERED);
-                        Writer.WriteLine();
-                        Writer.Write2(C.BEGIN_SCOPE);
-                        Writer.WriteLine();
-                        Writer.Indent++;
-                        Writer.WriteLineJoined(pkGroup.Select(pkg => I(pkg.Name)).ToArray());
-                        Writer.Indent--;
-                        Writer.Write2(C.END_SCOPE);
-                        Writer.Write(C.WITH);
-                        Writer.WriteScoped(C.DEFAULT_PK_OPTIONS);
-                        Writer.Write2(C.ON);
-                        Writer.WriteScoped(C.PRIMARY, C.BEGIN_SQUARE, C.END_SQUARE);
-                        Writer.WriteLine();
+                        writer.Write(C.ALTER);
+                        writer.Write2(C.TABLE);
+                        writer.Write2(I(_tableName));
+                        writer.Write2(C.ADD);
+                        writer.Write2(C.CONSTRAINT);
+                        writer.Write2(I(pkName));
+                        writer.Write2(C.PRIMARY);
+                        writer.Write2(C.KEY);
+                        writer.Write2(C.CLUSTERED);
+                        writer.WriteLine();
+                        writer.Write2(C.BEGIN_SCOPE);
+                        writer.WriteLine();
+                        writer.Indent++;
+                        writer.WriteLineJoined(pkGroup.Select(pkg => I(pkg.Name)).ToArray());
+                        writer.Indent--;
+                        writer.Write2(C.END_SCOPE);
+                        writer.Write(C.WITH);
+                        writer.WriteScoped(C.DEFAULT_PK_OPTIONS);
+                        writer.Write2(C.ON);
+                        writer.WriteScoped(C.PRIMARY, C.BEGIN_SQUARE, C.END_SQUARE);
+                        writer.WriteLine();
                     }
                 }
-                Writer.WriteLine();
+                writer.WriteLine();
             }
 
             //unique index list
@@ -148,40 +147,40 @@ namespace SQLEngine.SqlServer
                 if (ukList.Any())
                 {
 
-                    Writer.WriteLineComment($"List of Unique Keys of {_tableName}");
+                    writer.WriteLineComment($"List of Unique Keys of {_tableName}");
 
                     foreach (var ukName in ukList)
                     {
                         var ukGroup = cols.Where(c => c.UniqueKeyName == ukName).ToArray();
-                        Writer.Write(C.ALTER);
-                        Writer.Write2(C.TABLE);
-                        Writer.Write2(I(_tableName));
-                        Writer.Write2(C.ADD);
-                        Writer.Write2(C.CONSTRAINT);
-                        Writer.Write2(I(ukName));
-                        Writer.Write2(C.UNIQUE);
-                        Writer.Write2(C.NONCLUSTERED);
-                        Writer.WriteLine();
-                        Writer.Write2(C.BEGIN_SCOPE);
-                        Writer.Indent++;
-                        Writer.WriteLine();
-                        Writer.WriteLineJoined(ukGroup.Select(pkg => pkg.Name + C.SPACE +
+                        writer.Write(C.ALTER);
+                        writer.Write2(C.TABLE);
+                        writer.Write2(I(_tableName));
+                        writer.Write2(C.ADD);
+                        writer.Write2(C.CONSTRAINT);
+                        writer.Write2(I(ukName));
+                        writer.Write2(C.UNIQUE);
+                        writer.Write2(C.NONCLUSTERED);
+                        writer.WriteLine();
+                        writer.Write2(C.BEGIN_SCOPE);
+                        writer.Indent++;
+                        writer.WriteLine();
+                        writer.WriteLineJoined(ukGroup.Select(pkg => pkg.Name + C.SPACE +
                                                                      (pkg.IsUniqueKeyOrderDescending ? C.DESC : C.ASC))
                             .ToArray());
 
 
-                        Writer.Indent--;
-                        Writer.Write2(C.END_SCOPE);
-                        Writer.Write(C.WITH);
-                        Writer.WriteScoped(C.DEFAULT_PK_OPTIONS);
-                        Writer.Write2(C.ON);
-                        Writer.WriteScoped(C.PRIMARY, C.BEGIN_SQUARE, C.END_SQUARE);
-                        Writer.WriteLine();
+                        writer.Indent--;
+                        writer.Write2(C.END_SCOPE);
+                        writer.Write(C.WITH);
+                        writer.WriteScoped(C.DEFAULT_PK_OPTIONS);
+                        writer.Write2(C.ON);
+                        writer.WriteScoped(C.PRIMARY, C.BEGIN_SQUARE, C.END_SQUARE);
+                        writer.WriteLine();
 
                     }
-                    Writer.WriteLine();
+                    writer.WriteLine();
                 }
-                Writer.WriteLine();
+                writer.WriteLine();
             }
 
             //FK list
@@ -190,8 +189,8 @@ namespace SQLEngine.SqlServer
                 var fkList = cols.Where(c => c.IsForeignKey ?? false).ToArray();
                 if (fkList.Any())
                 {
-                    Writer.WriteLineComment($"Foreign Keys List of {_tableName}");
-                    Writer.WriteLine();
+                    writer.WriteLineComment($"Foreign Keys List of {_tableName}");
+                    writer.WriteLine();
 
                     foreach (var fk in fkList)
                     {
@@ -207,36 +206,36 @@ namespace SQLEngine.SqlServer
                             .Replace("[", "")
                             .Replace("]", "")
                             ;
-                        Writer.Write(C.ALTER);
-                        Writer.Write2(C.TABLE);
-                        Writer.Write(I(_tableName));
-                        Writer.Write2(C.WITH);
-                        Writer.Write2(C.CHECK);
-                        Writer.Write2(C.ADD);
-                        Writer.Write2(C.CONSTRAINT);
-                        Writer.Write2(I(fkName));
-                        Writer.Write2(C.FOREIGN);
-                        Writer.Write2(C.KEY);
-                        Writer.WriteScoped(I(fk.Name));
-                        Writer.Write2(C.REFERENCES);
-                        Writer.WriteLine(I(fk.ForeignKeyTableName));
-                        Writer.Write(C.BEGIN_SCOPE);
-                        Writer.WriteLine();
-                        Writer.Indent++;
-                        Writer.Write(I(fk.ForeignKeyColumnName));
-                        Writer.WriteLine();
-                        Writer.Indent--;
-                        Writer.Write(C.END_SCOPE);
+                        writer.Write(C.ALTER);
+                        writer.Write2(C.TABLE);
+                        writer.Write(I(_tableName));
+                        writer.Write2(C.WITH);
+                        writer.Write2(C.CHECK);
+                        writer.Write2(C.ADD);
+                        writer.Write2(C.CONSTRAINT);
+                        writer.Write2(I(fkName));
+                        writer.Write2(C.FOREIGN);
+                        writer.Write2(C.KEY);
+                        writer.WriteScoped(I(fk.Name));
+                        writer.Write2(C.REFERENCES);
+                        writer.WriteLine(I(fk.ForeignKeyTableName));
+                        writer.Write(C.BEGIN_SCOPE);
+                        writer.WriteLine();
+                        writer.Indent++;
+                        writer.Write(I(fk.ForeignKeyColumnName));
+                        writer.WriteLine();
+                        writer.Indent--;
+                        writer.Write(C.END_SCOPE);
 
-                        Writer.WriteLine();
+                        writer.WriteLine();
 
-                        Writer.Write(C.ALTER);
-                        Writer.Write2(C.TABLE);
-                        Writer.Write(I(_tableName));
-                        Writer.Write2(C.CHECK);
-                        Writer.Write2(C.CONSTRAINT);
-                        Writer.Write2(I(fkName));
-                        Writer.WriteLine();
+                        writer.Write(C.ALTER);
+                        writer.Write2(C.TABLE);
+                        writer.Write(I(_tableName));
+                        writer.Write2(C.CHECK);
+                        writer.Write2(C.CONSTRAINT);
+                        writer.Write2(I(fkName));
+                        writer.WriteLine();
                     }
                 }
             }
@@ -247,9 +246,9 @@ namespace SQLEngine.SqlServer
 
                 if (defaultValues.Any())
                 {
-                    Writer.WriteLine();
+                    writer.WriteLine();
 
-                    Writer.WriteLineComment($"Default Values List of {_tableName}");
+                    writer.WriteLineComment($"Default Values List of {_tableName}");
 
                     foreach (var df in defaultValues)
                     {
@@ -259,17 +258,17 @@ namespace SQLEngine.SqlServer
                             defaultConstraintName = "DF_" + _tableName + df.Name;
                         }
 
-                        Writer.Write(C.ALTER);
-                        Writer.Write2(C.TABLE);
-                        Writer.Write(I(_tableName));
-                        Writer.Write2(C.ADD);
-                        Writer.Write2(C.CONSTRAINT);
-                        Writer.Write2(I(defaultConstraintName));
-                        Writer.Write2(C.DEFAULT);
-                        Writer.WriteScoped(df.DefaultValue);
-                        Writer.Write2(C.FOR);
-                        Writer.WriteLine(I(df.Name));
-                        Writer.WriteLine();
+                        writer.Write(C.ALTER);
+                        writer.Write2(C.TABLE);
+                        writer.Write(I(_tableName));
+                        writer.Write2(C.ADD);
+                        writer.Write2(C.CONSTRAINT);
+                        writer.Write2(I(defaultConstraintName));
+                        writer.Write2(C.DEFAULT);
+                        writer.WriteScoped(df.DefaultValue);
+                        writer.Write2(C.FOR);
+                        writer.WriteLine(I(df.Name));
+                        writer.WriteLine();
                     }
                 }
             }
@@ -281,29 +280,27 @@ namespace SQLEngine.SqlServer
                 {
                     foreach (var model in descriptions)
                     {
-                        using (var t = new ExecuteQueryBuilder())
+                        //using (var t = new ExecuteQueryBuilder())
                         {
+                            var t = new ExecuteQueryBuilder();
                             // https://stackoverflow.com/a/3754214/7901692
 
                             var schemaName = _schemaName;
                             if (string.IsNullOrEmpty(schemaName)) schemaName = "dbo";
-                            //TODO
-                            throw new NotImplementedException();
-                            //var query = t.Procedure("sp_addextendedproperty")
-                            //    .Arg("name", "MS_Description".ToSQL())
-                            //    .Arg("value", model.Description.ToSQL())
+                            
+                            t.Procedure("sp_addextendedproperty")
+                                .Arg("name", "MS_Description".ToSQL())
+                                .Arg("value", model.Description.ToSQL())
 
-                            //    .Arg("level0type", "Schema".ToSQL())
-                            //    .Arg("level0name", schemaName.ToSQL())
+                                .Arg("level0type", "Schema".ToSQL())
+                                .Arg("level0name", schemaName.ToSQL())
 
-                            //    .Arg("level1type", "Table".ToSQL())
-                            //    .Arg("level1name", _tableName.ToSQL())
+                                .Arg("level1type", "Table".ToSQL())
+                                .Arg("level1name", _tableName.ToSQL())
 
-                            //    .Arg("level2type", "Column".ToSQL())
-                            //    .Arg("level2name", model.Name.ToSQL())
-                            //    .Build();
-
-                            //Writer.Write(query);
+                                .Arg("level2type", "Column".ToSQL())
+                                .Arg("level2name", model.Name.ToSQL())
+                                .Build(writer);
                         }
                     }
                 }
@@ -320,7 +317,7 @@ namespace SQLEngine.SqlServer
                     _logFileName = _tableName + "__LOG";
                 }
 
-                Writer.WriteLine($@"
+                writer.WriteLine($@"
 ALTER TABLE {_schemaName}.{_tableName} 
 ADD 
     _START_TIME DATETIME2 GENERATED ALWAYS AS ROW START HIDDEN DEFAULT GETUTCDATE(),
@@ -328,9 +325,8 @@ ADD
 
 PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
 
-                Writer.WriteLine($"ALTER TABLE {_schemaName}.{_tableName} SET (SYSTEM_VERSIONING = ON (HISTORY_TABLE={_schemaName}.{_logFileName}))");
+                writer.WriteLine($"ALTER TABLE {_schemaName}.{_tableName} SET (SYSTEM_VERSIONING = ON (HISTORY_TABLE={_schemaName}.{_logFileName}))");
             }
-            return base.Build();
         }
 
         public ICreateTableQueryBuilder SystemVersioned(bool systemVersioning, string logFileName = null)

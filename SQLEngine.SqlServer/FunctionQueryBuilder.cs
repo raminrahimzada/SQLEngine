@@ -64,40 +64,39 @@ namespace SQLEngine.SqlServer
             _bodyBuilder = builder;
             return this;
         }
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
-            Writer.Write(C.CREATE);
-            Writer.Write2(C.FUNCTION);
+            writer.Write(C.CREATE);
+            writer.Write2(C.FUNCTION);
             if (!string.IsNullOrEmpty(_schemaName))
             {
-                Writer.Write(I(_schemaName));
-                Writer.Write(C.DOT);
+                writer.Write(I(_schemaName));
+                writer.Write(C.DOT);
             }
-            Writer.WriteLine(I(_functionName));
-            Writer.WriteLine(C.BEGIN_SCOPE);
-            Writer.Indent++;
-            Writer.WriteJoined(_arguments.Select(a => a.Build()));
-            Writer.Indent--;
-            Writer.WriteLine();
-            Writer.WriteLine(C.END_SCOPE);
-            Writer.Write(C.RETURNS);
-            Writer.Write(C.SPACE);
+            writer.WriteLine(I(_functionName));
+            writer.WriteLine(C.BEGIN_SCOPE);
+            writer.Indent++;
+            writer.WriteJoined(_arguments.Select(a => a.Build()));
+            writer.Indent--;
+            writer.WriteLine();
+            writer.WriteLine(C.END_SCOPE);
+            writer.Write(C.RETURNS);
+            writer.Write(C.SPACE);
             if (_schemaBuilding)
             {
-                Writer.Write2(C.WITH);
-                Writer.Write2(C.SCHEMABINDING);
+                writer.Write2(C.WITH);
+                writer.Write2(C.SCHEMABINDING);
             }
-            Writer.WriteLine(_returnType);
-            Writer.WriteLine(C.AS);
-            Writer.WriteLine(C.BEGIN);
-            Writer.Indent++;
+            writer.WriteLine(_returnType);
+            writer.WriteLine(C.AS);
+            writer.WriteLine(C.BEGIN);
+            writer.Indent++;
 
             using (var o = Query.New)
             {
                 _bodyBuilder(o);
-                Writer.Indent--;
-                Writer.WriteLine(C.END);
-                return base.Build();
+                writer.Indent--;
+                writer.WriteLine(C.END);
             }
         }
     }

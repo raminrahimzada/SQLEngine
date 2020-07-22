@@ -80,33 +80,32 @@ namespace SQLEngine.SqlServer
             //_bodyBuilder = builder;
             return this;
         }
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
             if (!string.IsNullOrEmpty(_metaDataHeader))
-                Writer.WriteLine(_metaDataHeader);
-            Writer.Write(C.CREATE);
-            Writer.Write2(C.PROCEDURE);
+                writer.WriteLine(_metaDataHeader);
+            writer.Write(C.CREATE);
+            writer.Write2(C.PROCEDURE);
             if (!string.IsNullOrEmpty(_schemaName))
             {
-                Writer.Write(I(_schemaName));
-                Writer.Write(C.DOT);
+                writer.Write(I(_schemaName));
+                writer.Write(C.DOT);
             }
-            Writer.WriteLine(I(_procedureName));
-            Writer.WriteLine(C.BEGIN_SCOPE);
-            Writer.Indent++;
-            Writer.WriteJoined(_arguments.Select(a => a.Build()), ",", true);
-            Writer.Indent--;
-            Writer.WriteLine();
-            Writer.WriteLine(C.END_SCOPE);
-            Writer.WriteLine(C.AS);
-            Writer.WriteLine(C.BEGIN);
-            Writer.Indent++;
+            writer.WriteLine(I(_procedureName));
+            writer.WriteLine(C.BEGIN_SCOPE);
+            writer.Indent++;
+            writer.WriteJoined(_arguments.Select(a => a.Build()), ",", true);
+            writer.Indent--;
+            writer.WriteLine();
+            writer.WriteLine(C.END_SCOPE);
+            writer.WriteLine(C.AS);
+            writer.WriteLine(C.BEGIN);
+            writer.Indent++;
             
-            Writer.WriteLine(_body);
+            writer.WriteLine(_body);
 
-            Writer.Indent--;
-            Writer.WriteLine(C.END);
-            return base.Build();
+            writer.Indent--;
+            writer.WriteLine(C.END);
         }
 
         public ICreateProcedureNoHeaderQueryBuilder Header(string metaDataHeader)

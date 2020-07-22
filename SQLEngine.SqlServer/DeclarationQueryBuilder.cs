@@ -39,24 +39,22 @@
             _defaultValue = defaultValue;
             return this;
         }
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
-            Clear();
-            Writer.Write(C.DECLARE);
-            Writer.Write2();
-            Writer.Write(C.VARIABLE_HEADER);
-            Writer.Write(_variableName);
-            Writer.Write2(_type);
+            writer.Write(C.DECLARE);
+            writer.Write2();
+            writer.Write(C.VARIABLE_HEADER);
+            writer.Write(_variableName);
+            writer.Write2(_type);
             if (!string.IsNullOrEmpty(_defaultValue))
             {
-                Writer.Write2(C.EQUALS);
-                Writer.Write(C.BEGIN_SCOPE);
-                Writer.Write(_defaultValue);
-                Writer.Write(C.END_SCOPE);
+                writer.Write2(C.EQUALS);
+                writer.Write(C.BEGIN_SCOPE);
+                writer.Write(_defaultValue);
+                writer.Write(C.END_SCOPE);
             }
 
-            Writer.Write(C.SEMICOLON);
-            return base.Build();
+            writer.Write(C.SEMICOLON);
         }
     }
 }

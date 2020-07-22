@@ -45,7 +45,7 @@ namespace SQLEngine.Tests
                 QueryAssert.AreEqual(q.Build(), query);
             }
         }
-       
+
         [TestMethod]
         public void Test_Insert_By_Select()
         {
@@ -68,15 +68,15 @@ namespace SQLEngine.Tests
         {
             using (var q = Query.New)
             {
-                var queryThat = q.Insert
+                q.Insert
                     .Into<UserTable>()
                     .Values(select =>
                         select
                             .From<AnotherUsersTable>()
-                    ).ToString();
-               
+                    );
+
                 const string query = "INSERT INTO Users  SELECT  *  FROM AnotherUsers";
-                QueryAssert.AreEqual(queryThat, query);
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
     }

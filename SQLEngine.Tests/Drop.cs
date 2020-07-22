@@ -9,15 +9,15 @@ namespace SQLEngine.Tests
         {
             using (var b = Query.New)
             {
-                var dropQuery = b
+                b
                     .Drop
                     .Function("fn_max")
                     .FromSchema("dbo")
-                    .ToString();
+                    ;
                 const string query = @"
 DROP FUNCTION dbo.fn_max;
 ";
-                QueryAssert.AreEqual(dropQuery, query);
+                QueryAssert.AreEqual(b.ToString(), query);
             }
         }
         [TestMethod]
@@ -25,15 +25,15 @@ DROP FUNCTION dbo.fn_max;
         {
             using (var b = Query.New)
             {
-                var dropQuery = b
+                b
                     .Drop
                     .Table("Users")
                     .FromSchema("dbo")
-                    .ToString();
+                    ;
                 const string query = @"
 DROP TABLE dbo.Users 
 ";
-                QueryAssert.AreEqual(dropQuery, query);
+                QueryAssert.AreEqual(b.ToString(), query);
             }
         }
         [TestMethod]
@@ -41,16 +41,16 @@ DROP TABLE dbo.Users
         {
             using (var b = Query.New)
             {
-                var dropQuery = b
+                b
                     .Drop
                     .Table("Users")
                     .FromSchema("dbo")
                     .FromDB("facebook")
-                    .ToString();
+                    ;
                 const string query = @"
 DROP TABLE facebook.dbo.Users 
 ";
-                QueryAssert.AreEqual(dropQuery, query);
+                QueryAssert.AreEqual(b.ToString(), query);
             }
         }
         [TestMethod]
@@ -58,14 +58,14 @@ DROP TABLE facebook.dbo.Users
         {
             using (var b = Query.New)
             {
-                var dropQuery = b
+                b
                     .Drop
                     .Table<UserTable>()
-                    .ToString();
+                    ;
                 const string query = @"
 DROP TABLE Users 
 ";
-                QueryAssert.AreEqual(dropQuery, query);
+                QueryAssert.AreEqual(b.ToString(), query);
             }
         }
         [TestMethod]
@@ -73,31 +73,31 @@ DROP TABLE Users
         {
             using (var b = Query.New)
             {
-                var dropQuery = b
+                b
                     .Drop
                     .Table<UserTable>()
                     .FromSchema("dbo")
                     .FromDB("facebook")
-                    .ToString();
+                    ;
                 const string query = @"
 DROP TABLE facebook.dbo.Users 
 ";
-                QueryAssert.AreEqual(dropQuery, query);
+                QueryAssert.AreEqual(b.ToString(), query);
             }
         }       [TestMethod]
         public void Test_Drop_View_1()
         {
             using (var b = Query.New)
             {
-                var dropQuery = b
+                b
                     .Drop
                     .View("VW_Users")
                     .FromSchema("dbo")
-                    .ToString();
+                    ;
                 const string query = @"
 DROP VIEW dbo.VW_Users 
 ";
-                QueryAssert.AreEqual(dropQuery, query);
+                QueryAssert.AreEqual(b.ToString(), query);
             }
         }
         [TestMethod]
@@ -105,16 +105,16 @@ DROP VIEW dbo.VW_Users
         {
             using (var b = Query.New)
             {
-                var dropQuery = b
+                b
                     .Drop
                     .View("VW_Users")
                     .FromSchema("dbo")
                     .FromDB("facebook")
-                    .ToString();
+                    ;
                 const string query = @"
 DROP VIEW facebook.dbo.VW_Users
 ";
-                QueryAssert.AreEqual(dropQuery, query);
+                QueryAssert.AreEqual(b.ToString(), query);
             }
         }
 
@@ -123,14 +123,14 @@ DROP VIEW facebook.dbo.VW_Users
         {
             using (var b = Query.New)
             {
-                var dropQuery = b
+                b
                     .Drop
                     .Database("facebook")
-                    .ToString();
+                    ;
                 const string query = @"
 DROP DATABASE facebook
 ";
-                QueryAssert.AreEqual(dropQuery, query);
+                QueryAssert.AreEqual(b.ToString(), query);
             }
         }
         

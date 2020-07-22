@@ -14,25 +14,23 @@
             _viewName = viewName;
             return this;
         }
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
-            Writer.Write(C.DROP);
-            Writer.Write(C.SPACE);
-            Writer.Write(C.VIEW);
-            Writer.Write(C.SPACE);
+            writer.Write(C.DROP);
+            writer.Write(C.SPACE);
+            writer.Write(C.VIEW);
+            writer.Write(C.SPACE);
             if (!string.IsNullOrWhiteSpace(_dbName))
             {
-                Writer.Write(_dbName);
-                Writer.Write(C.DOT);
+                writer.Write(_dbName);
+                writer.Write(C.DOT);
             }
             if (!string.IsNullOrWhiteSpace(_schemaName))
             {
-                Writer.Write(_schemaName);
-                Writer.Write(C.DOT);
+                writer.Write(_schemaName);
+                writer.Write(C.DOT);
             }
-            Writer.Write(_viewName);
-
-            return base.Build();
+            writer.Write(_viewName);
         }
 
         public IDropViewNoSchemaNoDatabase FromDB(string dbName)

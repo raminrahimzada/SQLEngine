@@ -9,12 +9,11 @@
             return this;
         }
 
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
-            Writer.Write(C.TRUNCATE);
-            Writer.Write2(C.TABLE);
-            Writer.Write(I(_tableName));
-            return base.Build();
+            writer.Write(C.TRUNCATE);
+            writer.Write2(C.TABLE);
+            writer.Write(I(_tableName));
         }
     }
 }

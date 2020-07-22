@@ -17,18 +17,17 @@
             _schemaName = schemaName;
             return this;
         }
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
-            Writer.Write(C.DROP);
-            Writer.Write2(C.FUNCTION);
+            writer.Write(C.DROP);
+            writer.Write2(C.FUNCTION);
             if (!string.IsNullOrWhiteSpace(_schemaName))
             {
-                Writer.Write(_schemaName);
-                Writer.Write(C.DOT);
+                writer.Write(_schemaName);
+                writer.Write(C.DOT);
             }
-            Writer.Write(I(_functionName));
-            Writer.Write(C.SEMICOLON);
-            return base.Build();
+            writer.Write(I(_functionName));
+            writer.Write(C.SEMICOLON);
         }
     }
 }

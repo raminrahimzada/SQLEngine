@@ -10,12 +10,11 @@
             return this;
         }
 
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
-            Writer.Write(C.CREATE);
-            Writer.Write2(C.DATABASE);
-            Writer.Write(_databaseName);
-            return base.Build();
+            writer.Write(C.CREATE);
+            writer.Write2(C.DATABASE);
+            writer.Write(_databaseName);
         }
     }
 }

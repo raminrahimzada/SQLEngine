@@ -41,19 +41,18 @@ namespace SQLEngine.SqlServer
             _currentThen = string.Empty;
         }
 
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
-            Writer.WriteLine();
-            Writer.Write(C.BEGIN_SCOPE);
-            Writer.Write(C.CASE);
-            Writer.Write(C.SPACE);
+            writer.WriteLine();
+            writer.Write(C.BEGIN_SCOPE);
+            writer.Write(C.CASE);
+            writer.Write(C.SPACE);
             foreach (string @case in _casesList)
             {
-                Writer.WriteLine(@case);
+                writer.WriteLine(@case);
             }
-            Writer.Write(C.END);
-            Writer.Write(C.END_SCOPE);
-            return base.Build();
+            writer.Write(C.END);
+            writer.Write(C.END_SCOPE);
         }
     }
 }

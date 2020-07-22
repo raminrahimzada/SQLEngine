@@ -47,18 +47,18 @@
             this._indexName = indexName;
             return this;
         }
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
-            Writer.Write(C.CREATE);
+            writer.Write(C.CREATE);
             if (_isUnique ?? false)
             {
-                Writer.Write2(C.UNIQUE);
+                writer.Write2(C.UNIQUE);
             }
-            Writer.Write2(C.INDEX);
-            Writer.Write(this._indexName);
-            Writer.Write2(C.ON);
-            Writer.Write(_tableName);
-            Writer.Write2(C.BEGIN_SCOPE);
+            writer.Write2(C.INDEX);
+            writer.Write(this._indexName);
+            writer.Write2(C.ON);
+            writer.Write(_tableName);
+            writer.Write2(C.BEGIN_SCOPE);
             bool first = true;
             foreach (var columnName in _columnNames)
             {
@@ -68,12 +68,11 @@
                 }
                 else
                 {
-                    Writer.Write(C.COMMA);
+                    writer.Write(C.COMMA);
                 }
-                Writer.Write(columnName);
+                writer.Write(columnName);
             }
-            Writer.Write2(C.END_SCOPE);
-            return base.Build();
+            writer.Write2(C.END_SCOPE);
         }
     }
 }

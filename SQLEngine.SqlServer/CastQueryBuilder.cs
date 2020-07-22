@@ -30,17 +30,15 @@
             }
         }
 
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
 
-            Writer.Write(C.CAST);
-            Writer.Write(C.BEGIN_SCOPE);
-            Writer.Write(_expression);
-            Writer.Write2(C.AS);
-            Writer.Write(_type);
-            Writer.Write(C.END_SCOPE);
-
-            return base.Build();
+            writer.Write(C.CAST);
+            writer.Write(C.BEGIN_SCOPE);
+            writer.Write(_expression);
+            writer.Write2(C.AS);
+            writer.Write(_type);
+            writer.Write(C.END_SCOPE);
         }
     }
 }

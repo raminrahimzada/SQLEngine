@@ -1,11 +1,11 @@
 ﻿namespace SQLEngine.SqlServer
 {
     internal class AlterTableQueryBuilder :
-            AbstractQueryBuilder
-            , IAlterTableQueryBuilder
+             IAlterTableQueryBuilder
             , IAlterTableNoNameQueryBuilder
             , IAlterTableNoNameDropColumnQueryBuilder
     {
+        private IAbstractQueryBuilder _internalBuilder;
         private string _tableName;
         public IAlterTableNoNameQueryBuilder TableName(string tableName)
         {
@@ -15,28 +15,40 @@
       
         public IAlterTableNoNameAddColumnNoNameQueryBuilder AddColumn(string columnName)
         {
-            return GetDefault<AlterTableAddColumnQueryBuilder>().Table(_tableName).Column(columnName);
+            var b = new AlterTableAddColumnQueryBuilder();
+            _internalBuilder = b.Table(_tableName).Column(columnName);
+            return b;
         }
 
         public IAlterTableNoNameDropColumnQueryBuilder DropColumn(string columnName)
         {
-            Writer.Write(C.ALTER);
-            Writer.Write2(C.TABLE);
-            Writer.Write2(_tableName);
-            Writer.Write2(C.DROP);
-            Writer.Write2(C.COLUMN);
-            Writer.Write2(columnName);
-            return this;
+            var b = new AlterTableDropColumnQueryBuilder();
+            _internalBuilder= b.Table(_tableName).Column(columnName);
+            return b;
         }
 
         public IAlterTableNoNameRenameColumnQueryBuilder RenameColumn(string columnName)
         {
-            return GetDefault<AlterTableRenameColumnQueryBuilder>().Table(_tableName).Column(columnName);
+            var b = new AlterTableRenameColumnQueryBuilder();
+            _internalBuilder = b.Table(_tableName).Column(columnName);
+            return b;
         }
 
         public IAlterTableNoNameAlterColumnQueryBuilder AlterColumn(string columnName)
         {
-            return GetDefault<AlterTableAlterColumnQueryBuilder>().Table(_tableName).Column(columnName);
+            var b = new AlterTableAlterColumnQueryBuilder();
+            _internalBuilder = b.Table(_tableName).Column(columnName);
+            return b;
+        }
+
+        public void Dispose()
+        {
+            _internalBuilder.Dispose();
+        }
+
+        public void Build(ISqlWriter writer)
+        {
+            _internalBuilder.Build(writer);
         }
     }
 }

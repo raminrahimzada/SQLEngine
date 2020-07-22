@@ -7,63 +7,63 @@
 
         public IColumnQueryBuilder Column(string columnName)
         {
-            IColumnQueryBuilder builder = GetDefault<ColumnQueryBuilder>();
+            IColumnQueryBuilder builder = new ColumnQueryBuilder();
             builder.Name(columnName);
             return builder;
         }
 
         public IColumnQueryBuilder Datetime(string columnName)
         {
-            return GetDefault<ColumnQueryBuilder>().Name(columnName).Type(C.DATETIME);
+            return New<ColumnQueryBuilder>().Name(columnName).Type(C.DATETIME);
         }
         public IColumnQueryBuilder Long(string columnName)
         {
-            return GetDefault<ColumnQueryBuilder>().Name(columnName).Type(C.BIGINT);
+            return New<ColumnQueryBuilder>().Name(columnName).Type(C.BIGINT);
         }
 
         public IColumnQueryBuilder Int(string columnName)
         {
-            return GetDefault<ColumnQueryBuilder>().Name(columnName).Type(C.INT);
+            return New<ColumnQueryBuilder>().Name(columnName).Type(C.INT);
         }
         public IColumnQueryBuilder Date(string columnName)
         {
-            return GetDefault<ColumnQueryBuilder>().Name(columnName).Type(C.DATE);
+            return New<ColumnQueryBuilder>().Name(columnName).Type(C.DATE);
         }
         public IColumnQueryBuilder Binary(string columnName)
         {
-            return GetDefault<ColumnQueryBuilder>().Name(columnName).Type(C.VARBINARYMAX);
+            return New<ColumnQueryBuilder>().Name(columnName).Type(C.VARBINARYMAX);
         }
         public IColumnQueryBuilder Byte(string columnName)
         {
-            return GetDefault<ColumnQueryBuilder>().Name(columnName).Type(C.TINYINT);
+            return New<ColumnQueryBuilder>().Name(columnName).Type(C.TINYINT);
         }
 
         public IColumnQueryBuilder String(string columnName, bool isUniCode = true, bool isVariable = true)
         {
             var type = isVariable ? isUniCode ? C.NVARCHAR : C.VARCHAR : isUniCode ? C.NCHAR : C.CHAR;
-            return GetDefault<ColumnQueryBuilder>().Name(columnName).Type(type);
+            return New<ColumnQueryBuilder>().Name(columnName).Type(type);
         }
 
         public IColumnQueryBuilder Decimal(string columnName)
         {
-            return GetDefault<ColumnQueryBuilder>().Name(columnName).Type(C.DECIMAL).Precision(DefaultPrecision).Scale(DefaultScale);
+            return New<ColumnQueryBuilder>().Name(columnName).Type(C.DECIMAL).Precision(DefaultPrecision).Scale(DefaultScale);
         }
         public IColumnQueryBuilder Decimal(string columnName, byte precision , byte scale )
         {
-            return GetDefault<ColumnQueryBuilder>().Name(columnName).Type(C.DECIMAL).Precision(precision).Scale(scale);
+            return New<ColumnQueryBuilder>().Name(columnName).Type(C.DECIMAL).Precision(precision).Scale(scale);
         }
 
         public IColumnQueryBuilder Bool(string columnName)
         {
-            return GetDefault<ColumnQueryBuilder>().Name(columnName).Type(C.BIT);
+            return New<ColumnQueryBuilder>().Name(columnName).Type(C.BIT);
         }
 
         public IColumnQueryBuilder Short(string columnName)
         {
-            return GetDefault<ColumnQueryBuilder>().Name(columnName).Type(C.SMALLINT);
+            return New<ColumnQueryBuilder>().Name(columnName).Type(C.SMALLINT);
         }
 
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
             throw Bomb();
         }

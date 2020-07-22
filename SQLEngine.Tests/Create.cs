@@ -35,14 +35,13 @@ namespace SQLEngine.Tests
 
 
                         // two column index
-                        c.Int("Amount1").Unique("IX_Amount1_Amount2", descending: true),
-                        c.Int("Amount2").Unique("IX_Amount1_Amount2"),
+                        c.Column<decimal>("Amount1").Unique("IX_Amount1_Amount2", descending: true),
+                        c.Decimal("Amount2").Unique("IX_Amount1_Amount2"),
 
                         //calculated column
                         c.Column("Sum").CalculatedColumn("Amount1 + Amount2"),
                     });
                 var query = b.ToString();
-                //TODO
             }
         }
 
@@ -52,27 +51,21 @@ namespace SQLEngine.Tests
             using (var q = Query.New)
             {
                 var isBlocked = q.Column("IsBlocked");
-
-                q.Select
-                    .From("Users")
-                    .Where(isBlocked == false)
-                    ;
-                //TODO
-                const string viewSelection = @"
-SELECT  * 
-    FROM Users
-    WHERE IsBlocked = 0";
-                var view = q.Create
+                q
+                    .Create
                     .View("View_Active_Users")
-                    .As(viewSelection)
-                    .ToString();
+                    .As(
+                        s => s
+                            .From("Users")
+                            .Where(isBlocked == false)
+                    );
 
                 const string originalQuery = @"
 CREATE VIEW View_Active_Users AS SELECT  * 
     FROM Users
     WHERE IsBlocked = 0
 ";
-                QueryAssert.AreEqual(view, originalQuery);
+                QueryAssert.AreEqual(q.ToString(), originalQuery);
             }
         }
 
@@ -81,7 +74,8 @@ CREATE VIEW View_Active_Users AS SELECT  *
         {
             using (var q = Query.New)
             {
-                var function=q.Create
+                q
+                    .Create
                     .Function("max")
                     .Parameter<int>("x")
                     .Parameter<int>("y")
@@ -100,7 +94,7 @@ CREATE VIEW View_Active_Users AS SELECT  *
                         f.Comment("Sql Server needs that ;) ");
                         f.Return(0);
 
-                    }).ToString();
+                    });
 
                 const string originalQuery = @"
 CREATE FUNCTION max
@@ -118,10 +112,45 @@ BEGIN
     RETURN(0)
 END
 ";
-                QueryAssert.AreEqual(function, originalQuery);
+                QueryAssert.AreEqual(q.ToString(), originalQuery);
             }
         }
 
+        [TestMethod]
+        public void Test_Create_Function_Sum()
+        {
+            using (var q = Query.New)
+            {
+                q
+                    .Create
+                    .Function("sum")
+                    .Parameter<int>("x")
+                    .Parameter<int>("y")
+                    .Returns<int>()
+                    .Body(f =>
+                    {
+                        var x = f.Param("x");
+                        var y = f.Param("y");
+                        
+                        f.Comment("Adding numbers here");
+
+                        f.Return(x + y);
+                    });
+
+                const string originalQuery = @"
+CREATE FUNCTION sum
+(
+@x INT , @y INT
+)
+RETURNS INT
+BEGIN
+    /*Adding numbers here*/ 
+    RETURN (@x + @y)
+END
+";
+                QueryAssert.AreEqual(q.ToString(), originalQuery);
+            }
+        }
         [TestMethod]
         public void Test_Create_Procedure()
         {
@@ -169,20 +198,19 @@ END
         {
             using (var t = Query.New)
             {
-                var queryThat = t
+                t
                         .Create
                         .Index("IX_Unique_Email")
                         .OnTable("Users")
                         .Columns("Email")
                         .Unique()
-                        .ToString()
                     ;
                 const string query =
                     @"
                 CREATE UNIQUE  INDEX IX_Unique_Email ON Users ( Email ) 
                 ";
 
-                QueryAssert.AreEqual(queryThat, query);
+                QueryAssert.AreEqual(t.ToString(), query);
             }
         }
         
@@ -191,17 +219,16 @@ END
         {
             using (var t = Query.New)
             {
-                var queryThat = t
+                t
                         .Create
                         .Database("FacebookDB")
-                        .ToString()
                     ;
                 const string query =
                     @"
                 CREATE DATABASE FacebookDB
                 ";
 
-                QueryAssert.AreEqual(queryThat, query);
+                QueryAssert.AreEqual(t.ToString(), query);
             }
         }
     }

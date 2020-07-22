@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal class AbstractConditionBuilder : AbstractQueryBuilder
+    internal abstract class AbstractConditionBuilder : AbstractQueryBuilder
     {
     }
 }

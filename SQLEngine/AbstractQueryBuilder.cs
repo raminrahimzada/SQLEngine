@@ -1,33 +1,20 @@
 ﻿using System;
-using System.CodeDom.Compiler;
-using System.IO;
-using System.Text;
 
 namespace SQLEngine
 {
-    public interface IIfQueryBuilder : IAbstractQueryBuilder
-    {
-
-    }
-    public interface IElseIfQueryBuilder : IAbstractQueryBuilder
-    {
-
-    }
     public abstract class AbstractQueryBuilder : IAbstractQueryBuilder
     {
-
-        protected IndentedTextWriter Writer { get; private set; }
-
-        private StringBuilder _stringBuilder;
-
-        protected void Clear()
+        protected static ISqlWriter CreateNewWriter()
         {
-            _stringBuilder.Clear();
+            return new SqlWriter();
         }
+        protected ISqlWriter Writer { get; private set; }
+
+
+       
         public void Join(AbstractQueryBuilder other)
         {
             Writer = other.Writer;
-            _stringBuilder = other._stringBuilder;
         }
 
         public int Indent
@@ -35,35 +22,22 @@ namespace SQLEngine
             get => Writer.Indent;
             set => Writer.Indent = value;
         }
+
         protected AbstractQueryBuilder()
         {
-            _stringBuilder = new StringBuilder();
-            var output = new StringWriter(_stringBuilder);
-            Writer = new IndentedTextWriter(output);
+            Writer = new SqlWriter();
         }
-        protected static T GetDefault<T>() where T : AbstractQueryBuilder, new()
+        protected static T New<T>() where T : AbstractQueryBuilder, new()
         {
-            var result = Activator.CreateInstance<T>();
-            //TODO add extra here
-            return result;
+            return Activator.CreateInstance<T>();
         }
 
         protected virtual void ValidateAndThrow()
         {
 
         }
-        public virtual string Build()
-        {
-            ValidateAndThrow();
-            return _stringBuilder.ToString();
-        }
 
-        public override string ToString()
-        {
-            return Build();
-        }
-
-        
+        public abstract void Build(ISqlWriter writer);
 
         public virtual void Dispose()
         {
@@ -75,9 +49,12 @@ namespace SQLEngine
             if (string.IsNullOrEmpty(message)) message = "Invalid Usage of QueryBuilder: " + GetType().Name;
             throw new Exception(message);
         }
-
-        //TODO identifier
-        public string I(string name)
+        /// <summary>
+        /// validates the names of identifier 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        protected virtual string I(string name)
         {
             return name;
         }

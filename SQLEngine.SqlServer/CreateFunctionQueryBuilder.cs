@@ -55,36 +55,34 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        public override string Build()
+        public override void Build(ISqlWriter writer)
         {
-            Writer.Write(C.CREATE);
-            Writer.Write(C.SPACE);
-            Writer.Write(C.FUNCTION);
-            Writer.Write(C.SPACE);
+            writer.Write(C.CREATE);
+            writer.Write(C.SPACE);
+            writer.Write(C.FUNCTION);
+            writer.Write(C.SPACE);
             if (!string.IsNullOrEmpty(_schemaName))
             {
-                Writer.Write(_schemaName);
-                Writer.Write(C.DOT);
+                writer.Write(_schemaName);
+                writer.Write(C.DOT);
             }
-            Writer.Write(_name);
-            Writer.WriteLine();
-            Writer.WriteLine(C.BEGIN_SCOPE);
+            writer.Write(_name);
+            writer.WriteLine();
+            writer.WriteLine(C.BEGIN_SCOPE);
             Indent++;
-            Writer.WriteLineJoined(_parameters);
+            writer.WriteLineJoined(_parameters);
             Indent--;
-            Writer.WriteLine(C.END_SCOPE);
-            Writer.Write(C.RETURNS);
-            Writer.Write(C.SPACE);
-            Writer.Write(_returnType);
-            Writer.WriteLine();
-            Writer.Write(C.BEGIN);
-            Writer.WriteLine();
+            writer.WriteLine(C.END_SCOPE);
+            writer.Write(C.RETURNS);
+            writer.Write(C.SPACE);
+            writer.Write(_returnType);
+            writer.WriteLine();
+            writer.Write(C.BEGIN);
+            writer.WriteLine();
             Indent++;
-            Writer.WriteEx(_body);
+            writer.WriteEx(_body);
             Indent--;
-            Writer.Write(C.END);
-            
-            return base.Build();
+            writer.Write(C.END);
         }
     }
 }

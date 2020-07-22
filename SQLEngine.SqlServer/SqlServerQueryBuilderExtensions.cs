@@ -67,6 +67,15 @@ namespace SQLEngine.SqlServer
             throw new Exception("Complex type " + type.FullName + " cannot be converted to sql type");
         }
 
+        public static ISelectOrderBuilder OrderBy(this ISelectWithoutFromQueryBuilder builder,string columnName)
+        {
+            return builder.OrderBy(new SqlServerColumn(columnName));
+        }
+
+        public static ISelectOrderBuilder OrderByDesc(this ISelectWithoutFromQueryBuilder builder,string columnName)
+        {
+            return builder.OrderByDesc(new SqlServerColumn(columnName));
+        }
 
         public static void Print(this IQueryBuilder builder, SqlServerLiteral literal)
         {
@@ -220,6 +229,8 @@ namespace SQLEngine.SqlServer
             
             return SqlServerCondition.Raw(expression);
         }
+
+        
         public static AbstractSqlCondition In(this AbstractSqlColumn column
             , Action<ISelectQueryBuilder> builderFunc)
         {
@@ -282,6 +293,14 @@ namespace SQLEngine.SqlServer
         {
             var expression = "(" + column.ToSqlString() + " BETWEEN (" + from.ToSqlString() + ") AND (" +
                              to.ToSqlString() + "))";
+
+            return SqlServerCondition.Raw(expression);
+        }
+        public static AbstractSqlCondition Between(this AbstractSqlColumn column
+            , AbstractSqlLiteral from, AbstractSqlLiteral to)
+        {
+            var expression = "(" + column.ToSqlString() + " BETWEEN " + from.ToSqlString() + " AND " +
+                             to.ToSqlString() + ")";
 
             return SqlServerCondition.Raw(expression);
         }

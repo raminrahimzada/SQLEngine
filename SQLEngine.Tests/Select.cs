@@ -51,6 +51,28 @@ SELECT TOP(1)  *
             }
         }
         [TestMethod]
+        public void Test_Simple_Select_3()
+        {
+            using (var q = Query.New)
+            {
+                var age = q.Column("Age");
+                q
+                    .Select
+                    .Top(1)
+                    .From<UserTable>()
+                    .Where(age > 18)
+                    ;
+
+                var queryThat = @"
+SELECT TOP(1)  * 
+    FROM Users
+    WHERE Age > 18
+";
+                QueryAssert.AreEqual(q.ToString(), queryThat);
+
+            }
+        }
+        [TestMethod]
         public void Test_Simple_Select_Order()
         {
             using (var q = Query.New)
@@ -114,7 +136,6 @@ SELECT TOP(1)  @myCreatedDate=CreatedDate
             using (var q = Query.New)
             {
                 var age = q.Column("Age");
-
                 q
                     .Select
                     .Top(1)
@@ -126,6 +147,36 @@ SELECT TOP(1)  @myCreatedDate=CreatedDate
 SELECT TOP(1) * 
     FROM Users
     WHERE (Age BETWEEN 10 AND 60)
+";
+                QueryAssert.AreEqual(q.ToString(), queryThat);
+
+            }
+        }
+        [TestMethod]
+        public void Test_Simple_Select_Between_2()
+        {
+            using (var q = Query.New)
+            {
+                var now = DateTime.Now.Date;
+
+                //literal sample for example only date example
+                var toDate = q.Literal(now, includeTime: false);
+                var fromDate = q.Literal(now.AddDays(-1), includeTime: false);
+
+                var age = q.Column("Age");
+
+
+                q
+                    .Select
+                    .Top(1)
+                    .From<UserTable>()
+                    .Where(age.Between(fromDate, toDate))
+                    ;
+
+                const string queryThat = @"
+SELECT TOP(1)   * 
+    FROM Users
+    WHERE (Age BETWEEN '2020-07-21' AND '2020-07-22')
 ";
                 QueryAssert.AreEqual(q.ToString(), queryThat);
 
@@ -150,6 +201,67 @@ SELECT TOP(1) *
 SELECT TOP(1) * 
     FROM Users
     WHERE Age IN (11,22,33)
+";
+                QueryAssert.AreEqual(q.ToString(), queryThat);
+
+            }
+        }
+
+        [TestMethod]
+        public void Test_Simple_Select_Like()
+        {
+            using (var q = Query.New)
+            {
+                var name = q.Column("Name");
+                var surname = q.Column("Surname");
+
+                q
+                    .Select
+                    .Top(1)
+                    .From<UserTable>()
+                    .Where(name.Like("J_hn") & surname.Like("Sm_th"))
+                    ;
+
+                const string queryThat = @"
+SELECT TOP(1)   * 
+    FROM Users
+    WHERE (Name LIKE N'J_hn') AND (Surname LIKE N'Sm_th')
+";
+                QueryAssert.AreEqual(q.ToString(), queryThat);
+
+            }
+        }
+
+        [TestMethod]
+        public void Test_Simple_Select_In_With_Select()
+        {
+            using (var q = Query.New)
+            {
+                var age = q.Column("Age");
+
+                q
+                    .Select
+                    .Top(1)
+                    .From<UserTable>()
+                    .Where(
+                        age.In(
+                            s => s
+                                .Top(10)
+                                .Select("AnotherAge")
+                                .From<AnotherUsersTable>()
+                                .OrderByDesc("CreateDate")
+                        )
+                    )
+                    ;
+
+                const string queryThat = @"
+SELECT TOP(1)   * 
+    FROM Users
+    WHERE Age IN (
+        SELECT TOP(10)  AnotherAge
+            FROM AnotherUsers
+            ORDER BY CreateDate DESC
+    )
 ";
                 QueryAssert.AreEqual(q.ToString(), queryThat);
 
@@ -372,7 +484,7 @@ SELECT TOP(1)  U.Age , P.Url as PhotoUrl
                 string query= @"
 SELECT Age , COUNT(Id) , SUM(Weight) , COUNT(DISTINCT Name)
     FROM Users
-    GROUP BY Age DESC 
+    GROUP BY Age DESC
 
 ";
                 QueryAssert.AreEqual(q.ToString(), query);
@@ -397,7 +509,7 @@ SELECT Age , COUNT(Id) , SUM(Weight) , COUNT(DISTINCT Name)
                 string query= @"
 SELECT TOP(1)  Age , COUNT(U.*)
     FROM Users AS U
-    GROUP BY Age DESC 
+    GROUP BY Age DESC
 ";
                 QueryAssert.AreEqual(q.ToString(), query);
 

@@ -335,5 +335,17 @@ namespace SQLEngine.SqlServer
         {
             return LessEqual((SqlServerLiteral)value);
         }
+
+        public override AbstractSqlCondition Like(string expression,bool isUnicode=true)
+        {
+            return SqlServerCondition.Raw(
+                string.Concat(
+                    this.ToSqlString(),
+                    C.SPACE,
+                    C.LIKE,
+                    C.SPACE,
+                    expression.ToSQL(isUnicode)
+                ));
+        }
     }
 }

@@ -2,7 +2,8 @@
 
 namespace SQLEngine
 {
-    public interface IQueryBuilder:IDisposable
+    
+    public interface IQueryBuilder: IDisposable
     {
         ISelectQueryBuilder Select { get; }
         IUpdateQueryBuilder Update { get; }
@@ -53,5 +54,25 @@ namespace SQLEngine
         string Build();
         AbstractSqlColumn Column(string columnName);
         AbstractSqlColumn Column(string columnName,string tableAlias);
+
+
+
+
+        AbstractSqlLiteral Literal(string x, bool isUniCode = true);
+        AbstractSqlLiteral Literal(DateTime x, bool includeTime = true);
+        AbstractSqlLiteral Literal(int x);
+        AbstractSqlLiteral Literal(int? x);
+        AbstractSqlLiteral Literal(byte x);
+        AbstractSqlLiteral Literal(byte? x);
+
+        AbstractSqlLiteral Literal(long x);
+        AbstractSqlLiteral Literal(long? x);
+
+        AbstractSqlLiteral Literal(short x);
+        AbstractSqlLiteral Literal(short? x);
+
+        AbstractSqlLiteral Literal(byte[] x);
+
     }
+
 }

@@ -399,5 +399,7 @@ namespace SQLEngine
         {
             return column?.NotEqualTo(value);
         }
+
+        public abstract AbstractSqlCondition Like(string expression, bool isUnicode = true);
     }
 }

@@ -13,10 +13,7 @@ namespace SQLEngine.SqlServer
         private readonly List<IAbstractQueryBuilder> _list = new List<IAbstractQueryBuilder>();
         
 
-        //public void Join(AbstractQueryBuilder other)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        
 
         public override string ToString()
         {
@@ -402,6 +399,62 @@ namespace SQLEngine.SqlServer
         {
             return new SqlServerColumnWithTableAlias(columnName, tableAlias);
         }
+
+        public AbstractSqlLiteral Literal(string x, bool isUniCode = true)
+        {
+            return SqlServerLiteral.From(x,isUniCode);
+        }
+
+        public AbstractSqlLiteral Literal(DateTime x, bool includeTime = true)
+        {
+            return SqlServerLiteral.From(x, includeTime);
+        }
+
+        public AbstractSqlLiteral Literal(int x)
+        {
+            return SqlServerLiteral.From(x);
+        }
+
+        public AbstractSqlLiteral Literal(int? x)
+        {
+            return SqlServerLiteral.From(x);
+        }
+
+        public AbstractSqlLiteral Literal(byte x)
+        {
+            return SqlServerLiteral.From(x);
+        }
+
+        public AbstractSqlLiteral Literal(byte? x)
+        {
+            return SqlServerLiteral.From(x);
+        }
+
+        public AbstractSqlLiteral Literal(long x)
+        {
+            return SqlServerLiteral.From(x);
+        }
+
+        public AbstractSqlLiteral Literal(long? x)
+        {
+            return SqlServerLiteral.From(x);
+        }
+
+        public AbstractSqlLiteral Literal(short x)
+        {
+            return SqlServerLiteral.From(x);
+        }
+
+        public AbstractSqlLiteral Literal(short? x)
+        {
+            return SqlServerLiteral.From(x);
+        }
+
+        public AbstractSqlLiteral Literal(byte[] x)
+        {
+            return SqlServerLiteral.From(x);
+        }
+
         public void Dispose()
         {
             foreach (var builder in _list)

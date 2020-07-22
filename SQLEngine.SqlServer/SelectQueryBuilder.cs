@@ -546,6 +546,18 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
+        public ISelectOrderBuilder OrderBy(AbstractSqlColumn column)
+        {
+            _orderByClauses.Add(new OrderByQueryModel(column, false));
+            return this;
+        }
+
+        public ISelectOrderBuilder OrderByDesc(AbstractSqlColumn column)
+        {
+            _orderByClauses.Add(new OrderByQueryModel(column, true));
+            return this;
+        }
+
         public ISelectWithoutFromAndGroupQueryBuilder GroupBy(ISqlExpression expression)
         {
             _groupByClauses.Add(expression.ToSqlString());
@@ -561,6 +573,18 @@ namespace SQLEngine.SqlServer
         public ISelectWithoutFromAndGroupQueryBuilder GroupByDesc(ISqlExpression expression)
         {
             _groupByClauses.Add(expression.ToSqlString() + C.SPACE + C.DESC);
+            return this;
+        }
+
+        public ISelectWithoutFromAndGroupQueryBuilder GroupBy(AbstractSqlColumn column)
+        {
+            _groupByClauses.Add(column.ToSqlString());
+            return this;
+        }
+
+        public ISelectWithoutFromAndGroupQueryBuilder GroupByDesc(AbstractSqlColumn column)
+        {
+            _groupByClauses.Add(column.ToSqlString() + C.SPACE + C.DESC);
             return this;
         }
 

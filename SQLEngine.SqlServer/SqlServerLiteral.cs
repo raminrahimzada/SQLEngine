@@ -40,10 +40,10 @@ namespace SQLEngine.SqlServer
 
             return result;
         }
-        public static SqlServerLiteral From(DateTime date,bool onlyDate=false)
+        public static SqlServerLiteral From(DateTime date,bool includeTime = true)
         {
             var result = new SqlServerLiteral();
-            var str = date.ToString(onlyDate ? Query.Settings.DateFormat :Query.Settings.DateTimeFormat);
+            var str = date.ToString((!includeTime) ? Query.Settings.DateFormat : Query.Settings.DateTimeFormat);
             result._rawSqlString = $"'{str}'";
             return result;
         }

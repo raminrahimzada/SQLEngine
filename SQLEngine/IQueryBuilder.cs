@@ -49,7 +49,11 @@ namespace SQLEngine
         //void Drop(Func<IDropTableQueryBuilder, IDropTableNoNameNoSchemaNoDBQueryBuilder> builder);
         //void Drop(Func<IDropTableQueryBuilder, IDropTableNoNameQueryBuilder> builder);
         //void Drop(Func<IDropViewQueryBuilder, IDropViewQueryBuilder> builder);
-        void Cursor(string selection,string[] intoVariables,Action<IQueryBuilder> body);
+        void Cursor(
+            string cursorName,
+            Action<ISelectQueryBuilder> selection,
+            AbstractSqlVariable[] intoVariables,
+            Action<IQueryBuilder> body);
         void Print(ISqlExpression expression);
         //void Join(AbstractQueryBuilder other);
         string Build();

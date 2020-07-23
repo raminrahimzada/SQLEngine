@@ -196,9 +196,9 @@ END
         [TestMethod]
         public void Test_Create_Index()
         {
-            using (var t = Query.New)
+            using (var q = Query.New)
             {
-                t
+                q
                         .Create
                         .Index("IX_Unique_Email")
                         .OnTable("Users")
@@ -210,16 +210,16 @@ END
                 CREATE UNIQUE  INDEX IX_Unique_Email ON Users ( Email ) 
                 ";
 
-                QueryAssert.AreEqual(t.ToString(), query);
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
         
         [TestMethod]
         public void Test_Create_Database()
         {
-            using (var t = Query.New)
+            using (var q = Query.New)
             {
-                t
+                q
                         .Create
                         .Database("FacebookDB")
                     ;
@@ -228,7 +228,7 @@ END
                 CREATE DATABASE FacebookDB
                 ";
 
-                QueryAssert.AreEqual(t.ToString(), query);
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
     }

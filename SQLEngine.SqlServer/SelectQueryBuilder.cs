@@ -12,7 +12,6 @@ namespace SQLEngine.SqlServer
         ISelectWithoutFromAndGroupQueryBuilder,
         ISelectWithoutFromAndGroupNeedHavingConditionQueryBuilder,
         ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder
-
     {
         internal sealed class OrderByQueryModel
         {
@@ -139,16 +138,9 @@ namespace SQLEngine.SqlServer
             _mainTableName = tableName;
             return this;
         }
-        
-        
 
-        //public ISelectWithSelectorQueryBuilder SelectAssign(string left, Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> right)
-        //{
-        //    using (var q = new BinaryExpressionBuilder())
-        //    {
-        //        return SelectAssign(left, right(q).Build());
-        //    }
-        //}
+
+        
         public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left,
             ISqlExpression right)
         {
@@ -173,106 +165,30 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        //public ISelectWithSelectorQueryBuilder Select(Func<ICaseWhenNeedWhenQueryBuilder, ICaseWhenNeedWhenQueryBuilder> selectorBuilder, string alias)
-        //{
-        //    MutateAliasName(ref alias);
-        //    var selection = selectorBuilder(GetDefault<CaseWhenQueryBuilder>()).Build();
-        //    return Select(selection, alias);
-        //}
+        
 
         public ISelectWithSelectorQueryBuilder Select(ISqlExpression selector, string alias)
         {
             MutateAliasName(ref alias);
-            //if (SQLKeywords.GetAll().Any(k => k == alias.ToUpperInvariant()))
-            //{
-            //    alias = SQLKeywords.BEGIN_SCOPE + alias + SQLKeywords.END_SCOPE;
-            //}
             _selectors.Add($"{selector} {C.AS} {alias}" );
             return this;
         }
 
-        //public ISelectWithSelectorQueryBuilder Select(Func<IConditionFilterQueryHelper, string> helperBuilder)
-        //{
-        //    using (var builder = Query.New)
-        //    {
-        //        return Select(helperBuilder(builder.Helper));
-        //    }
-        //}
 
-        //public ISelectWithSelectorQueryBuilder Select(Func<IConditionFilterQueryHelper, string> helperBuilder, string alias)
-        //{
-        //    MutateAliasName(ref alias);
-        //    using (var builder = Query.New)
-        //    {
-        //        return Select(helperBuilder(builder.Helper), alias);
-        //    }
-        //}
-
-        public ISelectWithSelectorQueryBuilder SelectCol(string tableAlias, string columnName, string alias = null)
+        public ISelectWithoutWhereQueryBuilder WhereAnd(params AbstractSqlCondition[] conditions)
         {
-            MutateAliasName(ref alias);
-            _selectors.Add(string.IsNullOrEmpty(alias)
-                ? $"{tableAlias}.{columnName}"
-                : $"{tableAlias}.{columnName} {C.AS} {alias}");
+            _whereClause = string.Join(C.AND,
+                conditions
+                    .Select(x => x.ToSqlString())
+                    .Select(x => string.Concat(C.BEGIN_SCOPE, x, C.END_SCOPE))
+            );
             return this;
         }
 
-        //public ISelectWithoutWhereQueryBuilder Where(Func<AbstractConditionBuilder, AbstractConditionBuilder> builder)
-        //{
-        //    _whereClause = builder.Invoke(GetDefault<AbstractConditionBuilder>()).Build();
-        //    return this;
-        //}
-        //public ISelectWithoutWhereQueryBuilder Where(Func<BinaryConditionExpressionBuilder, BinaryConditionExpressionBuilder> builder)
-        //{
-        //    _whereClause = builder.Invoke(GetDefault<BinaryConditionExpressionBuilder>()).Build();
-        //    return this;
-        //}
         public ISelectWithoutWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression right)
         {
             var col = new SqlServerColumn(columnName);
-            using (var b = Query.New)
-                _whereClause = b.Helper.Equal(col, right);
-            return this;
-        }
-
-        //public ISelectWithoutWhereQueryBuilder WhereIDIs(long id)
-        //{
-        //    using (var b = Query.New)
-        //        _whereClause = b.Helper.Equal("ID", id.ToSQL());
-        //    return this;
-        //}
-
-        //public ISelectWithoutWhereQueryBuilder WhereIDIs(string sqlVariable)
-        //{
-        //    using (var b = Query.New)
-        //        _whereClause = b.Helper.Equal("ID", sqlVariable);
-        //    return this;
-        //}
-        //public ISelectWithoutWhereQueryBuilder Where(Func<ConditionBuilder, ConditionBuilder> builder)
-        //{
-        //    _whereClause = builder.Invoke(GetDefault<ConditionBuilder>()).Build();
-        //    return this;
-        //}
-
-        public ISelectWithoutWhereQueryBuilder WhereAnd(params string[] filters)
-        {
-            using (var b = Query.New)
-            {
-                _whereClause = b.Helper.And(filters);
-            }
-
-            return this;
-        }
-
-        //public ISelectWithoutWhereQueryBuilder WhereAnd(params Func<BinaryConditionExpressionBuilder, BinaryConditionExpressionBuilder>[] builders)
-        //{
-        //    _whereClause = builders.Select(builder => builder.Invoke(GetDefault<BinaryConditionExpressionBuilder>()).Build())
-        //        .JoinWith(SQLKeywords.AND);
-        //    return this;
-        //}
-        public ISelectWithoutWhereQueryBuilder Where(string condition)
-        {
-            _whereClause = condition;
+            _whereClause = string.Concat(col.ToSqlString(), C.EQUALS, right.ToSqlString());
             return this;
         }
         public ISelectWithoutWhereQueryBuilder Where(AbstractSqlCondition condition)
@@ -552,7 +468,7 @@ namespace SQLEngine.SqlServer
 
         public ISelectOrderBuilder OrderBy(AbstractSqlColumn column)
         {
-            _orderByClauses.Add(new OrderByQueryModel(column, false));
+            _orderByClauses.Add(new OrderByQueryModel(column));
             return this;
         }
 

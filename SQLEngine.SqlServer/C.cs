@@ -5,6 +5,7 @@
     /// </summary>
     public static class C
     {
+        public const string AND="AND";
         public const string MIN = "MIN";
         public const string AVG = "AVG";
         public const string SUM = "SUM";

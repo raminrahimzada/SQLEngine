@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Alter.Column.cs" />
+    <Compile Include="Cursor.cs" />
     <Compile Include="Drop.cs" />
     <Compile Include="Delete.cs" />
     <Compile Include="Complex_Queries.cs" />

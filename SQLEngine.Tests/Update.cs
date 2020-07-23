@@ -9,9 +9,9 @@ namespace SQLEngine.Tests
         [TestMethod]
         public void Test_Update_1()
         {
-            using (var t = Query.New)
+            using (var q = Query.New)
             {
-                t
+                q
                     .Update
                     .Top(5)
                     .Table("Users")
@@ -23,18 +23,18 @@ namespace SQLEngine.Tests
                 const string query =
                     "UPDATE TOP(5)  Users SET NAME = N'Ramin' , SURNAME = N'Rahimzada' , AGE = 18 WHERE (ID = 41)";
 
-                QueryAssert.AreEqual(t.ToString(), query);
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
 
         [TestMethod]
         public void Test_Update_Filter_1()
         {
-            using (var t = Query.New)
+            using (var q = Query.New)
             {
-                var id = t.Column("Id");
+                var id = q.Column("Id");
 
-                t
+                q
                     .Update
                     .Top(5)
                     .Table("Users")
@@ -47,18 +47,18 @@ namespace SQLEngine.Tests
      SET Age = 21
      WHERE (Id = 17)
 ";
-                QueryAssert.AreEqual(t.ToString(), query);
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
 
         [TestMethod]
         public void Test_Update_Filter_2()
         {
-            using (var t = Query.New)
+            using (var q = Query.New)
             {
-                var age = t.Column("Age");
+                var age = q.Column("Age");
 
-                t
+                q
                     .Update
                     .Top(5)
                     .Table("Users")
@@ -71,7 +71,7 @@ namespace SQLEngine.Tests
      SET CanWatchMovie = 1
      WHERE (Age >= 18)
 ";
-                QueryAssert.AreEqual(t.ToString(), query);
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
 
@@ -79,12 +79,12 @@ namespace SQLEngine.Tests
         [TestMethod]
         public void Test_Update_Filter_3()
         {
-            using (var t = Query.New)
+            using (var q = Query.New)
             {
-                var lastLogin = t.Column("LastLoginDate");
+                var lastLogin = q.Column("LastLoginDate");
 
 
-                t
+                q
                     .Update
                     .Top(5)
                     .Table("Users")
@@ -98,18 +98,18 @@ namespace SQLEngine.Tests
      SET Blocked = 1
      WHERE (LastLoginDate <= '2000-01-01 00:00:00.000')
 ";
-                QueryAssert.AreEqual(t.ToString(), query);
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
 
         [TestMethod]
         public void Test_Update_Filter_4()
         {
-            using (var t = Query.New)
+            using (var q = Query.New)
             {
-                var id = t.Column("Id");
+                var id = q.Column("Id");
 
-                t
+                q
                     .Update
                     .Top(5)
                     .Table("Users")
@@ -124,7 +124,7 @@ UPDATE TOP(5) Users
  SET Blocked = 1 , BlockDate = '2020-01-01 00:00:00.000'
  WHERE ((Id < 100) AND (Id > 10))
 ";
-                QueryAssert.AreEqual(t.ToString(), query);
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
     }

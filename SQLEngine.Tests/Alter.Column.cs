@@ -18,9 +18,9 @@ namespace SQLEngine.Tests
         [TestMethod]
         public void Test_Alter_Table_AddColumn()
         {
-            using (var t = Query.New)
+            using (var q = Query.New)
             {
-                t
+                q
                     .Alter
                     .Table("Users")
                     .AddColumn("Age")
@@ -34,16 +34,16 @@ namespace SQLEngine.Tests
 ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ";
 
-                QueryAssert.AreEqual(t.Build(), query);
+                QueryAssert.AreEqual(q.Build(), query);
             }
         }
 
         [TestMethod]
         public void Test_Alter_Table_AddColumn_OfType_Strong_Typed()
         {
-            using (var t = Query.New)
+            using (var q = Query.New)
             {
-                t
+                q
                         .Alter
                         .Table("Users")
                         .AddColumn("Age")
@@ -57,15 +57,15 @@ ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ";
 
-                QueryAssert.AreEqual(t.ToString(), query);
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
         [TestMethod]
         public void Test_Alter_Table_DropColumn()
         {
-            using (var t = Query.New)
+            using (var q = Query.New)
             {
-                t
+                q
                         .Alter
                         .Table("Users")
                         .DropColumn("Age")
@@ -75,15 +75,15 @@ ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ALTER TABLE  Users  DROP  COLUMN  Age 
 ";
 
-                QueryAssert.AreEqual(t.ToString(), query);
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
         [TestMethod]
         public void Test_Alter_Table_RenameColumn()
         {
-            using (var t = Query.New)
+            using (var q = Query.New)
             {
-                t
+                q
                         .Alter
                         .Table("Users")
                         .RenameColumn("Age")
@@ -96,15 +96,15 @@ EXECUTE sys.sp_rename  @objtype=N'COLUMN'
 	,@newname=N'Age_Of_User';
 ";
 
-                QueryAssert.AreEqual(t.ToString(), query);
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
         [TestMethod]
         public void Test_Alter_Table_AlterColumn()
         {
-            using (var t = Query.New)
+            using (var q = Query.New)
             {
-                t
+                q
                         .Alter
                         .Table("Users")
                         .AlterColumn("Name")
@@ -118,16 +118,16 @@ EXECUTE sys.sp_rename  @objtype=N'COLUMN'
 ALTER TABLE Users ALTER COLUMN Name VARCHAR(15) NOT NULL  DEFAULT ( N'Anonymous' )
 ";
 
-                QueryAssert.AreEqual(t.ToString(), query);
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
         
         [TestMethod]
         public void Test_Alter_Table_AlterColumn_Decimal()
         {
-            using (var t = Query.New)
+            using (var q = Query.New)
             {
-                t
+                q
                         .Alter
                         .Table<UserTable>() //another form you can use
                         .AlterColumn("Weight")
@@ -140,7 +140,7 @@ ALTER TABLE Users ALTER COLUMN Name VARCHAR(15) NOT NULL  DEFAULT ( N'Anonymous'
 ALTER TABLE Users ALTER COLUMN Weight decimal(18,4) NOT NULL 
 ";
 
-                QueryAssert.AreEqual(t.ToString(), query);
+                QueryAssert.AreEqual(q.ToString(), query);
             }
         }
 

@@ -67,6 +67,7 @@ namespace SQLEngine.SqlServer
             throw new Exception("Complex type " + type.FullName + " cannot be converted to sql type");
         }
 
+        
 
         public static IExecuteFunctionNeedNameQueryBuilder Arg(this IExecuteFunctionNeedNameQueryBuilder builder,SqlServerLiteral parameterValue)
         {
@@ -497,14 +498,14 @@ namespace SQLEngine.SqlServer
             builder.Set(variable, value);
         }
 
-        public static string ColumnGreaterThan(this IConditionFilterQueryHelper helper, string columnName, SqlServerLiteral value)
-        {
-            return helper.ColumnGreaterThan(columnName, value);
-        }
-        public static string ColumnLessThan(this IConditionFilterQueryHelper helper, string columnName, SqlServerLiteral value)
-        {
-            return helper.ColumnLessThan(columnName, value);
-        }
+        //public static string ColumnGreaterThan(this IConditionFilterQueryHelper helper, string columnName, SqlServerLiteral value)
+        //{
+        //    return helper.ColumnGreaterThan(columnName, value);
+        //}
+        //public static string ColumnLessThan(this IConditionFilterQueryHelper helper, string columnName, SqlServerLiteral value)
+        //{
+        //    return helper.ColumnLessThan(columnName, value);
+        //}
 
         public static ISelectWithoutWhereQueryBuilder WhereColumnEquals(this ISelectWhereQueryBuilder builder,
             string columnName, SqlServerLiteral right)

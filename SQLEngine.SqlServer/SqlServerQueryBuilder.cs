@@ -84,14 +84,14 @@ namespace SQLEngine.SqlServer
         public IIfQueryBuilder IfOr(params AbstractSqlCondition[] conditions)
         {
             var str = conditions.Select(x => x.ToSqlString()).ToArray();
-            var xx = Helper.Or(str);
+            var xx = string.Join(C.OR, str);
             var condition = SqlServerCondition.Raw(xx);
             return If(condition);
         }
         public IIfQueryBuilder IfAnd(params AbstractSqlCondition[] conditions)
         {
             var str = conditions.Select(x => x.ToSqlString()).ToArray();
-            var xx = Helper.And(str);
+            var xx = string.Join(C.AND, str);
             var condition = SqlServerCondition.Raw(xx);
             return If(condition);
         }
@@ -293,20 +293,28 @@ namespace SQLEngine.SqlServer
                 return beginning.ToLowerInvariant() + "__" + _randomFeed;// + Guid.NewGuid().ToString().Replace("-", "_").ToLowerInvariant();
             }
         }
-        public void Cursor(string selection,string[] intoVariables,Action<IQueryBuilder> body)
+        public void Cursor(
+            string cursorName,
+            Action<ISelectQueryBuilder> selection,
+            AbstractSqlVariable[] intoVariables,
+            Action<IQueryBuilder> body)
         {
             _list.Add(new RawStringQueryBuilder(Writer =>
             {
-                var variableName = "__cursor_" + Guid.NewGuid().ToString().Replace("-", "");
+                var variableName = cursorName;//"__cursor_" + Guid.NewGuid().ToString().Replace("-", "");
                 Writer.Write(C.DECLARE);
                 Writer.Write(C.SPACE);
-                Writer.Write(variableName);
+                Writer.Write(cursorName);
                 Writer.Write(C.SPACE);
                 Writer.Write(C.CURSOR);
                 Writer.Write(C.SPACE);
                 Writer.Write(C.FOR);
                 Writer.Write(C.SPACE);
-                Writer.Write(selection);
+                using (var s=new SelectQueryBuilder())
+                {
+                    selection(s);
+                    s.Build(Writer);
+                }
                 Writer.WriteLine();
 
                 Writer.Write(C.OPEN);
@@ -338,8 +346,13 @@ namespace SQLEngine.SqlServer
                 Writer.Write(C.BEGIN);
                 Writer.WriteLine();
                 Writer.Indent++;
-                //TODO
-                //body(this);
+
+                using (var s = new FunctionBodyQueryBuilder())
+                {
+                    body(s);
+                    Writer.Write(s.Build());
+                }
+
                 Writer.WriteLine();
                 Writer.Write(C.FETCH);
                 Writer.Write(C.SPACE);

@@ -320,14 +320,14 @@ SELECT TOP(1)   *
         {
             using (var q = Query.New)
             {
-                var filter = q.Helper.ColumnGreaterThan("Age", 18);
+                var age = q.Column("Age");
                 q
                     .Select
                     .Top(1)
                     .Select("Name")
                     .Select("Surname")
                     .From("Users")
-                    .Where(filter)
+                    .Where(age > 18)
                     ;
 
                 var queryThat = @"
@@ -345,8 +345,8 @@ SELECT TOP(1)  Name , Surname
         {
             using (var q = Query.New)
             {
-                var filter1 = q.Helper.ColumnGreaterThan("Age", 18);
-                var filter2 = q.Helper.ColumnLessThan("Height", 1.7);
+                var age = q.Column("Age");
+                var height = q.Column("Height");
 
                 q
                     .Select
@@ -354,7 +354,10 @@ SELECT TOP(1)  Name , Surname
                     .Select("Name")
                     .Select("Surname")
                     .From("Users")
-                    .WhereAnd(filter1, filter2)
+
+                    .WhereAnd(age > 18, height < 1.7)
+                    //or like that
+                    //.Where(age > 18 & height < 1.7)
                     ;
 
                 const string queryThat = @"

@@ -11,13 +11,10 @@ namespace SQLEngine.SqlServer
     public class SqlServerQueryBuilder : IQueryBuilder
     {
         private readonly List<IAbstractQueryBuilder> _list = new List<IAbstractQueryBuilder>();
-        
-
-        
 
         public override string ToString()
         {
-            return this.Build();
+            return Build();
         }
 
         public  string Build()
@@ -31,7 +28,6 @@ namespace SQLEngine.SqlServer
         }
 
         
-        //public ISelectQueryBuilder Select => new SelectQueryBuilder();
         private T _Add<T>(T item) where T : IAbstractQueryBuilder
         {
             _list.Add(item);
@@ -47,38 +43,36 @@ namespace SQLEngine.SqlServer
         public ICreateQueryBuilder Create => _Add(new CreateQueryBuilder());
         
         public IDropQueryBuilder Drop => _Add(new DropQueryBuilder());
+        public IExecuteQueryBuilder Execute => _Add(new ExecuteQueryBuilder());
 
 
         public IConditionFilterQueryHelper Helper { get; } = new SqlServerConditionFilterQueryHelper();
 
+        public void Union()
+        {
+            _list.Add(new RawStringQueryBuilder(writer =>
+            {
+                writer.WriteLineEx(C.UNION);
+            }));
+        }
 
-        //public void Create(Func<ICreateQueryBuilder, ICreateTableQueryBuilder> builder)
-        //{
-        //    Writer.WriteLineEx(builder.Invoke(GetDefault<CreateQueryBuilder>()).Build());
-        //}
-        //public void Create(Func<ICreateQueryBuilder, IAbstractCreateFunctionQueryBuilder> builder)
-        //{
-        //    Writer.WriteLineEx(builder.Invoke(GetDefault<CreateQueryBuilder>()).Build());
-        //}
-
-
-        //public void Select(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> builder)
-        //{
-        //    Writer.WriteLineEx(builder.Invoke(GetDefault<SelectQueryBuilder>()).Build());
-        //}
-
-        //public void Union()
-        //{
-        //    _list.Add(new );
-        //    Writer.WriteLineEx(C.UNION);
-        //}
-
-        //public void UnionAll()
-        //{
-        //    Writer.WriteLine(C.UNION);
-        //    Writer.WriteLine(C.SPACE);
-        //    Writer.WriteLine(C.ALL);
-        //}
+        public void UnionAll()
+        {
+            _list.Add(new RawStringQueryBuilder(writer =>
+            {
+                writer.WriteLine(C.UNION);
+                writer.WriteLine(C.SPACE);
+                writer.WriteLine(C.ALL);
+            }));
+        }
+        [Obsolete("This is a fallback for " +
+                  "If You don't find any Method to use for custom query," +
+                  "So If You Are Here Please create issue on github " +
+                  "page of SqlEngine Repository")]
+        public ISqlExpression Raw(string expression)
+        {
+            return new SqlServerRawExpression(expression);
+        }
 
         public void Truncate(string tableName)
         {
@@ -169,12 +163,27 @@ namespace SQLEngine.SqlServer
 
         public void SetToScopeIdentity(AbstractSqlVariable variable)
         {
-            Set(variable, SqlServerLiteral.Raw("SCOPE_IDENTITY()"));
+            Set(variable, x => x.ScopeIdentity());
+        }
+
+        public void Set(AbstractSqlVariable variable, Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallNopBuilder> right)
+        {
+            var t = new SetQueryBuilder();
+            var functionCallExpressionBuilder=new CustomFunctionCallExpressionBuilder();
+            right(functionCallExpressionBuilder);
+            using (var writer=SqlWriter.New)
+            {
+                functionCallExpressionBuilder.Build(writer);
+#pragma warning disable CS0618 // Type or member is obsolete
+                var expression = t.Set(variable).To(Raw(writer.Build()));
+#pragma warning restore CS0618 // Type or member is obsolete
+                _list.Add(expression);
+            }
         }
 
         public void Set(AbstractSqlVariable variable, ISqlExpression value)
         {
-            using (var t = new SetQueryBuilder())
+            var t = new SetQueryBuilder();
             {
                 var expression = t.Set(variable).To(value);
                 _list.Add(expression);
@@ -182,7 +191,7 @@ namespace SQLEngine.SqlServer
         }
         public void Set(AbstractSqlVariable variable, AbstractSqlVariable value)
         {
-            using (var t = new SetQueryBuilder())
+            var t = new SetQueryBuilder();
             {
                 var expression = t.Set(variable).To(value);
                 _list.Add(expression);
@@ -190,7 +199,7 @@ namespace SQLEngine.SqlServer
         }
         public void Set(AbstractSqlVariable variable, AbstractSqlLiteral value)
         {
-            using (var t = new SetQueryBuilder())
+            var t = new SetQueryBuilder();
             {
                 var expression = t.Set(variable).To(value);
                 _list.Add(expression);
@@ -284,22 +293,6 @@ namespace SQLEngine.SqlServer
                 return beginning.ToLowerInvariant() + "__" + _randomFeed;// + Guid.NewGuid().ToString().Replace("-", "_").ToLowerInvariant();
             }
         }
-
-
-        //public void Drop(Func<IDropTableQueryBuilder, IDropTableNoNameNoSchemaNoDBQueryBuilder> builder)
-        //{
-        //    Writer.WriteLineEx(builder.Invoke(GetDefault<DropTableQueryBuilder>()).Build());
-        //}
-
-        //public void Drop(Func<IDropTableQueryBuilder, IDropTableNoNameQueryBuilder> builder)
-        //{
-        //    Writer.WriteLineEx(builder.Invoke(GetDefault<DropTableQueryBuilder>()).Build());
-        //}
-        //public void Drop(Func<IDropViewQueryBuilder, IDropViewQueryBuilder> builder)
-        //{
-        //    Writer.WriteLineEx(builder.Invoke(GetDefault<DropViewQueryBuilder>()).Build());
-        //}
-
         public void Cursor(string selection,string[] intoVariables,Action<IQueryBuilder> body)
         {
             _list.Add(new RawStringQueryBuilder(Writer =>
@@ -454,6 +447,8 @@ namespace SQLEngine.SqlServer
         {
             return SqlServerLiteral.From(x);
         }
+
+        
 
         public void Dispose()
         {

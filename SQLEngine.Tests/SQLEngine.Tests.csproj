@@ -53,6 +53,8 @@
     <Compile Include="Drop.cs" />
     <Compile Include="Delete.cs" />
     <Compile Include="Complex_Queries.cs" />
+    <Compile Include="Execute.cs" />
+    <Compile Include="FutureWorks.cs" />
     <Compile Include="PhotosTable.cs" />
     <Compile Include="QueryAssert.cs" />
     <Compile Include="Create.cs" />

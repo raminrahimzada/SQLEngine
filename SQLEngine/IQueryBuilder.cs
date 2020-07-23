@@ -12,12 +12,13 @@ namespace SQLEngine
         ICreateQueryBuilder Create { get; }
         IAlterQueryBuilder Alter { get; }
         IDropQueryBuilder Drop { get; }
+        IExecuteQueryBuilder Execute { get; }
         IConditionFilterQueryHelper Helper { get; }
         //void Create(Func<ICreateQueryBuilder, ICreateTableQueryBuilder> builder);
         //void Create(Func<ICreateQueryBuilder, IAbstractCreateFunctionQueryBuilder> builder);
         //void Select(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> builder);
-        //void Union();
-        //void UnionAll();
+        void Union();
+        void UnionAll();
         void Truncate(string tableName);
         IIfQueryBuilder IfOr(params AbstractSqlCondition[] conditions);
         IIfQueryBuilder IfAnd(params AbstractSqlCondition[] conditions);
@@ -31,7 +32,7 @@ namespace SQLEngine
         AbstractSqlVariable DeclareRandom(string variableName, string type, AbstractSqlLiteral defaultValue = null);
         AbstractSqlVariable Declare(string variableName, string type, AbstractSqlLiteral defaultValue = null);
         void SetToScopeIdentity(AbstractSqlVariable variable);
-        //void Set(ISqlVariable variable, Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> right);
+        void Set(AbstractSqlVariable variable, Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallNopBuilder> right);
         void Set(AbstractSqlVariable variable, ISqlExpression value);
         void Set(AbstractSqlVariable variable, AbstractSqlVariable value);
         void Set(AbstractSqlVariable variable, AbstractSqlLiteral value);
@@ -73,6 +74,7 @@ namespace SQLEngine
 
         AbstractSqlLiteral Literal(byte[] x);
 
+        ISqlExpression Raw(string expression);
     }
 
 }

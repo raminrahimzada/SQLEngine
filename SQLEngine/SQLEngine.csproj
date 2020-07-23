@@ -73,8 +73,8 @@
     <Compile Include="IAlterTableNoNameRenameColumnNoNewNameQueryBuilder.cs" />
     <Compile Include="IAlterTableNoNameRenameColumnQueryBuilder.cs" />
     <Compile Include="IAlterTableQueryBuilder.cs" />
-    <Compile Include="IBinaryExpressionBuilder.cs" />
-    <Compile Include="IBinaryExpressionNopBuilder.cs" />
+    <Compile Include="ICustomFunctionCallExpressionBuilder.cs" />
+    <Compile Include="ICustomFunctionCallNopBuilder.cs" />
     <Compile Include="ICaseWhenNeedThenQueryBuilder.cs" />
     <Compile Include="ICaseWhenNeedWhenQueryBuilder.cs" />
     <Compile Include="ICaseWhenQueryBuilder.cs" />
@@ -124,6 +124,8 @@
     <Compile Include="IExceptDefaultValueNameDeclarationQueryBuilder.cs" />
     <Compile Include="IExceptVariableNameDeclarationQueryBuilder.cs" />
     <Compile Include="IExceptVariableTypeNameDeclarationQueryBuilder.cs" />
+    <Compile Include="IExecuteFunctionNeedNameAndSchemaQueryBuilder.cs" />
+    <Compile Include="IExecuteFunctionNeedNameQueryBuilder.cs" />
     <Compile Include="IExecuteProcedureNeedArgQueryBuilder.cs" />
     <Compile Include="IExecuteProcedureNeedNameQueryBuilder.cs" />
     <Compile Include="IExecuteProcedureQueryBuilder.cs" />

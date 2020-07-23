@@ -53,6 +53,7 @@
     <Compile Include="CreateDatabaseQueryBuilder.cs" />
     <Compile Include="CreateIndexQueryBuilder.cs" />
     <Compile Include="C.cs" />
+    <Compile Include="CustomFunctionCallExpressionBuilderExtensions.cs" />
     <Compile Include="ElseIfQueryBuilder.cs" />
     <Compile Include="IfQueryBuilder.cs" />
     <Compile Include="IndentedTextWriterExtensions.cs" />
@@ -69,7 +70,7 @@
     <Compile Include="AlterTableDropConstraintQueryBuilder.cs" />
     <Compile Include="AlterTableQueryBuilder.cs" />
     <Compile Include="AlterTableRenameColumnQueryBuilder.cs" />
-    <Compile Include="BinaryExpressionBuilder.cs" />
+    <Compile Include="CustomFunctionCallExpressionBuilder.cs" />
     <Compile Include="CaseWhenQueryBuilder.cs" />
     <Compile Include="CastQueryBuilder.cs" />
     <Compile Include="ColumnQueryBuilder.cs" />

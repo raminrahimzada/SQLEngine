@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SQLEngine.SqlServer
 {
@@ -18,24 +17,29 @@ namespace SQLEngine.SqlServer
         internal sealed class OrderByQueryModel
         {
             private readonly IAbstractQueryBuilder _internalBuilder;
-            private readonly bool? isDesc;
+            private readonly bool? _isDesc;
             public OrderByQueryModel(AggregateFunctionBuilder aggregateFunction,bool? isDesc=false)
             {
                 _internalBuilder = aggregateFunction;
-                this.isDesc = isDesc;
+                _isDesc = isDesc;
+            }
+            public OrderByQueryModel(CustomFunctionCallExpressionBuilder customFunctionCallExpressionBuilder,bool? isDesc=false)
+            {
+                _internalBuilder = customFunctionCallExpressionBuilder;
+                _isDesc = isDesc;
             }
 
             public OrderByQueryModel(ISqlExpression expression, bool? isDesc = false)
             {
                 string expressionSql = expression.ToSqlString();
                 _internalBuilder = new RawStringQueryBuilder(w => w.Write(expressionSql));
-                this.isDesc = isDesc;
+                _isDesc = isDesc;
             }
 
             public void Build(ISqlWriter Writer)
             {
                 _internalBuilder.Build(Writer);
-                if (isDesc??false)
+                if (_isDesc??false)
                 {
                     Writer.Write(C.SPACE);
                     Writer.Write(C.DESC);
@@ -148,7 +152,7 @@ namespace SQLEngine.SqlServer
         public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left,
             ISqlExpression right)
         {
-            _selectors.Add(new BinaryExpressionBuilder().Assign(left,right));
+            _selectors.Add(new CustomFunctionCallExpressionBuilder().Assign(left,right));
             return this;
         }
         public ISelectWithSelectorQueryBuilder Select(ISqlExpression expression)
@@ -598,6 +602,17 @@ namespace SQLEngine.SqlServer
                 return this;
             }
         }
+
+        public ISelectWithSelectorQueryBuilder Select(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallNopBuilder> aggregate)
+        {
+            using (var b = new CustomFunctionCallExpressionBuilder())
+            {
+                aggregate(b);
+                _selectors.Add(new OrderByQueryModel(b));
+                return this;
+            }
+        }
+
         private string JoinQuery(JoinModel model)
         {
             if (!string.IsNullOrWhiteSpace(model.RawCondition))

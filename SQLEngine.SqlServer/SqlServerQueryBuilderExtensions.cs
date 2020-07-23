@@ -67,6 +67,21 @@ namespace SQLEngine.SqlServer
             throw new Exception("Complex type " + type.FullName + " cannot be converted to sql type");
         }
 
+
+        public static IExecuteFunctionNeedNameQueryBuilder Arg(this IExecuteFunctionNeedNameQueryBuilder builder,SqlServerLiteral parameterValue)
+        {
+            return builder.Arg(parameterValue);
+        }
+
+        public static IExecuteProcedureNeedArgQueryBuilder Arg(this IExecuteProcedureNeedArgQueryBuilder builder,string parameterName, SqlServerLiteral parameterValue)
+        {
+            return builder.Arg(parameterName, parameterValue);
+        }
+
+        public static IExecuteProcedureNeedArgQueryBuilder ArgOut(this IExecuteProcedureNeedArgQueryBuilder builder,string parameterName, SqlServerLiteral parameterValue)
+        {
+            return builder.ArgOut(parameterName, parameterValue);
+        }
         public static ISelectOrderBuilder OrderBy(this ISelectWithoutFromQueryBuilder builder,string columnName)
         {
             return builder.OrderBy(new SqlServerColumn(columnName));

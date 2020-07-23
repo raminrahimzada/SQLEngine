@@ -54,7 +54,7 @@
                 writer.Write(C.END_SCOPE);
             }
 
-            writer.Write(C.SEMICOLON);
+            writer.WriteLine(C.SEMICOLON);
         }
     }
 }

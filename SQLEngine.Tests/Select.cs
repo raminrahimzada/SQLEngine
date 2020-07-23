@@ -97,7 +97,32 @@ SELECT TOP(1)   *
 
             }
         }
+        [TestMethod]
+        public void Test_Simple_Select_With_function()
+        {
+            using (var q = Query.New)
+            {
+                var name = q.Column("Name");
+                q
+                    .Select
+                    .Top(1)
+                    .Select(name)
+                    .Select(x => x.Len(name))
+                    .Select(x => x.Trim(name))
+                    
+                    .From("Users")
+                    ;
 
+
+                const string queryThat = @"
+SELECT TOP(1)  Name, LEN(Name), TRIM(Name)
+    FROM Users
+
+";
+                QueryAssert.AreEqual(q.ToString(), queryThat);
+
+            }
+        }
         [TestMethod]
         public void Test_Simple_Select_Assign()
         {
@@ -157,7 +182,7 @@ SELECT TOP(1) *
         {
             using (var q = Query.New)
             {
-                var now = DateTime.Now.Date;
+                var now = DateTime.Parse("2020-07-22");
 
                 //literal sample for example only date example
                 var toDate = q.Literal(now, includeTime: false);

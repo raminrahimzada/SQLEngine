@@ -20,7 +20,7 @@ namespace SQLEngine
 
         public override string ToString()
         {
-            throw new Exception("Please Call Build method");
+            throw new Exception("Please Call Build() method Instead of ToString()");
         }
 
         public void Dispose()

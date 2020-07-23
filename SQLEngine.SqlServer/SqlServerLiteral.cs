@@ -196,6 +196,14 @@ namespace SQLEngine.SqlServer
         {
             return new SqlServerLiteral {_rawSqlString = rawSqlString};
         }
+        public static AbstractSqlLiteral Raw(char ch)
+        {
+            return new SqlServerLiteral {_rawSqlString = ch.ToString()};
+        }
+        public static AbstractSqlLiteral Raw(char? ch)
+        {
+            return new SqlServerLiteral {_rawSqlString = ch?.ToString()};
+        }
 
         public static implicit operator string(SqlServerLiteral x)
         {
@@ -203,6 +211,14 @@ namespace SQLEngine.SqlServer
         }
 
         public static implicit operator SqlServerLiteral(int x)
+        {
+            return From(x);
+        }
+        public static implicit operator SqlServerLiteral(char x)
+        {
+            return From(x);
+        }
+        public static implicit operator SqlServerLiteral(char? x)
         {
             return From(x);
         }

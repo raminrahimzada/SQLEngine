@@ -2,6 +2,6 @@
 {
     public interface IExecuteProcedureNeedNameQueryBuilder : IExecuteProcedureQueryBuilder
     {
-        IExecuteProcedureNeedArgQueryBuilder Name(string procedureName, bool useScoping = false);
+        IExecuteProcedureNeedArgQueryBuilder Name(string procedureName);
     }
 }

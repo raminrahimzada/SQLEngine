@@ -91,5 +91,39 @@ SET @x = '00000000-0000-0000-0000-000000000000'
                 QueryAssert.AreEqual(q.ToString(), query);
             }
         }
+
+        [TestMethod]
+        public void Test_Declare_And_Set_With_Function()
+        {
+            using (var q = Query.New)
+            {
+                var tableName = q.Declare<string>("tableName");
+                
+                q.Set(tableName,"Users");
+                
+                var objId = q.Declare<int>("objId");
+
+                //Here OBJECT_ID is extension method on SqlEngine.SqlServer 
+                //You can write your own custom functions as extensions to use it like that
+                //see ICustomFunctionCallExpressionBuilder extensions
+                
+                q.Set(objId, x => x.ObjectId(tableName));
+
+                q.Print(objId);
+
+                const string query = @"
+
+DECLARE  @tableName NVARCHAR ;
+SET  @tableName  = N'Users';
+
+DECLARE  @objId INT ;
+SET  @objId  = OBJECT_ID(@tableName);
+
+print(@objId)
+
+";
+                QueryAssert.AreEqual(q.ToString(), query);
+            }
+        }
     }
 }

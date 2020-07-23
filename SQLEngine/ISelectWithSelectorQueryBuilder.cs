@@ -23,5 +23,6 @@ namespace SQLEngine
         ISelectWithoutFromQueryBuilder From(string tableName);
         ISelectWithoutFromQueryBuilder FromSubQuery(string query, string alias);
         ISelectWithSelectorQueryBuilder Select(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate);
+        ISelectWithSelectorQueryBuilder Select(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallNopBuilder> aggregate);
     }
 }

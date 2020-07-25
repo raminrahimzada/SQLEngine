@@ -89,5 +89,10 @@
             _defaultValue = expression;
             return this;
         }
+        public IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeNoDefaultValueQueryBuilder DefaultValue(AbstractSqlLiteral literal)
+        {
+            _defaultValue = literal;
+            return this;
+        }
     }
 }

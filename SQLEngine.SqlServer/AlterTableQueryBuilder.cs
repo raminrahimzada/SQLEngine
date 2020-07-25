@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal class AlterTableQueryBuilder :
+    internal class AlterTableQueryBuilder :AbstractQueryBuilder,
              IAlterTableQueryBuilder
             , IAlterTableNoNameQueryBuilder
             , IAlterTableNoNameDropColumnQueryBuilder
@@ -41,12 +41,12 @@
             return b;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             _internalBuilder.Dispose();
         }
 
-        public void Build(ISqlWriter writer)
+        public override void Build(ISqlWriter writer)
         {
             _internalBuilder.Build(writer);
         }

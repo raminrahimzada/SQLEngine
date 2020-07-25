@@ -64,16 +64,22 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public IColumnQueryBuilder DefaultValue(string defaultValue, string defaultConstraintName = null)
+        public IColumnQueryBuilder DefaultValue(ISqlExpression defaultValue, string defaultConstraintName = null)
         {
-            Model.DefaultValue = defaultValue;
+            Model.DefaultValue = defaultValue.ToSqlString();
+            Model.DefaultConstraintName = defaultConstraintName;
+            return this;
+        }
+        public IColumnQueryBuilder DefaultValue(AbstractSqlLiteral literal, string defaultConstraintName = null)
+        {
+            Model.DefaultValue = literal.ToSqlString();
             Model.DefaultConstraintName = defaultConstraintName;
             return this;
         }
 
-        public IColumnQueryBuilder CalculatedColumn(string expression, bool? isPersisted = true)
+        public IColumnQueryBuilder CalculatedColumn(ISqlExpression expression, bool? isPersisted = true)
         {
-            Model.CalculatedColumnExpression = expression;
+            Model.CalculatedColumnExpression = expression.ToSqlString();
             Model.IsPersisted = isPersisted;
             return this;
         }

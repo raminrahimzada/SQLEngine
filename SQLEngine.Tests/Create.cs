@@ -30,7 +30,7 @@ namespace SQLEngine.Tests
 
                         //custom column with all props
                         c.Column("Age").Type("INT").Check("Age>1 && Age<100"),
-                        c.Datetime("BirthDate").DefaultValue("GETDATE()"),
+                        c.Datetime("BirthDate").DefaultValueRaw("GETDATE()"),
                         c.Bool("HasDriverLicense"),
 
 

@@ -191,6 +191,12 @@ namespace SQLEngine.SqlServer
             _whereClause = string.Concat(col.ToSqlString(), C.EQUALS, right.ToSqlString());
             return this;
         }
+        public ISelectWithoutWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlLiteral literal)
+        {
+            var col = new SqlServerColumn(columnName);
+            _whereClause = string.Concat(col.ToSqlString(), C.EQUALS, literal.ToSqlString());
+            return this;
+        }
         public ISelectWithoutWhereQueryBuilder Where(AbstractSqlCondition condition)
         {
             _whereClause = condition.ToSqlString();

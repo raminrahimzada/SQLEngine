@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer
 {
-    internal class CustomFunctionCallExpressionBuilder : ICustomFunctionCallNopBuilder, ICustomFunctionCallExpressionBuilder
+    internal class CustomFunctionCallExpressionBuilder :AbstractQueryBuilder, ICustomFunctionCallNopBuilder, ICustomFunctionCallExpressionBuilder
     {
         private Action<ISqlWriter> _internalBuilder;
 
@@ -28,12 +28,12 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             
         }
 
-        public void Build(ISqlWriter writer)
+        public override void Build(ISqlWriter writer)
         {
             _internalBuilder(writer);
         }

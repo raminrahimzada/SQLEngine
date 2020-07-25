@@ -39,6 +39,15 @@ namespace SQLEngine
 
         public abstract void Build(ISqlWriter writer);
 
+        public string Build()
+        {
+            using (var writer=SqlWriter.New)
+            {
+                Build(writer);
+                return writer.Build();
+            }
+        }
+
         public virtual void Dispose()
         {
             Writer?.Dispose();

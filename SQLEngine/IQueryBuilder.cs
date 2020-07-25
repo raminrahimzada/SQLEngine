@@ -5,6 +5,16 @@ namespace SQLEngine
     
     public interface IQueryBuilder: IDisposable
     {
+        ISqlExpression Null { get; }
+        ISelectQueryBuilder _select { get; }
+        IUpdateQueryBuilder _update { get; }
+        IDeleteQueryBuilder _delete { get; }
+        IInsertQueryBuilder _insert { get; }
+        IAlterQueryBuilder _alter { get; }
+        ICreateQueryBuilder _create { get; }
+        IDropQueryBuilder _drop { get; }
+        IExecuteQueryBuilder _execute { get; }
+
         ISelectQueryBuilder Select { get; }
         IUpdateQueryBuilder Update { get; }
         IDeleteQueryBuilder Delete { get; }
@@ -14,15 +24,17 @@ namespace SQLEngine
         IDropQueryBuilder Drop { get; }
         IExecuteQueryBuilder Execute { get; }
         IConditionFilterQueryHelper Helper { get; }
-        //void Create(Func<ICreateQueryBuilder, ICreateTableQueryBuilder> builder);
-        //void Create(Func<ICreateQueryBuilder, IAbstractCreateFunctionQueryBuilder> builder);
-        //void Select(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> builder);
+        
         void Union();
         void UnionAll();
         void Truncate(string tableName);
         IIfQueryBuilder IfOr(params AbstractSqlCondition[] conditions);
         IIfQueryBuilder IfAnd(params AbstractSqlCondition[] conditions);
         IIfQueryBuilder If(AbstractSqlCondition condition);
+
+        IIfQueryBuilder IfExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selection);
+        IIfQueryBuilder IfExists(IAbstractSelectQueryBuilder selection);
+
         IElseIfQueryBuilder ElseIf(AbstractSqlCondition condition);
         void Else();
         void Begin();
@@ -44,6 +56,7 @@ namespace SQLEngine
         void Return();
         //void Return(string sql);
         void Return(ISqlExpression expression);
+        void Return(AbstractSqlLiteral literal);
         void Comment(string comment);
         string GenerateRandomVariableName(string beginning);
         //void Drop(Func<IDropTableQueryBuilder, IDropTableNoNameNoSchemaNoDBQueryBuilder> builder);
@@ -55,6 +68,7 @@ namespace SQLEngine
             AbstractSqlVariable[] intoVariables,
             Action<IQueryBuilder> body);
         void Print(ISqlExpression expression);
+        void Print(AbstractSqlLiteral literal);
         //void Join(AbstractQueryBuilder other);
         string Build();
         AbstractSqlColumn Column(string columnName);

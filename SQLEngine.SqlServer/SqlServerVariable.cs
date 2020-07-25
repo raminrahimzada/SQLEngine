@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal class SqlServerVariable: AbstractSqlVariable
+    public class SqlServerVariable: AbstractSqlVariable
     {
         public SqlServerVariable(string name)
         {
@@ -22,6 +22,18 @@
         {
             var sql = "(" + ToSqlString() + " - " + y.ToSqlString() + ")";
             return new SqlServerRawExpression(sql);
+        }
+
+        public override AbstractSqlCondition IsNull()
+        {
+            var sql = "(" + ToSqlString() + " IS NULL)";
+            return new SqlServerCondition(sql);
+        }
+
+        public override AbstractSqlCondition IsNotNull()
+        {
+            var sql = "(" + ToSqlString() + " IS NOT NULL)";
+            return new SqlServerCondition(sql);
         }
 
         protected override AbstractSqlCondition Greater(AbstractSqlVariable abstractSqlVariable)
@@ -78,9 +90,21 @@
             return SqlServerCondition.Raw(expression);
         }
 
+        protected override AbstractSqlCondition EqualsTo(AbstractSqlLiteral literal)
+        {
+            var expression = ToSqlString() + " = " + literal.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
         protected override AbstractSqlCondition NotEqualsTo(AbstractSqlColumn column)
         {
             var expression = ToSqlString() + " <> " + column.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition NotEqualsTo(AbstractSqlLiteral literal)
+        {
+            var expression = ToSqlString() + " <> " + literal.ToSqlString();
             return SqlServerCondition.Raw(expression);
         }
 

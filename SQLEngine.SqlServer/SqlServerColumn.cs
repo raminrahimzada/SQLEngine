@@ -3,6 +3,33 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer
 {
+    internal class SqlServerColumnWithAsExpression : SqlServerColumn
+    {
+        private readonly string _asName;
+        public SqlServerColumnWithAsExpression(string name,string asName) : base(name)
+        {
+            _asName = asName;
+        }
+
+        public override string ToSqlString()
+        {
+            return base.ToSqlString() + C.AS + _asName;
+        }
+    }
+    internal class SqlServerColumnWithTableAliasAndAsExpression : SqlServerColumnWithTableAlias
+    {
+        private readonly string _asName;
+
+        public override string ToSqlString()
+        {
+            return base.ToSqlString() + C.AS + _asName;
+        }
+
+        public SqlServerColumnWithTableAliasAndAsExpression(string name, string tableAlias,string asName) : base(name, tableAlias)
+        {
+            _asName = asName;
+        }
+    }
     internal class SqlServerColumn : AbstractSqlColumn
     {
         public SqlServerColumn(string name)

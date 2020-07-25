@@ -30,7 +30,7 @@ namespace SQLEngine.Tests
         {
             using (var q = Query.New)
             {
-                var dict = new Dictionary<string,SqlServerLiteral>
+                var dict = new Dictionary<string,AbstractSqlLiteral>
                 {
                     {"Name", "Ramin"},
                     {"Surname", "Rahimzada"},

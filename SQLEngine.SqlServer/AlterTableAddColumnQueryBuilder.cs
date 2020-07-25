@@ -41,6 +41,11 @@
             _defaultValue = expression.ToSqlString();
             return this;
         }
+        public IAlterTableNoNameAddColumnNoNameNoTypeNameNoSizeNoDefaultValueQueryBuilder DefaultValue(AbstractSqlLiteral literal)
+        {
+            _defaultValue = literal.ToSqlString();
+            return this;
+        }
 
         public override void Build(ISqlWriter writer)
         {

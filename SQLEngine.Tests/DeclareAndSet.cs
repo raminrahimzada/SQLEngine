@@ -84,9 +84,8 @@ SET @x = 48
                 q.Set(x, Guid.Empty);
                 const string query = @"
 
-declare @x UNIQUEIDENTIFIER
-
-SET @x = '00000000-0000-0000-0000-000000000000'
+DECLARE  @x UNIQUEIDENTIFIER ;
+SET  @x  = 00000000-0000-0000-0000-000000000000;
 ";
                 QueryAssert.AreEqual(q.ToString(), query);
             }

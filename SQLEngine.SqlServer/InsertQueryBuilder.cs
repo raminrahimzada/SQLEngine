@@ -5,7 +5,8 @@ using System.Linq;
 namespace SQLEngine.SqlServer
 {
     internal class InsertQueryBuilder : AbstractQueryBuilder, 
-        IInsertNoIntoWithColumns, IInsertNoValuesQueryBuilder, 
+        IInsertNoIntoWithColumns, 
+        IInsertNoValuesQueryBuilder, 
         IInsertNeedValueQueryBuilder,
         IInsertQueryBuilder, 
         IInsertNoIntoQueryBuilder
@@ -59,10 +60,23 @@ namespace SQLEngine.SqlServer
             _columnsAndValuesDictionary.Add(columnName, columnValue);
             return this;
         }
+        public IInsertNeedValueQueryBuilder Value(string columnName, AbstractSqlVariable variable)
+        {
+            if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, ISqlExpression>();
+            _columnsAndValuesDictionary.Add(columnName, variable);
+            return this;
+        }
 
         public IInsertNoValuesQueryBuilder Values(Dictionary<string, ISqlExpression> colsAndValues)
         {
             _columnsAndValuesDictionary = colsAndValues;
+            return this;
+        }
+
+        public IInsertNoValuesQueryBuilder Values(Dictionary<string, AbstractSqlLiteral> colsAndValuesAsLiterals)
+        {
+            _columnsAndValuesDictionary =
+                colsAndValuesAsLiterals.ToDictionary(x => x.Key, x => (ISqlExpression) x.Value);
             return this;
         }
 

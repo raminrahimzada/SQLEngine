@@ -10,6 +10,10 @@ namespace SQLEngine.SqlServer
 {
     public class SqlServerQueryBuilder : IQueryBuilder
     {
+        static SqlServerQueryBuilder()
+        {
+            SqlServerLiteral.Setup();
+        }
         private readonly List<IAbstractQueryBuilder> _list = new List<IAbstractQueryBuilder>();
 
         public override string ToString()
@@ -43,7 +47,28 @@ namespace SQLEngine.SqlServer
         public ICreateQueryBuilder Create => _Add(new CreateQueryBuilder());
         
         public IDropQueryBuilder Drop => _Add(new DropQueryBuilder());
-        public IExecuteQueryBuilder Execute => _Add(new ExecuteQueryBuilder());
+        public IExecuteQueryBuilder Execute => _Add(new ExecuteQueryBuilder());   public ISelectQueryBuilder _Select => (new SelectQueryBuilder());
+
+        private ISqlExpression _null;
+        public ISqlExpression Null
+        {
+            get
+            {
+                if (_null != null) return _null;
+                _null = new SqlServerRawExpression(C.NULL);
+                return _null;
+            }
+        }
+        public ISelectQueryBuilder _select => (new SelectQueryBuilder());
+        public IUpdateQueryBuilder _update => (new UpdateQueryBuilder());
+        public IDeleteQueryBuilder _delete => (new DeleteQueryBuilder());
+        public IInsertQueryBuilder _insert => (new InsertQueryBuilder());
+        public IAlterQueryBuilder _alter => (new AlterQueryBuilder());
+        
+        public ICreateQueryBuilder _create => (new CreateQueryBuilder());
+        
+        public IDropQueryBuilder _drop => (new DropQueryBuilder());
+        public IExecuteQueryBuilder _execute => (new ExecuteQueryBuilder());
 
 
         public IConditionFilterQueryHelper Helper { get; } = new SqlServerConditionFilterQueryHelper();
@@ -98,6 +123,14 @@ namespace SQLEngine.SqlServer
         public IIfQueryBuilder If(AbstractSqlCondition condition)
         {
             return _Add(new IfQueryBuilder(condition));            
+        }
+        public IIfQueryBuilder IfExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selection)
+        {
+            throw new NotImplementedException();
+        }
+        public IIfQueryBuilder IfExists(IAbstractSelectQueryBuilder selection)
+        {
+            throw new NotImplementedException();
         }
 
         public IElseIfQueryBuilder ElseIf(AbstractSqlCondition condition)
@@ -264,6 +297,15 @@ namespace SQLEngine.SqlServer
                 writer.WriteLine();
             }));
         }
+        public void Return(AbstractSqlLiteral literal)
+        {
+            _list.Add(new RawStringQueryBuilder(writer =>
+            {
+                writer.Write(C.RETURN);
+                writer.Write(literal.ToSqlString());
+                writer.WriteLine();
+            }));
+        }
 
         public void Comment(string comment)
         {
@@ -391,6 +433,18 @@ namespace SQLEngine.SqlServer
                 writer.Write("print");
                 writer.Write(C.BEGIN_SCOPE);
                 writer.Write(expression.ToSqlString());
+                writer.Write(C.END_SCOPE);
+                writer.WriteLine();
+            }));
+            
+        }
+        public void Print(AbstractSqlLiteral literal)
+        {
+            _list.Add(new RawStringQueryBuilder(writer =>
+            {
+                writer.Write("print");
+                writer.Write(C.BEGIN_SCOPE);
+                writer.Write(literal.ToSqlString());
                 writer.Write(C.END_SCOPE);
                 writer.WriteLine();
             }));

@@ -2,7 +2,7 @@
 {
     public interface IUpdateNoTableAndValuesQueryBuilder : IAbstractUpdateQueryBuilder
     {
-        IUpdateNoTableAndValuesAndWhereQueryBuilder Where(string condition);
+        //IUpdateNoTableAndValuesAndWhereQueryBuilder Where(string condition);
         //IUpdateNoTableAndValuesAndWhereQueryBuilder Where(Func<AbstractConditionBuilder, AbstractConditionBuilder> builder);
 
         //IUpdateNoTableAndValuesAndWhereQueryBuilder Where(

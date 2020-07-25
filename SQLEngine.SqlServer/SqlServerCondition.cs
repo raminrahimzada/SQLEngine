@@ -4,6 +4,11 @@
     {
         private string _rawSqlString;
 
+        public SqlServerCondition(string rawSqlString)
+        {
+            _rawSqlString = rawSqlString;
+        }
+
         public override string ToSqlString()
         {
             return _rawSqlString;
@@ -23,10 +28,7 @@
 
         public static SqlServerCondition Raw(string rawSqlString)
         {
-            return new SqlServerCondition
-            {
-                _rawSqlString = rawSqlString
-            };
+            return new SqlServerCondition(rawSqlString);
         }
     }
 }

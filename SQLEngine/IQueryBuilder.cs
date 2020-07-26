@@ -6,6 +6,7 @@ namespace SQLEngine
     public interface IQueryBuilder: IDisposable
     {
         ISqlExpression Null { get; }
+        ISqlExpression Now { get; }
         ISelectQueryBuilder _select { get; }
         IUpdateQueryBuilder _update { get; }
         IDeleteQueryBuilder _delete { get; }
@@ -34,6 +35,9 @@ namespace SQLEngine
 
         IIfQueryBuilder IfExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selection);
         IIfQueryBuilder IfExists(IAbstractSelectQueryBuilder selection);
+        
+        IIfQueryBuilder IfNotExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selection);
+        IIfQueryBuilder IfNotExists(IAbstractSelectQueryBuilder selection);
 
         IElseIfQueryBuilder ElseIf(AbstractSqlCondition condition);
         void Else();
@@ -41,8 +45,13 @@ namespace SQLEngine
         void AddExpression(string expression);
         void End();
         //void Declare(Func<IDeclarationQueryBuilder, IDeclarationQueryBuilder> builder);
-        AbstractSqlVariable DeclareRandom(string variableName, string type, AbstractSqlLiteral defaultValue = null);
-        AbstractSqlVariable Declare(string variableName, string type, AbstractSqlLiteral defaultValue = null);
+        AbstractSqlVariable DeclareRandom(string variableName, string type, AbstractSqlLiteral defaultValue);
+        AbstractSqlVariable DeclareRandom(string variableName, string type, ISqlExpression defaultValue);
+        AbstractSqlVariable DeclareRandom(string variableName, string type);
+        AbstractSqlVariable Declare(string variableName, string type);
+        AbstractSqlVariable Declare(string variableName, string type, AbstractSqlLiteral defaultValue);
+        AbstractSqlVariable Declare(string variableName, string type, ISqlExpression defaultValue);
+
         void SetToScopeIdentity(AbstractSqlVariable variable);
         void Set(AbstractSqlVariable variable, Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallNopBuilder> right);
         void Set(AbstractSqlVariable variable, ISqlExpression value);
@@ -58,7 +67,7 @@ namespace SQLEngine
         void Return(ISqlExpression expression);
         void Return(AbstractSqlLiteral literal);
         void Comment(string comment);
-        string GenerateRandomVariableName(string beginning);
+        string GenerateUniqueVariableName(string beginning);
         //void Drop(Func<IDropTableQueryBuilder, IDropTableNoNameNoSchemaNoDBQueryBuilder> builder);
         //void Drop(Func<IDropTableQueryBuilder, IDropTableNoNameQueryBuilder> builder);
         //void Drop(Func<IDropViewQueryBuilder, IDropViewQueryBuilder> builder);

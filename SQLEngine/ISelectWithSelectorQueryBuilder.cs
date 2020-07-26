@@ -5,6 +5,7 @@ namespace SQLEngine
     public interface ISelectWithSelectorQueryBuilder : IJoinedQueryBuilder
     {
         ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left, ISqlExpression right);
+        ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left, AbstractSqlLiteral literal);
 
         ISelectWithSelectorQueryBuilder Select(AbstractSqlColumn column);
         ISelectWithSelectorQueryBuilder Select(ISqlExpression expression);

@@ -6,10 +6,10 @@ namespace SQLEngine
     public abstract class AbstractSqlColumn : ISqlExpression
 #pragma warning restore 660,661
     {
-        //TODO Refactor this, too much bottleneck codes here 
         public string Name { get; set; }
         public abstract string ToSqlString();
 
+        #region EqualTo
         protected abstract AbstractSqlCondition EqualTo(AbstractSqlColumn otherColumn);
         protected abstract AbstractSqlCondition EqualTo(AbstractSqlLiteral value);
         protected abstract AbstractSqlCondition EqualTo(int value);
@@ -23,7 +23,11 @@ namespace SQLEngine
         protected abstract AbstractSqlCondition EqualTo(decimal value);
         protected abstract AbstractSqlCondition EqualTo(double value);
         protected abstract AbstractSqlCondition EqualTo(float value);
+        protected abstract AbstractSqlCondition EqualTo(AbstractSqlVariable variable);
 
+        #endregion
+
+        #region NotEqualTo
         protected abstract AbstractSqlCondition NotEqualTo(AbstractSqlColumn otherColumn);
         protected abstract AbstractSqlCondition NotEqualTo(AbstractSqlVariable otherColumn);
         protected abstract AbstractSqlCondition NotEqualTo(AbstractSqlLiteral value);
@@ -39,69 +43,192 @@ namespace SQLEngine
         protected abstract AbstractSqlCondition NotEqualTo(double value);
         protected abstract AbstractSqlCondition NotEqualTo(float value);
 
+
+        #endregion
+
+        #region Greater
         protected abstract AbstractSqlCondition Greater(AbstractSqlColumn otherColumn);
-        protected abstract AbstractSqlCondition GreaterEqual(AbstractSqlColumn otherColumn);
-        protected abstract AbstractSqlCondition Less(AbstractSqlColumn otherColumn);
-
-        protected abstract AbstractSqlCondition LessEqual(AbstractSqlColumn otherColumn);
-
         protected abstract AbstractSqlCondition Greater(AbstractSqlLiteral value);
-        protected abstract AbstractSqlCondition GreaterEqual(AbstractSqlLiteral value);
-        protected abstract AbstractSqlCondition Less(AbstractSqlLiteral value);
-        protected abstract AbstractSqlCondition LessEqual(AbstractSqlLiteral value);
-
-
-        protected abstract AbstractSqlCondition EqualTo(AbstractSqlVariable variable);
-        protected abstract AbstractSqlCondition GreaterEqual(AbstractSqlVariable variable);
-        protected abstract AbstractSqlCondition Greater(AbstractSqlVariable variable);
-        protected abstract AbstractSqlCondition Less(AbstractSqlVariable variable);
-        protected abstract AbstractSqlCondition LessEqual(AbstractSqlVariable variable);
-
         protected abstract AbstractSqlCondition Greater(byte value);
-        protected abstract AbstractSqlCondition GreaterEqual(byte value);
-        protected abstract AbstractSqlCondition Less(byte value);
-        protected abstract AbstractSqlCondition LessEqual(byte value);
-
-
-
+        protected abstract AbstractSqlCondition Greater(AbstractSqlVariable variable);
         protected abstract AbstractSqlCondition Greater(DateTime value);
-        protected abstract AbstractSqlCondition GreaterEqual(DateTime value);
-        protected abstract AbstractSqlCondition Less(DateTime value);
-        protected abstract AbstractSqlCondition LessEqual(DateTime value);
-
-
         protected abstract AbstractSqlCondition Greater(double value);
+        protected abstract AbstractSqlCondition Greater(long value);
+        protected abstract AbstractSqlCondition Greater(int value);
+
+
+        #endregion
+
+        #region GreaterEqual
+        protected abstract AbstractSqlCondition GreaterEqual(AbstractSqlColumn otherColumn);
+        protected abstract AbstractSqlCondition GreaterEqual(AbstractSqlLiteral value);
+        protected abstract AbstractSqlCondition GreaterEqual(AbstractSqlVariable variable);
+        protected abstract AbstractSqlCondition GreaterEqual(byte value);
+        protected abstract AbstractSqlCondition GreaterEqual(DateTime value);
         protected abstract AbstractSqlCondition GreaterEqual(double value);
+        protected abstract AbstractSqlCondition GreaterEqual(long value);
+        protected abstract AbstractSqlCondition GreaterEqual(int value);
+
+
+        #endregion
+
+        #region Less
+        protected abstract AbstractSqlCondition Less(AbstractSqlColumn otherColumn);
+        protected abstract AbstractSqlCondition Less(AbstractSqlLiteral value);
+
+        protected abstract AbstractSqlCondition Less(AbstractSqlVariable variable);
+
+        protected abstract AbstractSqlCondition Less(byte value);
         protected abstract AbstractSqlCondition Less(double value);
+        protected abstract AbstractSqlCondition Less(int value);
+        protected abstract AbstractSqlCondition Less(long value);
+
+        protected abstract AbstractSqlCondition Less(DateTime value);
+
+
+        #endregion
+
+        #region LessEqual
+        protected abstract AbstractSqlCondition LessEqual(AbstractSqlColumn otherColumn);
+        protected abstract AbstractSqlCondition LessEqual(AbstractSqlLiteral value);
+        protected abstract AbstractSqlCondition LessEqual(AbstractSqlVariable variable);
+        protected abstract AbstractSqlCondition LessEqual(byte value);
         protected abstract AbstractSqlCondition LessEqual(double value);
 
-
-        protected abstract AbstractSqlCondition Greater(long value);
-        protected abstract AbstractSqlCondition GreaterEqual(long value);
-        protected abstract AbstractSqlCondition Less(long value);
         protected abstract AbstractSqlCondition LessEqual(long value);
 
-        protected abstract AbstractSqlCondition Greater(int value);
-        protected abstract AbstractSqlCondition GreaterEqual(int value);
-        protected abstract AbstractSqlCondition Less(int value);
+        protected abstract AbstractSqlCondition LessEqual(DateTime value);
         protected abstract AbstractSqlCondition LessEqual(int value);
 
 
+        #endregion
 
-
+        #region <
 
         public static AbstractSqlCondition operator <(AbstractSqlColumn x, AbstractSqlColumn y)
         {
             return x.Less(y);
         }
+        public static AbstractSqlCondition operator <(AbstractSqlColumn x, AbstractSqlLiteral y)
+        {
+            return x.Less(y);
+        }
+        public static AbstractSqlCondition operator <(AbstractSqlColumn x, AbstractSqlVariable y)
+        {
+            return x.Less(y);
+        }
+        public static AbstractSqlCondition operator <(AbstractSqlColumn x, int y)
+        {
+            return x.Less(y);
+        }
+        public static AbstractSqlCondition operator <(AbstractSqlColumn x, long y)
+        {
+            return x.Less(y);
+        }
+        public static AbstractSqlCondition operator <(AbstractSqlColumn x, byte y)
+        {
+            return x.Less(y);
+        }
+        public static AbstractSqlCondition operator <(AbstractSqlColumn x, short y)
+        {
+            return x.Less(y);
+        }
+        public static AbstractSqlCondition operator <(AbstractSqlColumn x, DateTime y)
+        {
+            return x.Less(y);
+        }
+        public static AbstractSqlCondition operator <(AbstractSqlColumn x, double y)
+        {
+            return x.Less(y);
+        }
+        #endregion
+
+        #region >
+        public static AbstractSqlCondition operator >(AbstractSqlColumn x, AbstractSqlColumn y)
+        {
+            return x.Greater(y);
+        }
+        public static AbstractSqlCondition operator >(AbstractSqlColumn x, AbstractSqlLiteral y)
+        {
+            return x.Greater(y);
+        }
+        public static AbstractSqlCondition operator >(AbstractSqlColumn x, AbstractSqlVariable y)
+        {
+            return x.Greater(y);
+        }
+        public static AbstractSqlCondition operator >(AbstractSqlColumn x, int y)
+        {
+            return x.Greater(y);
+        }
+        public static AbstractSqlCondition operator >(AbstractSqlColumn x, long y)
+        {
+            return x.Greater(y);
+        }
+        public static AbstractSqlCondition operator >(AbstractSqlColumn x, byte y)
+        {
+            return x.Greater(y);
+        }
+        public static AbstractSqlCondition operator >(AbstractSqlColumn x, short y)
+        {
+            return x.Greater(y);
+        }
+        public static AbstractSqlCondition operator >(AbstractSqlColumn x, DateTime y)
+        {
+            return x.Greater(y);
+        }
+        public static AbstractSqlCondition operator >(AbstractSqlColumn x, double y)
+        {
+            return x.Greater(y);
+        }
+        #endregion
+
+        #region <=
         public static AbstractSqlCondition operator <=(AbstractSqlColumn x, AbstractSqlColumn y)
         {
             return x.LessEqual(y);
         }
-
-        public static AbstractSqlCondition operator >(AbstractSqlColumn x, AbstractSqlColumn y)
+        public static AbstractSqlCondition operator <=(AbstractSqlColumn x, AbstractSqlLiteral y)
         {
-            return x.Greater(y);
+            return x.LessEqual(y);
+        }
+        public static AbstractSqlCondition operator <=(AbstractSqlColumn x, AbstractSqlVariable y)
+        {
+            return x.LessEqual(y);
+        }
+        public static AbstractSqlCondition operator <=(AbstractSqlColumn x, int y)
+        {
+            return x.LessEqual(y);
+        }
+        public static AbstractSqlCondition operator <=(AbstractSqlColumn x, long y)
+        {
+            return x.LessEqual(y);
+        }
+        public static AbstractSqlCondition operator <=(AbstractSqlColumn x, byte y)
+        {
+            return x.LessEqual(y);
+        }
+        public static AbstractSqlCondition operator <=(AbstractSqlColumn x, short y)
+        {
+            return x.LessEqual(y);
+        }
+
+        public static AbstractSqlCondition operator <=(AbstractSqlColumn x, double y)
+        {
+            return x.LessEqual(y);
+        }
+
+
+        public static AbstractSqlCondition operator <=(AbstractSqlColumn x, DateTime y)
+        {
+            return x.LessEqual(y);
+        }
+
+        #endregion
+
+        #region >=
+        public static AbstractSqlCondition operator >=(AbstractSqlColumn x, AbstractSqlLiteral y)
+        {
+            return x.GreaterEqual(y);
         }
         public static AbstractSqlCondition operator >=(AbstractSqlColumn x, AbstractSqlColumn y)
         {
@@ -109,159 +236,133 @@ namespace SQLEngine
         }
 
 
-        public static AbstractSqlCondition operator <(AbstractSqlColumn x, AbstractSqlLiteral y)
-        {
-            return x.Less(y);
-        }
-        public static AbstractSqlCondition operator <=(AbstractSqlColumn x, AbstractSqlLiteral y)
-        {
-            return x.LessEqual(y);
-        }
 
-        public static AbstractSqlCondition operator >(AbstractSqlColumn x, AbstractSqlLiteral y)
-        {
-            return x.Greater(y);
-        }
-        public static AbstractSqlCondition operator >=(AbstractSqlColumn x, AbstractSqlLiteral y)
-        {
-            return x.GreaterEqual(y);
-        }
 
-        public static AbstractSqlCondition operator <(AbstractSqlColumn x, AbstractSqlVariable y)
-        {
-            return x.Less(y);
-        }
-        public static AbstractSqlCondition operator <=(AbstractSqlColumn x, AbstractSqlVariable y)
-        {
-            return x.LessEqual(y);
-        }
 
-        public static AbstractSqlCondition operator >(AbstractSqlColumn x, AbstractSqlVariable y)
-        {
-            return x.Greater(y);
-        }
+
+
         public static AbstractSqlCondition operator >=(AbstractSqlColumn x, AbstractSqlVariable y)
         {
             return x.GreaterEqual(y);
         }
 
 
-        public static AbstractSqlCondition operator >(AbstractSqlColumn x, int y)
-        {
-            return x.Greater(y);
-        }
-        public static AbstractSqlCondition operator <(AbstractSqlColumn x, int y)
-        {
-            return x.Less(y);
-        }
+
         public static AbstractSqlCondition operator >=(AbstractSqlColumn x, int y)
         {
             return x.GreaterEqual(y);
         }
-        public static AbstractSqlCondition operator <=(AbstractSqlColumn x, int y)
-        {
-            return x.LessEqual(y);
-        }
 
 
 
-        public static AbstractSqlCondition operator >(AbstractSqlColumn x, long y)
-        {
-            return x.Greater(y);
-        }
-        public static AbstractSqlCondition operator <(AbstractSqlColumn x, long y)
-        {
-            return x.Less(y);
-        }
+
+
+
         public static AbstractSqlCondition operator >=(AbstractSqlColumn x, long y)
         {
             return x.GreaterEqual(y);
         }
-        public static AbstractSqlCondition operator <=(AbstractSqlColumn x, long y)
-        {
-            return x.LessEqual(y);
-        }
 
 
-        public static AbstractSqlCondition operator >(AbstractSqlColumn x, byte y)
-        {
-            return x.Greater(y);
-        }
-        public static AbstractSqlCondition operator <(AbstractSqlColumn x, byte y)
-        {
-            return x.Less(y);
-        }
+
+
         public static AbstractSqlCondition operator >=(AbstractSqlColumn x, byte y)
         {
             return x.GreaterEqual(y);
         }
-        public static AbstractSqlCondition operator <=(AbstractSqlColumn x, byte y)
-        {
-            return x.LessEqual(y);
-        }
 
 
-        public static AbstractSqlCondition operator >(AbstractSqlColumn x, short y)
-        {
-            return x.Greater(y);
-        }
-        public static AbstractSqlCondition operator <(AbstractSqlColumn x, short y)
-        {
-            return x.Less(y);
-        }
-        public static AbstractSqlCondition operator >=(AbstractSqlColumn x, short y)
-        {
-            return x.GreaterEqual(y);
-        }
-        public static AbstractSqlCondition operator <=(AbstractSqlColumn x, short y)
-        {
-            return x.LessEqual(y);
-        }
 
-
-        public static AbstractSqlCondition operator >(AbstractSqlColumn x, DateTime y)
-        {
-            return x.Greater(y);
-        }
-        public static AbstractSqlCondition operator <(AbstractSqlColumn x, DateTime y)
-        {
-            return x.Less(y);
-        }
         public static AbstractSqlCondition operator >=(AbstractSqlColumn x, DateTime y)
         {
             return x.GreaterEqual(y);
         }
-        public static AbstractSqlCondition operator <=(AbstractSqlColumn x, DateTime y)
+
+        public static AbstractSqlCondition operator >=(AbstractSqlColumn x, short y)
         {
-            return x.LessEqual(y);
+            return x.GreaterEqual(y);
         }
 
 
-        public static AbstractSqlCondition operator >(AbstractSqlColumn x, double y)
-        {
-            return x.Greater(y);
-        }
-        public static AbstractSqlCondition operator <(AbstractSqlColumn x, double y)
-        {
-            return x.Less(y);
-        }
+
+
         public static AbstractSqlCondition operator >=(AbstractSqlColumn x, double y)
         {
             return x.GreaterEqual(y);
         }
-        public static AbstractSqlCondition operator <=(AbstractSqlColumn x, double y)
+        #endregion
+
+        #region ==
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, AbstractSqlLiteral literal)
         {
-            return x.LessEqual(y);
+            return column?.EqualTo(literal);
         }
-
-
-
 
         public static AbstractSqlCondition operator ==(AbstractSqlColumn column, AbstractSqlColumn otherColumn)
         {
             return column?.EqualTo(otherColumn);
         }
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, AbstractSqlVariable otherColumn)
+        {
+            return column?.EqualTo(otherColumn);
+        }
 
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, DateTime value)
+        {
+            return column?.EqualTo(value);
+        }
+
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, int value)
+        {
+            return column?.EqualTo(value);
+        }
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, bool value)
+        {
+            return column?.EqualTo(value);
+        }
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, long value)
+        {
+            return column?.EqualTo(value);
+        }
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, decimal value)
+        {
+            return column?.EqualTo(value);
+        }
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, double value)
+        {
+            return column?.EqualTo(value);
+        }
+
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, float value)
+        {
+            return column?.EqualTo(value);
+        }
+
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, short value)
+        {
+            return column?.EqualTo(value);
+        }
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, byte value)
+        {
+            return column?.EqualTo(value);
+        }
+
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, Guid value)
+        {
+            return column?.EqualTo(value);
+        }
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, byte[] value)
+        {
+            return column?.EqualTo(value);
+        }
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, string value)
+        {
+            return column?.EqualTo(value);
+        }
+
+        #endregion
+
+        #region !=
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, AbstractSqlColumn otherColumn)
         {
             return column?.NotEqualTo(otherColumn);
@@ -270,38 +371,17 @@ namespace SQLEngine
         {
             return column?.NotEqualTo(otherColumn);
         }
-        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, AbstractSqlVariable otherColumn)
-        {
-            return column?.EqualTo(otherColumn);
-        }
 
 
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, AbstractSqlLiteral literal)
         {
             return column?.NotEqualTo(literal);
         }
-        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, AbstractSqlLiteral literal)
-        {
-            return column?.EqualTo(literal);
-        }
 
-
-        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, DateTime value)
-        {
-            return column?.EqualTo(value);
-        }
 
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, DateTime value)
         {
             return column?.NotEqualTo(value);
-        }
-        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, int value)
-        {
-            return column?.EqualTo(value);
-        }
-        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, bool value)
-        {
-            return column?.EqualTo(value);
         }
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, bool value)
         {
@@ -311,10 +391,6 @@ namespace SQLEngine
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, int value)
         {
             return column?.NotEqualTo(value);
-        }
-        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, long value)
-        {
-            return column?.EqualTo(value);
         }
 
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, long value)
@@ -336,53 +412,19 @@ namespace SQLEngine
         }
 
 
-        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, decimal value)
-        {
-            return column?.EqualTo(value);
-        }
-        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, double value)
-        {
-            return column?.EqualTo(value);
-        }
-
-        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, float value)
-        {
-            return column?.EqualTo(value);
-        }
-
-
-
-
-
-        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, short value)
-        {
-            return column?.EqualTo(value);
-        }
 
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, short value)
         {
             return column?.NotEqualTo(value);
         }
-        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, byte value)
-        {
-            return column?.EqualTo(value);
-        }
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, byte[] value)
         {
             return column?.NotEqualTo(value);
-        }
-        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, byte[] value)
-        {
-            return column?.EqualTo(value);
         }
 
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, byte value)
         {
             return column?.NotEqualTo(value);
-        }
-        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, Guid value)
-        {
-            return column?.EqualTo(value);
         }
 
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, Guid value)
@@ -390,16 +432,96 @@ namespace SQLEngine
             return column?.NotEqualTo(value);
         }
 
-        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, string value)
-        {
-            return column?.EqualTo(value);
-        }
 
         public static AbstractSqlCondition operator !=(AbstractSqlColumn column, string value)
         {
             return column?.NotEqualTo(value);
         }
+        #endregion
 
+        #region +
+        public static AbstractSqlExpression operator +(AbstractSqlColumn left, AbstractSqlColumn right)
+        {
+            return left.Add(right);
+        }
+        public static AbstractSqlExpression operator +(AbstractSqlColumn left, AbstractSqlLiteral right)
+        {
+            return left.Add(right);
+        }
+        public static AbstractSqlExpression operator +(AbstractSqlColumn left, ISqlExpression right)
+        {
+            return left.Add(right);
+        }
+
+        #endregion
+
+        #region -
+        public static AbstractSqlExpression operator -(AbstractSqlColumn left, AbstractSqlColumn right)
+        {
+            return left.Subtract(right);
+        }
+        public static AbstractSqlExpression operator -(AbstractSqlColumn left, AbstractSqlLiteral right)
+        {
+            return left.Subtract(right);
+        }
+        public static AbstractSqlExpression operator -(AbstractSqlColumn left, ISqlExpression right)
+        {
+            return left.Subtract(right);
+        }
+
+        #endregion
+        
+        #region /
+        public static AbstractSqlExpression operator /(AbstractSqlColumn left, AbstractSqlColumn right)
+        {
+            return left.Divide(right);
+        }
+        public static AbstractSqlExpression operator /(AbstractSqlColumn left, AbstractSqlLiteral right)
+        {
+            return left.Divide(right);
+        }
+        public static AbstractSqlExpression operator /(AbstractSqlColumn left, ISqlExpression right)
+        {
+            return left.Divide(right);
+        }
+
+        #endregion
+
+        #region *
+        public static AbstractSqlExpression operator *(AbstractSqlColumn left, AbstractSqlColumn right)
+        {
+            return left.Multiply(right);
+        }
+        public static AbstractSqlExpression operator *(AbstractSqlColumn left, AbstractSqlLiteral right)
+        {
+            return left.Multiply(right);
+        }
+        public static AbstractSqlExpression operator *(AbstractSqlColumn left, ISqlExpression right)
+        {
+            return left.Multiply(right);
+        }
+
+        #endregion
+        
         public abstract AbstractSqlCondition Like(string expression, bool isUnicode = true);
+
+
+       
+
+        protected abstract AbstractSqlExpression Add(AbstractSqlColumn right);
+        protected abstract AbstractSqlExpression Subtract(AbstractSqlColumn right);
+        protected abstract AbstractSqlExpression Divide(AbstractSqlColumn right);
+        protected abstract AbstractSqlExpression Multiply(AbstractSqlColumn right);
+        
+        protected abstract AbstractSqlExpression Add(AbstractSqlLiteral right);
+        protected abstract AbstractSqlExpression Subtract(AbstractSqlLiteral right);
+        protected abstract AbstractSqlExpression Divide(AbstractSqlLiteral right);
+        protected abstract AbstractSqlExpression Multiply(AbstractSqlLiteral right);
+        
+        protected abstract AbstractSqlExpression Add(ISqlExpression right);
+        protected abstract AbstractSqlExpression Subtract(ISqlExpression right);
+        protected abstract AbstractSqlExpression Divide(ISqlExpression right);
+        protected abstract AbstractSqlExpression Multiply(ISqlExpression right);
+        
     }
 }

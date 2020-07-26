@@ -58,6 +58,8 @@
     <Compile Include="IfQueryBuilder.cs" />
     <Compile Include="IndentedTextWriterExtensions.cs" />
     <Compile Include="RawStringQueryBuilder.cs" />
+    <Compile Include="SqlServerColumnWithAsExpression.cs" />
+    <Compile Include="SqlServerColumnWithTableAliasAndAsExpression.cs" />
     <Compile Include="SqlServerConditionFilterQueryHelper.cs" />
     <Compile Include="DropDatabaseQueryBuilder.cs" />
     <Compile Include="FunctionBodyQueryBuilder.cs" />

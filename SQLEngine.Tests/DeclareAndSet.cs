@@ -124,5 +124,31 @@ print(@objId)
                 QueryAssert.AreEqual(q.ToString(), query);
             }
         }
+
+
+        [TestMethod]
+        public void Test_Declare_And_Set_With_Cast()
+        {
+            using (var q = Query.New)
+            {
+                var today = q.Declare<DateTime>("today");
+
+                q.Set(today, DateTime.Parse("01/01/2020"));
+                
+                q.Set(today, x => x.Cast(today, C.DATE));
+
+                q.Print(today);
+
+                const string query = @"
+
+DECLARE  @today DATETIME 
+SET  @today  = '2020-01-01 00:00:00.000'
+SET  @today  = CAST(@today AS DATE)
+print(@today)
+
+";
+                QueryAssert.AreEqual(q.ToString(), query);
+            }
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace SQLEngine.SqlServer
+﻿using System.Text;
+
+namespace SQLEngine.SqlServer
 {
     public class SqlServerVariable: AbstractSqlVariable
     {
@@ -22,6 +24,86 @@
         {
             var sql = "(" + ToSqlString() + " - " + y.ToSqlString() + ")";
             return new SqlServerRawExpression(sql);
+        }
+
+        public override AbstractSqlCondition In(params ISqlExpression[] expressions)
+        {
+            var sb = new StringBuilder();
+            sb.Append(ToSqlString());
+            sb.Append(C.SPACE);
+            sb.Append(C.IN);
+            sb.Append(C.BEGIN_SCOPE);
+            for (var i = 0; i < expressions.Length; i++)
+            {
+                if (i != 0)
+                {
+                    sb.Append(C.COMMA);
+                }
+                sb.Append(expressions[i].ToSqlString());
+            }
+            sb.Append(C.END_SCOPE);
+            return new SqlServerCondition(sb.ToString());
+        }
+
+        public override AbstractSqlCondition In(params AbstractSqlLiteral[] expressions)
+        {
+            var sb = new StringBuilder();
+            sb.Append(ToSqlString());
+            sb.Append(C.SPACE);
+            sb.Append(C.IN);
+            sb.Append(C.BEGIN_SCOPE);
+            for (var i = 0; i < expressions.Length; i++)
+            {
+                if (i != 0)
+                {
+                    sb.Append(C.COMMA);
+                }
+                sb.Append(expressions[i].ToSqlString());
+            }
+            sb.Append(C.END_SCOPE);
+            return new SqlServerCondition(sb.ToString());
+        }
+
+        public override AbstractSqlCondition NotIn(params ISqlExpression[] expressions)
+        {
+            var sb = new StringBuilder();
+            sb.Append(ToSqlString());
+            sb.Append(C.SPACE);
+            sb.Append(C.NOT);
+            sb.Append(C.SPACE);
+            sb.Append(C.IN);
+            sb.Append(C.BEGIN_SCOPE);
+            for (var i = 0; i < expressions.Length; i++)
+            {
+                if (i != 0)
+                {
+                    sb.Append(C.COMMA);
+                }
+                sb.Append(expressions[i].ToSqlString());
+            }
+            sb.Append(C.END_SCOPE);
+            return new SqlServerCondition(sb.ToString());
+        }
+
+        public override AbstractSqlCondition NotIn(params AbstractSqlLiteral[] expressions)
+        {
+            var sb = new StringBuilder();
+            sb.Append(ToSqlString());
+            sb.Append(C.SPACE);
+            sb.Append(C.NOT);
+            sb.Append(C.SPACE);
+            sb.Append(C.IN);
+            sb.Append(C.BEGIN_SCOPE);
+            for (var i = 0; i < expressions.Length; i++)
+            {
+                if (i != 0)
+                {
+                    sb.Append(C.COMMA);
+                }
+                sb.Append(expressions[i].ToSqlString());
+            }
+            sb.Append(C.END_SCOPE);
+            return new SqlServerCondition(sb.ToString());
         }
 
         public override AbstractSqlCondition IsNull()
@@ -57,6 +139,54 @@
         protected override AbstractSqlCondition LessEqual(AbstractSqlVariable abstractSqlVariable)
         {
             var expression = ToSqlString() + " <= " + abstractSqlVariable.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition Greater(ISqlExpression abstractSqlVariable)
+        {
+            var expression = ToSqlString() + " > " + abstractSqlVariable.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition GreaterEqual(ISqlExpression abstractSqlVariable)
+        {
+            var expression = ToSqlString() + " >= " + abstractSqlVariable.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition Less(ISqlExpression abstractSqlVariable)
+        {
+            var expression = ToSqlString() + " < " + abstractSqlVariable.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition LessEqual(ISqlExpression abstractSqlVariable)
+        {
+            var expression = ToSqlString() + " <= " + abstractSqlVariable.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition Greater(AbstractSqlLiteral literal)
+        {
+            var expression = ToSqlString() + " > " + literal.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition GreaterEqual(AbstractSqlLiteral literal)
+        {
+            var expression = ToSqlString() + " >= " + literal.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition Less(AbstractSqlLiteral literal)
+        {
+            var expression = ToSqlString() + " < " + literal.ToSqlString();
+            return SqlServerCondition.Raw(expression);
+        }
+
+        protected override AbstractSqlCondition LessEqual(AbstractSqlLiteral literal)
+        {
+            var expression = ToSqlString() + " <= " + literal.ToSqlString();
             return SqlServerCondition.Raw(expression);
         }
 

@@ -138,13 +138,17 @@ namespace SQLEngine.SqlServer
             _mainTableName = tableName;
             return this;
         }
-
-
         
         public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left,
             ISqlExpression right)
         {
             _selectors.Add(new CustomFunctionCallExpressionBuilder().Assign(left,right));
+            return this;
+        }
+        public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left,
+            AbstractSqlLiteral literal)
+        {
+            _selectors.Add(new CustomFunctionCallExpressionBuilder().Assign(left, literal));
             return this;
         }
         public ISelectWithSelectorQueryBuilder Select(ISqlExpression expression)

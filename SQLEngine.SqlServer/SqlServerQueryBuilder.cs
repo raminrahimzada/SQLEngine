@@ -23,12 +23,22 @@ namespace SQLEngine.SqlServer
 
         public  string Build()
         {
-            var Writer = SqlWriter.New;
+            using (var Writer = SqlWriter.New)
+            {
+                foreach (var builder in _list)
+                {
+                    builder.Build(Writer);
+                }
+
+                return Writer.Build();
+            }
+        }
+        public  void Build(ISqlWriter Writer)
+        {
             foreach (var builder in _list)
             {
                 builder.Build(Writer);
             }
-            return Writer.Build();
         }
 
         
@@ -47,7 +57,7 @@ namespace SQLEngine.SqlServer
         public ICreateQueryBuilder Create => _Add(new CreateQueryBuilder());
         
         public IDropQueryBuilder Drop => _Add(new DropQueryBuilder());
-        public IExecuteQueryBuilder Execute => _Add(new ExecuteQueryBuilder());   public ISelectQueryBuilder _Select => (new SelectQueryBuilder());
+        public IExecuteQueryBuilder Execute => _Add(new ExecuteQueryBuilder());   
 
         private ISqlExpression _null;
         public ISqlExpression Null
@@ -57,6 +67,16 @@ namespace SQLEngine.SqlServer
                 if (_null != null) return _null;
                 _null = new SqlServerRawExpression(C.NULL);
                 return _null;
+            }
+        }
+        private ISqlExpression _now;
+        public ISqlExpression Now
+        {
+            get
+            {
+                if (_now != null) return _now;
+                _now = new SqlServerRawExpression("GETDATE()");
+                return _now;
             }
         }
         public ISelectQueryBuilder _select => (new SelectQueryBuilder());
@@ -124,13 +144,31 @@ namespace SQLEngine.SqlServer
         {
             return _Add(new IfQueryBuilder(condition));            
         }
-        public IIfQueryBuilder IfExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selection)
+        public IIfQueryBuilder IfExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> func)
         {
-            throw new NotImplementedException();
+            using (var s=new SelectQueryBuilder())
+            {
+                func(s);
+                return If(new SqlServerCondition(C.EXISTS+C.BEGIN_SCOPE+s.Build()+C.END_SCOPE));
+            }
         }
         public IIfQueryBuilder IfExists(IAbstractSelectQueryBuilder selection)
         {
-            throw new NotImplementedException();
+            return If(new SqlServerCondition(C.NOT+C.SPACE+C.EXISTS + C.BEGIN_SCOPE + selection.Build() + C.END_SCOPE));
+        }
+
+        public IIfQueryBuilder IfNotExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> func)
+        {
+            using (var s = new SelectQueryBuilder())
+            {
+                func(s);
+                return If(new SqlServerCondition(C.NOT + C.SPACE + C.EXISTS + C.BEGIN_SCOPE + s.Build() + C.END_SCOPE));
+            }
+        }
+
+        public IIfQueryBuilder IfNotExists(IAbstractSelectQueryBuilder selection)
+        {
+            return If(new SqlServerCondition(C.NOT + C.SPACE + C.EXISTS + C.BEGIN_SCOPE + selection.Build() + C.END_SCOPE));
         }
 
         public IElseIfQueryBuilder ElseIf(AbstractSqlCondition condition)
@@ -170,21 +208,48 @@ namespace SQLEngine.SqlServer
             }));
         }
 
-        //public void Declare(Func<IDeclarationQueryBuilder, IDeclarationQueryBuilder> builder)
-        //{
-        //    Writer.WriteLineEx(builder.Invoke(GetDefault<DeclarationQueryBuilder>()).Build());
-        //}
+      
 
-        public AbstractSqlVariable DeclareRandom(string variableName, string type, AbstractSqlLiteral defaultValue = null)
+        public AbstractSqlVariable DeclareRandom(string variableName, string type, AbstractSqlLiteral defaultValue)
         {
-            variableName = GenerateRandomVariableName(variableName.ToLowerInvariant());
+            variableName = GenerateUniqueVariableName(variableName.ToLowerInvariant());
+
+            return Declare(variableName, type, defaultValue);
+        }
+        public AbstractSqlVariable DeclareRandom(string variableName, string type, ISqlExpression defaultValue)
+        {
+            variableName = GenerateUniqueVariableName(variableName.ToLowerInvariant());
 
             return Declare(variableName, type, defaultValue);
         }
 
+        public AbstractSqlVariable DeclareRandom(string variableName, string type)
+        {
+            variableName = GenerateUniqueVariableName(variableName.ToLowerInvariant());
+            return Declare(variableName, type);
+        }
+
+        public AbstractSqlVariable Declare(string variableName, string type)
+        {
+            var t = new DeclarationQueryBuilder();
+            {
+                var expression = t.Declare(variableName).OfType(type);
+                _list.Add(expression);
+                return new SqlServerVariable(variableName);
+            }
+        }
 
 
-        public AbstractSqlVariable Declare(string variableName, string type, AbstractSqlLiteral defaultValue = null)
+        public AbstractSqlVariable Declare(string variableName, string type, AbstractSqlLiteral defaultValue)
+        {
+            var t = new DeclarationQueryBuilder();
+            {
+                var expression = t.Declare(variableName).OfType(type).Default(defaultValue?.ToSqlString());
+                _list.Add(expression);
+                return new SqlServerVariable(variableName);
+            }
+        }
+        public AbstractSqlVariable Declare(string variableName, string type, ISqlExpression defaultValue)
         {
             var t = new DeclarationQueryBuilder();
             {
@@ -238,38 +303,6 @@ namespace SQLEngine.SqlServer
                 _list.Add(expression);
             }
         }
-        //public void Set(ISqlVariable variable, Func<ICastQueryBuilder, ICastQueryBuilder> q)
-        //{
-        //    using (var t = new SetQueryBuilder())
-        //    {
-        //        using (var c = new CastQueryBuilder())
-        //        {
-        //            ICastQueryBuilder temp = q(c);
-        //            ISqlExpression x;
-        //            Writer.WriteLineEx(t.Set(variable).To(x).Build());
-        //        }
-        //    }
-        //}
-        //public void Execute(Func<IExecuteQueryBuilder, IExecuteProcedureNeedArgQueryBuilder> builder)
-        //{
-        //    Writer.WriteLineEx(builder.Invoke(GetDefault<ExecuteQueryBuilder>()).Build());
-        //}
-
-        //public void Insert(Func<IInsertQueryBuilder, IAbstractInsertQueryBuilder> builder)
-        //{
-        //    Writer.WriteLineEx(builder.Invoke(GetDefault<InsertQueryBuilder>()).Build());
-        //}
-
-        //public void Update(Func<IUpdateQueryBuilder, IAbstractUpdateQueryBuilder> builder)
-        //{
-        //    Writer.WriteLineEx(builder.Invoke(GetDefault<UpdateQueryBuilder>()).Build());
-        //}
-
-        //public void Delete(Func<IDeleteQueryBuilder, IDeleteQueryBuilder> builder)
-        //{
-        //    Writer.WriteLineEx(builder.Invoke(GetDefault<DeleteQueryBuilder>()).Build());
-        //}
-
         public void Return()
         {
             _list.Add(new RawStringQueryBuilder(writer =>
@@ -327,7 +360,7 @@ namespace SQLEngine.SqlServer
         private static readonly object Sync=new object();
         private static long _randomFeed = 1;
 
-        public string GenerateRandomVariableName(string beginning)
+        public string GenerateUniqueVariableName(string beginning)
         {
             lock (Sync)
             {
@@ -462,7 +495,7 @@ namespace SQLEngine.SqlServer
 
         public AbstractSqlLiteral Literal(string x, bool isUniCode = true)
         {
-            return SqlServerLiteral.From(x,isUniCode);
+            return AbstractSqlLiteral.From(x,isUniCode);
         }
 
         public AbstractSqlLiteral Literal(DateTime x, bool includeTime = true)
@@ -472,47 +505,47 @@ namespace SQLEngine.SqlServer
 
         public AbstractSqlLiteral Literal(int x)
         {
-            return SqlServerLiteral.From(x);
+            return AbstractSqlLiteral.From(x);
         }
 
         public AbstractSqlLiteral Literal(int? x)
         {
-            return SqlServerLiteral.From(x);
+            return AbstractSqlLiteral.From(x);
         }
 
         public AbstractSqlLiteral Literal(byte x)
         {
-            return SqlServerLiteral.From(x);
+            return AbstractSqlLiteral.From(x);
         }
 
         public AbstractSqlLiteral Literal(byte? x)
         {
-            return SqlServerLiteral.From(x);
+            return AbstractSqlLiteral.From(x);
         }
 
         public AbstractSqlLiteral Literal(long x)
         {
-            return SqlServerLiteral.From(x);
+            return AbstractSqlLiteral.From(x);
         }
 
         public AbstractSqlLiteral Literal(long? x)
         {
-            return SqlServerLiteral.From(x);
+            return AbstractSqlLiteral.From(x);
         }
 
         public AbstractSqlLiteral Literal(short x)
         {
-            return SqlServerLiteral.From(x);
+            return AbstractSqlLiteral.From(x);
         }
 
         public AbstractSqlLiteral Literal(short? x)
         {
-            return SqlServerLiteral.From(x);
+            return AbstractSqlLiteral.From(x);
         }
 
         public AbstractSqlLiteral Literal(byte[] x)
         {
-            return SqlServerLiteral.From(x);
+            return AbstractSqlLiteral.From(x);
         }
 
         

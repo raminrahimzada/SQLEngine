@@ -60,7 +60,14 @@ namespace SQLEngine.SqlServer
 
         public override void SetFrom(DateTime? dt)
         {
-            throw new NotImplementedException();
+            if (dt == null)
+            {
+                _rawSqlString = C.NULL;
+            }
+            else
+            {
+                SetFrom(dt.Value);
+            }
         }
 
         public override void SetFrom(ulong l)

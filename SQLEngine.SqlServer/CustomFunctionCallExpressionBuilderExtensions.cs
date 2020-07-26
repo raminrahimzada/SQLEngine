@@ -4,6 +4,26 @@ namespace SQLEngine.SqlServer
 {
     public static class CustomFunctionCallExpressionBuilderExtensions
     {
+        public static ICustomFunctionCallNopBuilder IsNull(
+            this ICustomFunctionCallExpressionBuilder builder,
+            ISqlExpression expression,ISqlExpression fallback)
+        {
+            return builder.Call("ISNULL", expression, fallback);
+        }
+        public static ICustomFunctionCallNopBuilder IsNull(
+            this ICustomFunctionCallExpressionBuilder builder,
+            ISqlExpression expression,AbstractSqlLiteral fallback)
+        {
+            return builder.Call("ISNULL", expression, fallback);
+        }
+
+        public static ICustomFunctionCallNopBuilder Cast(
+            this ICustomFunctionCallExpressionBuilder builder,
+            ISqlExpression expression,string asType)
+        {
+            var p1 = new SqlServerRawExpression(expression.ToSqlString() + C.SPACE + C.AS + C.SPACE + asType);
+            return builder.Call("CAST", p1);
+        }
         public static ICustomFunctionCallNopBuilder ObjectId(this ICustomFunctionCallExpressionBuilder builder,ISqlExpression expression)
         {
             return builder.Call("OBJECT_ID", expression);

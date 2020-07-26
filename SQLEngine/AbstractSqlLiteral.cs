@@ -2,32 +2,8 @@
 
 namespace SQLEngine
 {
-    public interface IAbstractSqlLiteral
-    {
-        void SetFrom(byte[] data);
-        void SetFrom(int i);
-        void SetFrom(long l);
-        void SetFrom(bool b);
-        void SetFrom(string s, bool isUnicode = true);
-        void SetFrom(double d);
-        void SetFrom(decimal d);
-        void SetFrom(float f);
-        void SetFrom(short f);
-        void SetFrom(DateTime dt, bool includeTime = true);
-        void SetFrom(int? i);
-        void SetFrom(long? l);
-        void SetFrom(bool? b);
-        void SetFrom(double? d);
-        void SetFrom(decimal? d);
-        void SetFrom(float? f);
-        void SetFrom(short? f);
-        void SetFrom(DateTime? dt);
-        void SetFrom(ulong l);
-        void SetFrom(uint l);
-        string ToSqlString();
-    }
-
-    public abstract class AbstractSqlLiteral: ISqlExpression, IAbstractSqlLiteral
+   
+    public abstract class AbstractSqlLiteral: ISqlExpression
     {
         protected static Func<AbstractSqlLiteral> CreateEmpty;
 

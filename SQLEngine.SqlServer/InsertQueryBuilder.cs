@@ -13,7 +13,7 @@ namespace SQLEngine.SqlServer
     {
         private string _tableName;
         private Dictionary<string, ISqlExpression> _columnsAndValuesDictionary;
-        private string[] _valuesList;
+        private ISqlExpression[] _valuesList;
         private string[] _columnNames;
         private string _selection;
 
@@ -94,11 +94,7 @@ namespace SQLEngine.SqlServer
         }
 
 
-        public IInsertNoValuesQueryBuilder Values(params string[] values)
-        {
-            _valuesList = values;
-            return this;
-        }
+         
         public IInsertNoIntoWithColumns Columns(params string[] columnNames)
         {
             _columnNames = columnNames;
@@ -165,11 +161,34 @@ namespace SQLEngine.SqlServer
                 writer.Indent++;
 
                 writer.BeginScope();
-                writer.WriteJoined(_valuesList);
+                for (int i = 0; i < _valuesList.Length; i++)
+                {
+                    if (i != 0)
+                    {
+
+                    }
+                    else
+                    {
+                        writer.Write(C.COMMA);
+                    }
+
+                    writer.Write(_valuesList[i].ToSqlString());
+                }
                 writer.EndScope();
                 writer.Indent--;
             }
         }
-        
+
+        public IInsertNoValuesQueryBuilder Values(params ISqlExpression[] values)
+        {
+            _valuesList = values;
+            return this;
+        }
+
+        public IInsertNoValuesQueryBuilder Values(params AbstractSqlLiteral[] values)
+        {
+            _valuesList = values;
+            return this;
+        }
     }
 }

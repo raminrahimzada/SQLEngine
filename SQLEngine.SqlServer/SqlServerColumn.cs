@@ -3,33 +3,6 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer
 {
-    internal class SqlServerColumnWithAsExpression : SqlServerColumn
-    {
-        private readonly string _asName;
-        public SqlServerColumnWithAsExpression(string name,string asName) : base(name)
-        {
-            _asName = asName;
-        }
-
-        public override string ToSqlString()
-        {
-            return base.ToSqlString() + C.AS + _asName;
-        }
-    }
-    internal class SqlServerColumnWithTableAliasAndAsExpression : SqlServerColumnWithTableAlias
-    {
-        private readonly string _asName;
-
-        public override string ToSqlString()
-        {
-            return base.ToSqlString() + C.AS + _asName;
-        }
-
-        public SqlServerColumnWithTableAliasAndAsExpression(string name, string tableAlias,string asName) : base(name, tableAlias)
-        {
-            _asName = asName;
-        }
-    }
     internal class SqlServerColumn : AbstractSqlColumn
     {
         public SqlServerColumn(string name)
@@ -63,56 +36,56 @@ namespace SQLEngine.SqlServer
 
         protected override AbstractSqlCondition EqualTo(int value)
         {
-            return EqualTo((AbstractSqlLiteral) (SqlServerLiteral) value);
+            return EqualTo((AbstractSqlLiteral) value);
         }
         protected override AbstractSqlCondition EqualTo(bool value)
         {
-            return EqualTo((AbstractSqlLiteral) (SqlServerLiteral) value);
+            return EqualTo((AbstractSqlLiteral) value);
         }
 
         protected override AbstractSqlCondition EqualTo(byte value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition EqualTo(byte[] value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition EqualTo(DateTime value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition EqualTo(string value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition EqualTo(Guid value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition EqualTo(long value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition EqualTo(decimal value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition EqualTo(double value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition EqualTo(float value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition NotEqualTo(AbstractSqlColumn otherColumn)
@@ -133,56 +106,56 @@ namespace SQLEngine.SqlServer
 
         protected override AbstractSqlCondition NotEqualTo(int value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition NotEqualTo(byte value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition NotEqualTo(byte[] value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition NotEqualTo(DateTime value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
         protected override AbstractSqlCondition NotEqualTo(bool value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition NotEqualTo(string value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition NotEqualTo(Guid value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition NotEqualTo(long value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition NotEqualTo(decimal value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition NotEqualTo(double value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition NotEqualTo(float value)
         {
-            return EqualTo((AbstractSqlLiteral)(SqlServerLiteral)value);
+            return EqualTo((AbstractSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition Greater(AbstractSqlColumn otherColumn)
@@ -367,12 +340,72 @@ namespace SQLEngine.SqlServer
         {
             return SqlServerCondition.Raw(
                 string.Concat(
-                    this.ToSqlString(),
+                    ToSqlString(),
                     C.SPACE,
                     C.LIKE,
                     C.SPACE,
                     expression.ToSQL(isUnicode)
                 ));
+        }
+
+        protected override AbstractSqlExpression Add(AbstractSqlColumn right)
+        {
+            return new SqlServerRawExpression(ToSqlString() + "+" + right.ToSqlString());
+        }
+
+        protected override AbstractSqlExpression Subtract(AbstractSqlColumn right)
+        {
+            return new SqlServerRawExpression(ToSqlString() + "-" + right.ToSqlString());
+        }
+
+        protected override AbstractSqlExpression Divide(AbstractSqlColumn right)
+        {
+            return new SqlServerRawExpression(ToSqlString() + "/" + right.ToSqlString());
+        }
+
+        protected override AbstractSqlExpression Multiply(AbstractSqlColumn right)
+        {
+            return new SqlServerRawExpression(ToSqlString() + "*" + right.ToSqlString());
+        }
+
+        protected override AbstractSqlExpression Add(AbstractSqlLiteral right)
+        {
+            return new SqlServerRawExpression(ToSqlString() + "+" + right.ToSqlString());
+        }
+
+        protected override AbstractSqlExpression Subtract(AbstractSqlLiteral right)
+        {
+            return new SqlServerRawExpression(ToSqlString() + "-" + right.ToSqlString());
+        }
+
+        protected override AbstractSqlExpression Divide(AbstractSqlLiteral right)
+        {
+            return new SqlServerRawExpression(ToSqlString() + "/" + right.ToSqlString());
+        }
+
+        protected override AbstractSqlExpression Multiply(AbstractSqlLiteral right)
+        {
+            return new SqlServerRawExpression(ToSqlString() + "*" + right.ToSqlString());
+        }
+
+        protected override AbstractSqlExpression Add(ISqlExpression right)
+        {
+            return new SqlServerRawExpression(ToSqlString() + "+" + right.ToSqlString());
+        }
+
+        protected override AbstractSqlExpression Subtract(ISqlExpression right)
+        {
+            return new SqlServerRawExpression(ToSqlString() + "-" + right.ToSqlString());
+        }
+
+        protected override AbstractSqlExpression Divide(ISqlExpression right)
+        {
+            return new SqlServerRawExpression(ToSqlString() + "/" + right.ToSqlString());
+        }
+
+        protected override AbstractSqlExpression Multiply(ISqlExpression right)
+        {
+            return new SqlServerRawExpression(ToSqlString() + "*" + right.ToSqlString());
         }
     }
 }

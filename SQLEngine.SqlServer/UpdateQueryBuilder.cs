@@ -3,7 +3,8 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer
 {
-    internal class UpdateQueryBuilder : AbstractQueryBuilder, IUpdateNoTopQueryBuilder, 
+    internal class UpdateQueryBuilder : AbstractQueryBuilder, 
+        IUpdateNoTopQueryBuilder, 
         IUpdateNoTableAndTopQueryBuilder, 
         IUpdateNoTableAndValuesAndWhereQueryBuilder,
         IUpdateQueryBuilder, 
@@ -35,11 +36,24 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public IUpdateNoTableAndValuesQueryBuilder Values(Dictionary<string, string> updateDict)
+        //public IUpdateNoTableAndValuesQueryBuilder Values(Dictionary<string, string> updateDict)
+        //{
+        //    _columnsAndValuesDictionary = updateDict;
+        //    return this;
+        //}
+
+        public IUpdateNoTableAndValuesQueryBuilder Values(Dictionary<string, ISqlExpression> updateDict)
         {
-            _columnsAndValuesDictionary = updateDict;
+            _columnsAndValuesDictionary = updateDict.ToDictionary(x => x.Key, x => x.Value.ToSqlString());
             return this;
         }
+
+        public IUpdateNoTableAndValuesQueryBuilder Values(Dictionary<string, AbstractSqlLiteral> updateDict)
+        {
+            _columnsAndValuesDictionary = updateDict.ToDictionary(x => x.Key, x =>  x.Value.ToSqlString());
+            return this;
+        }
+
         public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue)
         {
             if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, string>();

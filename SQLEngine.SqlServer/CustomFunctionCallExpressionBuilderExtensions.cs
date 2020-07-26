@@ -102,8 +102,7 @@ namespace SQLEngine.SqlServer
             ISqlExpression[] strings
             )
         {
-            var list = new List<ISqlExpression>(1 + strings.Length);
-            list.Add(SqlServerLiteral.Raw(separator));
+            var list = new List<ISqlExpression>(1 + strings.Length) {SqlServerLiteral.Raw(separator)};
             list.AddRange(strings);
             return builder.Call("CONCAT_WS", list.ToArray());
         }

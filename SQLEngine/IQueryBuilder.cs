@@ -1,4 +1,7 @@
 ﻿using System;
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+#pragma warning disable IDE1006 // Naming Styles
 
 namespace SQLEngine
 {

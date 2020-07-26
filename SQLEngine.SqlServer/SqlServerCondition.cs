@@ -2,7 +2,7 @@
 {
     public class SqlServerCondition : AbstractSqlCondition
     {
-        private string _rawSqlString;
+        private readonly string _rawSqlString;
 
         public SqlServerCondition(string rawSqlString)
         {

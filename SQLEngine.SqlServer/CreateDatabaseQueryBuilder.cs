@@ -6,7 +6,7 @@
 
         public ICreateDatabaseNoNameQueryBuilder Name(string databaseName)
         {
-            this._databaseName = databaseName;
+            _databaseName = databaseName;
             return this;
         }
 

@@ -4,7 +4,7 @@
     {
         internal static AbstractSqlLiteral ToSQL(this string str, bool isUnicode = true)
         {
-            return SqlServerLiteral.From(str, isUnicode);
+            return AbstractSqlLiteral.From(str, isUnicode);
         }
         
         internal static string AsSQLVariable(this string variableName)

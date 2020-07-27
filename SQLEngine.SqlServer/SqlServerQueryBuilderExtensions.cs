@@ -329,8 +329,14 @@ namespace SQLEngine.SqlServer
             var expression = tableAlias + C.DOT + C.WILCARD;
             return builder.Select(new SqlServerRawExpression(expression));
         }
+        public static ISelectWithSelectorQueryBuilder SelectAll(this ISelectWithoutFromQueryBuilder builder
+            ,string tableAlias)
+        {
+            var expression = tableAlias + C.DOT + C.WILCARD;
+            return builder.Select(new SqlServerRawExpression(expression));
+        }
         public static ISelectWithSelectorQueryBuilder SelectAs(this ISelectWithSelectorQueryBuilder builder
-            ,string columnName,string tableAlias,string asName)
+            , string tableAlias, string columnName,string asName)
         {
             return builder.Select(new SqlServerColumnWithTableAliasAndAsExpression(columnName, tableAlias, asName));
         }

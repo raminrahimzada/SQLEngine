@@ -2,28 +2,70 @@
 
 namespace SQLEngine.SqlServer
 {
-    internal class CaseWhenQueryBuilder : AbstractQueryBuilder, ICaseWhenNeedWhenQueryBuilder, ICaseWhenNeedThenQueryBuilder
+    internal class CaseWhenQueryBuilder : AbstractQueryBuilder,
+        ICaseWhenNeedWhenQueryBuilder, 
+        ICaseWhenNeedThenQueryBuilder
     {
         private readonly List<string> _casesList = new List<string>();
         private string _currentWhen = string.Empty;
         private string _currentThen = string.Empty;
+        private string _elseCase = null;
 
-        public ICaseWhenNeedThenQueryBuilder When(string @when)
+        
+        public ICaseWhenNeedThenQueryBuilder When(AbstractSqlCondition condition)
         {
-            _currentWhen = @when;
+            _currentWhen = condition.ToSqlString();
             return this;
         }
-        public ICaseWhenNeedThenQueryBuilder WhenEquals(string columnName, string expression)
+        public ICaseWhenNeedThenQueryBuilder WhenColumnEquals(string columnName, ISqlExpression expression)
         {
-            _currentWhen = columnName + " " + C.EQUALS + " " + expression;
+            _currentWhen = columnName + " " + C.EQUALS + " " + expression.ToSqlString();
             return this;
         }
-        public ICaseWhenNeedWhenQueryBuilder Then(string @then)
+        public ICaseWhenNeedThenQueryBuilder WhenColumnEquals(string tableAlias, string columnName, ISqlExpression expression)
         {
-            _currentThen = @then;
+            _currentWhen = tableAlias + "." + columnName + " " + C.EQUALS + " " + expression.ToSqlString();
+            return this;
+        }
+
+        public ICaseWhenNeedThenQueryBuilder WhenColumnEquals(string columnName, AbstractSqlLiteral literal)
+        {
+            _currentWhen = columnName + " " + C.EQUALS + " " + literal.ToSqlString();
+            return this;
+        }
+
+        public ICaseWhenNeedThenQueryBuilder WhenColumnEquals(string tableAlias, string columnName, AbstractSqlLiteral literal)
+        {
+            _currentWhen = tableAlias + "." + columnName + " " + C.EQUALS + " " + literal.ToSqlString();
+            return this;
+        }
+
+        public ICaseWhenQueryBuilder Else(AbstractSqlLiteral literal)
+        {
+            _elseCase = literal.ToSqlString();
+            return this;
+        }
+
+        public ICaseWhenQueryBuilder Else(ISqlExpression expression)
+        {
+            _elseCase = expression.ToSqlString();
+            return this;
+        }
+
+        public ICaseWhenNeedWhenQueryBuilder Then(ISqlExpression then)
+        {
+            _currentThen = then.ToSqlString();
             Add();
             return this;
         }
+
+        public ICaseWhenNeedWhenQueryBuilder Then(AbstractSqlLiteral then)
+        {
+            _currentThen = then.ToSqlString();
+            Add();
+            return this;
+        }
+
         public ICaseWhenNeedWhenQueryBuilder ThenColumn(string @then)
         {
             return Then(@then);
@@ -51,8 +93,23 @@ namespace SQLEngine.SqlServer
             {
                 writer.WriteLine(@case);
             }
+
+            if (!string.IsNullOrWhiteSpace(_elseCase))
+            {
+                writer.Write(C.SPACE);
+                writer.Write(C.ELSE);
+                writer.Write(C.SPACE);
+                writer.Write(_elseCase);
+                writer.Write(C.SPACE);
+            }
             writer.Write(C.END);
             writer.Write(C.END_SCOPE);
         }
+
+       
+
+        
+
+       
     }
 }

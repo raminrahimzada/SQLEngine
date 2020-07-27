@@ -550,9 +550,8 @@ SELECT TOP(1)  Age , COUNT(U.*)
             {
                 var all = q.Column("*", "U");
                 
-                //TODO refactor that 
-                //TODO this should not depend on sql-server  decouple tht
-                var condition = SqlServerCondition.Raw("count(Age) > 5");
+                //TODO this should be rafactored
+                var condition = q.RawCondition("count(Age) > 5");
 
                 q
                     .Select
@@ -573,6 +572,76 @@ SELECT TOP(1)  Age , COUNT(U.*)
     ORDER BY COUNT(Id)
 ";
                 QueryAssert.AreEqual(q.ToString(), query);
+
+            }
+        }
+
+
+        [TestMethod]
+        public void Test_Simple_Select_Case_When()
+        {
+            using (var q = Query.New)
+            {
+                var age = q.Column("Age");
+
+
+                q
+                    .Select
+                    .Top(1)
+                    .SelectAs(x =>
+
+                            x
+                                .When(age <= 18).Then("Teeneger")
+                                .When(age > 18).Then("Non-Teeneger")
+
+                        , "AgeStatus"
+                    )
+                    .From<UserTable>()
+                    ;
+
+                const string queryThat = @"
+SELECT TOP(1)  
+    (CASE WHEN Age <= 18 THEN N'Teeneger'
+          WHEN Age > 18  THEN N'Non-Teeneger'
+    END) AS AgeStatus
+    FROM Users
+";
+                QueryAssert.AreEqual(q.ToString(), queryThat);
+
+            }
+        }
+        [TestMethod]
+        public void Test_Simple_Select_Case_When_End()
+        {
+            using (var q = Query.New)
+            {
+                var gender = q.Column("Gender");
+
+                q
+                    .Select
+                    .Top(1)
+                    .SelectAs(x =>
+
+                            x
+                                .When(gender == 1).Then("Male")
+                                .When(gender == 2).Then("Female")
+                                .Else("LGBT")
+
+                        , "AgeStatus"
+                    )
+                    .From<UserTable>()
+                    ;
+
+                const string queryThat = @"
+SELECT TOP(1)  
+    (CASE WHEN Gender = 1 THEN N'Male'
+          WHEN Gender = 2 THEN N'Female'
+            ELSE N'LGBT' 
+        END
+    ) AS AgeStatus
+    FROM Users
+";
+                QueryAssert.AreEqual(q.ToString(), queryThat);
 
             }
         }

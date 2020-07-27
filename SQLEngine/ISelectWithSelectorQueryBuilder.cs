@@ -10,6 +10,9 @@ namespace SQLEngine
         ISelectWithSelectorQueryBuilder Select(AbstractSqlColumn column);
         ISelectWithSelectorQueryBuilder Select(ISqlExpression expression);
         ISelectWithSelectorQueryBuilder Select(ISqlExpression selector, string alias);
+        ISelectWithSelectorQueryBuilder Select(Func<ICaseWhenNeedWhenQueryBuilder, ICaseWhenQueryBuilder> caseWhen);
+        ISelectWithSelectorQueryBuilder SelectAs(Func<ICaseWhenNeedWhenQueryBuilder, ICaseWhenQueryBuilder> caseWhen, string alias);
+
 
         ISelectWithoutFromQueryBuilder From(string tableName, string alias);
         ISelectWithoutFromQueryBuilder From(string tableName);

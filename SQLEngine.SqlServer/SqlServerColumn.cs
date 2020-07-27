@@ -22,6 +22,12 @@ namespace SQLEngine.SqlServer
             return Name;
         }
 
+        protected override AbstractSqlCondition EqualTo(ISqlExpression expression)
+        {
+            var rawSqlString = ToSqlString() + " = " + expression.ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
+        }
+
         protected override AbstractSqlCondition EqualTo(AbstractSqlColumn otherColumn)
         {
             var rawSqlString = ToSqlString() + " = " + otherColumn.ToSqlString();
@@ -86,6 +92,12 @@ namespace SQLEngine.SqlServer
         protected override AbstractSqlCondition EqualTo(float value)
         {
             return EqualTo((AbstractSqlLiteral)value);
+        }
+
+        protected override AbstractSqlCondition NotEqualTo(ISqlExpression expression)
+        {
+            var rawSqlString = ToSqlString() + " <> " + expression.ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
         }
 
         protected override AbstractSqlCondition NotEqualTo(AbstractSqlColumn otherColumn)
@@ -348,62 +360,88 @@ namespace SQLEngine.SqlServer
                 ));
         }
 
-        protected override AbstractSqlExpression Add(AbstractSqlColumn right)
+        public override AbstractSqlCondition IsNull()
+        {
+            return SqlServerCondition.Raw(
+                string.Concat(
+                    ToSqlString(),
+                    C.SPACE,
+                    C.IS,
+                    C.SPACE,
+                    C.NULL
+                ));
+        }
+
+        public override AbstractSqlCondition IsNotNull()
+        {
+            return SqlServerCondition.Raw(
+                string.Concat(
+                    ToSqlString(),
+                    C.SPACE,
+                    C.IS,
+                    C.SPACE,
+                    C.NOT,
+                    C.SPACE,
+                    C.NULL
+                ));
+        }
+
+        protected override ISqlExpression Add(AbstractSqlColumn right)
         {
             return new SqlServerRawExpression(ToSqlString() + "+" + right.ToSqlString());
         }
 
-        protected override AbstractSqlExpression Subtract(AbstractSqlColumn right)
+        protected override ISqlExpression Subtract(AbstractSqlColumn right)
         {
             return new SqlServerRawExpression(ToSqlString() + "-" + right.ToSqlString());
         }
 
-        protected override AbstractSqlExpression Divide(AbstractSqlColumn right)
+        protected override ISqlExpression Divide(AbstractSqlColumn right)
         {
             return new SqlServerRawExpression(ToSqlString() + "/" + right.ToSqlString());
         }
 
-        protected override AbstractSqlExpression Multiply(AbstractSqlColumn right)
+        protected override ISqlExpression Multiply(AbstractSqlColumn right)
         {
             return new SqlServerRawExpression(ToSqlString() + "*" + right.ToSqlString());
         }
 
-        protected override AbstractSqlExpression Add(AbstractSqlLiteral right)
+        protected override ISqlExpression Add(AbstractSqlLiteral right)
         {
             return new SqlServerRawExpression(ToSqlString() + "+" + right.ToSqlString());
         }
 
-        protected override AbstractSqlExpression Subtract(AbstractSqlLiteral right)
+        protected override ISqlExpression Subtract(AbstractSqlLiteral right)
         {
             return new SqlServerRawExpression(ToSqlString() + "-" + right.ToSqlString());
         }
 
-        protected override AbstractSqlExpression Divide(AbstractSqlLiteral right)
+        protected override ISqlExpression Divide(AbstractSqlLiteral right)
         {
             return new SqlServerRawExpression(ToSqlString() + "/" + right.ToSqlString());
         }
 
-        protected override AbstractSqlExpression Multiply(AbstractSqlLiteral right)
+        protected override ISqlExpression Multiply(AbstractSqlLiteral right)
         {
             return new SqlServerRawExpression(ToSqlString() + "*" + right.ToSqlString());
         }
 
-        protected override AbstractSqlExpression Add(ISqlExpression right)
+        protected override ISqlExpression Add(ISqlExpression right)
         {
             return new SqlServerRawExpression(ToSqlString() + "+" + right.ToSqlString());
         }
 
-        protected override AbstractSqlExpression Subtract(ISqlExpression right)
+        protected override ISqlExpression Subtract(ISqlExpression right)
         {
             return new SqlServerRawExpression(ToSqlString() + "-" + right.ToSqlString());
         }
 
-        protected override AbstractSqlExpression Divide(ISqlExpression right)
+        protected override ISqlExpression Divide(ISqlExpression right)
         {
             return new SqlServerRawExpression(ToSqlString() + "/" + right.ToSqlString());
         }
 
-        protected override AbstractSqlExpression Multiply(ISqlExpression right)
+        protected override ISqlExpression Multiply(ISqlExpression right)
         {
             return new SqlServerRawExpression(ToSqlString() + "*" + right.ToSqlString());
         }

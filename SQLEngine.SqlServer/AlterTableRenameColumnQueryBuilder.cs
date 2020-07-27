@@ -13,7 +13,7 @@
 
         public AlterTableDropColumnQueryBuilder Column(string columnName)
         {
-            this._columnName = columnName;
+            _columnName = columnName;
             return this;
         }
 

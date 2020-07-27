@@ -110,13 +110,15 @@ namespace SQLEngine.SqlServer
                 writer.WriteLine(C.ALL);
             }));
         }
-        [Obsolete("This is a fallback for " +
-                  "If You don't find any Method to use for custom query," +
-                  "So If You Are Here Please create issue on github " +
-                  "page of SqlEngine Repository")]
-        public ISqlExpression Raw(string expression)
+        
+        public ISqlExpression Raw(string rawSqlExpression)
         {
-            return new SqlServerRawExpression(expression);
+            return new SqlServerRawExpression(rawSqlExpression);
+        }
+
+        public AbstractSqlCondition RawCondition(string rawConditionQuery)
+        {
+            return new SqlServerCondition(rawConditionQuery);
         }
 
         public void Truncate(string tableName)
@@ -149,12 +151,12 @@ namespace SQLEngine.SqlServer
             using (var s=new SelectQueryBuilder())
             {
                 func(s);
-                return If(new SqlServerCondition(C.EXISTS+C.BEGIN_SCOPE+s.Build()+C.END_SCOPE));
+                return If(new SqlServerCondition(C.EXISTS, C.BEGIN_SCOPE, s.Build(), C.END_SCOPE));
             }
         }
         public IIfQueryBuilder IfExists(IAbstractSelectQueryBuilder selection)
         {
-            return If(new SqlServerCondition(C.NOT+C.SPACE+C.EXISTS + C.BEGIN_SCOPE + selection.Build() + C.END_SCOPE));
+            return If(new SqlServerCondition(C.NOT,C.SPACE,C.EXISTS , C.BEGIN_SCOPE , selection.Build() , C.END_SCOPE));
         }
 
         public IIfQueryBuilder IfNotExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> func)
@@ -162,13 +164,13 @@ namespace SQLEngine.SqlServer
             using (var s = new SelectQueryBuilder())
             {
                 func(s);
-                return If(new SqlServerCondition(C.NOT + C.SPACE + C.EXISTS + C.BEGIN_SCOPE + s.Build() + C.END_SCOPE));
+                return If(new SqlServerCondition(C.NOT , C.SPACE , C.EXISTS , C.BEGIN_SCOPE , s.Build() , C.END_SCOPE));
             }
         }
 
         public IIfQueryBuilder IfNotExists(IAbstractSelectQueryBuilder selection)
         {
-            return If(new SqlServerCondition(C.NOT + C.SPACE + C.EXISTS + C.BEGIN_SCOPE + selection.Build() + C.END_SCOPE));
+            return If(new SqlServerCondition(C.NOT , C.SPACE , C.EXISTS , C.BEGIN_SCOPE , selection.Build() , C.END_SCOPE));
         }
 
         public IElseIfQueryBuilder ElseIf(AbstractSqlCondition condition)

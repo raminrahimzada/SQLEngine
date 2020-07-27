@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    internal class SqlServerRawExpression : AbstractSqlExpression,ISqlExpression
+    internal class SqlServerRawExpression : ISqlExpression
     {
         public string Expression { get; set; }
 
@@ -8,7 +8,7 @@
         {
             Expression = expression;
         }
-        public override string ToSqlString()
+        public string ToSqlString()
         {
             return Expression;
         }

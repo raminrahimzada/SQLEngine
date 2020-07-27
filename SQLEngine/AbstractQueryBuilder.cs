@@ -12,10 +12,10 @@ namespace SQLEngine
 
 
        
-        public void Join(AbstractQueryBuilder other)
-        {
-            Writer = other.Writer;
-        }
+        //public void Join(AbstractQueryBuilder other)
+        //{
+        //    Writer = other.Writer;
+        //}
 
         public int Indent
         {

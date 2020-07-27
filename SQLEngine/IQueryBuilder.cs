@@ -104,7 +104,16 @@ namespace SQLEngine
 
         AbstractSqlLiteral Literal(byte[] x);
 
-        ISqlExpression Raw(string expression);
+        [Obsolete("This is a fallback for " +
+                  "If You don't find any Method to use for custom query," +
+                  "So If You Are Here Please create issue on github " +
+                  "page of SqlEngine Repository")]
+        ISqlExpression Raw(string rawSqlExpression);
+        [Obsolete("This is a fallback for " +
+                  "If You don't find any Method to use for custom query," +
+                  "So If You Are Here Please create issue on github " +
+                  "page of SqlEngine Repository")]
+        AbstractSqlCondition RawCondition(string rawConditionQuery);
     }
 
 }

@@ -1,12 +1,16 @@
 ﻿namespace SQLEngine.SqlServer
 {
-    public class SqlServerCondition : AbstractSqlCondition
+    internal class SqlServerCondition : AbstractSqlCondition
     {
         private readonly string _rawSqlString;
 
         public SqlServerCondition(string rawSqlString)
         {
             _rawSqlString = rawSqlString;
+        }
+        public SqlServerCondition(params string[] rawSqlStringParts)
+        {
+            _rawSqlString = string.Concat(rawSqlStringParts);
         }
 
         public override string ToSqlString()

@@ -35,13 +35,13 @@ namespace SQLEngine.SqlServer
                 _isDesc = isDesc;
             }
 
-            public void Build(ISqlWriter Writer)
+            public void Build(ISqlWriter writer)
             {
-                _internalBuilder.Build(Writer);
+                _internalBuilder.Build(writer);
                 if (_isDesc??false)
                 {
-                    Writer.Write(C.SPACE);
-                    Writer.Write(C.DESC);
+                    writer.Write(C.SPACE);
+                    writer.Write(C.DESC);
                 }
             }
         }
@@ -169,13 +169,30 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        
-
         public ISelectWithSelectorQueryBuilder Select(ISqlExpression selector, string alias)
         {
             MutateAliasName(ref alias);
-            _selectors.Add($"{selector} {C.AS} {alias}" );
+            _selectors.Add($"{selector} {C.AS} {alias}");
             return this;
+        }
+        public ISelectWithSelectorQueryBuilder SelectAs(Func<ICaseWhenNeedWhenQueryBuilder, ICaseWhenQueryBuilder> caseWhen, string alias)
+        {
+            MutateAliasName(ref alias);
+            using (var t=new CaseWhenQueryBuilder())
+            {
+                caseWhen(t);
+                _selectors.Add($"{t.Build()} {C.AS} {alias}");
+                return this;
+            }
+        }
+        public ISelectWithSelectorQueryBuilder Select(Func<ICaseWhenNeedWhenQueryBuilder, ICaseWhenQueryBuilder> caseWhen)
+        {
+            using (var t=new CaseWhenQueryBuilder())
+            {
+                caseWhen(t);
+                _selectors.Add($"{t.Build()}");
+                return this;
+            }
         }
 
 

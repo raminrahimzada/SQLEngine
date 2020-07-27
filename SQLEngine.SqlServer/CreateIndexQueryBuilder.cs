@@ -14,7 +14,7 @@
 
         public ICreateIndexNoTableNameQueryBuilder OnTable(string tableName)
         {
-            this._tableName = tableName;
+            _tableName = tableName;
             return this;
         }
 
@@ -22,7 +22,7 @@
         {
             using (var table=new TTable())
             {
-                this._tableName = table.Name;
+                _tableName = table.Name;
             }
             return this;
         }
@@ -33,18 +33,18 @@
             {
                 throw Bomb("At Least one column should be given");
             }
-            this._columnNames = columnNames;
+            _columnNames = columnNames;
             return this;
         }
 
         public ICreateIndexNoTableNameNoColumnNamesNoUniqueQueryBuilder Unique(bool isUnique = true)
         {
-            this._isUnique = isUnique;
+            _isUnique = isUnique;
             return this;
         }
         public ICreateIndexNoNameQueryBuilder Name(string indexName)
         {
-            this._indexName = indexName;
+            _indexName = indexName;
             return this;
         }
         public override void Build(ISqlWriter writer)
@@ -55,7 +55,7 @@
                 writer.Write2(C.UNIQUE);
             }
             writer.Write2(C.INDEX);
-            writer.Write(this._indexName);
+            writer.Write(_indexName);
             writer.Write2(C.ON);
             writer.Write(_tableName);
             writer.Write2(C.BEGIN_SCOPE);

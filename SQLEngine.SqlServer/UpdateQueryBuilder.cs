@@ -66,6 +66,20 @@ namespace SQLEngine.SqlServer
             _columnsAndValuesDictionary.Add(columnName, variable.ToSqlString());
             return this;
         }
+
+        public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, ISqlExpression expression)
+        {
+            if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, string>();
+            _columnsAndValuesDictionary.Add(columnName, expression.ToSqlString());
+            return this;
+        }
+
+        //public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, ISqlExpression expression)
+        //{
+        //    if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, string>();
+        //    _columnsAndValuesDictionary.Add(columnName, expression.ToSqlString());
+        //    return this;
+        //}
         //public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> builder)
         //{
         //    var columnValue = builder(GetDefault<BinaryExpressionBuilder>()).Build();

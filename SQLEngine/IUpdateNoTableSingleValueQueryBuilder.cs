@@ -2,11 +2,9 @@
 {
     public interface IUpdateNoTableSingleValueQueryBuilder : IAbstractUpdateQueryBuilder
     {
-        //IUpdateNoTableSingleValueQueryBuilder Value(string columnName,
-        //    Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> builder);
-
         IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue);
         IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlVariable variable);
+        IUpdateNoTableSingleValueQueryBuilder Value(string columnName, ISqlExpression expression);
 
         //IUpdateNoTableAndValuesAndWhereQueryBuilder Where(string condition);
         IUpdateNoTableAndValuesAndWhereQueryBuilder Where(AbstractSqlCondition condition);

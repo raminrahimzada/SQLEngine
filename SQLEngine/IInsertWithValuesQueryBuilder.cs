@@ -7,6 +7,7 @@ namespace SQLEngine
     {
         IInsertNoValuesQueryBuilder Values(Dictionary<string, ISqlExpression> colsAndValues);
         IInsertNoValuesQueryBuilder Values(Dictionary<string, AbstractSqlLiteral> colsAndValuesAsLiterals);
+        IInsertNoValuesQueryBuilder Values(Dictionary<string, AbstractSqlExpression> colsAndValuesAsLiterals);
         IInsertNoValuesQueryBuilder Values(Action<ISelectQueryBuilder> builder);
     }
 }

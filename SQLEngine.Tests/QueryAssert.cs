@@ -7,6 +7,8 @@ namespace SQLEngine.Tests
     {
         public static void AreEqual(string query1, string query2)
         {
+            AbstractSqlLiteral x = 1M;
+
             const string splitter = " \r\n\t;()";
             string[] FormatQuery(string query)
             {

@@ -64,7 +64,7 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public IColumnQueryBuilder DefaultValue(ISqlExpression defaultValue, string defaultConstraintName = null)
+        public IColumnQueryBuilder DefaultValue(AbstractSqlExpression defaultValue, string defaultConstraintName = null)
         {
             Model.DefaultValue = defaultValue.ToSqlString();
             Model.DefaultConstraintName = defaultConstraintName;
@@ -77,7 +77,7 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public IColumnQueryBuilder CalculatedColumn(ISqlExpression expression, bool? isPersisted = true)
+        public IColumnQueryBuilder CalculatedColumn(AbstractSqlExpression expression, bool? isPersisted = true)
         {
             Model.CalculatedColumnExpression = expression.ToSqlString();
             Model.IsPersisted = isPersisted;

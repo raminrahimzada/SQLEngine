@@ -38,7 +38,7 @@ namespace SQLEngine.SqlServer
             _internalBuilder(writer);
         }
 
-        public IAbstractQueryBuilder Assign(ISqlExpression left, ISqlExpression right)
+        public IAbstractQueryBuilder Assign(AbstractSqlVariable left, ISqlExpression right)
         {
             _internalBuilder = writer =>
             {

@@ -3,13 +3,19 @@
 namespace SQLEngine
 {
    
-    public abstract class AbstractSqlLiteral: ISqlExpression
+    public abstract class AbstractSqlLiteral:ISqlExpression
     {
+        public abstract string ToSqlString();
+
         protected static Func<AbstractSqlLiteral> CreateEmpty;
 
         public abstract void SetFrom(byte[] data);
 
         public abstract void SetFrom(int i);
+        public abstract void SetFrom(Enum i);
+        public abstract void SetFrom(byte i);
+        public abstract void SetFrom(byte? i);
+        public abstract void SetFrom(sbyte? i);
         public abstract void SetFrom(Guid i);
         public abstract void SetFrom(Guid? i);
         public abstract void SetFrom(long l);
@@ -19,24 +25,62 @@ namespace SQLEngine
         public abstract void SetFrom(decimal d);
         public abstract void SetFrom(float f);
         public abstract void SetFrom(short f);
+        public abstract void SetFrom(sbyte f);
+        public abstract void SetFrom(ushort f);
         public abstract void SetFrom(DateTime dt, bool includeTime = true);
+        public abstract void SetFrom(char f);
 
         public abstract void SetFrom(int? i);
+        public abstract void SetFrom(ushort? i);
         public abstract void SetFrom(long? l);
         public abstract void SetFrom(bool? b);
         public abstract void SetFrom(double? d);
+        public abstract void SetFrom(ulong? d);
+        public abstract void SetFrom(uint? d);
         public abstract void SetFrom(decimal? d);
         public abstract void SetFrom(float? f);
         public abstract void SetFrom(short? f);
+        public abstract void SetFrom(char? f);
         public abstract void SetFrom(DateTime? dt);
 
         public abstract void SetFrom(ulong l);
         public abstract void SetFrom(uint l);
-        public abstract string ToSqlString();
 
 
 
+        public static implicit operator AbstractSqlLiteral(int? x)
+        {
+            return From(x);
+        }
 
+        public static implicit operator AbstractSqlLiteral(byte? x)
+        {
+            return From(x);
+        }
+        public static implicit operator AbstractSqlLiteral(short? x)
+        {
+            return From(x);
+        }
+        public static implicit operator AbstractSqlLiteral(sbyte? x)
+        {
+            return From(x);
+        }
+        public static implicit operator AbstractSqlLiteral(uint? x)
+        {
+            return From(x);
+        }
+        public static implicit operator AbstractSqlLiteral(ulong? x)
+        {
+            return From(x);
+        }
+        public static implicit operator AbstractSqlLiteral(long? x)
+        {
+            return From(x);
+        }
+        public static implicit operator AbstractSqlLiteral(DateTime? x)
+        {
+            return From(x);
+        }
 
 
 
@@ -45,6 +89,12 @@ namespace SQLEngine
         {
             return From(x);
         }
+
+        public static implicit operator AbstractSqlLiteral(Enum x)
+        {
+            return From(x);
+        }
+
         public static implicit operator AbstractSqlLiteral(ulong x)
         {
             return From(x);
@@ -73,11 +123,29 @@ namespace SQLEngine
         {
             return From(x);
         }
+        public static implicit operator AbstractSqlLiteral(bool? x)
+        {
+            return From(x);
+        }
+        public static implicit operator AbstractSqlLiteral(decimal? x)
+        {
+            return From(x);
+        }
         public static implicit operator AbstractSqlLiteral(DateTime x)
         {
             return From(x);
         }
+      
         public static implicit operator AbstractSqlLiteral(long x)
+        {
+            return From(x);
+        }
+        public static implicit operator AbstractSqlLiteral(sbyte x)
+        {
+            return From(x);
+        }
+
+        public static implicit operator AbstractSqlLiteral(ushort? x)
         {
             return From(x);
         }
@@ -98,13 +166,19 @@ namespace SQLEngine
         {
             return From(x);
         }
+
+        public static implicit operator AbstractSqlLiteral(ushort x)
+        {
+            return From(x);
+        }
+        
         public static implicit operator AbstractSqlLiteral(byte x)
         {
             return From(x);
         }
         public static implicit operator AbstractSqlLiteral(byte[] x)
         {
-            return (AbstractSqlLiteral)From(x);
+            return From(x);
         }
 
 
@@ -115,7 +189,43 @@ namespace SQLEngine
             literal.SetFrom(i);
             return literal;
         }
+        public static AbstractSqlLiteral From(Enum i)
+        {
+            var literal = CreateEmpty();
+            literal.SetFrom(i);
+            return literal;
+        }
         public static AbstractSqlLiteral From(short i)
+        {
+            var literal = CreateEmpty();
+            literal.SetFrom(i);
+            return literal;
+        }
+        public static AbstractSqlLiteral From(sbyte i)
+        {
+            var literal = CreateEmpty();
+            literal.SetFrom(i);
+            return literal;
+        }
+        public static AbstractSqlLiteral From(ushort i)
+        {
+            var literal = CreateEmpty();
+            literal.SetFrom(i);
+            return literal;
+        }
+        public static AbstractSqlLiteral From(char i)
+        {
+            var literal = CreateEmpty();
+            literal.SetFrom(i);
+            return literal;
+        }
+        public static AbstractSqlLiteral From(char? i)
+        {
+            var literal = CreateEmpty();
+            literal.SetFrom(i);
+            return literal;
+        }
+        public static AbstractSqlLiteral From(DateTime? i)
         {
             var literal = CreateEmpty();
             literal.SetFrom(i);
@@ -157,7 +267,25 @@ namespace SQLEngine
             literal.SetFrom(i);
             return literal;
         }
+        public static AbstractSqlLiteral From(ushort? i)
+        {
+            var literal = CreateEmpty();
+            literal.SetFrom(i);
+            return literal;
+        }
         public static AbstractSqlLiteral From(double? i)
+        {
+            var literal = CreateEmpty();
+            literal.SetFrom(i);
+            return literal;
+        }
+        public static AbstractSqlLiteral From(ulong? i)
+        {
+            var literal = CreateEmpty();
+            literal.SetFrom(i);
+            return literal;
+        }
+        public static AbstractSqlLiteral From(uint? i)
         {
             var literal = CreateEmpty();
             literal.SetFrom(i);
@@ -223,7 +351,13 @@ namespace SQLEngine
             literal.SetFrom(i);
             return literal;
         }
-        public static AbstractSqlLiteral From(byte[] i)
+        public static AbstractSqlLiteral From(sbyte? i)
+        {
+            var literal = CreateEmpty();
+            literal.SetFrom(i);
+            return literal;
+        }
+        public static AbstractSqlLiteral From(params byte[] i)
         {
             var literal = CreateEmpty();
             literal.SetFrom(i);

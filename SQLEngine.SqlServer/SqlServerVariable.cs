@@ -14,19 +14,19 @@ namespace SQLEngine.SqlServer
             return "@" + Name;
         }
 
-        public override ISqlExpression Add(AbstractSqlVariable y)
+        public override AbstractSqlExpression Add(AbstractSqlVariable y)
         {
             var sql = "(" + ToSqlString() + " + " + y.ToSqlString() + ")";
             return new SqlServerRawExpression(sql);
         }
 
-        public override ISqlExpression Subtract(AbstractSqlVariable y)
+        public override AbstractSqlExpression Subtract(AbstractSqlVariable y)
         {
             var sql = "(" + ToSqlString() + " - " + y.ToSqlString() + ")";
             return new SqlServerRawExpression(sql);
         }
 
-        public override AbstractSqlCondition In(params ISqlExpression[] expressions)
+        public override AbstractSqlCondition In(params AbstractSqlExpression[] expressions)
         {
             var sb = new StringBuilder();
             sb.Append(ToSqlString());
@@ -64,7 +64,7 @@ namespace SQLEngine.SqlServer
             return new SqlServerCondition(sb.ToString());
         }
 
-        public override AbstractSqlCondition NotIn(params ISqlExpression[] expressions)
+        public override AbstractSqlCondition NotIn(params AbstractSqlExpression[] expressions)
         {
             var sb = new StringBuilder();
             sb.Append(ToSqlString());
@@ -142,25 +142,25 @@ namespace SQLEngine.SqlServer
             return SqlServerCondition.Raw(expression);
         }
 
-        protected override AbstractSqlCondition Greater(ISqlExpression abstractSqlVariable)
+        protected override AbstractSqlCondition Greater(AbstractSqlExpression abstractSqlVariable)
         {
             var expression = ToSqlString() + " > " + abstractSqlVariable.ToSqlString();
             return SqlServerCondition.Raw(expression);
         }
 
-        protected override AbstractSqlCondition GreaterEqual(ISqlExpression abstractSqlVariable)
+        protected override AbstractSqlCondition GreaterEqual(AbstractSqlExpression abstractSqlVariable)
         {
             var expression = ToSqlString() + " >= " + abstractSqlVariable.ToSqlString();
             return SqlServerCondition.Raw(expression);
         }
 
-        protected override AbstractSqlCondition Less(ISqlExpression abstractSqlVariable)
+        protected override AbstractSqlCondition Less(AbstractSqlExpression abstractSqlVariable)
         {
             var expression = ToSqlString() + " < " + abstractSqlVariable.ToSqlString();
             return SqlServerCondition.Raw(expression);
         }
 
-        protected override AbstractSqlCondition LessEqual(ISqlExpression abstractSqlVariable)
+        protected override AbstractSqlCondition LessEqual(AbstractSqlExpression abstractSqlVariable)
         {
             var expression = ToSqlString() + " <= " + abstractSqlVariable.ToSqlString();
             return SqlServerCondition.Raw(expression);
@@ -250,46 +250,46 @@ namespace SQLEngine.SqlServer
             return SqlServerCondition.Raw(expression);
         }
 
-        public override ISqlExpression Multiply(AbstractSqlVariable variable)
+        public override AbstractSqlExpression Multiply(AbstractSqlVariable variable)
         {
             var expression = "(" + ToSqlString() + " * " + variable.ToSqlString() + ")";
-            return SqlServerCondition.Raw(expression);
+            return new SqlServerRawExpression(expression);
         }
 
-        public override ISqlExpression Multiply(AbstractSqlLiteral variable)
+        public override AbstractSqlExpression Multiply(AbstractSqlLiteral variable)
         {
             var expression = "(" + ToSqlString() + " * " + variable.ToSqlString() + ")";
-            return SqlServerCondition.Raw(expression);
+            return new SqlServerRawExpression(expression);
         }
 
-        public override ISqlExpression Add(AbstractSqlLiteral literal)
+        public override AbstractSqlExpression Add(AbstractSqlLiteral literal)
         {
             var expression = "(" + ToSqlString() + " + " + literal.ToSqlString() + ")";
-            return SqlServerCondition.Raw(expression);
+            return new SqlServerRawExpression(expression);
         }
 
-        public override ISqlExpression Divide(AbstractSqlVariable variable)
+        public override AbstractSqlExpression Divide(AbstractSqlVariable variable)
         {
             var expression = "(" + ToSqlString() + " / " + variable.ToSqlString() + ")";
-            return SqlServerCondition.Raw(expression);
+            return new SqlServerRawExpression(expression);
         }
 
-        public override ISqlExpression Subtract(AbstractSqlLiteral literal)
+        public override AbstractSqlExpression Subtract(AbstractSqlLiteral literal)
         {
             var expression = "(" + ToSqlString() + " - " + literal.ToSqlString() + ")";
-            return SqlServerCondition.Raw(expression);
+            return new SqlServerRawExpression(expression);
         }
 
-        protected override ISqlExpression SubtractReverse(AbstractSqlLiteral literal)
+        protected override AbstractSqlExpression SubtractReverse(AbstractSqlLiteral literal)
         {
             var expression = "(" + literal.ToSqlString() + " - " + ToSqlString() + ")";
-            return SqlServerCondition.Raw(expression);
+            return new SqlServerRawExpression(expression);
         }
 
-        protected override ISqlExpression DivideReverse(AbstractSqlLiteral literal)
+        protected override AbstractSqlExpression DivideReverse(AbstractSqlLiteral literal)
         {
             var expression = "(" + literal.ToSqlString() + " / " + ToSqlString() + ")";
-            return SqlServerCondition.Raw(expression);
+            return new SqlServerRawExpression(expression);
         }
 
         public override string ToString()

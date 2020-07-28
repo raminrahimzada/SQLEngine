@@ -104,20 +104,20 @@ namespace SQLEngine.SqlServer
             return builder.OrderByDesc(new SqlServerColumn(columnName));
         }
 
-        public static ISelectOrderBuilder OrderBy(this ISelectWithoutWhereQueryBuilder builder,AbstractSqlColumn column)
-        {
-            return builder.OrderBy(column);
-        }
+        //public static ISelectOrderBuilder OrderBy(this ISelectWithoutWhereQueryBuilder builder,AbstractSqlColumn column)
+        //{
+        //    return builder.OrderBy(column);
+        //}
 
-        public static ISelectOrderBuilder OrderByDesc(this ISelectWithoutWhereQueryBuilder builder, AbstractSqlColumn column)
-        {
-            return builder.OrderByDesc(column);
-        }
+        //public static ISelectOrderBuilder OrderByDesc(this ISelectWithoutWhereQueryBuilder builder, AbstractSqlColumn column)
+        //{
+        //    return builder.OrderByDesc(column);
+        //}
         
-        public static ISelectWithSelectorQueryBuilder SelectAssign(this ISelectWithSelectorQueryBuilder builder, AbstractSqlVariable left, AbstractSqlColumn column)
-        {
-            return builder.SelectAssign(left, column);
-        }
+        //public static ISelectWithSelectorQueryBuilder SelectAssign(this ISelectWithSelectorQueryBuilder builder, AbstractSqlVariable left, AbstractSqlColumn column)
+        //{
+        //    return builder.SelectAssign(left, column);
+        //}
         public static ISelectWithSelectorQueryBuilder SelectAssign(this ISelectWithSelectorQueryBuilder builder, AbstractSqlVariable left, string columnName)
         {
             return builder.SelectAssign(left, new SqlServerColumn(columnName));
@@ -195,7 +195,7 @@ namespace SQLEngine.SqlServer
         
         
         public static AbstractSqlCondition In(this AbstractSqlColumn column
-            , params ISqlExpression[] expressions)
+            , params AbstractSqlExpression[] expressions)
         {
             if (expressions.Length == 0)
             {
@@ -240,7 +240,7 @@ namespace SQLEngine.SqlServer
         }
 
         public static AbstractSqlCondition NotIn(this AbstractSqlColumn column
-            , params ISqlExpression[] expressions)
+            , params AbstractSqlExpression[] expressions)
         {
             if (expressions.Length == 0)
             {
@@ -278,7 +278,7 @@ namespace SQLEngine.SqlServer
 
 
         public static AbstractSqlCondition Between(this AbstractSqlColumn column
-            , ISqlExpression from,ISqlExpression to)
+            , AbstractSqlExpression from,AbstractSqlExpression to)
         {
             var expression = "(" + column.ToSqlString() + " BETWEEN (" + from.ToSqlString() + ") AND (" +
                              to.ToSqlString() + "))";
@@ -351,6 +351,7 @@ namespace SQLEngine.SqlServer
         {
             return builder.Select(variable);
         }
+        
         public static void Return(this IProcedureBodyQueryBuilder builder, AbstractSqlLiteral literal)
         {
             builder.Return(literal);
@@ -404,7 +405,9 @@ namespace SQLEngine.SqlServer
         public static IInsertNoValuesQueryBuilder Values(this IInsertWithValuesQueryBuilder builder,
             Dictionary<string, AbstractSqlLiteral> colsAndValues)
         {
-            var colsAndValuesReformed = colsAndValues.ToDictionary(x => x.Key, x => x.Value as ISqlExpression);
+            var colsAndValuesReformed = colsAndValues.ToDictionary(x => x.Key,
+                x => (ISqlExpression) x.Value);
+
             return builder.Values(colsAndValuesReformed);
         }
         public static IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(this IUpdateNoTableSingleValueQueryBuilder builder,

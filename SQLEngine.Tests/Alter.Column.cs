@@ -5,15 +5,6 @@ namespace SQLEngine.Tests
 {
     public partial class Test_Query_Builder_Sql_Server
     {
-        [TestMethod]
-        public void Test_Experimental()
-        {
-            using (var t=new SqlServerQueryBuilder())
-            {
-                
-            }
-
-        }
 
         [TestMethod]
         public void Test_Alter_Table_AddColumn()

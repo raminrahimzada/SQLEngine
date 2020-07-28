@@ -7,7 +7,8 @@
 
         ISelectWithoutWhereQueryBuilder WhereAnd(
             params AbstractSqlCondition[] conditions);
-        ISelectWithoutWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression right);
+        ISelectWithoutWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlExpression right);
         ISelectWithoutWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlLiteral literal);
+        ISelectWithoutWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlVariable variable);
     }
 }

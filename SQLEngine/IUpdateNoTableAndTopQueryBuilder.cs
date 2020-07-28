@@ -5,7 +5,7 @@ namespace SQLEngine
     public interface IUpdateNoTableAndTopQueryBuilder : IAbstractUpdateQueryBuilder
     {
         IUpdateNoTableQueryBuilder Table(string tableName);
-        IUpdateNoTableAndValuesQueryBuilder Values(Dictionary<string, ISqlExpression> updateDict);
+        IUpdateNoTableAndValuesQueryBuilder Values(Dictionary<string, AbstractSqlExpression> updateDict);
         IUpdateNoTableAndValuesQueryBuilder Values(Dictionary<string, AbstractSqlLiteral> updateDict);
         IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue);
 

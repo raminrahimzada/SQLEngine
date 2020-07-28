@@ -85,7 +85,7 @@ SET @x = 48
                 const string query = @"
 
 DECLARE  @x UNIQUEIDENTIFIER ;
-SET  @x  = 00000000-0000-0000-0000-000000000000;
+SET  @x  = '00000000-0000-0000-0000-000000000000';
 ";
                 QueryAssert.AreEqual(q.ToString(), query);
             }

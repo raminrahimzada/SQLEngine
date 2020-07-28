@@ -10,9 +10,16 @@ namespace SQLEngine.SqlServer
 {
     public class SqlServerQueryBuilder : IQueryBuilder
     {
-        static SqlServerQueryBuilder()
+        public static IEnumSqlStringConvertor EnumSqlStringConvertor;
+
+        public SqlServerQueryBuilder()
         {
+            //default settings
+            EnumSqlStringConvertor = new IntegerEnumSqlStringConvertor();
+
+            //setup
             SqlServerLiteral.Setup();
+            SqlServerRawExpression.Setup();
         }
         private readonly List<IAbstractQueryBuilder> _list = new List<IAbstractQueryBuilder>();
 
@@ -59,8 +66,8 @@ namespace SQLEngine.SqlServer
         public IDropQueryBuilder Drop => _Add(new DropQueryBuilder());
         public IExecuteQueryBuilder Execute => _Add(new ExecuteQueryBuilder());   
 
-        private ISqlExpression _null;
-        public ISqlExpression Null
+        private AbstractSqlExpression _null;
+        public AbstractSqlExpression Null
         {
             get
             {
@@ -69,8 +76,8 @@ namespace SQLEngine.SqlServer
                 return _null;
             }
         }
-        private ISqlExpression _now;
-        public ISqlExpression Now
+        private AbstractSqlExpression _now;
+        public AbstractSqlExpression Now
         {
             get
             {
@@ -111,7 +118,7 @@ namespace SQLEngine.SqlServer
             }));
         }
         
-        public ISqlExpression Raw(string rawSqlExpression)
+        public AbstractSqlExpression Raw(string rawSqlExpression)
         {
             return new SqlServerRawExpression(rawSqlExpression);
         }
@@ -218,7 +225,7 @@ namespace SQLEngine.SqlServer
 
             return Declare(variableName, type, defaultValue);
         }
-        public AbstractSqlVariable DeclareRandom(string variableName, string type, ISqlExpression defaultValue)
+        public AbstractSqlVariable DeclareRandom(string variableName, string type, AbstractSqlExpression defaultValue)
         {
             variableName = GenerateUniqueVariableName(variableName.ToLowerInvariant());
 
@@ -251,7 +258,7 @@ namespace SQLEngine.SqlServer
                 return new SqlServerVariable(variableName);
             }
         }
-        public AbstractSqlVariable Declare(string variableName, string type, ISqlExpression defaultValue)
+        public AbstractSqlVariable Declare(string variableName, string type, AbstractSqlExpression defaultValue)
         {
             var t = new DeclarationQueryBuilder();
             {
@@ -281,7 +288,7 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        public void Set(AbstractSqlVariable variable, ISqlExpression value)
+        public void Set(AbstractSqlVariable variable, AbstractSqlExpression value)
         {
             var t = new SetQueryBuilder();
             {
@@ -510,12 +517,21 @@ namespace SQLEngine.SqlServer
             return AbstractSqlLiteral.From(x);
         }
 
+        public AbstractSqlLiteral Literal(Enum x)
+        {
+            return AbstractSqlLiteral.From(x);
+        }
+
         public AbstractSqlLiteral Literal(int? x)
         {
             return AbstractSqlLiteral.From(x);
         }
 
         public AbstractSqlLiteral Literal(byte x)
+        {
+            return AbstractSqlLiteral.From(x);
+        }
+        public AbstractSqlLiteral Literal(sbyte x)
         {
             return AbstractSqlLiteral.From(x);
         }
@@ -534,13 +550,25 @@ namespace SQLEngine.SqlServer
         {
             return AbstractSqlLiteral.From(x);
         }
+        public AbstractSqlLiteral Literal(decimal? x)
+        {
+            return AbstractSqlLiteral.From(x);
+        }
 
         public AbstractSqlLiteral Literal(short x)
         {
             return AbstractSqlLiteral.From(x);
         }
+        public AbstractSqlLiteral Literal(ushort x)
+        {
+            return AbstractSqlLiteral.From(x);
+        }
 
         public AbstractSqlLiteral Literal(short? x)
+        {
+            return AbstractSqlLiteral.From(x);
+        }
+        public AbstractSqlLiteral Literal(double? x)
         {
             return AbstractSqlLiteral.From(x);
         }

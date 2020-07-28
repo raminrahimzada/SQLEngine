@@ -12,7 +12,7 @@
             return this;
         }
 
-        public ISetNoSetNoToQueryBuilder To(ISqlExpression value)
+        public ISetNoSetNoToQueryBuilder To(AbstractSqlExpression value)
         {
             _value = value;
             return this;
@@ -27,6 +27,18 @@
             writer.Write2(C.EQUALS);
             writer.Write(_value.ToSqlString());
             writer.Write(C.SEMICOLON);
+        }
+
+        public ISetNoSetNoToQueryBuilder To(ISqlExpression value)
+        {
+            _value = value;
+            return this;
+        }
+
+        public ISetNoSetNoToQueryBuilder To(AbstractSqlLiteral value)
+        {
+            _value = value;
+            return this;
         }
     }
 }

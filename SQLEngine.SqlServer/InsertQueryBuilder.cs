@@ -12,8 +12,8 @@ namespace SQLEngine.SqlServer
         IInsertNoIntoQueryBuilder
     {
         private string _tableName;
-        private Dictionary<string, ISqlExpression> _columnsAndValuesDictionary;
-        private ISqlExpression[] _valuesList;
+        private Dictionary<string, ISqlExpression> _columnsAndValuesDictionary=new Dictionary<string, ISqlExpression>();
+        private AbstractSqlExpression[] _valuesList;
         private string[] _columnNames;
         private string _selection;
 
@@ -56,13 +56,11 @@ namespace SQLEngine.SqlServer
         }
         public IInsertNeedValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue)
         {
-            if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, ISqlExpression>();
             _columnsAndValuesDictionary.Add(columnName, columnValue);
             return this;
         }
         public IInsertNeedValueQueryBuilder Value(string columnName, AbstractSqlVariable variable)
         {
-            if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, ISqlExpression>();
             _columnsAndValuesDictionary.Add(columnName, variable);
             return this;
         }
@@ -73,12 +71,19 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
+        public IInsertNoValuesQueryBuilder Values(Dictionary<string, AbstractSqlExpression> colsAndValues)
+        {
+            _columnsAndValuesDictionary = colsAndValues.ToDictionary(x => x.Key, x => (ISqlExpression) x.Value);
+            return this;
+        }
+
         public IInsertNoValuesQueryBuilder Values(Dictionary<string, AbstractSqlLiteral> colsAndValuesAsLiterals)
         {
             _columnsAndValuesDictionary =
                 colsAndValuesAsLiterals.ToDictionary(x => x.Key, x => (ISqlExpression) x.Value);
             return this;
         }
+        
 
         public IInsertNoValuesQueryBuilder Values(Action<ISelectQueryBuilder> builder)
         {
@@ -111,7 +116,7 @@ namespace SQLEngine.SqlServer
             writer.Write2(C.SPACE);
 
             var columnNamesSafe = _columnNames?.Select(I).ToArray();
-            if (_columnsAndValuesDictionary != null)
+            if (_columnsAndValuesDictionary != null&& _columnsAndValuesDictionary.Count>0)
             {
                 writer.WriteLine();
                 writer.Indent++;
@@ -165,10 +170,6 @@ namespace SQLEngine.SqlServer
                 {
                     if (i != 0)
                     {
-
-                    }
-                    else
-                    {
                         writer.Write(C.COMMA);
                     }
 
@@ -179,7 +180,7 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        public IInsertNoValuesQueryBuilder Values(params ISqlExpression[] values)
+        public IInsertNoValuesQueryBuilder Values(params AbstractSqlExpression[] values)
         {
             _valuesList = values;
             return this;
@@ -187,7 +188,7 @@ namespace SQLEngine.SqlServer
 
         public IInsertNoValuesQueryBuilder Values(params AbstractSqlLiteral[] values)
         {
-            _valuesList = values;
+            _valuesList = values.Select(x => (AbstractSqlExpression) x).ToArray();
             return this;
         }
     }

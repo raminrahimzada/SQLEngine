@@ -66,7 +66,7 @@ namespace SQLEngine.SqlServer
                 writer.Dispose();
             }
 
-            public void Add(ISqlExpression expression)
+            public void Add(AbstractSqlExpression expression)
             {
                 _rawSqlQueryList.Add(expression.ToSqlString());
             }
@@ -89,6 +89,16 @@ namespace SQLEngine.SqlServer
             public string[] ToArray()
             {
                 return _rawSqlQueryList.ToArray();
+            }
+
+            public void Add(AbstractSqlColumn column)
+            {
+                _rawSqlQueryList.Add(column.ToSqlString());
+            }
+
+            public void Add(ISqlExpression expression)
+            {
+                _rawSqlQueryList.Add(expression.ToSqlString());
             }
         }
         private string _mainTableName;
@@ -119,13 +129,6 @@ namespace SQLEngine.SqlServer
             alias = string.Concat(C.BEGIN_SQUARE, alias, C.END_SQUARE);
         }
 
-        public ISelectWithoutFromQueryBuilder FromSubQuery(string query, string alias)
-        {
-            MutateAliasName(ref alias);
-            _mainTableQuery = query;
-            _mainTableAliasName = alias;
-            return this;
-        }
         public ISelectWithoutFromQueryBuilder From(string tableName, string alias)
         {
             MutateAliasName(ref alias);
@@ -140,7 +143,7 @@ namespace SQLEngine.SqlServer
         }
         
         public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left,
-            ISqlExpression right)
+            AbstractSqlExpression right)
         {
             _selectors.Add(new CustomFunctionCallExpressionBuilder().Assign(left,right));
             return this;
@@ -151,6 +154,12 @@ namespace SQLEngine.SqlServer
             _selectors.Add(new CustomFunctionCallExpressionBuilder().Assign(left, literal));
             return this;
         }
+        public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left,
+            AbstractSqlColumn column)
+        {
+            _selectors.Add(new CustomFunctionCallExpressionBuilder().Assign(left, column));
+            return this;
+        }
         public ISelectWithSelectorQueryBuilder Select(ISqlExpression expression)
         {
             _selectors.Add(expression);
@@ -159,6 +168,11 @@ namespace SQLEngine.SqlServer
         public ISelectWithSelectorQueryBuilder Select(AbstractSqlColumn column)
         {
             _selectors.Add(column);
+            return this;
+        }
+        public ISelectWithSelectorQueryBuilder Select(AbstractSqlLiteral literal)
+        {
+            _selectors.Add(literal);
             return this;
         }
         public ISelectWithSelectorQueryBuilder Select(Action<IAggregateFunctionBuilder> body)
@@ -190,7 +204,25 @@ namespace SQLEngine.SqlServer
             using (var t=new CaseWhenQueryBuilder())
             {
                 caseWhen(t);
-                _selectors.Add($"{t.Build()}");
+                _selectors.Add(t.Build());
+                return this;
+            }
+        }
+        public ISelectWithSelectorQueryBuilder Select(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFuncExp)
+        {
+            using (var t=new CustomFunctionCallExpressionBuilder())
+            {
+                customFuncExp(t);
+                _selectors.Add(t.Build());
+                return this;
+            }
+        }
+        public ISelectWithSelectorQueryBuilder SelectAs(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFuncExp, string asName)
+        {
+            using (var t=new CustomFunctionCallExpressionBuilder())
+            {
+                customFuncExp(t);
+                _selectors.Add(t.Build() + C.SPACE + C.AS + C.SPACE + asName);
                 return this;
             }
         }
@@ -206,7 +238,7 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public ISelectWithoutWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression right)
+        public ISelectWithoutWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlExpression right)
         {
             var col = new SqlServerColumn(columnName);
             _whereClause = string.Concat(col.ToSqlString(), C.EQUALS, right.ToSqlString());
@@ -216,6 +248,12 @@ namespace SQLEngine.SqlServer
         {
             var col = new SqlServerColumn(columnName);
             _whereClause = string.Concat(col.ToSqlString(), C.EQUALS, literal.ToSqlString());
+            return this;
+        }
+        public ISelectWithoutWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlVariable variable)
+        {
+            var col = new SqlServerColumn(columnName);
+            _whereClause = string.Concat(col.ToSqlString(), C.EQUALS, variable.ToSqlString());
             return this;
         }
         public ISelectWithoutWhereQueryBuilder Where(AbstractSqlCondition condition)
@@ -487,6 +525,11 @@ namespace SQLEngine.SqlServer
             _orderByClauses.Add(new OrderByQueryModel(expression));
             return this;
         }
+        //public ISelectOrderBuilder OrderBy(AbstractSqlColumn column)
+        //{
+        //    _orderByClauses.Add(new OrderByQueryModel(column));
+        //    return this;
+        //}
         public ISelectOrderBuilder OrderByDesc(ISqlExpression expression)
         {
             _orderByClauses.Add(new OrderByQueryModel(expression, true));
@@ -505,11 +548,18 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
+        
+
         public ISelectWithoutFromAndGroupQueryBuilder GroupBy(ISqlExpression expression)
         {
             _groupByClauses.Add(expression.ToSqlString());
             return this;
         }
+        //public ISelectWithoutFromAndGroupQueryBuilder GroupBy(AbstractSqlExpression expression)
+        //{
+        //    _groupByClauses.Add(expression.ToSqlString());
+        //    return this;
+        //}
        
         public ISelectWithoutFromAndGroupNeedHavingConditionQueryBuilder Having(AbstractSqlCondition condition)
         {

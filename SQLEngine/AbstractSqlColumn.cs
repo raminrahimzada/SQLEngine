@@ -10,7 +10,7 @@ namespace SQLEngine
         public abstract string ToSqlString();
 
         #region EqualTo
-        protected abstract AbstractSqlCondition EqualTo(ISqlExpression expression);
+        protected abstract AbstractSqlCondition EqualTo(AbstractSqlExpression expression);
         protected abstract AbstractSqlCondition EqualTo(AbstractSqlColumn otherColumn);
         protected abstract AbstractSqlCondition EqualTo(AbstractSqlLiteral value);
         protected abstract AbstractSqlCondition EqualTo(int value);
@@ -29,7 +29,7 @@ namespace SQLEngine
         #endregion
 
         #region NotEqualTo
-        protected abstract AbstractSqlCondition NotEqualTo(ISqlExpression expression);
+        protected abstract AbstractSqlCondition NotEqualTo(AbstractSqlExpression expression);
         protected abstract AbstractSqlCondition NotEqualTo(AbstractSqlColumn otherColumn);
         protected abstract AbstractSqlCondition NotEqualTo(AbstractSqlVariable otherColumn);
         protected abstract AbstractSqlCondition NotEqualTo(AbstractSqlLiteral value);
@@ -299,7 +299,7 @@ namespace SQLEngine
         {
             return column?.EqualTo(literal);
         }
-        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, ISqlExpression expression)
+        public static AbstractSqlCondition operator ==(AbstractSqlColumn column, AbstractSqlExpression expression)
         {
             return column?.EqualTo(expression);
         }
@@ -373,7 +373,7 @@ namespace SQLEngine
         {
             return column?.NotEqualTo(otherColumn);
         }
-        public static AbstractSqlCondition operator !=(AbstractSqlColumn column, ISqlExpression expression)
+        public static AbstractSqlCondition operator !=(AbstractSqlColumn column, AbstractSqlExpression expression)
         {
             return column?.NotEqualTo(expression);
         }
@@ -447,15 +447,15 @@ namespace SQLEngine
         #endregion
 
         #region +
-        public static ISqlExpression operator +(AbstractSqlColumn left, AbstractSqlColumn right)
+        public static AbstractSqlExpression operator +(AbstractSqlColumn left, AbstractSqlColumn right)
         {
             return left.Add(right);
         }
-        public static ISqlExpression operator +(AbstractSqlColumn left, AbstractSqlLiteral right)
+        public static AbstractSqlExpression operator +(AbstractSqlColumn left, AbstractSqlLiteral right)
         {
             return left.Add(right);
         }
-        public static ISqlExpression operator +(AbstractSqlColumn left, ISqlExpression right)
+        public static AbstractSqlExpression operator +(AbstractSqlColumn left, AbstractSqlExpression right)
         {
             return left.Add(right);
         }
@@ -463,15 +463,15 @@ namespace SQLEngine
         #endregion
 
         #region -
-        public static ISqlExpression operator -(AbstractSqlColumn left, AbstractSqlColumn right)
+        public static AbstractSqlExpression operator -(AbstractSqlColumn left, AbstractSqlColumn right)
         {
             return left.Subtract(right);
         }
-        public static ISqlExpression operator -(AbstractSqlColumn left, AbstractSqlLiteral right)
+        public static AbstractSqlExpression operator -(AbstractSqlColumn left, AbstractSqlLiteral right)
         {
             return left.Subtract(right);
         }
-        public static ISqlExpression operator -(AbstractSqlColumn left, ISqlExpression right)
+        public static AbstractSqlExpression operator -(AbstractSqlColumn left, AbstractSqlExpression right)
         {
             return left.Subtract(right);
         }
@@ -479,15 +479,15 @@ namespace SQLEngine
         #endregion
         
         #region /
-        public static ISqlExpression operator /(AbstractSqlColumn left, AbstractSqlColumn right)
+        public static AbstractSqlExpression operator /(AbstractSqlColumn left, AbstractSqlColumn right)
         {
             return left.Divide(right);
         }
-        public static ISqlExpression operator /(AbstractSqlColumn left, AbstractSqlLiteral right)
+        public static AbstractSqlExpression operator /(AbstractSqlColumn left, AbstractSqlLiteral right)
         {
             return left.Divide(right);
         }
-        public static ISqlExpression operator /(AbstractSqlColumn left, ISqlExpression right)
+        public static AbstractSqlExpression operator /(AbstractSqlColumn left, AbstractSqlExpression right)
         {
             return left.Divide(right);
         }
@@ -495,15 +495,15 @@ namespace SQLEngine
         #endregion
 
         #region *
-        public static ISqlExpression operator *(AbstractSqlColumn left, AbstractSqlColumn right)
+        public static AbstractSqlExpression operator *(AbstractSqlColumn left, AbstractSqlColumn right)
         {
             return left.Multiply(right);
         }
-        public static ISqlExpression operator *(AbstractSqlColumn left, AbstractSqlLiteral right)
+        public static AbstractSqlExpression operator *(AbstractSqlColumn left, AbstractSqlLiteral right)
         {
             return left.Multiply(right);
         }
-        public static ISqlExpression operator *(AbstractSqlColumn left, ISqlExpression right)
+        public static AbstractSqlExpression operator *(AbstractSqlColumn left, AbstractSqlExpression right)
         {
             return left.Multiply(right);
         }
@@ -516,20 +516,20 @@ namespace SQLEngine
         public abstract AbstractSqlCondition IsNotNull();
 
 
-        protected abstract ISqlExpression Add(AbstractSqlColumn right);
-        protected abstract ISqlExpression Subtract(AbstractSqlColumn right);
-        protected abstract ISqlExpression Divide(AbstractSqlColumn right);
-        protected abstract ISqlExpression Multiply(AbstractSqlColumn right);
+        protected abstract AbstractSqlExpression Add(AbstractSqlColumn right);
+        protected abstract AbstractSqlExpression Subtract(AbstractSqlColumn right);
+        protected abstract AbstractSqlExpression Divide(AbstractSqlColumn right);
+        protected abstract AbstractSqlExpression Multiply(AbstractSqlColumn right);
         
-        protected abstract ISqlExpression Add(AbstractSqlLiteral right);
-        protected abstract ISqlExpression Subtract(AbstractSqlLiteral right);
-        protected abstract ISqlExpression Divide(AbstractSqlLiteral right);
-        protected abstract ISqlExpression Multiply(AbstractSqlLiteral right);
+        protected abstract AbstractSqlExpression Add(AbstractSqlLiteral right);
+        protected abstract AbstractSqlExpression Subtract(AbstractSqlLiteral right);
+        protected abstract AbstractSqlExpression Divide(AbstractSqlLiteral right);
+        protected abstract AbstractSqlExpression Multiply(AbstractSqlLiteral right);
         
-        protected abstract ISqlExpression Add(ISqlExpression right);
-        protected abstract ISqlExpression Subtract(ISqlExpression right);
-        protected abstract ISqlExpression Divide(ISqlExpression right);
-        protected abstract ISqlExpression Multiply(ISqlExpression right);
+        protected abstract AbstractSqlExpression Add(AbstractSqlExpression right);
+        protected abstract AbstractSqlExpression Subtract(AbstractSqlExpression right);
+        protected abstract AbstractSqlExpression Divide(AbstractSqlExpression right);
+        protected abstract AbstractSqlExpression Multiply(AbstractSqlExpression right);
         
 
 

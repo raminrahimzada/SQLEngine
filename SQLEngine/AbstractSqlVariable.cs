@@ -9,13 +9,13 @@
         public string Name { get; set; }
         public abstract string ToSqlString();
 
-        public abstract ISqlExpression Add(AbstractSqlVariable y);
-        public abstract ISqlExpression Subtract(AbstractSqlVariable y);
+        public abstract AbstractSqlExpression Add(AbstractSqlVariable y);
+        public abstract AbstractSqlExpression Subtract(AbstractSqlVariable y);
 
-        public abstract AbstractSqlCondition In(params ISqlExpression[] expressions);
+        public abstract AbstractSqlCondition In(params AbstractSqlExpression[] expressions);
         public abstract AbstractSqlCondition In(params AbstractSqlLiteral[] expressions);
         
-        public abstract AbstractSqlCondition NotIn(params ISqlExpression[] expressions);
+        public abstract AbstractSqlCondition NotIn(params AbstractSqlExpression[] expressions);
         public abstract AbstractSqlCondition NotIn(params AbstractSqlLiteral[] expressions);
 
         public abstract AbstractSqlCondition IsNull();
@@ -27,10 +27,10 @@
         protected abstract AbstractSqlCondition Less(AbstractSqlVariable abstractSqlVariable);
         protected abstract AbstractSqlCondition LessEqual(AbstractSqlVariable abstractSqlVariable);
 
-        protected abstract AbstractSqlCondition Greater(ISqlExpression abstractSqlVariable);
-        protected abstract AbstractSqlCondition GreaterEqual(ISqlExpression abstractSqlVariable);
-        protected abstract AbstractSqlCondition Less(ISqlExpression abstractSqlVariable);
-        protected abstract AbstractSqlCondition LessEqual(ISqlExpression abstractSqlVariable);
+        protected abstract AbstractSqlCondition Greater(AbstractSqlExpression abstractSqlVariable);
+        protected abstract AbstractSqlCondition GreaterEqual(AbstractSqlExpression abstractSqlVariable);
+        protected abstract AbstractSqlCondition Less(AbstractSqlExpression abstractSqlVariable);
+        protected abstract AbstractSqlCondition LessEqual(AbstractSqlExpression abstractSqlVariable);
 
 
 
@@ -138,20 +138,20 @@
         }
 
 
-        public static AbstractSqlCondition operator <(AbstractSqlVariable x, ISqlExpression y)
+        public static AbstractSqlCondition operator <(AbstractSqlVariable x, AbstractSqlExpression y)
         {
             return x.Less(y);
         }
-        public static AbstractSqlCondition operator <=(AbstractSqlVariable x, ISqlExpression y)
+        public static AbstractSqlCondition operator <=(AbstractSqlVariable x, AbstractSqlExpression y)
         {
             return x.LessEqual(y);
         }
 
-        public static AbstractSqlCondition operator >(AbstractSqlVariable x, ISqlExpression y)
+        public static AbstractSqlCondition operator >(AbstractSqlVariable x, AbstractSqlExpression y)
         {
             return x.Greater(y);
         }
-        public static AbstractSqlCondition operator >=(AbstractSqlVariable x, ISqlExpression y)
+        public static AbstractSqlCondition operator >=(AbstractSqlVariable x, AbstractSqlExpression y)
         {
             return x.GreaterEqual(y);
         }
@@ -159,61 +159,61 @@
 
 
 
-        public static ISqlExpression operator +(AbstractSqlVariable x, AbstractSqlVariable y)
+        public static AbstractSqlExpression operator +(AbstractSqlVariable x, AbstractSqlVariable y)
         {
             return x.Add(y);
         }
 
-        public static ISqlExpression operator -(AbstractSqlVariable x, AbstractSqlVariable y)
+        public static AbstractSqlExpression operator -(AbstractSqlVariable x, AbstractSqlVariable y)
         {
             return x.Subtract(y);
         }
-        public static ISqlExpression operator *(AbstractSqlVariable x, AbstractSqlVariable y)
+        public static AbstractSqlExpression operator *(AbstractSqlVariable x, AbstractSqlVariable y)
         {
             return x.Multiply(y);
         }
 
-        public abstract  ISqlExpression Multiply(AbstractSqlVariable variable);
-        public abstract  ISqlExpression Multiply(AbstractSqlLiteral variable);
-        public abstract  ISqlExpression Add(AbstractSqlLiteral literal);
-        public abstract  ISqlExpression Divide(AbstractSqlVariable variable);
-        public abstract  ISqlExpression Subtract(AbstractSqlLiteral literal);
+        public abstract  AbstractSqlExpression Multiply(AbstractSqlVariable variable);
+        public abstract  AbstractSqlExpression Multiply(AbstractSqlLiteral variable);
+        public abstract  AbstractSqlExpression Add(AbstractSqlLiteral literal);
+        public abstract  AbstractSqlExpression Divide(AbstractSqlVariable variable);
+        public abstract  AbstractSqlExpression Subtract(AbstractSqlLiteral literal);
 
 
-        public static ISqlExpression operator -(AbstractSqlLiteral x, AbstractSqlVariable y)
+        public static AbstractSqlExpression operator -(AbstractSqlLiteral x, AbstractSqlVariable y)
         {
             return y.SubtractReverse(x);
         }
 
-        protected abstract ISqlExpression SubtractReverse(AbstractSqlLiteral literal);
-        protected abstract ISqlExpression DivideReverse(AbstractSqlLiteral literal);
+        protected abstract AbstractSqlExpression SubtractReverse(AbstractSqlLiteral literal);
+        protected abstract AbstractSqlExpression DivideReverse(AbstractSqlLiteral literal);
 
-        public static ISqlExpression operator /(AbstractSqlLiteral x, AbstractSqlVariable y)
+        public static AbstractSqlExpression operator /(AbstractSqlLiteral x, AbstractSqlVariable y)
         {
             return y.DivideReverse(x);
         }
 
 
-        public static ISqlExpression operator +(AbstractSqlLiteral x, AbstractSqlVariable y)
+        public static AbstractSqlExpression operator +(AbstractSqlLiteral x, AbstractSqlVariable y)
         {
             return y.Add(x);
         }
-        public static ISqlExpression operator +(AbstractSqlVariable x, AbstractSqlLiteral y)
+        public static AbstractSqlExpression operator +(AbstractSqlVariable x, AbstractSqlLiteral y)
         {
             return x.Add(y);
         }
 
         
-        public static ISqlExpression operator -(AbstractSqlVariable x, AbstractSqlLiteral y)
+        public static AbstractSqlExpression operator -(AbstractSqlVariable x, AbstractSqlLiteral y)
         {
             return x.Subtract(y);
         }
-        public static ISqlExpression operator *(AbstractSqlLiteral x, AbstractSqlVariable y)
+        public static AbstractSqlExpression operator *(AbstractSqlLiteral x, AbstractSqlVariable y)
         {
             return y.Multiply(x);
         }
         
-        public static ISqlExpression operator /(AbstractSqlVariable x, AbstractSqlVariable y)
+        public static AbstractSqlExpression operator /(AbstractSqlVariable x, AbstractSqlVariable y)
         {
             return x.Divide(y);
         }

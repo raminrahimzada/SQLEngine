@@ -2,7 +2,7 @@
 {
     public interface IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeQueryBuilder //: IAbstractQueryBuilder
     {
-        IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeNoDefaultValueQueryBuilder DefaultValue(ISqlExpression expression);
+        IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeNoDefaultValueQueryBuilder DefaultValue(AbstractSqlExpression expression);
         IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeNoDefaultValueQueryBuilder DefaultValue(AbstractSqlLiteral literal);
     }
 }

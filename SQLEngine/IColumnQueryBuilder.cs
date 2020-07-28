@@ -12,9 +12,9 @@
         IColumnQueryBuilder ForeignKey(string tableName, string columnName, string fkName = null);
         IColumnQueryBuilder MaxLength(int? maxLen);
         IColumnQueryBuilder Unique(string keyName = null, bool descending = false);
-        IColumnQueryBuilder DefaultValue(ISqlExpression defaultValue, string defaultConstraintName = null);
+        IColumnQueryBuilder DefaultValue(AbstractSqlExpression defaultValue, string defaultConstraintName = null);
         IColumnQueryBuilder DefaultValue(AbstractSqlLiteral literal, string defaultConstraintName = null);
-        IColumnQueryBuilder CalculatedColumn(ISqlExpression expression, bool? isPersisted = true);
+        IColumnQueryBuilder CalculatedColumn(AbstractSqlExpression expression, bool? isPersisted = true);
         IColumnQueryBuilder Identity(int start = 1, int step = 1);
         IColumnQueryBuilder Primary(string keyName = null);
         IColumnQueryBuilder Check(string checkExpression);

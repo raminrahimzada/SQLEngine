@@ -23,6 +23,28 @@
             _whereCondition = condition.ToSqlString();
             return this;
         }
+
+        public IDeleteExceptWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlExpression expression)
+        {
+            var col = new SqlServerColumn(columnName);
+            _whereCondition = string.Concat(col.ToSqlString(), C.EQUALS, expression.ToSqlString());
+            return this;
+        }
+
+        public IDeleteExceptWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlLiteral literal)
+        {
+            var col = new SqlServerColumn(columnName);
+            _whereCondition = string.Concat(col.ToSqlString(), C.EQUALS, literal.ToSqlString());
+            return this;
+        }
+
+        public IDeleteExceptWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlVariable variable)
+        {
+            var col = new SqlServerColumn(columnName);
+            _whereCondition = string.Concat(col.ToSqlString(), C.EQUALS, variable.ToSqlString());
+            return this;
+        }
+
         public override void Build(ISqlWriter writer)
         {
             ValidateAndThrow();

@@ -43,7 +43,7 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public IExecuteFunctionNeedNameQueryBuilder Arg(ISqlExpression parameterValue)
+        public IExecuteFunctionNeedNameQueryBuilder Arg(AbstractSqlExpression parameterValue)
         {
             _parametersList.Add(parameterValue.ToSqlString());
             return this;

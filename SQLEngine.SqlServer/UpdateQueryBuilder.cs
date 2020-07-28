@@ -42,7 +42,7 @@ namespace SQLEngine.SqlServer
         //    return this;
         //}
 
-        public IUpdateNoTableAndValuesQueryBuilder Values(Dictionary<string, ISqlExpression> updateDict)
+        public IUpdateNoTableAndValuesQueryBuilder Values(Dictionary<string, AbstractSqlExpression> updateDict)
         {
             _columnsAndValuesDictionary = updateDict.ToDictionary(x => x.Key, x => x.Value.ToSqlString());
             return this;
@@ -67,7 +67,7 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, ISqlExpression expression)
+        public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlExpression expression)
         {
             if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, string>();
             _columnsAndValuesDictionary.Add(columnName, expression.ToSqlString());
@@ -120,7 +120,7 @@ namespace SQLEngine.SqlServer
         //    return this;
         //}
 
-        public IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression right)
+        public IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlExpression right)
         {
             _whereCondition = columnName + C.EQUALS + right.ToSqlString();
             return this;
@@ -135,7 +135,7 @@ namespace SQLEngine.SqlServer
             _whereCondition = columnName + C.EQUALS + literal.ToSqlString();
             return this;
         }
-        public IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnLike(string columnName, ISqlExpression right)
+        public IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnLike(string columnName, AbstractSqlExpression right)
         {
             _whereCondition = columnName + C.SPACE + C.LIKE + C.SPACE + right.ToSqlString();
             return this;

@@ -36,7 +36,7 @@
             return this;
         }
 
-        public IAlterTableNoNameAddColumnNoNameNoTypeNameNoSizeNoDefaultValueQueryBuilder DefaultValue(ISqlExpression expression)
+        public IAlterTableNoNameAddColumnNoNameNoTypeNameNoSizeNoDefaultValueQueryBuilder DefaultValue(AbstractSqlExpression expression)
         {
             _defaultValue = expression.ToSqlString();
             return this;

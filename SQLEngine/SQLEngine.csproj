@@ -48,7 +48,6 @@
     <Compile Include="AbstractQueryBuilder.cs" />
     <Compile Include="AbstractSqlColumn.cs" />
     <Compile Include="AbstractSqlCondition.cs" />
-    <Compile Include="AbstractSqlExpression.cs" />
     <Compile Include="AbstractSqlVariable.cs" />
     <Compile Include="ColumnModel.cs" />
     <Compile Include="Extensions.cs" />
@@ -122,6 +121,7 @@
     <Compile Include="IDropViewNoSchemaQueryBuilder.cs" />
     <Compile Include="IDropViewQueryBuilder.cs" />
     <Compile Include="IElseIfQueryBuilder.cs" />
+    <Compile Include="IEnumSqlStringConvertor.cs" />
     <Compile Include="IExceptDefaultValueNameDeclarationQueryBuilder.cs" />
     <Compile Include="IExceptVariableNameDeclarationQueryBuilder.cs" />
     <Compile Include="IExceptVariableTypeNameDeclarationQueryBuilder.cs" />
@@ -160,6 +160,7 @@
     <Compile Include="ISetNoSetNoToQueryBuilder.cs" />
     <Compile Include="ISetQueryBuilder.cs" />
     <Compile Include="AbstractSqlLiteral.cs" />
+    <Compile Include="AbstractSqlExpression.cs" />
     <Compile Include="ISqlExpression.cs" />
     <Compile Include="ISqlWriter.cs" />
     <Compile Include="ITruncateNoTableQueryBuilder.cs" />

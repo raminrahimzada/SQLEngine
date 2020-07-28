@@ -5,11 +5,10 @@
 
 namespace SQLEngine
 {
-    
     public interface IQueryBuilder: IDisposable
     {
-        ISqlExpression Null { get; }
-        ISqlExpression Now { get; }
+        AbstractSqlExpression Null { get; }
+        AbstractSqlExpression Now { get; }
         ISelectQueryBuilder _select { get; }
         IUpdateQueryBuilder _update { get; }
         IDeleteQueryBuilder _delete { get; }
@@ -49,15 +48,15 @@ namespace SQLEngine
         void End();
         //void Declare(Func<IDeclarationQueryBuilder, IDeclarationQueryBuilder> builder);
         AbstractSqlVariable DeclareRandom(string variableName, string type, AbstractSqlLiteral defaultValue);
-        AbstractSqlVariable DeclareRandom(string variableName, string type, ISqlExpression defaultValue);
+        AbstractSqlVariable DeclareRandom(string variableName, string type, AbstractSqlExpression defaultValue);
         AbstractSqlVariable DeclareRandom(string variableName, string type);
         AbstractSqlVariable Declare(string variableName, string type);
         AbstractSqlVariable Declare(string variableName, string type, AbstractSqlLiteral defaultValue);
-        AbstractSqlVariable Declare(string variableName, string type, ISqlExpression defaultValue);
+        AbstractSqlVariable Declare(string variableName, string type, AbstractSqlExpression defaultValue);
 
         void SetToScopeIdentity(AbstractSqlVariable variable);
         void Set(AbstractSqlVariable variable, Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallNopBuilder> right);
-        void Set(AbstractSqlVariable variable, ISqlExpression value);
+        void Set(AbstractSqlVariable variable, AbstractSqlExpression value);
         void Set(AbstractSqlVariable variable, AbstractSqlVariable value);
         void Set(AbstractSqlVariable variable, AbstractSqlLiteral value);
         //void Set(ISqlVariable variable, Func<ICastQueryBuilder, ICastQueryBuilder> q);
@@ -71,9 +70,7 @@ namespace SQLEngine
         void Return(AbstractSqlLiteral literal);
         void Comment(string comment);
         string GenerateUniqueVariableName(string beginning);
-        //void Drop(Func<IDropTableQueryBuilder, IDropTableNoNameNoSchemaNoDBQueryBuilder> builder);
-        //void Drop(Func<IDropTableQueryBuilder, IDropTableNoNameQueryBuilder> builder);
-        //void Drop(Func<IDropViewQueryBuilder, IDropViewQueryBuilder> builder);
+        
         void Cursor(
             string cursorName,
             Action<ISelectQueryBuilder> selection,
@@ -81,7 +78,6 @@ namespace SQLEngine
             Action<IQueryBuilder> body);
         void Print(ISqlExpression expression);
         void Print(AbstractSqlLiteral literal);
-        //void Join(AbstractQueryBuilder other);
         string Build();
         AbstractSqlColumn Column(string columnName);
         AbstractSqlColumn Column(string columnName,string tableAlias);
@@ -92,23 +88,24 @@ namespace SQLEngine
         AbstractSqlLiteral Literal(string x, bool isUniCode = true);
         AbstractSqlLiteral Literal(DateTime x, bool includeTime = true);
         AbstractSqlLiteral Literal(int x);
+        AbstractSqlLiteral Literal(Enum x);
         AbstractSqlLiteral Literal(int? x);
         AbstractSqlLiteral Literal(byte x);
         AbstractSqlLiteral Literal(byte? x);
-
         AbstractSqlLiteral Literal(long x);
         AbstractSqlLiteral Literal(long? x);
+        AbstractSqlLiteral Literal(decimal? x);
 
         AbstractSqlLiteral Literal(short x);
         AbstractSqlLiteral Literal(short? x);
 
-        AbstractSqlLiteral Literal(byte[] x);
+        AbstractSqlLiteral Literal(params byte[] x);
 
         [Obsolete("This is a fallback for " +
                   "If You don't find any Method to use for custom query," +
                   "So If You Are Here Please create issue on github " +
                   "page of SqlEngine Repository")]
-        ISqlExpression Raw(string rawSqlExpression);
+        AbstractSqlExpression Raw(string rawSqlExpression);
         [Obsolete("This is a fallback for " +
                   "If You don't find any Method to use for custom query," +
                   "So If You Are Here Please create issue on github " +

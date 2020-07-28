@@ -6,7 +6,7 @@ namespace SQLEngine.SqlServer
     {
         public static ICustomFunctionCallNopBuilder IsNull(
             this ICustomFunctionCallExpressionBuilder builder,
-            ISqlExpression expression,ISqlExpression fallback)
+            AbstractSqlExpression expression,AbstractSqlExpression fallback)
         {
             return builder.Call("ISNULL", expression, fallback);
         }
@@ -24,7 +24,7 @@ namespace SQLEngine.SqlServer
             var p1 = new SqlServerRawExpression(expression.ToSqlString() + C.SPACE + C.AS + C.SPACE + asType);
             return builder.Call("CAST", p1);
         }
-        public static ICustomFunctionCallNopBuilder ObjectId(this ICustomFunctionCallExpressionBuilder builder,ISqlExpression expression)
+        public static ICustomFunctionCallNopBuilder ObjectId(this ICustomFunctionCallExpressionBuilder builder, ISqlExpression expression)
         {
             return builder.Call("OBJECT_ID", expression);
         }
@@ -37,7 +37,7 @@ namespace SQLEngine.SqlServer
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static ICustomFunctionCallNopBuilder Ascii(this ICustomFunctionCallExpressionBuilder builder,ISqlExpression expression)
+        public static ICustomFunctionCallNopBuilder Ascii(this ICustomFunctionCallExpressionBuilder builder, ISqlExpression expression)
         {
             return builder.Call("ASCII",expression);
         }
@@ -46,7 +46,7 @@ namespace SQLEngine.SqlServer
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static ICustomFunctionCallNopBuilder Char(this ICustomFunctionCallExpressionBuilder builder,ISqlExpression expression)
+        public static ICustomFunctionCallNopBuilder Char(this ICustomFunctionCallExpressionBuilder builder, ISqlExpression expression)
         {
             return builder.Call("CHAR", expression);
         }
@@ -91,7 +91,7 @@ namespace SQLEngine.SqlServer
         /// <returns></returns>
         public static ICustomFunctionCallNopBuilder Concat(this ICustomFunctionCallExpressionBuilder builder,
             params
-            ISqlExpression[] strings
+                ISqlExpression[] strings
             )
         {
             return builder.Call("CONCAT", strings);
@@ -99,7 +99,7 @@ namespace SQLEngine.SqlServer
         public static ICustomFunctionCallNopBuilder ConcatWs(this ICustomFunctionCallExpressionBuilder builder,
             char separator,
             params
-            ISqlExpression[] strings
+                ISqlExpression[] strings
             )
         {
             var list = new List<ISqlExpression>(1 + strings.Length) {SqlServerLiteral.Raw(separator)};
@@ -107,7 +107,7 @@ namespace SQLEngine.SqlServer
             return builder.Call("CONCAT_WS", list.ToArray());
         }
         public static ICustomFunctionCallNopBuilder DataLength(this ICustomFunctionCallExpressionBuilder builder,
-                ISqlExpression expression
+            ISqlExpression expression
         )
         {
             return builder.Call("DATALENGTH", expression);

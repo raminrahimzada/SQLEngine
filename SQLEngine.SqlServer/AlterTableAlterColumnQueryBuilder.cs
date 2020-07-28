@@ -13,7 +13,7 @@
         private bool? _canBeNull;
         private byte? _size;
         private byte? _scale;
-        private ISqlExpression _defaultValue;
+        private AbstractSqlExpression _defaultValue;
 
         public AlterTableAlterColumnQueryBuilder Table(string tableName)
         {
@@ -84,7 +84,7 @@
             return this;
         }
 
-        public IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeNoDefaultValueQueryBuilder DefaultValue(ISqlExpression expression)
+        public IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeNoDefaultValueQueryBuilder DefaultValue(AbstractSqlExpression expression)
         {
             _defaultValue = expression;
             return this;

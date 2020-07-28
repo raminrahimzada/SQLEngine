@@ -56,6 +56,7 @@
     <Compile Include="Complex_Queries.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="FutureWorks.cs" />
+    <Compile Include="Literal.cs" />
     <Compile Include="PhotosTable.cs" />
     <Compile Include="QueryAssert.cs" />
     <Compile Include="Create.cs" />

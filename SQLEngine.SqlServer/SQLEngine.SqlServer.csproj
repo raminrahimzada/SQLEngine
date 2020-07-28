@@ -2,10 +2,28 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>2.2.0</Version>
+    <Company>R3</Company>
+    <Description>Cross Database Sql query generator using C# expressions,
+Sql-Server Adapter</Description>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageIcon>logo.png</PackageIcon>
+    <RepositoryUrl>https://github.com/raminrahimzada/SQLEngine</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/raminrahimzada/SQLEngine</PackageProjectUrl>
+    <PackageTags>csharp C# sql t-sql my-sql postgresql</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SQLEngine\SQLEngine.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

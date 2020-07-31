@@ -11,11 +11,12 @@ namespace SQLEngine.Tests
         {
             using (var q = Query.New)
             {
-                q.Declare("i", "INT", 1);
+                //C is constants class
+                q.Declare("i", C.INT, 1);
                 const string query = @"
 DECLARE  @i INT  = 1;   
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
         
@@ -24,11 +25,11 @@ DECLARE  @i INT  = 1;
         {
             using (var q = Query.New)
             {
-                q.Declare("i", 1);
+                q.Declare<int>("i", 1);
                 const string query = @"
 DECLARE  @i INT  = 1;   
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
 
@@ -41,7 +42,7 @@ DECLARE  @i INT  = 1;
                 const string query = @"
 DECLARE  @i INT;
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
         
@@ -54,7 +55,7 @@ DECLARE  @i INT;
                 const string query = @"
 DECLARE  @i INT;
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
 
@@ -63,14 +64,14 @@ DECLARE  @i INT;
         {
             using (var q = Query.New)
             {
-                var x = q.Declare("x", 47);
+                var x = q.Declare<int>("x", 47);
 
                 q.Set(x, 48);
                 const string query = @"
 declare @x int = 47
 SET @x = 48
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
 
@@ -87,7 +88,7 @@ SET @x = 48
 DECLARE  @x UNIQUEIDENTIFIER ;
 SET  @x  = '00000000-0000-0000-0000-000000000000';
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
 
@@ -121,7 +122,7 @@ SET  @objId  = OBJECT_ID(@tableName);
 print(@objId)
 
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
 
@@ -147,7 +148,7 @@ SET  @today  = CAST(@today AS DATE)
 print(@today)
 
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
     }

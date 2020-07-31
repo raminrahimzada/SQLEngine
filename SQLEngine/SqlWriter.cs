@@ -34,9 +34,12 @@ namespace SQLEngine
             set => _indentedTextWriter.Indent = value;
         }
 
-        public void Write(string expression)
+        public void Write(params string[] expressions)
         {
-            _indentedTextWriter.Write(expression);
+            foreach (var expression in expressions)
+            {
+                _indentedTextWriter.Write(expression);
+            }
         }
 
         public void Write(byte? b)

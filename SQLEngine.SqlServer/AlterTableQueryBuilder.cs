@@ -20,6 +20,11 @@
             return b;
         }
 
+        public IAlterTableNoNameAddColumnNoNameNoTypeNameQueryBuilder AddColumn<T>(string columnName)
+        {
+            return AddColumn(columnName).OfType<T>();
+        }
+
         public IAlterTableNoNameDropColumnQueryBuilder DropColumn(string columnName)
         {
             var b = new AlterTableDropColumnQueryBuilder();
@@ -39,6 +44,11 @@
             var b = new AlterTableAlterColumnQueryBuilder();
             _internalBuilder = b.Table(_tableName).Column(columnName);
             return b;
+        }
+
+        public IAlterTableNoNameAlterColumnNoNewTypeQueryBuilder AlterColumn<T>(string columnName)
+        {
+            return AlterColumn(columnName).Type<T>();
         }
 
         public override void Dispose()

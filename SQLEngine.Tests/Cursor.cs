@@ -53,7 +53,7 @@ DEALLOCATE cursor1
 
                 ";
 
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
     }

@@ -70,6 +70,11 @@
             _newType = newType;
             return this;
         }
+        public IAlterTableNoNameAlterColumnNoNewTypeQueryBuilder Type<T>()
+        {
+            _newType = Query.Settings.TypeConvertor.ToSqlType<T>();
+            return this;
+        }
 
         public IAlterTableNoNameAlterColumnNoNewTypeNoNullableQueryBuilder NotNull(bool notNull = true)
         {

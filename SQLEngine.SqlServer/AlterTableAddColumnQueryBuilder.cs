@@ -14,13 +14,19 @@
         private string _type;
         private bool? _canBeNull;
         private string _defaultValue;
+        
         private int? _size;
-        private int? _scale;
+        private byte? _scale;
 
         public IAlterTableNoNameAddColumnNoNameNoTypeNameQueryBuilder OfType(string type)
         {
             _type = type;
             return this;
+        }
+
+        public IAlterTableNoNameAddColumnNoNameNoTypeNameQueryBuilder OfType<T>()
+        {
+            return OfType(Query.Settings.TypeConvertor.ToSqlType<T>());
         }
 
         public IAlterTableNoNameAddColumnNoNameNoNullableQueryBuilder NotNull(bool notNull=true)
@@ -29,7 +35,7 @@
             return this;
         }
 
-        public IAlterTableNoNameAddColumnNoNameNoTypeNameNoSizeQueryBuilder Size(int size, int? scale = null)
+        public IAlterTableNoNameAddColumnNoNameNoTypeNameNoSizeQueryBuilder Size(int size, byte? scale = null)
         {
             _size = size;
             _scale = scale;

@@ -3,13 +3,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SQLEngine.Tests
 {
-    public static class QueryAssert
+    public static class SqlAssert
     {
-        public static void AreEqual(string query1, string query2)
+        public static void AreEqualQuery(string query1, string query2)
         {
-            AbstractSqlLiteral x = 1M;
-
-            const string splitter = " \r\n\t;()";
+            const string splitter = " \r\n\t;(),.=";
             string[] FormatQuery(string query)
             {
                 return query
@@ -22,7 +20,7 @@ namespace SQLEngine.Tests
 
             var arr1 = FormatQuery(query1);
             var arr2 = FormatQuery(query2);
-            Assert.AreEqual(arr1.JoinWith(""), arr2.JoinWith(""));
+            CollectionAssert.AreEqual(arr1, arr2);
         }
     }
 }

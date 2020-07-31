@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SQLEngine.SqlServer;
 
@@ -21,7 +22,7 @@ namespace SQLEngine.Tests
                 const string query =
                     "INSERT INTO Users (Name,Surname,Age,Height) VALUES (N'Ramin' , N'Rahimzada' , 26, 1.84)";
                 
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
 
@@ -35,14 +36,30 @@ namespace SQLEngine.Tests
                     {"Name", "Ramin"},
                     {"Surname", "Rahimzada"},
                     {"Age", 26},
+                    {"Id", Guid.Empty},
                 };
                 q.Insert
                     .Into("Users")
                     .Values(dict)
                     ;
 
-                const string query = "INSERT INTO Users(Name , Surname , Age) VALUES (N'Ramin' , N'Rahimzada' , 26)";
-                QueryAssert.AreEqual(q.Build(), query);
+                const string query = "INSERT INTO Users(Name , Surname , Age, Id) VALUES (N'Ramin' , N'Rahimzada' , 26 ,'00000000-0000-0000-0000-000000000000')";
+                SqlAssert.AreEqualQuery(q.Build(), query);
+            }
+        }
+        [TestMethod]
+        public void Test_Insert_By_Columns_And_Values()
+        {
+            using (var q = Query.New)
+            {
+                q.Insert
+                    .Into("Users")
+                    .Columns("Name", "Surname", "Age")
+                    .Values("Tracey", "McBean", 9)
+                    ;
+
+                const string query = "INSERT INTO Users(Name , Surname , Age) VALUES (N'Tracey' , N'McBean' , 9)";
+                SqlAssert.AreEqualQuery(q.Build(), query);
             }
         }
 
@@ -59,7 +76,7 @@ namespace SQLEngine.Tests
                     )
                     ;
                 const string query = "INSERT INTO Users  SELECT  *  FROM Users_Backup";
-                QueryAssert.AreEqual(q.Build(), query);
+                SqlAssert.AreEqualQuery(q.Build(), query);
             }
         }
 
@@ -76,7 +93,7 @@ namespace SQLEngine.Tests
                     );
 
                 const string query = "INSERT INTO Users  SELECT  *  FROM AnotherUsers";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
     }

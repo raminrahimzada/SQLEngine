@@ -9,6 +9,14 @@
             return this;
         }
 
+        public ITruncateNoTableQueryBuilder Table<TTable>() where TTable : ITable, new()
+        {
+            using (var table = new TTable())
+            {
+                return Table(table.Name);
+            }
+        }
+
         public override void Build(ISqlWriter writer)
         {
             writer.Write(C.TRUNCATE);

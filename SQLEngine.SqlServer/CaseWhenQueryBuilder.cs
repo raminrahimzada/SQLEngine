@@ -17,12 +17,14 @@ namespace SQLEngine.SqlServer
             _currentWhen = condition.ToSqlString();
             return this;
         }
-        public ICaseWhenNeedThenQueryBuilder WhenColumnEquals(string columnName, AbstractSqlExpression expression)
+
+        public ICaseWhenNeedThenQueryBuilder WhenColumnEquals(string columnName, ISqlExpression expression)
         {
             _currentWhen = columnName + " " + C.EQUALS + " " + expression.ToSqlString();
             return this;
         }
-        public ICaseWhenNeedThenQueryBuilder WhenColumnEquals(string tableAlias, string columnName, AbstractSqlExpression expression)
+
+        public ICaseWhenNeedThenQueryBuilder WhenColumnEquals(string tableAlias, string columnName, ISqlExpression expression)
         {
             _currentWhen = tableAlias + "." + columnName + " " + C.EQUALS + " " + expression.ToSqlString();
             return this;
@@ -46,15 +48,24 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public ICaseWhenQueryBuilder Else(AbstractSqlExpression expression)
+        public ICaseWhenQueryBuilder Else(ISqlExpression expression)
         {
             _elseCase = expression.ToSqlString();
             return this;
         }
 
-        public ICaseWhenNeedWhenQueryBuilder Then(AbstractSqlExpression then)
+
+        
+        public ICaseWhenNeedWhenQueryBuilder Then(ISqlExpression then)
         {
             _currentThen = then.ToSqlString();
+            Add();
+            return this;
+        }
+
+        public ICaseWhenNeedWhenQueryBuilder Then(AbstractSqlColumn column)
+        {
+            _currentThen = column.ToSqlString();
             Add();
             return this;
         }
@@ -105,11 +116,5 @@ namespace SQLEngine.SqlServer
             writer.Write(C.END);
             writer.Write(C.END_SCOPE);
         }
-
-       
-
-        
-
-       
     }
 }

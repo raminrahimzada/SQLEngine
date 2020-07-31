@@ -46,26 +46,27 @@ namespace SQLEngine
         void Begin();
         void AddExpression(string expression);
         void End();
-        //void Declare(Func<IDeclarationQueryBuilder, IDeclarationQueryBuilder> builder);
+        
         AbstractSqlVariable DeclareRandom(string variableName, string type, AbstractSqlLiteral defaultValue);
-        AbstractSqlVariable DeclareRandom(string variableName, string type, AbstractSqlExpression defaultValue);
         AbstractSqlVariable DeclareRandom(string variableName, string type);
         AbstractSqlVariable Declare(string variableName, string type);
         AbstractSqlVariable Declare(string variableName, string type, AbstractSqlLiteral defaultValue);
-        AbstractSqlVariable Declare(string variableName, string type, AbstractSqlExpression defaultValue);
+        AbstractSqlVariable Declare<T>(string variableName,  AbstractSqlLiteral defaultValue);
+
+        //default values usually become literals
+        //AbstractSqlVariable Declare(string variableName, string type, ISqlExpression defaultValue);
+        //AbstractSqlVariable DeclareRandom(string variableName, string type, ISqlExpression defaultValue);
+
+        AbstractSqlVariable Declare<T>(string variableName,  ISqlExpression defaultValue);
 
         void SetToScopeIdentity(AbstractSqlVariable variable);
         void Set(AbstractSqlVariable variable, Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallNopBuilder> right);
         void Set(AbstractSqlVariable variable, AbstractSqlExpression value);
         void Set(AbstractSqlVariable variable, AbstractSqlVariable value);
         void Set(AbstractSqlVariable variable, AbstractSqlLiteral value);
-        //void Set(ISqlVariable variable, Func<ICastQueryBuilder, ICastQueryBuilder> q);
-        //void Execute(Func<IExecuteQueryBuilder, IExecuteProcedureNeedArgQueryBuilder> builder);
-        //void Insert(Func<IInsertQueryBuilder, IAbstractInsertQueryBuilder> builder);
-        //void Update(Func<IUpdateQueryBuilder, IAbstractUpdateQueryBuilder> builder);
-        //void Delete(Func<IDeleteQueryBuilder, IDeleteQueryBuilder> builder);
+        
         void Return();
-        //void Return(string sql);
+        
         void Return(ISqlExpression expression);
         void Return(AbstractSqlLiteral literal);
         void Comment(string comment);

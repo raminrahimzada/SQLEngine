@@ -23,7 +23,7 @@ namespace SQLEngine.Tests
                 const string query =
                     "UPDATE TOP(5)  Users SET NAME = N'Ramin' , SURNAME = N'Rahimzada' , AGE = 18 WHERE (ID = 41)";
 
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
 
@@ -47,7 +47,7 @@ namespace SQLEngine.Tests
      SET Age = 21
      WHERE (Id = 17)
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
 
@@ -71,7 +71,7 @@ namespace SQLEngine.Tests
      SET CanWatchMovie = 1
      WHERE (Age >= 18)
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
 
@@ -98,7 +98,7 @@ namespace SQLEngine.Tests
      SET Blocked = 1
      WHERE (LastLoginDate <= '2000-01-01 00:00:00.000')
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
 
@@ -124,7 +124,7 @@ UPDATE TOP(5) Users
  SET Blocked = 1 , BlockDate = '2020-01-01 00:00:00.000'
  WHERE ((Id < 100) AND (Id > 10))
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
     }

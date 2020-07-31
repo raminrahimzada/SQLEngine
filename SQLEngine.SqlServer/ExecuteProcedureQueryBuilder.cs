@@ -3,73 +3,10 @@ using System.Collections.Generic;
 
 namespace SQLEngine.SqlServer
 {
-    
-    internal class ExecuteFunctionQueryBuilder : 
-        AbstractQueryBuilder, 
-        IExecuteFunctionNeedNameQueryBuilder,
-        IExecuteFunctionNeedNameAndSchemaQueryBuilder
-    {
-        private string _functionName;
-
-        private readonly List<string>
-            _parametersList = new List<string>();
-
-        private string _schemaName;
-
-        public override void Build(ISqlWriter writer)
-        {
-            if (!string.IsNullOrWhiteSpace(_schemaName))
-            {
-                writer.Write(_schemaName);
-                writer.Write(C.DOT);
-            }
-            writer.Write(_functionName);
-            writer.Write(C.SPACE);
-            writer.Write(C.BEGIN_SCOPE);
-            for (int i = 0; i < _parametersList.Count; i++)
-            {
-                if (i != 0)
-                {
-                    writer.Write(C.COMMA);
-                }
-                writer.Write(_parametersList[i]);
-            }
-            writer.Write(C.END_SCOPE);
-        }
-
-        public IExecuteFunctionNeedNameQueryBuilder Name(string functionName)
-        {
-            _functionName = functionName;
-            return this;
-        }
-
-        public IExecuteFunctionNeedNameQueryBuilder Arg(AbstractSqlExpression parameterValue)
-        {
-            _parametersList.Add(parameterValue.ToSqlString());
-            return this;
-        }
-
-        public IExecuteFunctionNeedNameQueryBuilder Arg(AbstractSqlLiteral parameterValue)
-        {
-            _parametersList.Add(parameterValue.ToSqlString());
-            return this;
-        }
-
-        public IExecuteFunctionNeedNameQueryBuilder Arg(AbstractSqlVariable parameterValue)
-        {
-            _parametersList.Add(parameterValue.ToSqlString());
-            return this;
-        }
-
-        public IExecuteFunctionNeedNameAndSchemaQueryBuilder Schema(string schemaName)
-        {
-            _schemaName = schemaName;
-            return this;
-        }
-    }
     internal class ExecuteProcedureQueryBuilder : AbstractQueryBuilder, IExecuteProcedureNeedNameQueryBuilder, IExecuteProcedureNeedArgQueryBuilder
     {
         private string _procedureName;
+        private string _schemaName;
 
         private readonly List<Tuple<string, string, ProcedureArgumentDirectionTypes>>
             _parametersDictionary = new List<Tuple<string, string, ProcedureArgumentDirectionTypes>>();
@@ -79,24 +16,16 @@ namespace SQLEngine.SqlServer
             _procedureName = procedureName;
             return this;
         }
-
-        public IExecuteProcedureNeedArgQueryBuilder ArgOut(string parameterName, string parameterValue)
-        {
-            _parametersDictionary.Add(new Tuple<string, string, ProcedureArgumentDirectionTypes>(parameterName, parameterValue, ProcedureArgumentDirectionTypes.OUT));
-            return this;
-        }
-        public IExecuteProcedureNeedArgQueryBuilder Arg(string parameterName, string parameterValue)
-        {
-            _parametersDictionary.Add(new Tuple<string, string, ProcedureArgumentDirectionTypes>(parameterName, parameterValue, ProcedureArgumentDirectionTypes.IN));
-            return this;
-        }
-
         public override void Build(ISqlWriter writer)
         {
             ValidateAndThrow();
             writer.Write(C.EXECUTE);
             writer.Write(C.SPACE);
-
+            if (!string.IsNullOrWhiteSpace(_schemaName))
+            {
+                writer.Write(_schemaName);
+                writer.Write(C.DOT);
+            }
             writer.Write(_procedureName);
 
             writer.Write2();
@@ -131,6 +60,12 @@ namespace SQLEngine.SqlServer
             }
 
             writer.WriteLine(C.SEMICOLON);
+        }
+
+        public IExecuteProcedureNeedArgQueryBuilder Schema(string schemaName)
+        {
+            _schemaName = schemaName;
+            return this;
         }
 
         public IExecuteProcedureNeedArgQueryBuilder Arg(string parameterName, AbstractSqlVariable parameterValue)

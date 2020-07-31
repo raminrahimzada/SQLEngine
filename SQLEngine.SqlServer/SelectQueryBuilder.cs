@@ -17,7 +17,7 @@ namespace SQLEngine.SqlServer
         {
             private readonly IAbstractQueryBuilder _internalBuilder;
             private readonly bool? _isDesc;
-            public OrderByQueryModel(AggregateFunctionBuilder aggregateFunction,bool? isDesc=false)
+            public OrderByQueryModel(AggregateFunctionBuilder aggregateFunction,bool? isDesc)
             {
                 _internalBuilder = aggregateFunction;
                 _isDesc = isDesc;
@@ -102,7 +102,7 @@ namespace SQLEngine.SqlServer
             }
         }
         private string _mainTableName;
-        private string _mainTableQuery;
+        //private string _mainTableQuery;
         private string _mainTableAliasName;
         private readonly SelectorCollection _selectors = new SelectorCollection();
         private string _whereClause;
@@ -141,13 +141,29 @@ namespace SQLEngine.SqlServer
             _mainTableName = tableName;
             return this;
         }
-        
-        public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left,
-            AbstractSqlExpression right)
+
+        public ISelectWithoutFromQueryBuilder From<TTable>() where TTable : ITable,new()
         {
-            _selectors.Add(new CustomFunctionCallExpressionBuilder().Assign(left,right));
+            using (var table=new TTable())
+            {
+                return From(table.Name);
+            }
+        }
+
+        public ISelectWithoutFromQueryBuilder From<TTable>(string alias) where TTable : ITable,new()
+        {
+            using (var table = new TTable())
+            {
+                return From(table.Name,alias);
+            }
+        }
+
+        public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left, ISqlExpression right)
+        {
+            _selectors.Add(new CustomFunctionCallExpressionBuilder().Assign(left, right));
             return this;
         }
+
         public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left,
             AbstractSqlLiteral literal)
         {
@@ -179,7 +195,7 @@ namespace SQLEngine.SqlServer
         {
             var a = new AggregateFunctionBuilder();
             body(a);
-            _selectors.Add(new OrderByQueryModel(a));
+            _selectors.Add(new OrderByQueryModel(a, false));
             return this;
         }
 
@@ -217,12 +233,12 @@ namespace SQLEngine.SqlServer
                 return this;
             }
         }
-        public ISelectWithSelectorQueryBuilder SelectAs(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFuncExp, string asName)
+        public ISelectWithSelectorQueryBuilder SelectAs(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFuncExp, string alias)
         {
             using (var t=new CustomFunctionCallExpressionBuilder())
             {
                 customFuncExp(t);
-                _selectors.Add(t.Build() + C.SPACE + C.AS + C.SPACE + asName);
+                _selectors.Add(t.Build() + C.SPACE + C.AS + C.SPACE + alias);
                 return this;
             }
         }
@@ -238,7 +254,17 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public ISelectWithoutWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlExpression right)
+        public ISelectWithoutWhereQueryBuilder WhereOr(params AbstractSqlCondition[] conditions)
+        {
+            _whereClause = string.Join(C.OR,
+                conditions
+                    .Select(x => x.ToSqlString())
+                    .Select(x => string.Concat(C.BEGIN_SCOPE, x, C.END_SCOPE))
+            );
+            return this;
+        }
+
+        public ISelectWithoutWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression right)
         {
             var col = new SqlServerColumn(columnName);
             _whereClause = string.Concat(col.ToSqlString(), C.EQUALS, right.ToSqlString());
@@ -256,6 +282,25 @@ namespace SQLEngine.SqlServer
             _whereClause = string.Concat(col.ToSqlString(), C.EQUALS, variable.ToSqlString());
             return this;
         }
+
+        public ISelectWithoutWhereQueryBuilder WhereColumnEquals(AbstractSqlColumn column, ISqlExpression right)
+        {
+            _whereClause = string.Concat(column.ToSqlString(), C.EQUALS, right.ToSqlString());
+            return this;
+        }
+
+        public ISelectWithoutWhereQueryBuilder WhereColumnEquals(AbstractSqlColumn column, AbstractSqlLiteral literal)
+        {
+            _whereClause = string.Concat(column.ToSqlString(), C.EQUALS, literal.ToSqlString());
+            return this;
+        }
+
+        public ISelectWithoutWhereQueryBuilder WhereColumnEquals(AbstractSqlColumn column, AbstractSqlVariable variable)
+        {
+            _whereClause = string.Concat(column.ToSqlString(), C.EQUALS, variable.ToSqlString());
+            return this;
+        }
+
         public ISelectWithoutWhereQueryBuilder Where(AbstractSqlCondition condition)
         {
             _whereClause = condition.ToSqlString();
@@ -411,28 +456,28 @@ namespace SQLEngine.SqlServer
             }
 
             //simple select -> select 1 as A 'test' as B
-            if (string.IsNullOrWhiteSpace(_mainTableName))
-            {
-                if (string.IsNullOrWhiteSpace(_mainTableQuery))
-                    return;
-            }
+            //if (string.IsNullOrWhiteSpace(_mainTableName))
+            //{
+            //    if (string.IsNullOrWhiteSpace(_mainTableQuery))
+            //        return;
+            //}
 
             writer.WriteLine();
             writer.Indent++;
             writer.Write(C.FROM);
             writer.Write(C.SPACE);
-            if (string.IsNullOrWhiteSpace(_mainTableQuery))
+            if (!string.IsNullOrWhiteSpace(_mainTableName))
             {
                 writer.Write(I(_mainTableName));
             }
-            else
-            {
-                writer.Write(C.BEGIN_SCOPE);
-                writer.Write(C.SPACE);
-                writer.Write(_mainTableQuery);
-                writer.Write(C.SPACE);
-                writer.Write(C.END_SCOPE);
-            }
+            //else
+            //{
+            //    writer.Write(C.BEGIN_SCOPE);
+            //    writer.Write(C.SPACE);
+            //    writer.Write(_mainTableQuery);
+            //    writer.Write(C.SPACE);
+            //    writer.Write(C.END_SCOPE);
+            //}
             writer.Indent--;
             if (!string.IsNullOrEmpty(_mainTableAliasName))
             {
@@ -591,7 +636,7 @@ namespace SQLEngine.SqlServer
             using (var b=new AggregateFunctionBuilder())
             {
                 aggregate(b);
-                _selectors.Add(new OrderByQueryModel(b));
+                _selectors.Add(new OrderByQueryModel(b,false));
                 return this;
             }
         }
@@ -672,7 +717,7 @@ namespace SQLEngine.SqlServer
         {
             var b = new AggregateFunctionBuilder();
             aggregate(b);
-            _orderByClauses.Add(new OrderByQueryModel(b));
+            _orderByClauses.Add(new OrderByQueryModel(b, false));
             return this;
         }
 

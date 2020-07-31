@@ -2,6 +2,6 @@
 {
     public interface IDropViewNoSchemaQueryBuilder : IAbstractQueryBuilder
     {
-        IDropViewNoSchemaNoDatabase FromDB(string dbName);
+        //IDropViewNoSchemaNoDatabase FromDatabase(string dbName);
     }
 }

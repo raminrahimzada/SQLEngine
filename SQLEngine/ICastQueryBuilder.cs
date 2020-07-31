@@ -2,6 +2,8 @@
 {
     public interface ICastQueryBuilder : IAbstractQueryBuilder
     {
-        ICastExpectCastQueryBuilder Cast(string expression);
+        ICastExpectCastQueryBuilder Cast(ISqlExpression expression);
+        ICastExpectCastQueryBuilder Cast(AbstractSqlVariable variable);
+        ICastExpectCastQueryBuilder Cast(AbstractSqlLiteral literal);
     }
 }

@@ -9,7 +9,7 @@ namespace SQLEngine.SqlServer
             CreateEmpty = () => new SqlServerLiteral();
         }
 
-        private static IEnumSqlStringConvertor EnumSqlStringConvertor=>SqlServerQueryBuilder.EnumSqlStringConvertor;
+        private static IEnumSqlStringConvertor EnumSqlStringConvertor => Query.Settings.EnumSqlStringConvertor;
         private string _rawSqlString;
  
 

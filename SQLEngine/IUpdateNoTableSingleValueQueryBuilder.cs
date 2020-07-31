@@ -4,15 +4,14 @@
     {
         IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue);
         IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlVariable variable);
-        IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlExpression expression);
+        IUpdateNoTableSingleValueQueryBuilder Value(string columnName, ISqlExpression expression);
 
-        //IUpdateNoTableAndValuesAndWhereQueryBuilder Where(string condition);
         IUpdateNoTableAndValuesAndWhereQueryBuilder Where(AbstractSqlCondition condition);
-        //IUpdateNoTableAndValuesAndWhereQueryBuilder Where(Func<AbstractConditionBuilder, AbstractConditionBuilder> builder);
-        IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlExpression right);
+        
+        IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression right);
         IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlVariable variable);
         IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlLiteral literal);
-        IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnLike(string columnName, AbstractSqlExpression right);
+        IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnLike(string columnName, string right);
 
         //IUpdateNoTableAndValuesAndWhereQueryBuilder Where(
         //    Func<BinaryConditionExpressionBuilder, BinaryConditionExpressionBuilder> builder);

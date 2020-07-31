@@ -17,7 +17,7 @@ namespace SQLEngine.Tests
                 const string query = @"
 DROP FUNCTION dbo.fn_max;
 ";
-                QueryAssert.AreEqual(b.ToString(), query);
+                SqlAssert.AreEqualQuery(b.ToString(), query);
             }
         }
         [TestMethod]
@@ -33,7 +33,7 @@ DROP FUNCTION dbo.fn_max;
                 const string query = @"
 DROP TABLE dbo.Users 
 ";
-                QueryAssert.AreEqual(b.ToString(), query);
+                SqlAssert.AreEqualQuery(b.ToString(), query);
             }
         }
         [TestMethod]
@@ -45,12 +45,11 @@ DROP TABLE dbo.Users
                     .Drop
                     .Table("Users")
                     .FromSchema("dbo")
-                    .FromDB("facebook")
                     ;
                 const string query = @"
-DROP TABLE facebook.dbo.Users 
+DROP TABLE dbo.Users 
 ";
-                QueryAssert.AreEqual(b.ToString(), query);
+                SqlAssert.AreEqualQuery(b.ToString(), query);
             }
         }
         [TestMethod]
@@ -65,7 +64,7 @@ DROP TABLE facebook.dbo.Users
                 const string query = @"
 DROP TABLE Users 
 ";
-                QueryAssert.AreEqual(b.ToString(), query);
+                SqlAssert.AreEqualQuery(b.ToString(), query);
             }
         }
         [TestMethod]
@@ -77,12 +76,11 @@ DROP TABLE Users
                     .Drop
                     .Table<UserTable>()
                     .FromSchema("dbo")
-                    .FromDB("facebook")
                     ;
                 const string query = @"
-DROP TABLE facebook.dbo.Users 
+DROP TABLE dbo.Users 
 ";
-                QueryAssert.AreEqual(b.ToString(), query);
+                SqlAssert.AreEqualQuery(b.ToString(), query);
             }
         }       [TestMethod]
         public void Test_Drop_View_1()
@@ -97,7 +95,7 @@ DROP TABLE facebook.dbo.Users
                 const string query = @"
 DROP VIEW dbo.VW_Users 
 ";
-                QueryAssert.AreEqual(b.ToString(), query);
+                SqlAssert.AreEqualQuery(b.ToString(), query);
             }
         }
         [TestMethod]
@@ -109,12 +107,11 @@ DROP VIEW dbo.VW_Users
                     .Drop
                     .View("VW_Users")
                     .FromSchema("dbo")
-                    .FromDB("facebook")
                     ;
                 const string query = @"
-DROP VIEW facebook.dbo.VW_Users
+DROP VIEW dbo.VW_Users
 ";
-                QueryAssert.AreEqual(b.ToString(), query);
+                SqlAssert.AreEqualQuery(b.ToString(), query);
             }
         }
 
@@ -130,7 +127,7 @@ DROP VIEW facebook.dbo.VW_Users
                 const string query = @"
 DROP DATABASE facebook
 ";
-                QueryAssert.AreEqual(b.ToString(), query);
+                SqlAssert.AreEqualQuery(b.ToString(), query);
             }
         }
         

@@ -21,7 +21,7 @@ namespace SQLEngine.Tests
                 var query = @"
 DELETE from Users WHERE Id = 111
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
         [TestMethod]
@@ -40,7 +40,7 @@ DELETE from Users WHERE Id = 111
                 const string query = @"
 DELETE from Users WHERE Id = 111
 ";
-                QueryAssert.AreEqual(b.ToString(), query);
+                SqlAssert.AreEqualQuery(b.ToString(), query);
             }
         }
         
@@ -60,7 +60,7 @@ DELETE from Users WHERE Id = 111
                 var query = @"
 DELETE TOP(10) from Users WHERE Id = 111
 ";
-                QueryAssert.AreEqual(b.ToString(), query);
+                SqlAssert.AreEqualQuery(b.ToString(), query);
             }
         }
 
@@ -72,7 +72,7 @@ DELETE TOP(10) from Users WHERE Id = 111
                 var id = q.Column("Id");
                 var isBlocked = q.Column("IsBlocked");
 
-
+                //query inside that `IN` statement below
                 void BlockedUserIdList(ISelectQueryBuilder _) =>
                     _.Select("UserId")
                         .From("Attachments")
@@ -94,7 +94,7 @@ WHERE
         WHERE IsBlocked = 1)
 )
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
     }

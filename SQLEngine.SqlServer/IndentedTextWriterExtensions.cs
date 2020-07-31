@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer
 {
-    public static class ISqlWriterExtensions
+    public static class SqlWriterExtensions
     {
         public static void WriteWithScoped(this ISqlWriter writer, string expression)
         {

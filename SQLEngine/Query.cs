@@ -15,6 +15,8 @@ namespace SQLEngine
             public static byte DefaultPrecision = 18;
             public static byte DefaultScale = 4;
             public static int SQLErrorState = 47;
+            public static IEnumSqlStringConvertor EnumSqlStringConvertor;
+            public static ITypeConvertor TypeConvertor;           
         }
 
         private static Func<IQueryBuilder> _builderFunction;

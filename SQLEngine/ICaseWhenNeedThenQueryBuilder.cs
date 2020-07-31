@@ -2,8 +2,11 @@
 {
     public interface ICaseWhenNeedThenQueryBuilder : ICaseWhenQueryBuilder
     {
-        ICaseWhenNeedWhenQueryBuilder Then(AbstractSqlExpression @then);
-        ICaseWhenNeedWhenQueryBuilder Then(AbstractSqlLiteral @then);
+        ICaseWhenNeedWhenQueryBuilder Then(ISqlExpression @then);
+        ICaseWhenNeedWhenQueryBuilder Then(AbstractSqlColumn column);
+
+        ICaseWhenNeedWhenQueryBuilder Then(AbstractSqlLiteral literal);
+        
         ICaseWhenNeedWhenQueryBuilder ThenColumn(string columnName);
         ICaseWhenNeedWhenQueryBuilder ThenColumn(string tableAlias, string columnName);
 

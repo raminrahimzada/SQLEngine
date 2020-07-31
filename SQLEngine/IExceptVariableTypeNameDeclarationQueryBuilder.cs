@@ -2,6 +2,6 @@
 {
     public interface IExceptVariableTypeNameDeclarationQueryBuilder : IAbstractQueryBuilder
     {
-        IExceptDefaultValueNameDeclarationQueryBuilder Default(string defaultValue);
+        IExceptDefaultValueNameDeclarationQueryBuilder Default(AbstractSqlLiteral literal);
     }
 }

@@ -10,13 +10,7 @@ namespace SQLEngine
         }
         protected ISqlWriter Writer { get; private set; }
 
-
-       
-        //public void Join(AbstractQueryBuilder other)
-        //{
-        //    Writer = other.Writer;
-        //}
-
+ 
         public int Indent
         {
             get => Writer.Indent;

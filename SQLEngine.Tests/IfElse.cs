@@ -10,8 +10,8 @@ namespace SQLEngine.Tests
         {
             using (var q = Query.New)
             {
-                var i = q.Declare("i",7);
-                var j = q.Declare("j",9);
+                var i = q.Declare<int>("i",7);
+                var j = q.Declare<int>("j",9);
                 var max = q.Declare<int>("max");
 
                 q.If(i < j);
@@ -38,7 +38,7 @@ ELSE
     SET  @max  = 0;
 
 ";
-                QueryAssert.AreEqual(queryThat, query);
+                SqlAssert.AreEqualQuery(queryThat, query);
             }
         }
         
@@ -47,8 +47,8 @@ ELSE
         {
             using (var q = Query.New)
             {
-                var i = q.Declare("i",7);
-                var j = q.Declare("j",9);
+                var i = q.Declare<int>("i",7);
+                var j = q.Declare<int>("j",9);
 
                 q.If(i == j);
                 q.Print("Equal");
@@ -69,7 +69,7 @@ ELSE
 
 
 ";
-                QueryAssert.AreEqual(queryThat, query);
+                SqlAssert.AreEqualQuery(queryThat, query);
             }
         }
     }

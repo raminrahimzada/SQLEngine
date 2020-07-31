@@ -1,7 +1,7 @@
-﻿namespace SQLEngine
-{
-    public interface IDropViewNoSchemaNoDatabase : IAbstractQueryBuilder
-    {
+﻿//namespace SQLEngine
+//{
+//    public interface IDropViewNoSchemaNoDatabase : IAbstractQueryBuilder
+//    {
 
-    }
-}
+//    }
+//}

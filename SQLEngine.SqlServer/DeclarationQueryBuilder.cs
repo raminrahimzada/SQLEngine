@@ -29,15 +29,15 @@
             return this;
         }
 
-        IExceptVariableTypeNameDeclarationQueryBuilder IExceptVariableNameDeclarationQueryBuilder.OfType(string type)
+        public IExceptVariableTypeNameDeclarationQueryBuilder OfType(string type)
         {
             _type = type;
             return this;
         }
-        IExceptDefaultValueNameDeclarationQueryBuilder IExceptVariableTypeNameDeclarationQueryBuilder.Default(string defaultValue)
+
+        public IExceptVariableTypeNameDeclarationQueryBuilder OfType<T>()
         {
-            _defaultValue = defaultValue;
-            return this;
+            return OfType(Query.Settings.TypeConvertor.ToSqlType<T>());
         }
         public override void Build(ISqlWriter writer)
         {
@@ -55,6 +55,12 @@
             }
 
             writer.WriteLine(C.SEMICOLON);
+        }
+
+        public IExceptDefaultValueNameDeclarationQueryBuilder Default(AbstractSqlLiteral literal)
+        {
+            _defaultValue = literal.ToSqlString();
+            return this;
         }
     }
 }

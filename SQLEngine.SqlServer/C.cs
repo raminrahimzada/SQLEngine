@@ -1,7 +1,7 @@
 ﻿namespace SQLEngine.SqlServer
 {
     /// <summary>
-    /// Represents constant strings
+    /// Represents constant strings in Sql Server 
     /// </summary>
     public static class C
     {

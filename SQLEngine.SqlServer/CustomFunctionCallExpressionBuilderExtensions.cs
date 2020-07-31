@@ -6,7 +6,7 @@ namespace SQLEngine.SqlServer
     {
         public static ICustomFunctionCallNopBuilder IsNull(
             this ICustomFunctionCallExpressionBuilder builder,
-            AbstractSqlExpression expression,AbstractSqlExpression fallback)
+            ISqlExpression expression,ISqlExpression fallback)
         {
             return builder.Call("ISNULL", expression, fallback);
         }

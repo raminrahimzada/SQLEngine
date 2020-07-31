@@ -39,6 +39,11 @@ namespace SQLEngine.SqlServer
             _arguments = new List<ArgumentModel>();
         }
 
+        public ICreateProcedureWithArgumentQueryBuilder Parameter<T>(string argName)
+        {
+            return Parameter(argName,Query.Settings.TypeConvertor.ToSqlType<T>());
+        }
+
         public ICreateProcedureWithArgumentQueryBuilder ParameterOut(string name, string type)
         {
             _arguments.Add(new ArgumentModel
@@ -49,6 +54,12 @@ namespace SQLEngine.SqlServer
             });
             return this;
         }
+
+        public ICreateProcedureWithArgumentQueryBuilder ParameterOut<T>(string argName)
+        {
+            return ParameterOut(argName,Query.Settings.TypeConvertor.ToSqlType<T>());
+        }
+
         public ICreateProcedureWithArgumentQueryBuilder Parameter(string name, string type)
         {
             _arguments.Add(new ArgumentModel
@@ -77,7 +88,6 @@ namespace SQLEngine.SqlServer
                 builder(t);
                 _body = t.Build();
             }
-            //_bodyBuilder = builder;
             return this;
         }
         public override void Build(ISqlWriter writer)

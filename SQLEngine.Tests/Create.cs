@@ -41,6 +41,7 @@ namespace SQLEngine.Tests
                         //calculated column
                         c.Column("Sum").CalculatedColumn("Amount1 + Amount2"),
                     });
+
                 var query = b.ToString();
             }
         }
@@ -65,7 +66,31 @@ CREATE VIEW View_Active_Users AS SELECT  *
     FROM Users
     WHERE IsBlocked = 0
 ";
-                QueryAssert.AreEqual(q.ToString(), originalQuery);
+                SqlAssert.AreEqualQuery(q.ToString(), originalQuery);
+            }
+        }
+
+        [TestMethod]
+        public void Test_Create_View_2()
+        {
+            using (var q = Query.New)
+            {
+                var isBlocked = q.Column("IsBlocked");
+                q
+                    .Create
+                    .View("View_Active_Users")
+                    .As(
+                        s => s
+                            .From<UserTable>()
+                            .Where(isBlocked == false)
+                    );
+
+                const string originalQuery = @"
+CREATE VIEW View_Active_Users AS SELECT  * 
+    FROM Users
+    WHERE IsBlocked = 0
+";
+                SqlAssert.AreEqualQuery(q.ToString(), originalQuery);
             }
         }
 
@@ -112,7 +137,7 @@ BEGIN
     RETURN(0)
 END
 ";
-                QueryAssert.AreEqual(q.ToString(), originalQuery);
+                SqlAssert.AreEqualQuery(q.ToString(), originalQuery);
             }
         }
 
@@ -148,9 +173,10 @@ BEGIN
     RETURN (@x + @y)
 END
 ";
-                QueryAssert.AreEqual(q.ToString(), originalQuery);
+                SqlAssert.AreEqualQuery(q.ToString(), originalQuery);
             }
         }
+
         [TestMethod]
         public void Test_Create_Procedure()
         {
@@ -189,7 +215,7 @@ END
 
 
 ";
-                QueryAssert.AreEqual(q.ToString(), originalQuery);
+                SqlAssert.AreEqualQuery(q.ToString(), originalQuery);
             }
         }
 
@@ -210,7 +236,7 @@ END
                 CREATE UNIQUE  INDEX IX_Unique_Email ON Users ( Email ) 
                 ";
 
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
         
@@ -228,7 +254,7 @@ END
                 CREATE DATABASE FacebookDB
                 ";
 
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
     }

@@ -7,6 +7,7 @@
         public override void Build(ISqlWriter writer)
         {
             writer.Write(C.DROP);
+            writer.Write(C.SPACE);
             writer.Write(C.DATABASE);
             writer.Write(C.SPACE);
             writer.Write(_databaseName);

@@ -8,65 +8,8 @@ namespace SQLEngine.SqlServer
     {        
         public static string DetectSqlType<T>()
         {
-            var type = typeof(T);
-            {
-                if (type == typeof(int))
-                {
-                    return (C.INT);
-                }
-            }
-            {
-                if (type == typeof(uint))
-                {
-                    return (C.INT);
-                }
-            }
-            {
-                if (type == typeof(long))
-                {
-                    return (C.BIGINT);
-                }
-            }
-            {
-                if (type == typeof(ulong))
-                {
-                    return (C.BIGINT);
-                }
-            }
-
-            {
-                if (type == typeof(byte))
-                {
-                    return (C.TINYINT);
-                }
-            }
-            {
-                if (type == typeof(Guid))
-                {
-                    return (C.UNIQUEIDENTIFIER);
-                }
-            }
-            {
-                if (type == typeof(DateTime))
-                {
-                    return (C.DATETIME);
-                }
-            }
-            {
-                if (type == typeof(string))
-                {
-                    return (C.NVARCHAR);
-                }
-            }
-            {
-                if (type == typeof(decimal))
-                {
-                    return (C.DECIMAL);
-                }
-            }
-            throw new Exception("Complex type " + type.FullName + " cannot be converted to sql type");
+            return Query.Settings.TypeConvertor.ToSqlType<T>();
         }
-
         
         public static IColumnQueryBuilder DefaultValueRaw(this IColumnQueryBuilder builder,
             string defaultValueRaw, 
@@ -442,60 +385,7 @@ namespace SQLEngine.SqlServer
         {
             return builder.Value(columnName, columnValue);
         }
-        public static AbstractSqlVariable Declare<T>(this IQueryBuilder builder,
-            string variableName,  T defaultValue)
-        {
-            {
-                if (defaultValue is int i)
-                {
-                    return builder.Declare(variableName, C.INT, i);
-                }
-            }
-            {
-                if (defaultValue is uint i)
-                {
-                    return builder.Declare(variableName, C.INT, i);
-                }
-            }
-            {
-                if (defaultValue is long i)
-                {
-                    return builder.Declare(variableName, C.BIGINT, i);
-                }
-            }
-            {
-                if (defaultValue is ulong i)
-                {
-                    return builder.Declare(variableName, C.BIGINT, i);
-                }
-            }
-
-            {
-                if (defaultValue is byte i)
-                {
-                    return builder.Declare(variableName, C.TINYINT, i);
-                }                
-            }
-            {
-                if (defaultValue is Guid i)
-                {
-                    return builder.Declare(variableName, C.UNIQUEIDENTIFIER, i);
-                }
-            }
-            {
-                if (defaultValue is DateTime i)
-                {
-                    return builder.Declare(variableName, C.DATETIME, i);
-                }
-            }
-            {
-                if (defaultValue is string i)
-                {
-                    return builder.Declare(variableName, C.NVARCHARMAX, i);
-                }
-            }
-            throw new Exception("Complex type " + typeof(T).FullName + " cannot be converted to sql literal");
-        }
+        
         public static AbstractSqlVariable Declare<T>(this IQueryBuilder builder,
             string variableName)
         {
@@ -538,11 +428,11 @@ namespace SQLEngine.SqlServer
         /// <param name="exceptionMessage">The exception message.</param>
         /// <param name="args">The arguments.</param>
         public static void ThrowException(this IQueryBuilder builder, string exceptionMessage,
-            params string[] args)
+            params ISqlExpression[] args)
         {
             int sqlErrorState = Query.Settings.SQLErrorState;
             var list = new List<string>(args.Length + 1) {exceptionMessage.ToSQL().ToSqlString()};
-            list.AddRange(args);
+            list.AddRange(args.Select(x => x.ToSqlString()));
             var errorMessageVar = builder.DeclareRandom("EXCEPTION", C.NVARCHARMAX);
             var to = SqlServerLiteral.Raw($"{C.FORMATMESSAGE}({list.JoinWith(", ")})");
             builder.Set(errorMessageVar, to);

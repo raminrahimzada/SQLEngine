@@ -69,7 +69,7 @@ print(@divide)
 
 
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
 
             }
         }

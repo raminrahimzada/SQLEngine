@@ -1,10 +1,9 @@
 ﻿namespace SQLEngine
 {
-    public interface IAlterTableNoNameAlterColumnNoNewTypeQueryBuilder // IAbstractQueryBuilder
+    public interface IAlterTableNoNameAlterColumnNoNewTypeQueryBuilder : IAbstractQueryBuilder
     {
         IAlterTableNoNameAlterColumnNoNewTypeNoNullableQueryBuilder NotNull(bool notNull = true);
         IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeQueryBuilder Size(byte size, byte? scale = null);
-        IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeNoDefaultValueQueryBuilder DefaultValue(AbstractSqlExpression expression);
-
+        IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeNoDefaultValueQueryBuilder DefaultValue(AbstractSqlLiteral literal);
     }
 }

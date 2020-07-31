@@ -13,7 +13,7 @@ namespace SQLEngine.SqlServer
         IUpdateNoTableAndValuesQueryBuilder
     {
         private string _tableName;
-        private Dictionary<string, string> _columnsAndValuesDictionary;
+        private Dictionary<string, string> _columnsAndValuesDictionary=new Dictionary<string, string>();
         private string _whereCondition;
         private int? _topClause;
 
@@ -36,13 +36,24 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        //public IUpdateNoTableAndValuesQueryBuilder Values(Dictionary<string, string> updateDict)
-        //{
-        //    _columnsAndValuesDictionary = updateDict;
-        //    return this;
-        //}
+        public IUpdateNoTableQueryBuilder Table<TTable>() where TTable:ITable, new()
+        {
+            using (var table=new TTable())
+            {
+                return Table(table.Name);
+            }
+        }
 
-        public IUpdateNoTableAndValuesQueryBuilder Values(Dictionary<string, AbstractSqlExpression> updateDict)
+
+        public IUpdateNoTableAndValuesQueryBuilder Values(Dictionary<string, ISqlExpression> updateDict)
+        {
+            _columnsAndValuesDictionary = updateDict.ToDictionary(x => x.Key, x => x.Value.ToSqlString());
+            return this;
+        }
+
+
+      
+        IUpdateNoTableAndValuesQueryBuilder IUpdateNoTableQueryBuilder.Values(Dictionary<string, ISqlExpression> updateDict)
         {
             _columnsAndValuesDictionary = updateDict.ToDictionary(x => x.Key, x => x.Value.ToSqlString());
             return this;
@@ -56,16 +67,28 @@ namespace SQLEngine.SqlServer
 
         public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue)
         {
-            if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, string>();
             _columnsAndValuesDictionary.Add(columnName, columnValue.ToSqlString());
             return this;
         }
+
+        IUpdateNoTableSingleValueQueryBuilder IUpdateNoTableAndTopQueryBuilder.Value(string columnName, ISqlExpression expression)
+        {
+            _columnsAndValuesDictionary.Add(columnName, expression.ToSqlString());
+            return this;
+        }
+
         public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlVariable variable)
         {
-            if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, string>();
             _columnsAndValuesDictionary.Add(columnName, variable.ToSqlString());
             return this;
         }
+
+        public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, ISqlExpression expression)
+        {
+            _columnsAndValuesDictionary.Add(columnName, expression.ToSqlString());
+            return this;
+        }
+
 
         public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlExpression expression)
         {
@@ -73,56 +96,22 @@ namespace SQLEngine.SqlServer
             _columnsAndValuesDictionary.Add(columnName, expression.ToSqlString());
             return this;
         }
-
-        //public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, ISqlExpression expression)
-        //{
-        //    if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, string>();
-        //    _columnsAndValuesDictionary.Add(columnName, expression.ToSqlString());
-        //    return this;
-        //}
-        //public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, Func<IBinaryExpressionBuilder, IBinaryExpressionNopBuilder> builder)
-        //{
-        //    var columnValue = builder(GetDefault<BinaryExpressionBuilder>()).Build();
-        //    if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, string>();
-        //    _columnsAndValuesDictionary.Add(columnName, columnValue);
-        //    return this;
-        //}
-
-        //public UpdateQueryBuilder Columns(params string[] columnNames)
-        //{
-        //    _columnNames = columnNames;
-        //    return this;
-        //}
-        //public UpdateQueryBuilder Values(params string[] values)
-        //{
-        //    _values = values;
-        //    return this;
-        //}
+         
         public IUpdateNoTopQueryBuilder Top(int? count)
         {
             _topClause = count;
             return this;
         }
-        //public IUpdateNoTableAndValuesAndWhereQueryBuilder Where(string condition)
-        //{
-        //    _whereCondition = condition;
-        //    return this;
-        //}
+       
         public IUpdateNoTableAndValuesAndWhereQueryBuilder Where(AbstractSqlCondition condition)
         {
             _whereCondition = condition.ToSqlString();
             return this;
         }
-        
-        //public IUpdateNoTableAndValuesAndWhereQueryBuilder Where(Func<AbstractConditionBuilder, AbstractConditionBuilder> builder)
-        //{
-        //    _whereCondition = builder.Invoke(GetDefault<AbstractConditionBuilder>()).Build();
-        //    return this;
-        //}
 
-        public IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlExpression right)
+        public IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression expression)
         {
-            _whereCondition = columnName + C.EQUALS + right.ToSqlString();
+            _whereCondition = columnName + C.EQUALS + expression.ToSqlString();
             return this;
         }
         public IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlVariable variable)
@@ -135,17 +124,12 @@ namespace SQLEngine.SqlServer
             _whereCondition = columnName + C.EQUALS + literal.ToSqlString();
             return this;
         }
-        public IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnLike(string columnName, AbstractSqlExpression right)
+
+        public IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnLike(string columnName, string right)
         {
-            _whereCondition = columnName + C.SPACE + C.LIKE + C.SPACE + right.ToSqlString();
+            _whereCondition = columnName + C.SPACE + C.LIKE + C.SPACE + ((AbstractSqlLiteral) right).ToSqlString();
             return this;
         }
-
-        //public IUpdateNoTableAndValuesAndWhereQueryBuilder Where(Func<BinaryConditionExpressionBuilder, BinaryConditionExpressionBuilder> builder)
-        //{
-        //    _whereCondition = builder.Invoke(GetDefault<BinaryConditionExpressionBuilder>()).Build();
-        //    return this;
-        //}
 
         public override void Build(ISqlWriter writer)
         {

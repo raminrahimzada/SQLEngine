@@ -10,17 +10,28 @@ namespace SQLEngine.SqlServer
 {
     public class SqlServerQueryBuilder : IQueryBuilder
     {
-        public static IEnumSqlStringConvertor EnumSqlStringConvertor;
+        private static void SetupDefaults()
+        {
+            //default settings
+            Query.Settings.EnumSqlStringConvertor = new IntegerEnumSqlStringConvertor();
+            Query.Settings.TypeConvertor = new TypeConvertor();
+            Query.Settings.DefaultIdColumnName = "Id";
+            Query.Settings.DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
+            Query.Settings.DateFormat = "yyyy-MM-dd";
+            Query.Settings.DefaultPrecision = 18;
+            Query.Settings.DefaultScale = 4;
+            Query.Settings.SQLErrorState = 47;
+        }
 
         public SqlServerQueryBuilder()
         {
-            //default settings
-            EnumSqlStringConvertor = new IntegerEnumSqlStringConvertor();
-
             //setup
+            SetupDefaults();
+
             SqlServerLiteral.Setup();
             SqlServerRawExpression.Setup();
         }
+
         private readonly List<IAbstractQueryBuilder> _list = new List<IAbstractQueryBuilder>();
 
         public override string ToString()
@@ -35,6 +46,7 @@ namespace SQLEngine.SqlServer
                 foreach (var builder in _list)
                 {
                     builder.Build(Writer);
+                    Writer.WriteLine();
                 }
 
                 return Writer.Build();
@@ -45,6 +57,7 @@ namespace SQLEngine.SqlServer
             foreach (var builder in _list)
             {
                 builder.Build(Writer);
+                Writer.WriteLine();
             }
         }
 
@@ -188,7 +201,7 @@ namespace SQLEngine.SqlServer
 
         public void Else()
         {
-            _list.Add(new RawStringQueryBuilder(w => w.Write(C.ELSE)));
+            _list.Add(new RawStringQueryBuilder(w => w.Write(C.ELSE, C.SPACE)));
         }
 
         public void Begin()
@@ -225,12 +238,8 @@ namespace SQLEngine.SqlServer
 
             return Declare(variableName, type, defaultValue);
         }
-        public AbstractSqlVariable DeclareRandom(string variableName, string type, AbstractSqlExpression defaultValue)
-        {
-            variableName = GenerateUniqueVariableName(variableName.ToLowerInvariant());
 
-            return Declare(variableName, type, defaultValue);
-        }
+       
 
         public AbstractSqlVariable DeclareRandom(string variableName, string type)
         {
@@ -253,15 +262,35 @@ namespace SQLEngine.SqlServer
         {
             var t = new DeclarationQueryBuilder();
             {
-                var expression = t.Declare(variableName).OfType(type).Default(defaultValue?.ToSqlString());
+                var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
                 _list.Add(expression);
                 return new SqlServerVariable(variableName);
             }
         }
-        public AbstractSqlVariable Declare(string variableName, string type, AbstractSqlExpression defaultValue)
+        public AbstractSqlVariable Declare<T>(string variableName, AbstractSqlLiteral defaultValue)
         {
             var t = new DeclarationQueryBuilder();
             {
+                var type = Query.Settings.TypeConvertor.ToSqlType<T>();
+                var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
+                _list.Add(expression);
+                return new SqlServerVariable(variableName);
+            }
+        }
+        //public AbstractSqlVariable Declare(string variableName, string type, ISqlExpression defaultValue)
+        //{
+        //    var t = new DeclarationQueryBuilder();
+        //    {
+        //        var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
+        //        _list.Add(expression);
+        //        return new SqlServerVariable(variableName);
+        //    }
+        //}
+        public AbstractSqlVariable Declare<T>(string variableName, ISqlExpression defaultValue)
+        {
+            var t = new DeclarationQueryBuilder();
+            {
+                var type = Query.Settings.TypeConvertor.ToSqlType<T>();
                 var expression = t.Declare(variableName).OfType(type).Default(defaultValue?.ToSqlString());
                 _list.Add(expression);
                 return new SqlServerVariable(variableName);
@@ -335,8 +364,9 @@ namespace SQLEngine.SqlServer
             _list.Add(new RawStringQueryBuilder(writer =>
             {
                 writer.Write(C.RETURN);
+                writer.Write(C.SPACE);
                 writer.Write(expression.ToSqlString());
-                writer.WriteLine();
+                writer.WriteLine(C.SPACE);
             }));
         }
         public void Return(AbstractSqlLiteral literal)
@@ -344,8 +374,9 @@ namespace SQLEngine.SqlServer
             _list.Add(new RawStringQueryBuilder(writer =>
             {
                 writer.Write(C.RETURN);
+                writer.Write(C.SPACE);
                 writer.Write(literal.ToSqlString());
-                writer.WriteLine();
+                writer.WriteLine(C.SPACE);
             }));
         }
 

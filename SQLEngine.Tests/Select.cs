@@ -23,7 +23,7 @@ SELECT TOP(1)  *
     FROM Users
     WHERE Id = 17
 ";
-                QueryAssert.AreEqual(q.ToString(), queryThat);
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
 
             }
         }
@@ -46,7 +46,7 @@ SELECT TOP(1)  *
     FROM Users
     WHERE UserName = N'admin'
 ";
-                QueryAssert.AreEqual(q.ToString(), queryThat);
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
 
             }
         }
@@ -68,7 +68,7 @@ SELECT TOP(1)  *
     FROM Users
     WHERE Age > 18
 ";
-                QueryAssert.AreEqual(q.ToString(), queryThat);
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
 
             }
         }
@@ -93,7 +93,7 @@ SELECT TOP(1)   *
     ORDER BY Id
 
 ";
-                QueryAssert.AreEqual(q.ToString(), queryThat);
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
 
             }
         }
@@ -119,7 +119,7 @@ SELECT TOP(1)  Name, LEN(Name), TRIM(Name)
     FROM Users
 
 ";
-                QueryAssert.AreEqual(q.ToString(), queryThat);
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
 
             }
         }
@@ -151,7 +151,7 @@ SELECT TOP(1)  @myCreatedDate=CreatedDate
     WHERE Id = 17
     ORDER BY Id
 ";
-                QueryAssert.AreEqual(q.ToString(), queryThat);
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
 
             }
         }
@@ -173,7 +173,7 @@ SELECT TOP(1) *
     FROM Users
     WHERE (Age BETWEEN 10 AND 60)
 ";
-                QueryAssert.AreEqual(q.ToString(), queryThat);
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
 
             }
         }
@@ -203,7 +203,7 @@ SELECT TOP(1)   *
     FROM Users
     WHERE (Age BETWEEN '2020-07-21' AND '2020-07-22')
 ";
-                QueryAssert.AreEqual(q.ToString(), queryThat);
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
 
             }
         }
@@ -227,7 +227,7 @@ SELECT TOP(1) *
     FROM Users
     WHERE Age IN (11,22,33)
 ";
-                QueryAssert.AreEqual(q.ToString(), queryThat);
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
 
             }
         }
@@ -252,7 +252,7 @@ SELECT TOP(1)   *
     FROM Users
     WHERE (Name LIKE N'J_hn') AND (Surname LIKE N'Sm_th')
 ";
-                QueryAssert.AreEqual(q.ToString(), queryThat);
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
 
             }
         }
@@ -288,7 +288,7 @@ SELECT TOP(1)   *
             ORDER BY CreateDate DESC
     )
 ";
-                QueryAssert.AreEqual(q.ToString(), queryThat);
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
 
             }
         }
@@ -311,7 +311,7 @@ SELECT TOP(1)   *
     FROM Users AS U
     WHERE U.UserName = N'admin'
 ";
-                QueryAssert.AreEqual(q.ToString(), queryThat);
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
 
             }
         }
@@ -335,7 +335,7 @@ SELECT TOP(1)  Name , Surname
     FROM Users
     WHERE Age > 18
 ";
-                QueryAssert.AreEqual(q.ToString(), queryThat);
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
 
             }
         }
@@ -367,7 +367,7 @@ SELECT TOP(1)  Name , Surname
     WHERE (Age > 18) and (Height < 1.7)
 
 ";
-                QueryAssert.AreEqual(q.ToString(), queryThat);
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
 
             }
         }
@@ -395,7 +395,7 @@ SELECT TOP(1)  Name , Surname
     FROM Users
     WHERE ((Age > 18) AND (Height <= 1.7)) AND (Id = 1)
 ";
-                QueryAssert.AreEqual(q.ToString(), queryThat);
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
 
             }
         }
@@ -425,7 +425,7 @@ SELECT TOP(1)  Name , Surname
     WHERE Age > 18
 ";
 
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
         [TestMethod]
@@ -456,7 +456,7 @@ SELECT TOP(1)  U.Age , P.Url as PhotoUrl
     WHERE U.Age > 18
 ";
 
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
 
@@ -489,7 +489,7 @@ SELECT TOP(1)  U.Age , P.Url as PhotoUrl
     WHERE U.Age > 18
 ";
 
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
         [TestMethod]
@@ -515,7 +515,7 @@ SELECT Age , COUNT(Id) , SUM(Weight) , COUNT(DISTINCT Name)
     GROUP BY Age DESC
 
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
 
             }
         }
@@ -539,7 +539,7 @@ SELECT TOP(1)  Age , COUNT(U.*)
     FROM Users AS U
     GROUP BY Age DESC
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
 
             }
         }
@@ -551,6 +551,7 @@ SELECT TOP(1)  Age , COUNT(U.*)
                 var all = q.Column("*", "U");
                 
                 //TODO this should be rafactored
+                //lack of api 
                 var condition = q.RawCondition("count(Age) > 5");
 
                 q
@@ -571,7 +572,7 @@ SELECT TOP(1)  Age , COUNT(U.*)
     HAVING count(Age) > 5
     ORDER BY COUNT(Id)
 ";
-                QueryAssert.AreEqual(q.ToString(), query);
+                SqlAssert.AreEqualQuery(q.ToString(), query);
 
             }
         }
@@ -584,12 +585,10 @@ SELECT TOP(1)  Age , COUNT(U.*)
             {
                 var age = q.Column("Age");
 
-
                 q
                     .Select
                     .Top(1)
                     .SelectAs(x =>
-
                             x
                                 .When(age <= 18).Then("Teeneger")
                                 .When(age > 18).Then("Non-Teeneger")
@@ -606,7 +605,7 @@ SELECT TOP(1)
     END) AS AgeStatus
     FROM Users
 ";
-                QueryAssert.AreEqual(q.ToString(), queryThat);
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
 
             }
         }
@@ -641,7 +640,7 @@ SELECT TOP(1)
     ) AS AgeStatus
     FROM Users
 ";
-                QueryAssert.AreEqual(q.ToString(), queryThat);
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
 
             }
         }

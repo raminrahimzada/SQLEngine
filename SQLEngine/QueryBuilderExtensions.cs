@@ -16,37 +16,6 @@
                 builder.Delete.Table(tableName);
             }
         }
-        //public static ISelectWithoutWhereQueryBuilder WhereEquals(this ISelectWithoutFromQueryBuilder builder, string left, string right)
-        //{
-        //    string whereClause;
-        //    using (var b = Query.New)
-        //        whereClause = b.Helper.Equal(left, right);
-        //    return builder.Where(whereClause);
-        //}
-
-        //public static IDeleteExceptWhereQueryBuilder WhereAnd(this IDeleteExceptTableNameQueryBuilder builder,
-        //    params string[] conditions)
-        //{
-        //    using (var b = Query.New)
-        //    {
-        //        return builder.Where(b.Helper.And(conditions));
-        //    }
-        //}
-        //public static IDeleteExceptWhereQueryBuilder WhereEquals(this IDeleteExceptTableNameQueryBuilder builder, string left, string right)
-        //{
-        //    string whereClause;
-        //    using (var b = Query.New)
-        //        whereClause = b.Helper.Equal(left, right);
-        //    return builder.Where(whereClause);
-        //}
-        //public static IUpdateNoTableAndValuesAndWhereQueryBuilder WhereEquals(this IUpdateNoTableAndValuesQueryBuilder builder, string left, string right)
-        //{
-        //    string whereClause;
-        //    using (var b = Query.New)
-        //        whereClause = b.Helper.Equal(left, right);
-        //    return builder.Where(whereClause);
-        //}
-
         public static IDeleteExceptTableNameQueryBuilder Table<TTable>(this IDeleteQueryBuilder builder)
             where TTable : ITable, new()
         {

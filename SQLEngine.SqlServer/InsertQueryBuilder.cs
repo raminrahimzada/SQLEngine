@@ -13,47 +13,24 @@ namespace SQLEngine.SqlServer
     {
         private string _tableName;
         private Dictionary<string, ISqlExpression> _columnsAndValuesDictionary=new Dictionary<string, ISqlExpression>();
-        private AbstractSqlExpression[] _valuesList;
+        private ISqlExpression[] _valuesList;
         private string[] _columnNames;
         private string _selection;
 
-        protected override void ValidateAndThrow()
-        {
-            if (_columnsAndValuesDictionary == null)
-            {
-                if (_valuesList == null)
-                {
-                    if (string.IsNullOrEmpty(_selection))
-                    {
-                        throw Bomb();
-                    }
-                }
-                else
-                {
-                    if (!string.IsNullOrEmpty(_selection))
-                    {
-                        throw Bomb();
-                    }
-                }
-            }
-            else
-            {
-                if (_valuesList != null)
-                {
-                    throw Bomb();
-                }
-
-                if (_columnNames != null)
-                {
-                    throw Bomb();
-                }
-            }
-        }
         public IInsertNoIntoQueryBuilder Into(string tableName)
         {
             _tableName = tableName;
             return this;
         }
+
+        public IInsertNoIntoQueryBuilder Into<TTable>() where TTable : ITable, new()
+        {
+            using (var table=new TTable())
+            {
+                return Into(table.Name);
+            }
+        }
+
         public IInsertNeedValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue)
         {
             _columnsAndValuesDictionary.Add(columnName, columnValue);
@@ -70,12 +47,7 @@ namespace SQLEngine.SqlServer
             _columnsAndValuesDictionary = colsAndValues;
             return this;
         }
-
-        public IInsertNoValuesQueryBuilder Values(Dictionary<string, AbstractSqlExpression> colsAndValues)
-        {
-            _columnsAndValuesDictionary = colsAndValues.ToDictionary(x => x.Key, x => (ISqlExpression) x.Value);
-            return this;
-        }
+ 
 
         public IInsertNoValuesQueryBuilder Values(Dictionary<string, AbstractSqlLiteral> colsAndValuesAsLiterals)
         {
@@ -116,12 +88,12 @@ namespace SQLEngine.SqlServer
             writer.Write2(C.SPACE);
 
             var columnNamesSafe = _columnNames?.Select(I).ToArray();
-            if (_columnsAndValuesDictionary != null&& _columnsAndValuesDictionary.Count>0)
+            if (_columnNames != null&& _columnNames.Length>0)
             {
                 writer.WriteLine();
                 writer.Indent++;
                 writer.BeginScope();
-                writer.WriteJoined(_columnsAndValuesDictionary.Keys.Select(I).ToArray());
+                writer.WriteJoined(_columnNames.ToArray());
                 writer.EndScope();
                 writer.WriteLine();
                 writer.Indent--;
@@ -132,7 +104,7 @@ namespace SQLEngine.SqlServer
 
                 writer.BeginScope();
 
-                writer.WriteJoined(_columnsAndValuesDictionary.Keys.Select(key => _columnsAndValuesDictionary[key].ToSqlString()).ToArray());
+                writer.WriteJoined(_valuesList.Select(x => x.ToSqlString()).ToArray());
                 writer.EndScope();
                 writer.Indent--;
             }
@@ -180,7 +152,8 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        public IInsertNoValuesQueryBuilder Values(params AbstractSqlExpression[] values)
+
+        public IInsertNoValuesQueryBuilder Values(params ISqlExpression[] values)
         {
             _valuesList = values;
             return this;
@@ -188,7 +161,7 @@ namespace SQLEngine.SqlServer
 
         public IInsertNoValuesQueryBuilder Values(params AbstractSqlLiteral[] values)
         {
-            _valuesList = values.Select(x => (AbstractSqlExpression) x).ToArray();
+            _valuesList = values.Select(x => (ISqlExpression) x).ToArray();
             return this;
         }
     }

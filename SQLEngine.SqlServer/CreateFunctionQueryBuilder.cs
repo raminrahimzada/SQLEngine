@@ -13,7 +13,7 @@ namespace SQLEngine.SqlServer
         private string _name;
         private string _schemaName;
         private string _returnType;
-        private string _body;
+        private FunctionBodyQueryBuilder _body;
         private readonly List<string> _parameters;
 
         public CreateFunctionQueryBuilder()
@@ -38,19 +38,30 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
+        public ICreateFunctionNoNameQueryBuilder Parameter<T>(string paramName)
+        {
+            return Parameter(paramName, Query.Settings.TypeConvertor.ToSqlType<T>());
+        }
+
         public ICreateFunctionNoNameAndParametersAndReturnTypeQueryBuilder Returns(string returnType)
         {
             _returnType = returnType;
             return this;
         }
 
+        public ICreateFunctionNoNameAndParametersAndReturnTypeQueryBuilder Returns<T>()
+        {
+            return Returns(Query.Settings.TypeConvertor.ToSqlType<T>());
+        }
+
+
 
         public IAbstractCreateFunctionQueryBuilder Body(Action<IFunctionBodyQueryBuilder> body)
         {
-            using (var builder= new FunctionBodyQueryBuilder())
+            var builder = new FunctionBodyQueryBuilder();
             {
                 body(builder);
-                _body = builder.Build();
+                _body = builder;
                 return this;
             }
         }
@@ -80,7 +91,7 @@ namespace SQLEngine.SqlServer
             writer.Write(C.BEGIN);
             writer.WriteLine();
             Indent++;
-            writer.WriteEx(_body);
+            _body.Build(writer);
             Indent--;
             writer.Write(C.END);
         }

@@ -13,6 +13,15 @@
             _tableName = tableName;
             return this;
         }
+
+        public IDeleteExceptTableNameQueryBuilder Table<TTable>() where TTable : ITable, new()
+        {
+            using (var table=new TTable())
+            {
+                return Table(table.Name);
+            }
+        }
+
         public IDeleteExceptTopQueryBuilder Top(int? count)
         {
             _topClause = count;
@@ -24,7 +33,7 @@
             return this;
         }
 
-        public IDeleteExceptWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlExpression expression)
+        public IDeleteExceptWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression expression)
         {
             var col = new SqlServerColumn(columnName);
             _whereCondition = string.Concat(col.ToSqlString(), C.EQUALS, expression.ToSqlString());

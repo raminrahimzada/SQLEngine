@@ -88,12 +88,26 @@ namespace SQLEngine.SqlServer
             writer.Write2(C.SPACE);
 
             var columnNamesSafe = _columnNames?.Select(I).ToArray();
-            if (_columnNames != null&& _columnNames.Length>0)
+            var isColumnsAndValues1 = _columnNames != null && _columnNames.Length > 0;
+            var isColumnsAndValues2 = _columnsAndValuesDictionary != null && _columnsAndValuesDictionary.Count > 0;
+            if (isColumnsAndValues1|| isColumnsAndValues2)
             {
+                var columnNames = _columnNames;
+                var valuesList = _valuesList;
+                if (columnNames == null)
+                {
+                    if (_columnsAndValuesDictionary == null) throw Bomb();
+                    columnNames = _columnsAndValuesDictionary.Keys.ToArray();
+                }
+                if (valuesList == null)
+                {
+                    if (_columnsAndValuesDictionary == null) throw Bomb();
+                    valuesList = _columnsAndValuesDictionary.Values.ToArray();
+                }
                 writer.WriteLine();
                 writer.Indent++;
                 writer.BeginScope();
-                writer.WriteJoined(_columnNames.ToArray());
+                writer.WriteJoined(columnNames.ToArray());
                 writer.EndScope();
                 writer.WriteLine();
                 writer.Indent--;
@@ -104,7 +118,7 @@ namespace SQLEngine.SqlServer
 
                 writer.BeginScope();
 
-                writer.WriteJoined(_valuesList.Select(x => x.ToSqlString()).ToArray());
+                writer.WriteJoined(valuesList.Select(x => x.ToSqlString()).ToArray());
                 writer.EndScope();
                 writer.Indent--;
             }

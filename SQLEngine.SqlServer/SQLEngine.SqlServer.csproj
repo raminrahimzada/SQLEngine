@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.2.0</Version>
+    <Version>2.2.1</Version>
     <Company>R3</Company>
     <Description>Cross Database Sql query generator using C# expressions,
 Sql-Server Adapter</Description>
@@ -13,6 +13,7 @@ Sql-Server Adapter</Description>
     <PackageProjectUrl>https://github.com/raminrahimzada/SQLEngine</PackageProjectUrl>
     <PackageTags>csharp C# sql t-sql my-sql postgresql</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Ramin Rahimzada</Authors>
   </PropertyGroup>
 
   <ItemGroup>

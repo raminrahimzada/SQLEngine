@@ -7,11 +7,12 @@
     <PackageProjectUrl>https://github.com/raminrahimzada/SQLEngine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/raminrahimzada/SQLEngine</RepositoryUrl>
     <Description>Cross Database Sql query generator using C# expressions</Description>
-    <Version>2.2.0</Version>
+    <Version>2.2.1</Version>
     <PackageIcon>logo.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <PackageTags>csharp C# sql t-sql my-sql postgresql</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Ramin Rahimzada</Authors>
   </PropertyGroup>
 
   <ItemGroup>

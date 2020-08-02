@@ -14,11 +14,11 @@ SQL Engine is a library that eases of generating cross-dialect sql queries witho
 # Database Providers:
 | | |
 | --- | --- |
-|SqlEngine.SqlServer| [![NuGet version (SqlEngine.SqlServer)](https://img.shields.io/nuget/v/SqlEngine.SqlServer.svg)](https://www.nuget.org/packages/SQLEngine.SqlServer/) |
-|SqlEngine.Oracle|... |
-|SqlEngine.MySql| ... |
+|SqlEngine.SqlServer| [![Nuget](https://buildstats.info/nuget/SQLEngine.SQLServer)](http://nuget.org/packages/SQLEngine.SQLServer)
+|SqlEngine.Oracle| ... |
+|SqlEngine.MySql| ... | 
 |SqlEngine.PostgreSql| ... |
-|SqlEngine.Sqlite| ... |
+|SqlEngine.Sqlite| ... | 
  
 
 ## Configuration 
@@ -120,9 +120,9 @@ And the result will be
 ```sql
 SELECT TOP(1)  Name , Surname
     FROM Users AS U
-	INNER JOIN	Photos AS P ON U.UserId = P.Id
-	LEFT JOIN	Attachments AS A ON U.UserId = A.Id
-	RIGHT JOIN	Sales AS S ON U.UserId = S.Id
+	INNER JOIN	Photos AS P ON P.UserId = U.Id
+	LEFT JOIN	Attachments AS A ON A.UserId = U.Id
+	RIGHT JOIN	Sales AS S ON S.UserId = U.Id
     WHERE Age > 18
 ```    
 

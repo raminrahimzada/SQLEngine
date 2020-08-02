@@ -2,24 +2,33 @@
 {
     public interface IJoinedQueryBuilder : ISelectWhereQueryBuilder
     {
-        IJoinedQueryBuilder InnerJoin(string alias, string tableName
-            , string mainTableColumnName);
+        IJoinedNeedsOnQueryBuilder InnerJoin(string targetTableName, string targetTableAlias);
+        IJoinedNeedsOnQueryBuilder InnerJoin<TTable>(string targetTableAlias) where TTable : ITable, new();
 
-        IJoinedQueryBuilder InnerJoin(string alias, string tableName
-            , string mainTableColumnName, string referenceTableColumnName);
-        
-        IJoinedQueryBuilder InnerJoinRaw(string alias, string tableName
-            , string condition);
+        IJoinedNeedsOnQueryBuilder LeftJoin(string targetTableName, string targetTableAlias);
+        IJoinedNeedsOnQueryBuilder LeftJoin<TTable>(string targetTableAlias) where TTable : ITable, new();
 
-        IJoinedQueryBuilder RightJoin(string alias, string tableName, string mainTableColumnName,
-            string referenceTableColumnName);
 
-        IJoinedQueryBuilder RightJoin(string alias, string tableName, string mainTableColumnName);
+        IJoinedNeedsOnQueryBuilder RightJoin(string targetTableName, string targetTableAlias);
+        IJoinedNeedsOnQueryBuilder RightJoin<TTable>(string targetTableAlias) where TTable : ITable, new();
+    }
 
-        IJoinedQueryBuilder LeftJoin(string alias, string tableName,
-            string mainTableColumnName, string referenceTableColumnName);
+    public interface IJoinedNeedsOnQueryBuilder : IAbstractQueryBuilder
+    {
+        IJoinedNeedsOnEqualsToQueryBuilder OnColumn(string targetTableColumn, string targetTableAlias);
+        /// <summary>
+        /// Gets targetTableAlias from last joined tables alias
+        /// </summary>
+        /// <param name="targetTableColumn"></param>
+        /// <returns></returns>
+        IJoinedNeedsOnEqualsToQueryBuilder OnColumn(string targetTableColumn);
 
-        IJoinedQueryBuilder LeftJoin(string alias, string tableName,
-            string mainTableColumnName);
+
+        IJoinedQueryBuilder On(AbstractSqlCondition condition);
+    }
+
+    public interface IJoinedNeedsOnEqualsToQueryBuilder : IAbstractQueryBuilder
+    {
+        IJoinedQueryBuilder IsEqualsTo(string sourceTableColumnName, string sourceTableAlias);
     }
 }

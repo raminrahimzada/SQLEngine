@@ -1,5 +1,24 @@
 ﻿namespace SQLEngine.Tests
 {
+    public class OrderTable : ITable
+    {
+        public void Dispose()
+        {
+            
+        }
+
+        public string Name => "Orders";
+    }
+    public class CustomerTable : ITable
+    {
+        public void Dispose()
+        {
+            
+        }
+
+        public string Name => "Customers";
+        public string PrimaryColumnName => Query.Settings.DefaultIdColumnName;
+    }
     public class UserTable : ITable
     {
         public void Dispose()

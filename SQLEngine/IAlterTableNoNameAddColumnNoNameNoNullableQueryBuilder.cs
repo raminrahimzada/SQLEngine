@@ -2,7 +2,8 @@
 {
     public interface IAlterTableNoNameAddColumnNoNameNoNullableQueryBuilder : IAbstractQueryBuilder
     {
-        IAlterTableNoNameAddColumnNoNameNoTypeNameQueryBuilder OfType(string i);
+        IAlterTableNoNameAddColumnNoNameNoTypeNameQueryBuilder OfType(string type);
+        IAlterTableNoNameAddColumnNoNameNoTypeNameQueryBuilder OfType<T>();
         IAlterTableNoNameAddColumnNoNameNoTypeNameNoSizeQueryBuilder Size(int size, byte? scale = null);
     }
 }

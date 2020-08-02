@@ -120,20 +120,8 @@ namespace SQLEngine.SqlServer
                 .GroupByDesc(new SqlServerColumn(columnName));
         }
         
-        public static IAlterTableNoNameAddColumnNoNameNoTypeNameQueryBuilder OfType
-        <T>(
-            this IAlterTableNoNameAddColumnNoNameQueryBuilder builder)
-        {
-            var sqlType = DetectSqlType<T>();
-            return builder.OfType(sqlType);
-        }
-        public static IAlterTableNoNameAddColumnNoNameNoTypeNameQueryBuilder OfType
-        <T>(
-            this IAlterTableNoNameAddColumnNoNameNoNullableQueryBuilder builder)
-        {
-            var sqlType = DetectSqlType<T>();
-            return builder.OfType(sqlType);
-        }
+        
+        
         
         
         

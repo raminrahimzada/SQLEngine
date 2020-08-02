@@ -12,13 +12,13 @@ namespace SQLEngine.Tests
             {
                 q.Comment("Declaring variables");
 
-                var x = q.Declare("x", "int");
-                var y = q.Declare("y", "int");
+                var x = q.Declare<int>("x");
+                var y = q.Declare<int>("y");
                 
-                var add = q.Declare("add", "int");
-                var subtract = q.Declare("subtract", "int");
-                var multiply = q.Declare("multiply", "int");
-                var divide = q.Declare("divide", "int");
+                var add = q.Declare<int>("add");
+                var subtract = q.Declare<int>("subtract");
+                var multiply = q.Declare<int>("multiply");
+                var divide = q.Declare<int>("divide");
 
 
                 q.Comment("Setting values");

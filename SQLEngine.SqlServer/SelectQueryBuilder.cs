@@ -4,6 +4,53 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer
 {
+    internal enum SqlServerJoinTypes
+    {
+        InnerJoin = 1,
+        LeftJoin = 2,
+        RightJoin = 3,
+    }
+
+    internal sealed class JoinModel
+    {
+        private string ToString(SqlServerJoinTypes joinType)
+        {
+            switch (joinType)
+            {
+                case SqlServerJoinTypes.InnerJoin:
+                    return "INNER JOIN";
+                case SqlServerJoinTypes.LeftJoin:
+                    return "LEFT JOIN";
+                case SqlServerJoinTypes.RightJoin:
+                    return "RIGHT JOIN";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(joinType), joinType, null);
+            }
+        }
+        public string TableName { get; set; }
+        public string TableAlias { get; set; }
+        public SqlServerJoinTypes JoinType { get; set; }
+        public AbstractSqlCondition Condition { get; set; }
+
+        public string JoinQuery()
+        {
+            return string.Concat(
+                C.SPACE,
+                ToString(JoinType),
+                C.SPACE,
+                TableName,
+                C.SPACE,
+                C.AS,
+                C.SPACE,
+                TableAlias,
+                C.SPACE,
+                C.ON,
+                C.SPACE,
+                Condition.ToSqlString()
+            );
+        }
+    }
+
     internal class SelectQueryBuilder : AbstractQueryBuilder, 
         ISelectQueryBuilder, 
         ISelectNoTopQueryBuilder,
@@ -11,7 +58,9 @@ namespace SQLEngine.SqlServer
         ISelectWithoutWhereQueryBuilder,
         ISelectWithoutFromAndGroupQueryBuilder,
         ISelectWithoutFromAndGroupNeedHavingConditionQueryBuilder,
-        ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder
+        ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder,
+        IJoinedNeedsOnQueryBuilder,
+        IJoinedNeedsOnEqualsToQueryBuilder
     {
         internal sealed class OrderByQueryModel
         {
@@ -45,15 +94,7 @@ namespace SQLEngine.SqlServer
                 }
             }
         }
-        private sealed class JoinModel
-        {
-            public string TableName { get; set; }
-            public string Alias { get; set; }
-            public string JoinType { get; set; }
-            public string ReferenceTableColumnName { get; set; }
-            public string MainTableColumnName { get; set; }
-            public string RawCondition { get; set; }
-        }
+        
         internal class SelectorCollection
         {
             private readonly List<string> _rawSqlQueryList = new List<string>();
@@ -103,12 +144,14 @@ namespace SQLEngine.SqlServer
         }
         private string _mainTableName;
         //private string _mainTableQuery;
-        private string _mainTableAliasName;
+        private string _mainTableAlias;
         private readonly SelectorCollection _selectors = new SelectorCollection();
         private string _whereClause;
         private int? _topClause;
         private bool? _hasDistinct;
-        private List<JoinModel> _joinsList;
+
+        private JoinModel _currentJoinModel=new JoinModel();
+        private readonly List<JoinModel> _joinsList = new List<JoinModel>();
 
         private string _having;
         private readonly List<OrderByQueryModel> _orderByClauses = new List<OrderByQueryModel>();
@@ -133,7 +176,7 @@ namespace SQLEngine.SqlServer
         {
             MutateAliasName(ref alias);
             _mainTableName = tableName;
-            _mainTableAliasName = alias;
+            _mainTableAlias = alias;
             return this;
         }
         public ISelectWithoutFromQueryBuilder From(string tableName)
@@ -319,114 +362,6 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public IJoinedQueryBuilder InnerJoin(string alias, string tableName, string mainTableColumnName)
-        {
-            MutateAliasName(ref alias);
-            if (_joinsList == null) _joinsList = new List<JoinModel>();
-            _joinsList.Add(new JoinModel
-            {
-                TableName = tableName,
-                Alias = alias,
-                MainTableColumnName = mainTableColumnName,
-                ReferenceTableColumnName = Query.Settings.DefaultIdColumnName,
-                JoinType = C.INNERJOIN
-            });
-            return this;
-        }
-
-        public IJoinedQueryBuilder InnerJoin(string alias, string tableName
-            , string mainTableColumnName, string referenceTableColumnName)
-        {
-            MutateAliasName(ref alias);
-            if (_joinsList == null) _joinsList = new List<JoinModel>();
-            _joinsList.Add(new JoinModel
-            {
-                TableName = tableName,
-                Alias = alias,
-                MainTableColumnName = mainTableColumnName,
-                ReferenceTableColumnName = referenceTableColumnName,
-                JoinType = C.INNERJOIN
-            });
-            return this;
-        }
-
-        public IJoinedQueryBuilder InnerJoinRaw(string alias, string tableName, string condition)
-        {
-            MutateAliasName(ref alias);
-            if (_joinsList == null) _joinsList = new List<JoinModel>();
-            _joinsList.Add(new JoinModel
-            {
-                TableName = tableName,
-                Alias = alias,
-                RawCondition=condition,
-                JoinType = C.INNERJOIN
-            });
-            return this;
-        }
-
-        public IJoinedQueryBuilder RightJoin(string alias, string tableName, string mainTableColumnName,
-            string referenceTableColumnName)
-        {
-            MutateAliasName(ref alias);
-            if (_joinsList == null) _joinsList = new List<JoinModel>();
-            _joinsList.Add(new JoinModel
-            {
-                TableName = tableName,
-                Alias = alias,
-                MainTableColumnName = mainTableColumnName,
-                ReferenceTableColumnName = referenceTableColumnName,
-                JoinType = C.RIGHTJOIN,
-
-            });
-            return this;
-        }
-
-        public IJoinedQueryBuilder RightJoin(string alias, string tableName, string mainTableColumnName)
-        {
-            MutateAliasName(ref alias);
-            if (_joinsList == null) _joinsList = new List<JoinModel>();
-            _joinsList.Add(new JoinModel
-            {
-                TableName = tableName,
-                Alias = alias,
-                MainTableColumnName = mainTableColumnName,
-                ReferenceTableColumnName = Query.Settings.DefaultIdColumnName,
-                JoinType = C.RIGHTJOIN,
-            });
-            return this;
-        }
-
-        public IJoinedQueryBuilder LeftJoin(string alias, string tableName,
-            string mainTableColumnName, string referenceTableColumnName)
-        {
-            MutateAliasName(ref alias);
-            if (_joinsList == null) _joinsList = new List<JoinModel>();
-            _joinsList.Add(new JoinModel
-            {
-                TableName = tableName,
-                Alias = alias,
-                MainTableColumnName = mainTableColumnName,
-                ReferenceTableColumnName = referenceTableColumnName,
-                JoinType = C.LEFTJOIN
-            });
-            return this;
-        }
-        public IJoinedQueryBuilder LeftJoin(string alias, string tableName,
-            string mainTableColumnName)
-        {
-            MutateAliasName(ref alias);
-            if (_joinsList == null) _joinsList = new List<JoinModel>();
-            _joinsList.Add(new JoinModel
-            {
-                TableName = tableName,
-                Alias = alias,
-                MainTableColumnName = mainTableColumnName,
-                ReferenceTableColumnName = Query.Settings.DefaultIdColumnName,
-                JoinType = C.LEFTJOIN
-            });
-            return this;
-        }
-
         public override void Build(ISqlWriter writer)
         {
             ValidateAndThrow();
@@ -479,10 +414,10 @@ namespace SQLEngine.SqlServer
             //    writer.Write(C.END_SCOPE);
             //}
             writer.Indent--;
-            if (!string.IsNullOrEmpty(_mainTableAliasName))
+            if (!string.IsNullOrEmpty(_mainTableAlias))
             {
                 writer.Write2(C.AS);
-                writer.Write(_mainTableAliasName);
+                writer.Write(_mainTableAlias);
             }
 
             if (_joinsList != null)
@@ -490,7 +425,7 @@ namespace SQLEngine.SqlServer
                 foreach (var joinModel in _joinsList)
                 {
                     writer.WriteNewLine();
-                    writer.Write(JoinQuery(joinModel));
+                    writer.Write(joinModel.JoinQuery());
                 }
             }
 
@@ -570,11 +505,7 @@ namespace SQLEngine.SqlServer
             _orderByClauses.Add(new OrderByQueryModel(expression));
             return this;
         }
-        //public ISelectOrderBuilder OrderBy(AbstractSqlColumn column)
-        //{
-        //    _orderByClauses.Add(new OrderByQueryModel(column));
-        //    return this;
-        //}
+        
         public ISelectOrderBuilder OrderByDesc(ISqlExpression expression)
         {
             _orderByClauses.Add(new OrderByQueryModel(expression, true));
@@ -651,67 +582,6 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        private string JoinQuery(JoinModel model)
-        {
-            if (!string.IsNullOrWhiteSpace(model.RawCondition))
-            {
-                if (!string.IsNullOrEmpty(_mainTableAliasName))
-                {
-                    if (!string.IsNullOrEmpty(model.Alias))
-                    {
-                        return
-                            $"{model.JoinType}\t{I(model.TableName)} {C.AS} {model.Alias} {C.ON} {model.RawCondition}";
-                    }
-                    else
-                    {
-                        return
-                            $"{model.JoinType}\t{I(model.TableName)} {C.ON} {model.RawCondition}";
-                    }
-                }
-                else
-                {
-                    if (!string.IsNullOrEmpty(model.Alias))
-                    {
-                        return
-                            $"{model.JoinType}\t{I(model.TableName)} {C.AS} {model.Alias} {C.ON} {model.RawCondition}";
-                    }
-                    else
-                    {
-                        return
-                            $"{model.JoinType}\t{I(model.TableName)} {C.ON} {model.RawCondition}";
-                    }
-                }
-            }
-
-
-            if (!string.IsNullOrEmpty(_mainTableAliasName))
-            {
-                if (!string.IsNullOrEmpty(model.Alias))
-                {
-                    return
-                        $"{model.JoinType}\t{I(model.TableName)} {C.AS} {model.Alias} {C.ON} {_mainTableAliasName}.{model.MainTableColumnName} = {model.Alias}.{model.ReferenceTableColumnName}";
-                }
-                else
-                {
-                    return
-                        $"{model.JoinType}\t{I(model.TableName)} {C.ON} {I(_mainTableName)}.{model.MainTableColumnName} = {I(model.TableName)}.{model.ReferenceTableColumnName}";
-                }
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(model.Alias))
-                {
-                    return
-                        $"{model.JoinType}\t{I(model.TableName)} {C.AS} {model.Alias} {C.ON} {I(_mainTableName)}.{model.MainTableColumnName} = {model.Alias}.{model.ReferenceTableColumnName}";
-                }
-                else
-                {
-                    return
-                        $"{model.JoinType}\t{I(model.TableName)} {C.ON} {_mainTableName}.{model.MainTableColumnName} = {I(model.TableName)}.{model.ReferenceTableColumnName}";
-                }
-            }
-        }
-
         public ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder 
             OrderBy(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate)
         {
@@ -727,6 +597,91 @@ namespace SQLEngine.SqlServer
             {
                 aggregate(b);
                 _orderByClauses.Add(new OrderByQueryModel(b, false));
+                return this;
+            }
+        }
+
+        public IJoinedNeedsOnQueryBuilder InnerJoin(string targetTableName, string targetTableAlias)
+        {
+            _currentJoinModel.TableName = targetTableName;
+            _currentJoinModel.TableAlias = targetTableAlias;
+            _currentJoinModel.JoinType = SqlServerJoinTypes.InnerJoin;
+            return this;
+        }
+
+        public IJoinedNeedsOnQueryBuilder InnerJoin<TTable>(string targetTableAlias) where TTable : ITable, new()
+        {
+            using (var table=new TTable())
+            {
+                return InnerJoin(table.Name, targetTableAlias);
+            }
+        } 
+        public IJoinedNeedsOnQueryBuilder RightJoin(string targetTableName, string targetTableAlias)
+        {
+            _currentJoinModel.TableName = targetTableName;
+            _currentJoinModel.TableAlias = targetTableAlias;
+            _currentJoinModel.JoinType = SqlServerJoinTypes.RightJoin;
+            return this;
+        }
+
+        public IJoinedNeedsOnQueryBuilder RightJoin<TTable>(string targetTableAlias) where TTable : ITable, new()
+        {
+            using (var table=new TTable())
+            {
+                return RightJoin(table.Name, targetTableAlias);
+            }
+        } 
+        
+        
+        public IJoinedNeedsOnQueryBuilder LeftJoin(string targetTableName, string targetTableAlias)
+        {
+            _currentJoinModel.TableName = targetTableName;
+            _currentJoinModel.TableAlias = targetTableAlias;
+            _currentJoinModel.JoinType = SqlServerJoinTypes.LeftJoin;
+            return this;
+        }
+
+        public IJoinedNeedsOnQueryBuilder LeftJoin<TTable>(string targetTableAlias) where TTable : ITable, new()
+        {
+            using (var table=new TTable())
+            {
+                return LeftJoin(table.Name, targetTableAlias);
+            }
+        }
+
+        public IJoinedQueryBuilder On(AbstractSqlCondition condition)
+        {
+            _currentJoinModel.Condition = condition;
+            _joinsList.Add(_currentJoinModel);
+            _currentJoinModel = new JoinModel();
+            return this;
+        }
+
+        private string _targetTableColumn;
+        private string _targetTableAlias;
+
+        public IJoinedNeedsOnEqualsToQueryBuilder OnColumn(string targetTableColumn, string targetTableAlias)
+        {
+            _targetTableColumn = targetTableColumn;
+            _targetTableAlias = targetTableAlias;
+            return this;
+        }
+        public IJoinedNeedsOnEqualsToQueryBuilder OnColumn(string targetTableColumn)
+        {
+            _targetTableColumn = targetTableColumn;
+            _targetTableAlias = _currentJoinModel.TableAlias;
+            return this;
+        }
+
+        public IJoinedQueryBuilder IsEqualsTo(string sourceTableColumnName, string sourceTableAlias)
+        {
+            using (var q = Query.New)
+            {
+                var colTarget = q.Column(_targetTableColumn, _targetTableAlias);
+                var colSource = q.Column(sourceTableColumnName, sourceTableAlias);
+                _currentJoinModel.Condition = colTarget == colSource;
+                _joinsList.Add(_currentJoinModel);
+                _currentJoinModel = new JoinModel();
                 return this;
             }
         }

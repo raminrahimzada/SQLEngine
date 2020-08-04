@@ -21,7 +21,7 @@ namespace SQLEngine.Tests
 
                 const string query =
                     @"
-ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
+ALTER TABLE Users ADD  Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ";
 
                 SqlAssert.AreEqualQuery(q.Build(), query);
@@ -44,7 +44,7 @@ ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 
                 const string query =
                     @"
-ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
+ALTER TABLE Users ADD  Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ";
 
                 SqlAssert.AreEqualQuery(q.Build(), query);
@@ -67,7 +67,7 @@ ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
                     ;
                 const string query =
                     @"
-ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
+ALTER TABLE Users ADD  Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ";
 
                 SqlAssert.AreEqualQuery(q.ToString(), query);
@@ -90,7 +90,7 @@ ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
                     ;
                 const string query =
                     @"
-ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
+ALTER TABLE Users ADD Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ";
 
                 SqlAssert.AreEqualQuery(q.ToString(), query);
@@ -111,7 +111,7 @@ ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
                     ;
                 const string query =
                     @"
-ALTER TABLE Users ADD COLUMN Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
+ALTER TABLE Users ADD Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ";
 
                 SqlAssert.AreEqualQuery(q.ToString(), query);
@@ -172,7 +172,9 @@ EXECUTE sys.sp_rename  @objtype=N'COLUMN'
                     ;
                 const string query =
                     @"
-ALTER TABLE Users ALTER COLUMN Name VARCHAR(15) NOT NULL  DEFAULT ( N'Anonymous' )
+ALTER TABLE Users ALTER COLUMN Name VARCHAR(15) NOT  NULL  
+ALTER TABLE Users ADD CONSTRAINT default_Users_Name  DEFAULT N'Anonymous' FOR Name 
+
 ";
 
                 SqlAssert.AreEqualQuery(q.ToString(), query);
@@ -194,7 +196,9 @@ ALTER TABLE Users ALTER COLUMN Name VARCHAR(15) NOT NULL  DEFAULT ( N'Anonymous'
                     ;
                 const string query =
                     @"
-ALTER TABLE Users ALTER COLUMN Name NVARCHAR(15) NOT NULL  DEFAULT ( N'Anonymous' )
+ALTER TABLE Users ALTER COLUMN Name NVARCHAR(15) NOT  NULL  
+ALTER TABLE Users ADD CONSTRAINT default_Users_Name DEFAULT N'Anonymous' FOR Name 
+
 ";
 
                 SqlAssert.AreEqualQuery(q.ToString(), query);

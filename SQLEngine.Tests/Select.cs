@@ -414,13 +414,13 @@ SELECT TOP(1)  Name , Surname
                     .Select(x => x.Count("Name").Distinct())
 
                     .From("Users")
-                    .GroupByDesc("Age")
+                    .GroupBy("Age")
                     ;
 
                 string query= @"
 SELECT Age , COUNT(Id) , SUM(Weight) , COUNT(DISTINCT Name)
     FROM Users
-    GROUP BY Age DESC
+    GROUP BY Age
 
 ";
                 SqlAssert.AreEqualQuery(q.ToString(), query);
@@ -432,20 +432,20 @@ SELECT Age , COUNT(Id) , SUM(Weight) , COUNT(DISTINCT Name)
         {
             using (var q=Query.New)
             {
-                var all = q.Column("*", "U");
+                var all = q.Column("*");
                 q
                     .Select
                     .Top(1)
                     .Select("Age")
                     .Select(x => x.Count(all))
                     .From<UserTable>("U")
-                    .GroupByDesc("Age")
+                    .GroupBy("Age")
                     ;
 
                 string query= @"
-SELECT TOP(1)  Age , COUNT(U.*)
+SELECT TOP(1)  Age , COUNT(*)
     FROM Users AS U
-    GROUP BY Age DESC
+    GROUP BY Age
 ";
                 SqlAssert.AreEqualQuery(q.ToString(), query);
 
@@ -456,7 +456,7 @@ SELECT TOP(1)  Age , COUNT(U.*)
         {
             using (var q = Query.New)
             {
-                var all = q.Column("*", "U");
+                var all = q.Column("*");
                 
                 //TODO this should be rafactored
                 //lack of api 
@@ -474,7 +474,7 @@ SELECT TOP(1)  Age , COUNT(U.*)
                     ;
 
                 string query = @"
-SELECT TOP(1)  Age , COUNT(U.*)
+SELECT TOP(1)  Age , COUNT(*)
     FROM Users AS U
     GROUP BY Age 
     HAVING count(Age) > 5

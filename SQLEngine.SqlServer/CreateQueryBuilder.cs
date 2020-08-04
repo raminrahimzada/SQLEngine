@@ -10,7 +10,7 @@
         }
         public override void Build(ISqlWriter writer)
         {
-            _innerBuilder.Build(writer);
+            _innerBuilder?.Build(writer);
         }
 
         public override string ToString()
@@ -27,6 +27,13 @@
             var x = New<CreateTableQueryBuilder>().Name(tableName);
             _innerBuilder = x;
             return x;
+        }
+        public ICreateTableQueryBuilder Table<TTable>() where TTable:ITable,new()
+        {
+            using (var table=new TTable())
+            {
+                return Table(table.Name);
+            }
         }
         public ICreateFunctionNoNameQueryBuilder Function(string funcName)
         {

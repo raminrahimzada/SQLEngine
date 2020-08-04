@@ -1,4 +1,6 @@
-﻿namespace SQLEngine.SqlServer
+﻿using System;
+
+namespace SQLEngine.SqlServer
 {
     internal class AlterTableAlterColumnQueryBuilder : AbstractQueryBuilder
         , IAlterTableNoNameAlterColumnQueryBuilder
@@ -59,10 +61,33 @@
 
             if (_defaultValue != null)
             {
-                writer.Write2(C.DEFAULT);
-                writer.Write(C.BEGIN_SCOPE);
-                writer.Write2(_defaultValue.ToSqlString());
-                writer.Write(C.END_SCOPE);
+                //Todo Make this configurable
+
+                var defaultValueConstraintName =
+                    "default_" + _tableName + "_" + _columnName;
+                writer.Write(C.SPACE);
+                writer.WriteLine();
+                writer.Write(C.ALTER);
+                writer.Write(C.SPACE);
+                writer.Write(C.TABLE);
+                writer.Write(C.SPACE);
+                writer.Write(_tableName);
+                writer.Write(C.SPACE);
+                writer.Write(C.ADD);
+                writer.Write(C.SPACE);
+                writer.Write(C.CONSTRAINT);
+                writer.Write(C.SPACE);
+                writer.Write(defaultValueConstraintName);
+                writer.Write(C.SPACE);
+                writer.Write(C.DEFAULT);
+                writer.Write(C.SPACE);
+                
+                writer.Write(_defaultValue.ToSqlString());
+                writer.Write(C.SPACE);
+                writer.Write(C.FOR);
+                writer.Write(C.SPACE);
+                writer.Write(_columnName);
+                writer.Write(C.SPACE);
             }
         }
         public IAlterTableNoNameAlterColumnNoNewTypeQueryBuilder Type(string newType)

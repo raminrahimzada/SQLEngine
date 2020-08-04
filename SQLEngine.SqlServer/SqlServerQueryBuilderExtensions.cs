@@ -113,17 +113,6 @@ namespace SQLEngine.SqlServer
             return builder
                 .GroupBy(new SqlServerColumn(columnName));
         }
-        public static ISelectWithoutFromAndGroupQueryBuilder GroupByDesc(this ISelectWithoutFromQueryBuilder builder,
-            string columnName)
-        {
-            return builder
-                .GroupByDesc(new SqlServerColumn(columnName));
-        }
-        
-        
-        
-        
-        
         
         public static AbstractSqlCondition In(this AbstractSqlColumn column
             , params AbstractSqlExpression[] expressions)

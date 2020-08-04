@@ -53,8 +53,9 @@
             writer.Write(C.ALTER);
             writer.Write2(C.TABLE);
             writer.Write(_tableName);
-            writer.Write2(C.ADD);
-            writer.Write(C.COLUMN);
+            writer.Write(C.SPACE);
+            writer.Write(C.ADD);
+            writer.Write(C.SPACE);
             writer.Write2(_columnName);
             writer.Write2(_type);
             if (_size != null)

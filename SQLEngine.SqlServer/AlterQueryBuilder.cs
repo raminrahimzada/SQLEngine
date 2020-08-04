@@ -20,7 +20,7 @@
 
         public override void Build(ISqlWriter writer)
         {
-            _internalBuilder.Build(writer);
+            _internalBuilder?.Build(writer);
         }
     }
 }

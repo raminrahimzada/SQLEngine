@@ -531,11 +531,7 @@ namespace SQLEngine.SqlServer
             _groupByClauses.Add(expression.ToSqlString());
             return this;
         }
-        //public ISelectWithoutFromAndGroupQueryBuilder GroupBy(AbstractSqlExpression expression)
-        //{
-        //    _groupByClauses.Add(expression.ToSqlString());
-        //    return this;
-        //}
+     
        
         public ISelectWithoutFromAndGroupNeedHavingConditionQueryBuilder Having(AbstractSqlCondition condition)
         {
@@ -543,24 +539,12 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public ISelectWithoutFromAndGroupQueryBuilder GroupByDesc(ISqlExpression expression)
-        {
-            _groupByClauses.Add(expression.ToSqlString() + C.SPACE + C.DESC);
-            return this;
-        }
-
+      
         public ISelectWithoutFromAndGroupQueryBuilder GroupBy(AbstractSqlColumn column)
         {
             _groupByClauses.Add(column.ToSqlString());
             return this;
         }
-
-        public ISelectWithoutFromAndGroupQueryBuilder GroupByDesc(AbstractSqlColumn column)
-        {
-            _groupByClauses.Add(column.ToSqlString() + C.SPACE + C.DESC);
-            return this;
-        }
-
 
         public ISelectWithSelectorQueryBuilder Select(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate)
         {

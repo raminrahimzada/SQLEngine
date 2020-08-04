@@ -62,5 +62,10 @@
             _defaultValue = literal.ToSqlString();
             return this;
         }
+        public IExceptDefaultValueNameDeclarationQueryBuilder Default(ISqlExpression expression)
+        {
+            _defaultValue = expression.ToSqlString();
+            return this;
+        }
     }
 }

@@ -62,6 +62,12 @@ namespace SQLEngine.SqlServer
                     return (C.DECIMAL);
                 }
             }
+            {
+                if (type == typeof(bool))
+                {
+                    return (C.BIT);
+                }
+            }
             throw new Exception("Complex type " + type.FullName + " cannot be converted to sql type");
         }
     }

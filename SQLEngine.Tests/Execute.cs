@@ -62,16 +62,21 @@ EXECUTE addUser  @Name=N'Nikola'
         {
             using (var q = Query.New)
             {
-                q
-                    .Execute
-                    .Function("UserExists")
-                    .Schema("dbo")
-                    .Arg("Nikola") //Name
-                    .Arg("Tesla") //Surname
-                    ;
+                var execution =
+                        q
+                            ._execute
+                            .Function("UserExists")
+                            .Schema("dbo")
+                            .Arg("Nikola") //Name
+                            .Arg("Tesla") //Surname
+                            .Build()
 
+                    ;
+                q.Declare<bool>("b", q.Raw(execution));
+                
                 const string query = @"
-dbo.UserExists (N'Nikola', N'Tesla')
+
+DECLARE @b BIT = dbo.UserExists (N'Nikola', N'Tesla')
 ";
                 SqlAssert.AreEqualQuery(q.ToString(), query);
             }

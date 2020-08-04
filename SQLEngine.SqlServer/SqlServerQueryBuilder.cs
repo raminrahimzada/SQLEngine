@@ -277,21 +277,21 @@ namespace SQLEngine.SqlServer
                 return new SqlServerVariable(variableName);
             }
         }
-        //public AbstractSqlVariable Declare(string variableName, string type, ISqlExpression defaultValue)
-        //{
-        //    var t = new DeclarationQueryBuilder();
-        //    {
-        //        var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
-        //        _list.Add(expression);
-        //        return new SqlServerVariable(variableName);
-        //    }
-        //}
+        public AbstractSqlVariable Declare(string variableName, string type, ISqlExpression defaultValue)
+        {
+            var t = new DeclarationQueryBuilder();
+            {
+                var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
+                _list.Add(expression);
+                return new SqlServerVariable(variableName);
+            }
+        }
         public AbstractSqlVariable Declare<T>(string variableName, ISqlExpression defaultValue)
         {
             var t = new DeclarationQueryBuilder();
             {
                 var type = Query.Settings.TypeConvertor.ToSqlType<T>();
-                var expression = t.Declare(variableName).OfType(type).Default(defaultValue?.ToSqlString());
+                var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
                 _list.Add(expression);
                 return new SqlServerVariable(variableName);
             }

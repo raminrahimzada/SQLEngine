@@ -1,4 +1,6 @@
-﻿#define CHECK_QUERY_COMPILATION
+﻿//Activate and configure connection string below  to check for sql compilation
+
+#define CHECK_QUERY_COMPILATION
 
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -34,7 +36,8 @@ namespace SQLEngine.Tests
         }
 
 #if CHECK_QUERY_COMPILATION
-
+        
+        //Write Your Sql Server connection string here to test the actual queries in server
         private const string
             ConnectionString =
                 "Server=.\\SERVER17;Database=SqlEngineTest;Trusted_Connection=True;";

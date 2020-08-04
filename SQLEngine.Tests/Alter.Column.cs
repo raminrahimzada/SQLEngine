@@ -173,7 +173,31 @@ EXECUTE sys.sp_rename  @objtype=N'COLUMN'
                 const string query =
                     @"
 ALTER TABLE Users ALTER COLUMN Name VARCHAR(15) NOT  NULL  
-ALTER TABLE Users ADD CONSTRAINT default_Users_Name  DEFAULT N'Anonymous' FOR Name 
+ALTER TABLE Users ADD CONSTRAINT DF_Users_Name  DEFAULT N'Anonymous' FOR Name 
+
+";
+
+                SqlAssert.AreEqualQuery(q.ToString(), query);
+            }
+        }
+        [TestMethod]
+        public void Test_Alter_Table_AlterColumn_3()
+        {
+            using (var q = Query.New)
+            {
+                q
+                    .Alter
+                    .Table("Users")
+                    .AlterColumn("Name")
+                    .Type("VARCHAR")
+                    .NotNull()
+                    .Size(15)
+                    .DefaultValue("Anonymous","DF_my_awesome_constraint")
+                    ;
+                const string query =
+                    @"
+ALTER TABLE Users ALTER COLUMN Name VARCHAR(15) NOT  NULL  
+ALTER TABLE Users ADD CONSTRAINT DF_my_awesome_constraint  DEFAULT N'Anonymous' FOR Name 
 
 ";
 
@@ -197,7 +221,7 @@ ALTER TABLE Users ADD CONSTRAINT default_Users_Name  DEFAULT N'Anonymous' FOR Na
                 const string query =
                     @"
 ALTER TABLE Users ALTER COLUMN Name NVARCHAR(15) NOT  NULL  
-ALTER TABLE Users ADD CONSTRAINT default_Users_Name DEFAULT N'Anonymous' FOR Name 
+ALTER TABLE Users ADD CONSTRAINT DF_Users_Name DEFAULT N'Anonymous' FOR Name 
 
 ";
 

@@ -16,6 +16,7 @@ namespace SQLEngine.SqlServer
         private byte? _size;
         private byte? _scale;
         private AbstractSqlExpression _defaultValue;
+        private string _defaultValueConstraintName;
 
         public AlterTableAlterColumnQueryBuilder Table(string tableName)
         {
@@ -61,10 +62,12 @@ namespace SQLEngine.SqlServer
 
             if (_defaultValue != null)
             {
-                //Todo Make this configurable
-
-                var defaultValueConstraintName =
-                    "default_" + _tableName + "_" + _columnName;
+                if (string.IsNullOrWhiteSpace(_defaultValueConstraintName))
+                {
+                    _defaultValueConstraintName =
+                        "DF_" + _tableName + "_" + _columnName;
+                }
+                
                 writer.Write(C.SPACE);
                 writer.WriteLine();
                 writer.Write(C.ALTER);
@@ -77,7 +80,7 @@ namespace SQLEngine.SqlServer
                 writer.Write(C.SPACE);
                 writer.Write(C.CONSTRAINT);
                 writer.Write(C.SPACE);
-                writer.Write(defaultValueConstraintName);
+                writer.Write(_defaultValueConstraintName);
                 writer.Write(C.SPACE);
                 writer.Write(C.DEFAULT);
                 writer.Write(C.SPACE);
@@ -112,16 +115,11 @@ namespace SQLEngine.SqlServer
             _size = size;
             _scale = scale;
             return this;
-        }
-
-        public IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeNoDefaultValueQueryBuilder DefaultValue(AbstractSqlExpression expression)
-        {
-            _defaultValue = expression;
-            return this;
-        }
-        public IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeNoDefaultValueQueryBuilder DefaultValue(AbstractSqlLiteral literal)
+        }        
+        public IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeNoDefaultValueQueryBuilder DefaultValue(AbstractSqlLiteral literal, string defaultValueConstraintName = null)
         {
             _defaultValue = literal;
+            _defaultValueConstraintName = defaultValueConstraintName;
             return this;
         }
     }

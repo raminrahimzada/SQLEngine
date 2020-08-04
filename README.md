@@ -1,9 +1,9 @@
 <img src="https://github.com/raminrahimzada/SQLEngine/blob/master/logo.png?raw=true"/> 
 
-# SQL-Engine 
-SQL Engine is a library that eases of generating cross-dialect sql queries without using any dialect specific keyword
-<br/>You can generate (almost) any sql query with C# expressions (Then configure it to build for MS-SQL, Oracle, MySQL or other style queries)
-<br/>So library may be considered as a query abstraction layer on databases
+# SQL Engine is a query abstraction layer on relational sql databases - MS-SQL, Oracle, MySQL etc..
+<br/>Library eases of generating cross-dialect sql queries without using any dialect specific syntax
+<br/>You can generate any complex sql statements using Engine expressions then configure it to build  queries in a specific dialect
+
 
 | | |
 | --- | --- |

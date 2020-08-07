@@ -2,12 +2,19 @@
 
 //#define CHECK_QUERY_COMPILATION
 
+#if !CHECK_QUERY_COMPILATION
+    #if DEBUG
+        #define CHECK_QUERY_COMPILATION
+    #endif
+#endif
+
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 #if CHECK_QUERY_COMPILATION
 using System.Data.SqlClient;
 #endif
+
 
 namespace SQLEngine.Tests
 {

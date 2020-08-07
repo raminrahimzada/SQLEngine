@@ -112,6 +112,12 @@ namespace SQLEngine
                   "So If You Are Here Please create issue on github " +
                   "page of SqlEngine Repository")]
         AbstractSqlCondition RawCondition(string rawConditionQuery);
+
+        ITryNoTryQueryBuilder Try(Action<IQueryBuilder> builder);
+        
+        void BeginTransaction(string transactionName=null);
+        void CommitTransaction(string transactionName = null);
+        void RollbackTransaction(string transactionName = null);
     }
 
 }

@@ -57,7 +57,8 @@
         public override void Build(ISqlWriter writer)
         {
             ValidateAndThrow();
-            writer.Write2(C.DELETE);
+            writer.Write(C.DELETE);
+            writer.Write(C.SPACE);
             if (_topClause != null)
             {
                 writer.Write(C.TOP);

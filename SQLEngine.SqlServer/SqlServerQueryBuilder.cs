@@ -141,6 +141,59 @@ namespace SQLEngine.SqlServer
             return new SqlServerCondition(rawConditionQuery);
         }
 
+        public ITryNoTryQueryBuilder Try(Action<IQueryBuilder> builder)
+        {
+            var t = new TryCatchQueryBuilder();
+            var expression = t.Try(builder);
+            _list.Add(expression);
+            return expression;
+        }
+
+        public void BeginTransaction(string transactionName = null)
+        {
+            _list.Add(new RawStringQueryBuilder(w =>
+            {
+                w.Write(C.BEGIN);
+                w.Write(C.SPACE);
+                w.Write(C.TRANSACTION);
+                if (!string.IsNullOrWhiteSpace(transactionName))
+                {
+                    w.Write(C.SPACE);
+                    w.Write(transactionName);
+                }
+            }));
+        }
+
+        public void CommitTransaction(string transactionName = null)
+        {
+            _list.Add(new RawStringQueryBuilder(w =>
+            {
+                w.Write(C.COMMIT);
+                w.Write(C.SPACE);
+                w.Write(C.TRANSACTION);
+                if (!string.IsNullOrWhiteSpace(transactionName))
+                {
+                    w.Write(C.SPACE);
+                    w.Write(transactionName);
+                }
+            }));
+        }
+
+        public void RollbackTransaction(string transactionName = null)
+        {
+            _list.Add(new RawStringQueryBuilder(w =>
+            {
+                w.Write(C.ROLLBACK);
+                w.Write(C.SPACE);
+                w.Write(C.TRANSACTION);
+                if (!string.IsNullOrWhiteSpace(transactionName))
+                {
+                    w.Write(C.SPACE);
+                    w.Write(transactionName);
+                }
+            }));
+        }
+
         public void Truncate(string tableName)
         {
             var t = new TruncateQueryBuilder();

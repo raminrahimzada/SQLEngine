@@ -13,6 +13,11 @@
         public const string BEGIN_SCOPE = "(";
         public const string END_SCOPE = ")";
         public const string SPACE = " ";
+        public const string ROLLBACK = "ROLLBACK";
+        public const string TRANSACTION = "TRANSACTION";
+        public const string COMMIT = "COMMIT";
+        public const string TRY = "TRY";
+        public const string CATCH = "CATCH";
 
         public const string DELETE = "DELETE";
         public const string IF = "IF";

@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SQLEngine.SqlServer;
 
 namespace SQLEngine.Tests
@@ -11,7 +13,6 @@ namespace SQLEngine.Tests
         {
             Query.Setup<SqlServerQueryBuilder>();
         }
-
         [TestMethod]
         public void Test_Create_Table()
         {

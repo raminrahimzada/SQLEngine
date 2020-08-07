@@ -71,7 +71,9 @@
     <Compile Include="Select.Join.cs" />
     <Compile Include="SqlAssert.cs" />
     <Compile Include="Select.cs" />
+    <Compile Include="TryCatch.cs" />
     <Compile Include="Update.cs" />
+    <Compile Include="Transaction.cs" />
     <Compile Include="_ExampleStrongTypedTables.cs" />
   </ItemGroup>
   <ItemGroup>

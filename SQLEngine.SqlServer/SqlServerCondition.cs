@@ -1,72 +1,13 @@
-﻿using System;
-
-namespace SQLEngine.SqlServer
+﻿namespace SQLEngine.SqlServer
 {
-    internal class TryCatchQueryBuilder :AbstractQueryBuilder
-        , ITryQueryBuilder
-        , ITryNoTryQueryBuilder
-        , ITryNoCatchQueryBuilder
-    {
-        private Action<IQueryBuilder> _tryBody;
-        private Action<ICatchFunctionQueryBuilder> _catchBody;
-        public override void Build(ISqlWriter writer)
-        {
-            writer.Write(C.BEGIN);
-            writer.Write(C.SPACE);
-            writer.Write(C.TRY);
-            writer.WriteLine();
-            
-            if (_tryBody!=null)
-            {
-                using (var q = new SqlServerQueryBuilder())
-                {
-                    _tryBody.Invoke(q);
-                    q.Build(writer);
-                }
-            }
-
-            writer.WriteLine();
-            writer.Write(C.END);
-            writer.Write(C.SPACE);
-            writer.Write(C.TRY);
-            
-            writer.WriteLine();
-            
-            writer.Write(C.BEGIN);
-            writer.Write(C.SPACE);
-            writer.Write(C.CATCH);
-            writer.WriteLine();
-
-            if (_catchBody != null)
-            {
-                using (var q = new CatchFunctionQueryBuilder())
-                {
-                    _catchBody.Invoke(q);
-                    q.Build(writer);
-                }
-            }
-            
-            writer.WriteLine();
-            writer.Write(C.END);
-            writer.Write(C.SPACE);
-            writer.Write(C.CATCH);
-        }
-
-        public ITryNoTryQueryBuilder Try(Action<IQueryBuilder> builder)
-        {
-            _tryBody = builder;
-            return this;
-        }
-
-        public ITryNoCatchQueryBuilder Catch(Action<ICatchFunctionQueryBuilder> builder)
-        {
-            _catchBody = builder;
-            return this;
-        }
-    }
     internal class SqlServerCondition : AbstractSqlCondition
     {
-        private readonly string _rawSqlString;
+        public static void Setup()
+        {
+            CreateEmpty = () => new SqlServerCondition();
+        }
+
+        private string _rawSqlString;
 
         public SqlServerCondition(string rawSqlString)
         {
@@ -80,6 +21,23 @@ namespace SQLEngine.SqlServer
         public override string ToSqlString()
         {
             return _rawSqlString;
+        }
+
+        protected override void SetRaw(bool rawValue)
+        {
+            _rawSqlString = rawValue ? C.TRUE : C.FALSE;
+        }
+
+        protected override void SetRaw(bool? rawValue)
+        {
+            if (rawValue == null)
+            {
+                _rawSqlString = C.NULL;
+            }
+            else
+            {
+                SetRaw(rawValue.Value);
+            }
         }
 
         public override AbstractSqlCondition And(AbstractSqlCondition condition)
@@ -98,5 +56,7 @@ namespace SQLEngine.SqlServer
         {
             return new SqlServerCondition(rawSqlString);
         }
+
+        
     }
 }

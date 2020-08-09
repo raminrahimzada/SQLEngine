@@ -35,6 +35,10 @@ namespace SQLEngine
         public static void Setup<T>() where T : IQueryBuilder,new()
         {
             _builderFunction = () => Activator.CreateInstance<T>();
+            using (_builderFunction())
+            {
+                //Creating an Empty class for setting initialization
+            }
         }
 
         /// <summary>

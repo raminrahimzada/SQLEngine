@@ -6,11 +6,26 @@ namespace SQLEngine.Tests
 {
     public partial class Test_Query_Builder_Sql_Server
     {
-        //Test Enum
+        //Demo Enum
         public enum InputOutput
         {
             Input=1,
             Output=2
+        }
+
+        [TestMethod]
+        public void Test_All_Literals_Conversion_AbstractSqlCondition_With_Literal()
+        {
+            AbstractSqlCondition condition = true;
+            
+            //Sql has no literal so we use bool literals like that
+            Assert.AreEqual(C.TRUE, condition.ToSqlString());
+
+            condition = false;
+            Assert.AreEqual(C.FALSE, condition.ToSqlString());
+
+            condition = (bool?) null;
+            Assert.AreEqual(C.NULL, condition.ToSqlString());
         }
 
         [TestMethod]
@@ -28,7 +43,10 @@ namespace SQLEngine.Tests
                 literal = InputOutput.Input;
                 Assert.AreEqual(literal.ToSqlString(), "1");
 
-                
+                literal = InputOutput.Output;
+                Assert.AreEqual(literal.ToSqlString(), "2");
+
+
 
                 literal = (uint)1;
                 Assert.AreEqual(literal.ToSqlString(), "1");
@@ -91,7 +109,7 @@ namespace SQLEngine.Tests
                 literal = new byte[] {0, 1, 2};
                 Assert.AreEqual(literal.ToSqlString(), "0x000102");
 
-                ;
+                
                 literal = (int?) null;
                 Assert.AreEqual(literal.ToSqlString(), C.NULL);
 
@@ -178,6 +196,10 @@ namespace SQLEngine.Tests
                 Assert.AreEqual(expression.ToSqlString(), "1");
 
 
+                expression = InputOutput.Output;
+                Assert.AreEqual(expression.ToSqlString(), "2");
+
+
 
 
                 expression = 1.5D;
@@ -213,7 +235,7 @@ namespace SQLEngine.Tests
                 expression = new byte[] {0, 1, 2};
                 Assert.AreEqual(expression.ToSqlString(), "0x000102");
 
-                ;
+                
 
                 expression = (int?)null;
                 Assert.AreEqual(expression.ToSqlString(), C.NULL);

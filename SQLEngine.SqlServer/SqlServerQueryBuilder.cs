@@ -22,14 +22,18 @@ namespace SQLEngine.SqlServer
             Query.Settings.DefaultScale = 4;
             Query.Settings.SQLErrorState = 47;
         }
-
-        public SqlServerQueryBuilder()
+        public static void Setup() 
         {
-            //setup
             SetupDefaults();
 
             SqlServerLiteral.Setup();
             SqlServerRawExpression.Setup();
+            SqlServerCondition.Setup();
+        }
+
+        static SqlServerQueryBuilder()
+        {
+            Setup();
         }
 
         private readonly List<IAbstractQueryBuilder> _list = new List<IAbstractQueryBuilder>();

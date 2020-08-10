@@ -17,6 +17,10 @@
         {
             Expression = expression;
         }
+        public SqlServerRawExpression(params string[] expressions)
+        {
+            Expression = string.Concat(expressions);
+        }
 
         public  override string ToSqlString()
         {

@@ -9,13 +9,17 @@ namespace SQLEngine
         ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left, AbstractSqlColumn column);
 
 
+        //this will cause conflict with column Names->strings as literals/AbstractSqlLiteral so named like that
+        ISelectWithSelectorQueryBuilder SelectLiteral(AbstractSqlLiteral literal);
+
 
         ISelectWithSelectorQueryBuilder Select(AbstractSqlColumn column);
-        //this will cause conflict with column Names->strings as literals/AbstractSqlLiteral
-        //ISelectWithSelectorQueryBuilder Select(AbstractSqlLiteral literal);
+        ISelectWithSelectorQueryBuilder Select(string columnName);
+        
+  
+
         ISelectWithSelectorQueryBuilder Select(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFuncExp);
         ISelectWithSelectorQueryBuilder Select(ISqlExpression expression);
-        ISelectWithSelectorQueryBuilder Select(ISqlExpression selector, string alias);
         ISelectWithSelectorQueryBuilder Select(Func<ICaseWhenNeedWhenQueryBuilder, ICaseWhenQueryBuilder> caseWhen);
         ISelectWithSelectorQueryBuilder Select(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate);
         ISelectWithSelectorQueryBuilder Select(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallNopBuilder> aggregate);
@@ -25,6 +29,7 @@ namespace SQLEngine
 
         ISelectWithSelectorQueryBuilder SelectAs(Func<ICaseWhenNeedWhenQueryBuilder, ICaseWhenQueryBuilder> caseWhen, string alias);
         ISelectWithSelectorQueryBuilder SelectAs(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> func,string alias);
+        ISelectWithSelectorQueryBuilder SelectAs(ISqlExpression selector, string alias);
 
         ISelectWithoutFromQueryBuilder From(string tableName, string alias);
         ISelectWithoutFromQueryBuilder From(string tableName);

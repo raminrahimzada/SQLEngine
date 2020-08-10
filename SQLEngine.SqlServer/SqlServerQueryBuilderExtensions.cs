@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace SQLEngine.SqlServer
 {
     public static class SqlServerQueryBuilderExtensions
     {        
-        public static string DetectSqlType<T>()
-        {
-            return Query.Settings.TypeConvertor.ToSqlType<T>();
-        }
+        //public static string DetectSqlType<T>()
+        //{
+        //    return Query.Settings.TypeConvertor.ToSqlType<T>();
+        //}
         
         public static IColumnQueryBuilder DefaultValueRaw(this IColumnQueryBuilder builder,
             string defaultValueRaw, 
@@ -26,26 +25,26 @@ namespace SQLEngine.SqlServer
          
 
         
-        public static ISelectOrderBuilder OrderByDesc(this ISelectWithoutFromQueryBuilder builder,string columnName)
-        {
-            return builder.OrderByDesc(new SqlServerColumn(columnName));
-        }
+        //public static ISelectOrderBuilder OrderByDesc(this ISelectWithoutFromQueryBuilder builder,string columnName)
+        //{
+        //    return builder.OrderByDesc(new SqlServerColumn(columnName));
+        //}
 
          
-        public static IColumnQueryBuilder Column<T>(this IColumnsCreateQueryBuilder builder,string columnName)
-        {
-            var sqlType = DetectSqlType<T>();
-            return builder.Column(columnName).Type(sqlType);
-        }
-        public static ISelectOrderBuilder OrderBy(this ISelectWithoutWhereQueryBuilder builder, string columnName)
-        {
-            return builder.OrderBy(new SqlServerColumn(columnName));
-        }
+        //public static IColumnQueryBuilder Column<T>(this IColumnsCreateQueryBuilder builder,string columnName)
+        //{
+        //    var sqlType = DetectSqlType<T>();
+        //    return builder.Column(columnName).Type(sqlType);
+        //}
+        //public static ISelectOrderBuilder OrderBy(this ISelectWithoutWhereQueryBuilder builder, string columnName)
+        //{
+        //    return builder.OrderBy(new SqlServerColumn(columnName));
+        //}
 
-        public static ISelectOrderBuilder OrderByDesc(this ISelectWithoutWhereQueryBuilder builder, string columnName)
-        {
-            return builder.OrderByDesc(new SqlServerColumn(columnName));
-        }
+        //public static ISelectOrderBuilder OrderByDesc(this ISelectWithoutWhereQueryBuilder builder, string columnName)
+        //{
+        //    return builder.OrderByDesc(new SqlServerColumn(columnName));
+        //}
 
         //public static ISelectOrderBuilder OrderBy(this ISelectWithoutWhereQueryBuilder builder,AbstractSqlColumn column)
         //{
@@ -61,158 +60,136 @@ namespace SQLEngine.SqlServer
         //{
         //    return builder.SelectAssign(left, column);
         //}
-        public static ISelectWithSelectorQueryBuilder SelectAssign(this ISelectWithSelectorQueryBuilder builder, AbstractSqlVariable left, string columnName)
-        {
-            return builder.SelectAssign(left, new SqlServerColumn(columnName));
-        }
-        public static IAggregateFunctionBuilder Min(this IAggregateFunctionBuilder builder, string columnName)
-        {
-            return builder.Min(new SqlServerColumn(columnName));
-        }
-
-        public static IAggregateFunctionBuilder Max(this IAggregateFunctionBuilder builder, string columnName)
-        {
-            return builder.Max(new SqlServerColumn(columnName));
-        }
-
-        public static IAggregateFunctionBuilder Count(this IAggregateFunctionBuilder builder, string columnName)
-        {
-            return builder.Count(new SqlServerColumn(columnName));
-        }
-
-        public static IAggregateFunctionBuilder Sum(this IAggregateFunctionBuilder builder, string columnName)
-        {
-            return builder.Sum(new SqlServerColumn(columnName));
-        }
-
-        public static IAggregateFunctionBuilder Avg(this IAggregateFunctionBuilder builder, string columnName)
-        {
-            return builder.Avg(new SqlServerColumn(columnName));
-        }
+        //public static ISelectWithSelectorQueryBuilder SelectAssign(this ISelectWithSelectorQueryBuilder builder, AbstractSqlVariable left, string columnName)
+        //{
+        //    return builder.SelectAssign(left, new SqlServerColumn(columnName));
+        //}
+       
 
 
 
-        public static ISelectWithoutFromAndGroupQueryBuilder GroupBy(this ISelectWithoutFromQueryBuilder builder,
-            params string[] columnNames)
-        {
-            var cols = columnNames
-                .Select(columnName => new SqlServerColumn(columnName))
-                .Cast<AbstractSqlColumn>()
-                .ToArray();
-            var result = builder.GroupBy(cols[0]);
-            for (int i = 1; i < cols.Length; i++)
-            {
-                result = result.GroupBy(cols[0]);
-            }
+        //public static ISelectWithoutFromAndGroupQueryBuilder GroupBy(this ISelectWithoutFromQueryBuilder builder,
+        //    params string[] columnNames)
+        //{
+        //    var cols = columnNames
+        //        .Select(columnName => new SqlServerColumn(columnName))
+        //        .Cast<AbstractSqlColumn>()
+        //        .ToArray();
+        //    var result = builder.GroupBy(cols[0]);
+        //    for (int i = 1; i < cols.Length; i++)
+        //    {
+        //        result = result.GroupBy(cols[0]);
+        //    }
 
-            return result;
-        }
-        public static ISelectWithoutFromAndGroupQueryBuilder GroupBy(this ISelectWithoutFromQueryBuilder builder,
-            string columnName)
-        {
-            return builder
-                .GroupBy(new SqlServerColumn(columnName));
-        }
-        
-        public static AbstractSqlCondition In(this AbstractSqlColumn column
-            , params AbstractSqlExpression[] expressions)
-        {
-            if (expressions.Length == 0)
-            {
-                throw new Exception("At least one element needed in -IN query needed");
-            }
-            var expression =   column.ToSqlString() + " IN (" +
-                            string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
-            
-            return SqlServerCondition.Raw(expression);
-        }
-        public static AbstractSqlCondition In(this AbstractSqlColumn column
-            , params AbstractSqlLiteral[] expressions)
-        {
-            if (expressions.Length == 0)
-            {
-                throw new Exception("At least one element needed in -IN query needed");
-            }
-            var expression =   column.ToSqlString() + " IN (" +
-                            string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
-            
-            return SqlServerCondition.Raw(expression);
-        }
+        //    return result;
+        //}
 
-        
-        public static AbstractSqlCondition In(this AbstractSqlColumn column
-            , Action<ISelectQueryBuilder> builderFunc)
-        {
-            var writer = SqlWriter.New;
-            writer.Write(column.ToSqlString());
-            writer.Write(C.SPACE);
-            writer.Write(C.IN);
-            writer.Write(C.SPACE);
-            writer.Write(C.BEGIN_SCOPE);
-            using (var builder=new SelectQueryBuilder())
-            {
-                builderFunc(builder);
-                builder.Build(writer);
-            }
-            writer.Write(C.END_SCOPE);
+        //public static ISelectWithoutFromAndGroupQueryBuilder GroupBy(this ISelectWithoutFromQueryBuilder builder,
+        //    string columnName)
+        //{
+        //    return builder
+        //        .GroupBy(new SqlServerColumn(columnName));
+        //}
 
-            return SqlServerCondition.Raw(writer.Build());
-        }
+        //public static AbstractSqlCondition In(this AbstractSqlColumn column
+        //    , params AbstractSqlExpression[] expressions)
+        //{
+        //    if (expressions.Length == 0)
+        //    {
+        //        throw new Exception("At least one element needed in -IN query needed");
+        //    }
+        //    var expression =   column.ToSqlString() + " IN (" +
+        //                    string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
 
-        public static AbstractSqlCondition NotIn(this AbstractSqlColumn column
-            , params AbstractSqlExpression[] expressions)
-        {
-            if (expressions.Length == 0)
-            {
-                throw new Exception("At least one element needed in -IN query needed");
-            }
-            var expression = column.ToSqlString() + " NOT IN (" +
-                             string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
+        //    return SqlServerCondition.Raw(expression);
+        //}
+        //public static AbstractSqlCondition In(this AbstractSqlColumn column
+        //    , params AbstractSqlLiteral[] expressions)
+        //{
+        //    if (expressions.Length == 0)
+        //    {
+        //        throw new Exception("At least one element needed in -IN query needed");
+        //    }
+        //    var expression =   column.ToSqlString() + " IN (" +
+        //                    string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
 
-            return SqlServerCondition.Raw(expression);
-        }
-        public static AbstractSqlCondition NotIn(this AbstractSqlColumn column
-            , IAbstractSelectQueryBuilder selectQuery)
-        {
-            var expression = column.ToSqlString() + " NOT IN (" + selectQuery + ")";
-            return SqlServerCondition.Raw(expression);
-        }
-        public static AbstractSqlCondition In(this AbstractSqlColumn column
-            , IAbstractSelectQueryBuilder selectQuery)
-        {
-            var expression = column.ToSqlString() + "  IN (" + selectQuery + ")";
-            return SqlServerCondition.Raw(expression);
-        }
-        public static AbstractSqlCondition NotIn(this AbstractSqlColumn column
-            , params AbstractSqlLiteral[] expressions)
-        {
-            if (expressions.Length == 0)
-            {
-                throw new Exception("At least one element needed in -IN query needed");
-            }
-            var expression = column.ToSqlString() + " NOT IN (" +
-                             string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
-
-            return SqlServerCondition.Raw(expression);
-        }
+        //    return SqlServerCondition.Raw(expression);
+        //}
 
 
-        public static AbstractSqlCondition Between(this AbstractSqlColumn column
-            , AbstractSqlExpression from,AbstractSqlExpression to)
-        {
-            var expression = "(" + column.ToSqlString() + " BETWEEN (" + from.ToSqlString() + ") AND (" +
-                             to.ToSqlString() + "))";
+        //public static AbstractSqlCondition In(this AbstractSqlColumn column
+        //    , Action<ISelectQueryBuilder> builderFunc)
+        //{
+        //    var writer = SqlWriter.New;
+        //    writer.Write(column.ToSqlString());
+        //    writer.Write(C.SPACE);
+        //    writer.Write(C.IN);
+        //    writer.Write(C.SPACE);
+        //    writer.Write(C.BEGIN_SCOPE);
+        //    using (var builder=new SelectQueryBuilder())
+        //    {
+        //        builderFunc(builder);
+        //        builder.Build(writer);
+        //    }
+        //    writer.Write(C.END_SCOPE);
 
-            return SqlServerCondition.Raw(expression);
-        }
-        public static AbstractSqlCondition Between(this AbstractSqlColumn column
-            , AbstractSqlLiteral from, AbstractSqlLiteral to)
-        {
-            var expression = "(" + column.ToSqlString() + " BETWEEN " + from.ToSqlString() + " AND " +
-                             to.ToSqlString() + ")";
+        //    return SqlServerCondition.Raw(writer.Build());
+        //}
 
-            return SqlServerCondition.Raw(expression);
-        }
+        //public static AbstractSqlCondition NotIn(this AbstractSqlColumn column
+        //    , params AbstractSqlExpression[] expressions)
+        //{
+        //    if (expressions.Length == 0)
+        //    {
+        //        throw new Exception("At least one element needed in -IN query needed");
+        //    }
+        //    var expression = column.ToSqlString() + " NOT IN (" +
+        //                     string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
+
+        //    return SqlServerCondition.Raw(expression);
+        //}
+        //public static AbstractSqlCondition NotIn(this AbstractSqlColumn column
+        //    , IAbstractSelectQueryBuilder selectQuery)
+        //{
+        //    var expression = column.ToSqlString() + " NOT IN (" + selectQuery + ")";
+        //    return SqlServerCondition.Raw(expression);
+        //}
+        //public static AbstractSqlCondition In(this AbstractSqlColumn column
+        //    , IAbstractSelectQueryBuilder selectQuery)
+        //{
+        //    var expression = column.ToSqlString() + "  IN (" + selectQuery + ")";
+        //    return SqlServerCondition.Raw(expression);
+        //}
+        //public static AbstractSqlCondition NotIn(this AbstractSqlColumn column
+        //    , params AbstractSqlLiteral[] expressions)
+        //{
+        //    if (expressions.Length == 0)
+        //    {
+        //        throw new Exception("At least one element needed in -IN query needed");
+        //    }
+        //    var expression = column.ToSqlString() + " NOT IN (" +
+        //                     string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
+
+        //    return SqlServerCondition.Raw(expression);
+        //}
+
+
+        //public static AbstractSqlCondition Between(this AbstractSqlColumn column
+        //    , AbstractSqlExpression from,AbstractSqlExpression to)
+        //{
+        //    var expression = "(" + column.ToSqlString() + " BETWEEN (" + from.ToSqlString() + ") AND (" +
+        //                     to.ToSqlString() + "))";
+
+        //    return SqlServerCondition.Raw(expression);
+        //}
+        //public static AbstractSqlCondition Between(this AbstractSqlColumn column
+        //    , AbstractSqlLiteral from, AbstractSqlLiteral to)
+        //{
+        //    var expression = "(" + column.ToSqlString() + " BETWEEN " + from.ToSqlString() + " AND " +
+        //                     to.ToSqlString() + ")";
+
+        //    return SqlServerCondition.Raw(expression);
+        //}
         //public static AbstractSqlCondition Between(this AbstractSqlColumn column
         //    , AbstractSqlLiteral from, AbstractSqlLiteral to)
         //{
@@ -222,163 +199,163 @@ namespace SQLEngine.SqlServer
         //    return SqlServerCondition.Raw(expression);
         //}
 
-        public static ISelectWithSelectorQueryBuilder SelectLiteral(this ISelectWithSelectorQueryBuilder builder
-            ,AbstractSqlLiteral literal)
-        {
-            return builder.Select(literal);
-        }
-        public static ISelectWithSelectorQueryBuilder Select(this ISelectWithSelectorQueryBuilder builder
-            ,string columnName)
-        {
-            return builder.Select(new SqlServerColumn(columnName));
-        }
-        public static ISelectWithSelectorQueryBuilder SelectAs(this ISelectWithSelectorQueryBuilder builder
-            ,string columnName,string asName)
-        {
-            return builder.Select(new SqlServerColumnWithAsExpression(columnName, asName));
-        }
-        public static ISelectWithSelectorQueryBuilder SelectAs(this ISelectWithSelectorQueryBuilder builder
-            ,AbstractSqlLiteral literal,string asName)
-        {
-            var expression = literal.ToSqlString() + C.AS + asName;
-            return builder.Select(new SqlServerRawExpression(expression));
-        }
-        public static ISelectWithSelectorQueryBuilder SelectAll(this ISelectQueryBuilder builder
-            ,string tableAlias)
-        {
-            var expression = tableAlias + C.DOT + C.WILCARD;
-            return builder.Select(new SqlServerRawExpression(expression));
-        }
-        public static ISelectWithSelectorQueryBuilder SelectAll(this ISelectWithoutFromQueryBuilder builder
-            ,string tableAlias)
-        {
-            var expression = tableAlias + C.DOT + C.WILCARD;
-            return builder.Select(new SqlServerRawExpression(expression));
-        }
-        public static ISelectWithSelectorQueryBuilder SelectAs(this ISelectWithSelectorQueryBuilder builder
-            , string tableAlias, string columnName,string asName)
-        {
-            return builder.Select(new SqlServerColumnWithTableAliasAndAsExpression(columnName, tableAlias, asName));
-        }
-        public static ISelectWithSelectorQueryBuilder Select(this ISelectWithSelectorQueryBuilder builder
-            ,string columnName,string tableAlias)
-        {
-            return builder.Select(new SqlServerColumnWithTableAlias(columnName, tableAlias));
-        }
-        
-        public static ISelectWithSelectorQueryBuilder Select(this ISelectWithSelectorQueryBuilder builder
-            ,AbstractSqlVariable variable)
-        {
-            return builder.Select(variable);
-        }
-        
-        public static void Return(this IProcedureBodyQueryBuilder builder, AbstractSqlLiteral literal)
-        {
-            builder.Return(literal);
-        }
-        public static void Return(this IFunctionBodyQueryBuilder builder, AbstractSqlLiteral literal)
-        {
-            builder.Return(literal);
-        }
-        public static ICreateProcedureWithArgumentQueryBuilder Parameter<T>(this ICreateProcedureQueryBuilder builder,string argName)
-        {
-            var typeSql = DetectSqlType<T>();
-            return builder.Parameter(argName, typeSql);
-        }
-        public static ICreateProcedureWithArgumentQueryBuilder ParameterOut<T>(
-            this ICreateProcedureQueryBuilder builder,string argName)
-        {
-            var typeSql = DetectSqlType<T>();
-            return builder.ParameterOut(argName, typeSql);
-        }
-        public static ICreateProcedureWithArgumentQueryBuilder Parameter<T>(this ICreateProcedureWithArgumentQueryBuilder builder,string argName)
-        {
-            var typeSql = DetectSqlType<T>();
-            return builder.Parameter(argName, typeSql);
-        }
-        public static ICreateProcedureWithArgumentQueryBuilder ParameterOut<T>(
-            this ICreateProcedureWithArgumentQueryBuilder builder,string argName)
-        {
-            var typeSql = DetectSqlType<T>();
-            return builder.ParameterOut(argName, typeSql);
-        }
-        public static ICreateFunctionNoNameAndParametersAndReturnTypeQueryBuilder Returns<T>(
-            this ICreateFunctionNoNameQueryBuilder builder)
-        {
-            var typeSql = DetectSqlType<T>();
-            return builder.Returns(typeSql);
-        }
-        public static ICreateFunctionNoNameQueryBuilder Parameter<T>(this ICreateFunctionNoNameQueryBuilder builder,
-            string paramName)
-        {
-            var sqlType = DetectSqlType<T>();
-            return builder.Parameter(paramName, sqlType);
-        }
-        public static void If(this IQueryBuilder builder,AbstractSqlCondition condition)
-        {
-            builder.If(condition);
-        }
-        public static void ElseIf(this IQueryBuilder builder,AbstractSqlCondition condition)
-        {            
-            builder.ElseIf(condition);
-        }
-        public static IInsertNoValuesQueryBuilder Values(this IInsertWithValuesQueryBuilder builder,
-            Dictionary<string, AbstractSqlLiteral> colsAndValues)
-        {
-            var colsAndValuesReformed = colsAndValues.ToDictionary(x => x.Key,
-                x => (ISqlExpression) x.Value);
+        //public static ISelectWithSelectorQueryBuilder SelectLiteral(this ISelectWithSelectorQueryBuilder builder
+        //    ,AbstractSqlLiteral literal)
+        //{
+        //    return builder.Select(literal);
+        //}
+        //public static ISelectWithSelectorQueryBuilder Select(this ISelectWithSelectorQueryBuilder builder
+        //    ,string columnName)
+        //{
+        //    return builder.Select(new SqlServerColumn(columnName));
+        //}
+        //public static ISelectWithSelectorQueryBuilder SelectAs(this ISelectWithSelectorQueryBuilder builder
+        //    ,string columnName,string asName)
+        //{
+        //    return builder.Select(new SqlServerColumnWithAsExpression(columnName, asName));
+        //}
+        //public static ISelectWithSelectorQueryBuilder SelectAs(this ISelectWithSelectorQueryBuilder builder
+        //    ,AbstractSqlLiteral literal,string asName)
+        //{
+        //    var expression = literal.ToSqlString() + C.AS + asName;
+        //    return builder.Select(new SqlServerRawExpression(expression));
+        //}
+        //public static ISelectWithSelectorQueryBuilder SelectAll(this ISelectQueryBuilder builder
+        //    ,string tableAlias)
+        //{
+        //    var expression = tableAlias + C.DOT + C.WILCARD;
+        //    return builder.Select(new SqlServerRawExpression(expression));
+        //}
+        //public static ISelectWithSelectorQueryBuilder SelectAll(this ISelectWithoutFromQueryBuilder builder
+        //    ,string tableAlias)
+        //{
+        //    var expression = tableAlias + C.DOT + C.WILCARD;
+        //    return builder.Select(new SqlServerRawExpression(expression));
+        //}
+        //public static ISelectWithSelectorQueryBuilder SelectAs(this ISelectWithSelectorQueryBuilder builder
+        //    , string tableAlias, string columnName,string asName)
+        //{
+        //    return builder.Select(new SqlServerColumnWithTableAliasAndAsExpression(columnName, tableAlias, asName));
+        //}
+        //public static ISelectWithSelectorQueryBuilder Select(this ISelectWithSelectorQueryBuilder builder
+        //    ,string columnName,string tableAlias)
+        //{
+        //    return builder.Select(new SqlServerColumnWithTableAlias(columnName, tableAlias));
+        //}
 
-            return builder.Values(colsAndValuesReformed);
-        }
-        public static IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(this IUpdateNoTableSingleValueQueryBuilder builder,
-            string columnName, AbstractSqlLiteral right)
-        {
-            return builder.WhereColumnEquals(columnName, right);
-        }
-        public static IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnLike(this IUpdateNoTableSingleValueQueryBuilder builder,
-            string columnName, AbstractSqlLiteral right)
-        {
-            return builder.WhereColumnLike(columnName, right);
-        }
-        public static IUpdateNoTableSingleValueQueryBuilder Value(
-            this IUpdateNoTableSingleValueQueryBuilder builder,
-            string columnName, AbstractSqlLiteral columnValue)
-        {
-            return builder.Value(columnName, columnValue);
-        }
-        public static IUpdateNoTableSingleValueQueryBuilder Value(this IUpdateNoTableQueryBuilder builder,
-            string columnName, 
-            AbstractSqlLiteral columnValue)
-        {
-            return builder.Value(columnName, columnValue);
-        }
-        public static IInsertNeedValueQueryBuilder Value(this IInsertNoIntoQueryBuilder builder, 
-            string columnName, AbstractSqlLiteral columnValue)
-        {
-            return builder.Value(columnName, columnValue);
-        }
-        public static IInsertNeedValueQueryBuilder Value(this IInsertNeedValueQueryBuilder builder, 
-            string columnName, AbstractSqlLiteral columnValue)
-        {
-            return builder.Value(columnName, columnValue);
-        }
-        
-        public static AbstractSqlVariable Declare<T>(this IQueryBuilder builder,
-            string variableName)
-        {
-            var sqlType = DetectSqlType<T>();
-            return builder.Declare(variableName, sqlType);
-        }
+        //public static ISelectWithSelectorQueryBuilder Select(this ISelectWithSelectorQueryBuilder builder
+        //    ,AbstractSqlVariable variable)
+        //{
+        //    return builder.Select(variable);
+        //}
 
-        public static AbstractSqlVariable Declare(this IQueryBuilder builder, 
-            string variableName, string type, AbstractSqlLiteral defaultValue = null)
-        {
-            return builder.Declare(variableName, type, defaultValue);
-        }
-        public static void Set(this IQueryBuilder builder, AbstractSqlVariable variable, AbstractSqlLiteral value)
-        {
-            builder.Set(variable, value);
-        }
+        //public static void Return(this IProcedureBodyQueryBuilder builder, AbstractSqlLiteral literal)
+        //{
+        //    builder.Return(literal);
+        //}
+        //public static void Return(this IFunctionBodyQueryBuilder builder, AbstractSqlLiteral literal)
+        //{
+        //    builder.Return(literal);
+        //}
+        //public static ICreateProcedureWithArgumentQueryBuilder Parameter<T>(this ICreateProcedureQueryBuilder builder,string argName)
+        //{
+        //    var typeSql = DetectSqlType<T>();
+        //    return builder.Parameter(argName, typeSql);
+        //}
+        //public static ICreateProcedureWithArgumentQueryBuilder ParameterOut<T>(
+        //    this ICreateProcedureQueryBuilder builder,string argName)
+        //{
+        //    var typeSql = DetectSqlType<T>();
+        //    return builder.ParameterOut(argName, typeSql);
+        //}
+        //public static ICreateProcedureWithArgumentQueryBuilder Parameter<T>(this ICreateProcedureWithArgumentQueryBuilder builder,string argName)
+        //{
+        //    var typeSql = DetectSqlType<T>();
+        //    return builder.Parameter(argName, typeSql);
+        //}
+        //public static ICreateProcedureWithArgumentQueryBuilder ParameterOut<T>(
+        //    this ICreateProcedureWithArgumentQueryBuilder builder,string argName)
+        //{
+        //    var typeSql = DetectSqlType<T>();
+        //    return builder.ParameterOut(argName, typeSql);
+        //}
+        //public static ICreateFunctionNoNameAndParametersAndReturnTypeQueryBuilder Returns<T>(
+        //    this ICreateFunctionNoNameQueryBuilder builder)
+        //{
+        //    var typeSql = DetectSqlType<T>();
+        //    return builder.Returns(typeSql);
+        //}
+        //public static ICreateFunctionNoNameQueryBuilder Parameter<T>(this ICreateFunctionNoNameQueryBuilder builder,
+        //    string paramName)
+        //{
+        //    var sqlType = DetectSqlType<T>();
+        //    return builder.Parameter(paramName, sqlType);
+        //}
+        //public static void If(this IQueryBuilder builder,AbstractSqlCondition condition)
+        //{
+        //    builder.If(condition);
+        //}
+        //public static void ElseIf(this IQueryBuilder builder,AbstractSqlCondition condition)
+        //{            
+        //    builder.ElseIf(condition);
+        //}
+        //public static IInsertNoValuesQueryBuilder Values(this IInsertWithValuesQueryBuilder builder,
+        //    Dictionary<string, AbstractSqlLiteral> colsAndValues)
+        //{
+        //    var colsAndValuesReformed = colsAndValues.ToDictionary(x => x.Key,
+        //        x => (ISqlExpression) x.Value);
+
+        //    return builder.Values(colsAndValuesReformed);
+        //}
+        //public static IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(this IUpdateNoTableSingleValueQueryBuilder builder,
+        //    string columnName, AbstractSqlLiteral right)
+        //{
+        //    return builder.WhereColumnEquals(columnName, right);
+        //}
+        //public static IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnLike(this IUpdateNoTableSingleValueQueryBuilder builder,
+        //    string columnName, AbstractSqlLiteral right)
+        //{
+        //    return builder.WhereColumnLike(columnName, right);
+        //}
+        //public static IUpdateNoTableSingleValueQueryBuilder Value(
+        //    this IUpdateNoTableSingleValueQueryBuilder builder,
+        //    string columnName, AbstractSqlLiteral columnValue)
+        //{
+        //    return builder.Value(columnName, columnValue);
+        //}
+        //public static IUpdateNoTableSingleValueQueryBuilder Value(this IUpdateNoTableQueryBuilder builder,
+        //    string columnName, 
+        //    AbstractSqlLiteral columnValue)
+        //{
+        //    return builder.Value(columnName, columnValue);
+        //}
+        //public static IInsertNeedValueQueryBuilder Value(this IInsertNoIntoQueryBuilder builder, 
+        //    string columnName, AbstractSqlLiteral columnValue)
+        //{
+        //    return builder.Value(columnName, columnValue);
+        //}
+        //public static IInsertNeedValueQueryBuilder Value(this IInsertNeedValueQueryBuilder builder, 
+        //    string columnName, AbstractSqlLiteral columnValue)
+        //{
+        //    return builder.Value(columnName, columnValue);
+        //}
+
+        //public static AbstractSqlVariable Declare<T>(this IQueryBuilder builder,
+        //    string variableName)
+        //{
+        //    var sqlType = DetectSqlType<T>();
+        //    return builder.Declare(variableName, sqlType);
+        //}
+
+        //public static AbstractSqlVariable Declare(this IQueryBuilder builder, 
+        //    string variableName, string type, AbstractSqlLiteral defaultValue = null)
+        //{
+        //    return builder.Declare(variableName, type, defaultValue);
+        //}
+        //public static void Set(this IQueryBuilder builder, AbstractSqlVariable variable, AbstractSqlLiteral value)
+        //{
+        //    builder.Set(variable, value);
+        //}
 
         //public static string ColumnGreaterThan(this IConditionFilterQueryHelper helper, string columnName, AbstractSqlLiteral value)
         //{
@@ -389,11 +366,11 @@ namespace SQLEngine.SqlServer
         //    return helper.ColumnLessThan(columnName, value);
         //}
 
-        public static ISelectWithoutWhereQueryBuilder WhereColumnEquals(this ISelectWhereQueryBuilder builder,
-            string columnName, AbstractSqlLiteral right)
-        {
-            return builder.WhereColumnEquals(columnName, right);
-        }
+        //public static ISelectWithoutWhereQueryBuilder WhereColumnEquals(this ISelectWhereQueryBuilder builder,
+        //    string columnName, AbstractSqlLiteral right)
+        //{
+        //    return builder.WhereColumnEquals(columnName, right);
+        //}
         public static void SetNoCountOn(this SqlServerQueryBuilder builder)
         {
             builder.AddExpression("SET NOCOUNT ON;");

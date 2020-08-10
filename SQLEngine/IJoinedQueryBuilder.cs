@@ -29,6 +29,12 @@
 
     public interface IJoinedNeedsOnEqualsToQueryBuilder : IAbstractQueryBuilder
     {
+        /// <summary>
+        /// If sourceTableAlias not specified then we will use main table alias
+        /// </summary>
+        /// <param name="sourceTableColumnName"></param>
+        /// <returns></returns>
+        IJoinedQueryBuilder IsEqualsTo(string sourceTableColumnName);
         IJoinedQueryBuilder IsEqualsTo(string sourceTableColumnName, string sourceTableAlias);
     }
 }

@@ -39,6 +39,39 @@
             _expression = expression;
             _functionName = C.AVG;
             return this;
+        }public IAggregateFunctionBuilder Min(AbstractSqlColumn column)
+        {
+            _expression = column;
+            _functionName = C.MIN;
+            return this;
+        }
+
+        public IAggregateFunctionBuilder Max(AbstractSqlColumn column)
+        {
+            _expression = column;
+            _functionName = C.MAX;
+            return this;
+        }
+
+        public IAggregateFunctionBuilder Count(AbstractSqlColumn column)
+        {
+            _expression = column;
+            _functionName = C.COUNT;
+            return this;
+        }
+
+        public IAggregateFunctionBuilder Sum(AbstractSqlColumn column)
+        {
+            _expression = column;
+            _functionName = C.SUM;
+            return this;
+        }
+
+        public IAggregateFunctionBuilder Avg(AbstractSqlColumn column)
+        {
+            _expression = column;
+            _functionName = C.AVG;
+            return this;
         }
 
         public IAggregateFunctionBuilder Distinct()
@@ -52,6 +85,34 @@
             _isDistinct = false;
             return this;
         }
+
+
+        public IAggregateFunctionBuilder Min(string columnName)
+        {
+            return Min(new SqlServerColumn(columnName));
+        }
+
+        public IAggregateFunctionBuilder Max(string columnName)
+        {
+            return Max(new SqlServerColumn(columnName));
+        }
+
+        public IAggregateFunctionBuilder Count(string columnName)
+        {
+            return Count(new SqlServerColumn(columnName));
+        }
+
+        public IAggregateFunctionBuilder Sum(string columnName)
+        {
+            return Sum(new SqlServerColumn(columnName));
+        }
+
+        public IAggregateFunctionBuilder Avg(string columnName)
+        {
+            return Avg(new SqlServerColumn(columnName));
+        }
+
+
 
         public override void Build(ISqlWriter writer)
         {

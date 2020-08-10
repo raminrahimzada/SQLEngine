@@ -391,6 +391,8 @@ SELECT TOP(1)   *
             }
         }
 
+       
+
         [TestMethod]
         public void Test_Left_Select_Simple_Join_4()
         {
@@ -434,6 +436,31 @@ SELECT TOP(1)   *
 SELECT TOP(1)   * 
     FROM Customers AS C
 	Left JOIN Orders AS O ON O.PartnerId = C.CustomerPartnerId
+
+";
+
+                SqlAssert.AreEqualQuery(q.ToString(), query);
+            }
+        }
+
+        [TestMethod]
+        public void Test_Left_Select_Simple_Join_6()
+        {
+            using (var q = Query.New)
+            {
+                q
+                    .Select
+                    .Top(1)
+                    .From<CustomerTable>("C")
+                    .LeftJoin<OrderTable>("O")
+                    .OnColumn("CustomerId", "O")
+                    .IsEqualsTo("Id")
+                    ;
+
+                const string query = @" 
+SELECT TOP(1)   * 
+    FROM Customers AS C
+	Left JOIN Orders AS O ON O.CustomerId = C.Id
 
 ";
 

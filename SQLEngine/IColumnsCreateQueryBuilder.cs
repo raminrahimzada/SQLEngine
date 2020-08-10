@@ -5,6 +5,7 @@
         byte DefaultPrecision { get; }
         byte DefaultScale { get; }
         IColumnQueryBuilder Column(string columnName);
+        IColumnQueryBuilder Column<T>(string columnName);
         IColumnQueryBuilder Datetime(string columnName);
         IColumnQueryBuilder Long(string columnName);
         IColumnQueryBuilder Int(string columnName);

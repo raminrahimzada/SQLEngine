@@ -385,35 +385,106 @@ namespace SQLEngine.SqlServer
                     C.NULL
                 ));
         }
+        public override AbstractSqlCondition Between(AbstractSqlLiteral from, AbstractSqlLiteral to)
+        {
+            var expression = "(" + this.ToSqlString() + " BETWEEN " + from.ToSqlString() + " AND " +
+                             to.ToSqlString() + ")";
 
+            return SqlServerCondition.Raw(expression);
+        }
+        public override AbstractSqlCondition Between(ISqlExpression from, ISqlExpression to)
+        {
+            var expression = "(" + this.ToSqlString() + " BETWEEN " + from.ToSqlString() + " AND " +
+                             to.ToSqlString() + ")";
+
+            return SqlServerCondition.Raw(expression);
+        }
+        public override AbstractSqlCondition In(Action<ISelectQueryBuilder> builderFunc)
+        {
+            var writer = SqlWriter.New;
+            writer.Write(this.ToSqlString());
+            writer.Write(C.SPACE);
+            writer.Write(C.IN);
+            writer.Write(C.SPACE);
+            writer.Write(C.BEGIN_SCOPE);
+            using (var builder = new SelectQueryBuilder())
+            {
+                builderFunc(builder);
+                builder.Build(writer);
+            }
+            writer.Write(C.END_SCOPE);
+
+            return SqlServerCondition.Raw(writer.Build());
+        }
+        public override AbstractSqlCondition In(params AbstractSqlLiteral[] expressions)
+        {
+            if (expressions.Length == 0)
+            {
+                throw new Exception("At least one element needed in -IN query needed");
+            }
+            var expression = this.ToSqlString() + " IN (" +
+                             string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
+
+            return SqlServerCondition.Raw(expression);
+        }
+        public override AbstractSqlCondition NotIn(params AbstractSqlLiteral[] expressions)
+        {
+            if (expressions.Length == 0)
+            {
+                throw new Exception("At least one element needed in -NOT IN query needed");
+            }
+            var expression = this.ToSqlString() + " NOT IN (" +
+                             string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
+
+            return SqlServerCondition.Raw(expression);
+        }
+        public override AbstractSqlCondition NotIn(Action<ISelectQueryBuilder> builderFunc)
+        {
+            var writer = SqlWriter.New;
+            writer.Write(this.ToSqlString());
+            writer.Write(C.SPACE);
+            writer.Write(C.NOT);
+            writer.Write(C.SPACE);
+            writer.Write(C.IN);
+            writer.Write(C.SPACE);
+            writer.Write(C.BEGIN_SCOPE);
+            using (var builder = new SelectQueryBuilder())
+            {
+                builderFunc(builder);
+                builder.Build(writer);
+            }
+            writer.Write(C.END_SCOPE);
+
+            return SqlServerCondition.Raw(writer.Build());
+        }
         protected override AbstractSqlExpression Add(AbstractSqlColumn right)
         {
-            return new SqlServerRawExpression(ToSqlString() + "+" + right.ToSqlString());
+            return new SqlServerRawExpression(ToSqlString() ,C.PLUS, right.ToSqlString());
         }
 
         protected override AbstractSqlExpression Subtract(AbstractSqlColumn right)
         {
-            return new SqlServerRawExpression(ToSqlString() + "-" + right.ToSqlString());
+            return new SqlServerRawExpression(ToSqlString() ,C.MINUS, right.ToSqlString());
         }
 
         protected override AbstractSqlExpression Divide(AbstractSqlColumn right)
         {
-            return new SqlServerRawExpression(ToSqlString() + "/" + right.ToSqlString());
+            return new SqlServerRawExpression(ToSqlString() ,C.DIVIDE, right.ToSqlString());
         }
 
         protected override AbstractSqlExpression Multiply(AbstractSqlColumn right)
         {
-            return new SqlServerRawExpression(ToSqlString() + "*" + right.ToSqlString());
+            return new SqlServerRawExpression(ToSqlString() ,C.MULTIPLY, right.ToSqlString());
         }
 
         protected override AbstractSqlExpression Add(AbstractSqlLiteral right)
         {
-            return new SqlServerRawExpression(ToSqlString() + "+" + right.ToSqlString());
+            return new SqlServerRawExpression(ToSqlString(),C.ADD,right.ToSqlString());
         }
 
         protected override AbstractSqlExpression Subtract(AbstractSqlLiteral right)
         {
-            return new SqlServerRawExpression(ToSqlString() + "-" + right.ToSqlString());
+            return new SqlServerRawExpression(ToSqlString(), C.MINUS, right.ToSqlString());
         }
 
         protected override AbstractSqlExpression Divide(AbstractSqlLiteral right)

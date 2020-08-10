@@ -83,38 +83,6 @@ namespace SQLEngine.SqlServer
         public IDropQueryBuilder Drop => _Add(new DropQueryBuilder());
         public IExecuteQueryBuilder Execute => _Add(new ExecuteQueryBuilder());   
 
-        private AbstractSqlExpression _null;
-        public AbstractSqlExpression Null
-        {
-            get
-            {
-                if (_null != null) return _null;
-                _null = new SqlServerRawExpression(C.NULL);
-                return _null;
-            }
-        }
-        private AbstractSqlExpression _now;
-        public AbstractSqlExpression Now
-        {
-            get
-            {
-                if (_now != null) return _now;
-                _now = new SqlServerRawExpression("GETDATE()");
-                return _now;
-            }
-        }
-        public ISelectQueryBuilder _select => (new SelectQueryBuilder());
-        public IUpdateQueryBuilder _update => (new UpdateQueryBuilder());
-        public IDeleteQueryBuilder _delete => (new DeleteQueryBuilder());
-        public IInsertQueryBuilder _insert => (new InsertQueryBuilder());
-        public IAlterQueryBuilder _alter => (new AlterQueryBuilder());
-        
-        public ICreateQueryBuilder _create => (new CreateQueryBuilder());
-        
-        public IDropQueryBuilder _drop => (new DropQueryBuilder());
-        public IExecuteQueryBuilder _execute => (new ExecuteQueryBuilder());
-
-
         public IConditionFilterQueryHelper Helper { get; } = new SqlServerConditionFilterQueryHelper();
 
         public void Union()
@@ -204,6 +172,13 @@ namespace SQLEngine.SqlServer
             var expression = t.Table(tableName);
             _list.Add(expression);
         }
+        public void Truncate<TTable>() where TTable : ITable, new()
+        {
+            using (var table=new TTable())
+            {
+                Truncate(table.Name);
+            }
+        }
 
         public IIfQueryBuilder IfOr(params AbstractSqlCondition[] conditions)
         {
@@ -222,6 +197,10 @@ namespace SQLEngine.SqlServer
         public IIfQueryBuilder If(AbstractSqlCondition condition)
         {
             return _Add(new IfQueryBuilder(condition));            
+        }
+        public IIfQueryBuilder IfNot(AbstractSqlCondition condition)
+        {
+            return _Add(new IfNotQueryBuilder(condition));            
         }
         public IIfQueryBuilder IfExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> func)
         {
@@ -270,11 +249,11 @@ namespace SQLEngine.SqlServer
             }));
         }
 
-        public void AddExpression(string expression)
+        public void AddExpression(string rawExpression)
         {
             _list.Add(new RawStringQueryBuilder(w =>
             {
-                w.WriteLine(expression);
+                w.WriteLine(rawExpression);
             }));
         }
 
@@ -287,7 +266,12 @@ namespace SQLEngine.SqlServer
             }));
         }
 
-      
+
+        public AbstractSqlVariable DeclareRandom<T>(string variableName, AbstractSqlLiteral defaultValue)
+        {
+            var type = Query.Settings.TypeConvertor.ToSqlType<T>();
+            return DeclareRandom(variableName, type, defaultValue);
+        }
 
         public AbstractSqlVariable DeclareRandom(string variableName, string type, AbstractSqlLiteral defaultValue)
         {
@@ -334,6 +318,17 @@ namespace SQLEngine.SqlServer
                 return new SqlServerVariable(variableName);
             }
         }
+        public AbstractSqlVariable Declare<T>(string variableName)
+        {
+            var t = new DeclarationQueryBuilder();
+            {
+                var type = Query.Settings.TypeConvertor.ToSqlType<T>();
+                var expression = t.Declare(variableName).OfType(type);
+                _list.Add(expression);
+                return new SqlServerVariable(variableName);
+            }
+        }
+
         public AbstractSqlVariable Declare(string variableName, string type, ISqlExpression defaultValue)
         {
             var t = new DeclarationQueryBuilder();
@@ -639,6 +634,10 @@ namespace SQLEngine.SqlServer
             return AbstractSqlLiteral.From(x);
         }
         public AbstractSqlLiteral Literal(decimal? x)
+        {
+            return AbstractSqlLiteral.From(x);
+        }
+        public AbstractSqlLiteral Literal(decimal x)
         {
             return AbstractSqlLiteral.From(x);
         }

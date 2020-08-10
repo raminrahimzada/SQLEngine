@@ -73,10 +73,10 @@
         public const string UNIQUE = "UNIQUE";
         public const string CHECK = "CHECK";
         public const string ADD = "ADD";
-        public const string _PLUS = "+";
-        public const string _MINUS = "-";
-        public const string _MULTIPLY = "*";
-        public const string _DIVIDE = "/";
+        public const string PLUS = "+";
+        public const string MINUS = "-";
+        public const string MULTIPLY = "*";
+        public const string DIVIDE = "/";
         public const string DESC = "DESC";
         public const string ASC = "ASC";
         public const string KEY = "KEY";
@@ -114,9 +114,6 @@
         public const string BEGIN = "BEGIN";
         public const string END = "END";
         public const string GROUP = "GROUP";
-        public const string INNERJOIN = "INNER JOIN";
-        public const string LEFTJOIN = "LEFT JOIN";
-        public const string RIGHTJOIN = "RIGHT JOIN";
         public const string AS = "AS";
         public const string PERSISTED = "PERSISTED";
         public const string ON = "ON";

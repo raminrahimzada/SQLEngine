@@ -515,6 +515,13 @@ namespace SQLEngine
         public abstract AbstractSqlCondition IsNull();
         public abstract AbstractSqlCondition IsNotNull();
 
+        public abstract AbstractSqlCondition Between(AbstractSqlLiteral from, AbstractSqlLiteral to);
+        public abstract AbstractSqlCondition Between(ISqlExpression from, ISqlExpression to);
+
+        public abstract AbstractSqlCondition In(Action<ISelectQueryBuilder> builderFunc);
+        public abstract AbstractSqlCondition NotIn(Action<ISelectQueryBuilder> builderFunc);
+        public abstract AbstractSqlCondition In(params AbstractSqlLiteral[] expressions);
+        public abstract AbstractSqlCondition NotIn(params AbstractSqlLiteral[] expressions);
 
         protected abstract AbstractSqlExpression Add(AbstractSqlColumn right);
         protected abstract AbstractSqlExpression Subtract(AbstractSqlColumn right);

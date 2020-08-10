@@ -11,6 +11,11 @@
             builder.Name(columnName);
             return builder;
         }
+        public IColumnQueryBuilder Column<T>(string columnName)
+        {
+            var type = Query.Settings.TypeConvertor.ToSqlType<T>();
+            return this.Column(columnName).Type(type);
+        }
 
         public IColumnQueryBuilder Datetime(string columnName)
         {

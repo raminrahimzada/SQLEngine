@@ -63,8 +63,8 @@ EXECUTE addUser  @Name=N'Nikola'
             using (var q = Query.New)
             {
                 var execution =
-                        q
-                            ._execute
+                        Query.New
+                            .Execute
                             .Function("UserExists")
                             .Schema("dbo")
                             .Arg("Nikola") //Name

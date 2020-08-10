@@ -229,7 +229,12 @@ namespace SQLEngine.SqlServer
             _selectors.Add(column);
             return this;
         }
-        public ISelectWithSelectorQueryBuilder Select(AbstractSqlLiteral literal)
+        public ISelectWithSelectorQueryBuilder Select(string columnName)
+        {
+            _selectors.Add(new SqlServerColumn(columnName));
+            return this;
+        }
+        public ISelectWithSelectorQueryBuilder SelectLiteral(AbstractSqlLiteral literal)
         {
             _selectors.Add(literal);
             return this;
@@ -242,7 +247,7 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public ISelectWithSelectorQueryBuilder Select(ISqlExpression selector, string alias)
+        public ISelectWithSelectorQueryBuilder SelectAs(ISqlExpression selector, string alias)
         {
             MutateAliasName(ref alias);
             _selectors.Add($"{selector} {C.AS} {alias}");
@@ -517,6 +522,14 @@ namespace SQLEngine.SqlServer
             _orderByClauses.Add(new OrderByQueryModel(column));
             return this;
         }
+        public ISelectOrderBuilder OrderBy(string columnName)
+        {
+            return OrderBy(new SqlServerColumn(columnName));
+        }
+        public ISelectOrderBuilder OrderByDesc(string columnName)
+        {
+            return OrderByDesc(new SqlServerColumn(columnName));
+        }
 
         public ISelectOrderBuilder OrderByDesc(AbstractSqlColumn column)
         {
@@ -544,6 +557,10 @@ namespace SQLEngine.SqlServer
         {
             _groupByClauses.Add(column.ToSqlString());
             return this;
+        }
+        public ISelectWithoutFromAndGroupQueryBuilder GroupBy(string columnName)
+        {
+            return GroupBy(new SqlServerColumn(columnName));
         }
 
         public ISelectWithSelectorQueryBuilder Select(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate)
@@ -657,6 +674,10 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
+        public IJoinedQueryBuilder IsEqualsTo(string sourceTableColumnName)
+        {
+            return IsEqualsTo(sourceTableColumnName, _mainTableAlias);
+        }
         public IJoinedQueryBuilder IsEqualsTo(string sourceTableColumnName, string sourceTableAlias)
         {
             using (var q = Query.New)

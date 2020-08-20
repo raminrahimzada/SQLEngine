@@ -16,7 +16,6 @@
             var type = Query.Settings.TypeConvertor.ToSqlType<T>();
             return this.Column(columnName).Type(type);
         }
-
         public IColumnQueryBuilder Datetime(string columnName)
         {
             return New<ColumnQueryBuilder>().Name(columnName).Type(C.DATETIME);
@@ -25,7 +24,6 @@
         {
             return New<ColumnQueryBuilder>().Name(columnName).Type(C.BIGINT);
         }
-
         public IColumnQueryBuilder Int(string columnName)
         {
             return New<ColumnQueryBuilder>().Name(columnName).Type(C.INT);
@@ -42,13 +40,11 @@
         {
             return New<ColumnQueryBuilder>().Name(columnName).Type(C.TINYINT);
         }
-
         public IColumnQueryBuilder String(string columnName, bool isUniCode = true, bool isVariable = true)
         {
             var type = isVariable ? isUniCode ? C.NVARCHAR : C.VARCHAR : isUniCode ? C.NCHAR : C.CHAR;
             return New<ColumnQueryBuilder>().Name(columnName).Type(type);
         }
-
         public IColumnQueryBuilder Decimal(string columnName)
         {
             return New<ColumnQueryBuilder>().Name(columnName).Type(C.DECIMAL).Precision(DefaultPrecision).Scale(DefaultScale);
@@ -57,17 +53,14 @@
         {
             return New<ColumnQueryBuilder>().Name(columnName).Type(C.DECIMAL).Precision(precision).Scale(scale);
         }
-
         public IColumnQueryBuilder Bool(string columnName)
         {
             return New<ColumnQueryBuilder>().Name(columnName).Type(C.BIT);
         }
-
         public IColumnQueryBuilder Short(string columnName)
         {
             return New<ColumnQueryBuilder>().Name(columnName).Type(C.SMALLINT);
         }
-
         public override void Build(ISqlWriter writer)
         {
             throw Bomb();

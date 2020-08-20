@@ -9,6 +9,7 @@ namespace SQLEngine.Tests
         {
             using (var q = Query.New)
             {
+                
                 q
                     .Alter
                     .Table("Users")

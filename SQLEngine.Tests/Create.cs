@@ -20,6 +20,10 @@ namespace SQLEngine.Tests
             {
                 var now = b.Helper.Now;
                 var age = b.Column("Age");
+
+                var amount1 = b.Column("Amount1");
+                var amount2 = b.Column("Amount2");
+
                 b.Create.Table("Employees")
                     .Columns(c => new[]
                     {
@@ -31,7 +35,7 @@ namespace SQLEngine.Tests
                         c.Decimal("Weight"),
 
                         //custom column with all props
-                        c.Column("Age").Type("INT").Check(age>18&age<100),
+                        c.Column<byte>("Age").Check(age > 18 & age < 100),
                         c.Datetime("BirthDate").DefaultValue(now),
                         c.Bool("HasDriverLicense"),
 
@@ -41,10 +45,34 @@ namespace SQLEngine.Tests
                         c.Decimal("Amount2").Unique("IX_Amount1_Amount2"),
 
                         //calculated column
-                        c.Column("Sum").CalculatedColumn("Amount1 + Amount2"),
+                        c.Column("SumAmount").CalculatedColumn(amount1 + amount2),
                     });
+                
+                var query = @"
+CREATE TABLE Employees  ( 
+    ID BIGINT IDENTITY(1,1) NOT NULL,
+    UserID BIGINT  NOT NULL CHECK  ( UserID>0 )  ,
+    Name NVARCHAR (50) NULL,
+    Weight DECIMAL (18,4) NULL,
+    Age TINYINT NULL CHECK  ( (Age > 18) AND (Age < 100) )  ,
+    BirthDate DATETIME NULL,
+    HasDriverLicense BIT NULL,
+    Amount1 DECIMAL (18,4) NULL,
+    Amount2 DECIMAL (18,4) NULL,
+    SumAmount AS (Amount1+Amount2) PERSISTED
+ ) 
 
-                var query = b.ToString();
+ALTER TABLE Employees ADD CONSTRAINT PK_Employees_ID PRIMARY KEY CLUSTERED ( ID);
+ALTER TABLE Employees ADD CONSTRAINT IX_Employees_Name UNIQUE(Name ASC);
+ALTER TABLE Employees ADD CONSTRAINT IX_Amount1_Amount2 UNIQUE(Amount1 DESC , Amount2 ASC);
+ALTER TABLE Employees WITH CHECK ADD CONSTRAINT FK_Employees_UserID__USERS_ID FOREIGN KEY (UserID) REFERENCES USERS( ID );
+ALTER TABLE Employees CHECK CONSTRAINT FK_Employees_UserID__USERS_ID ;
+ALTER TABLE Employees ADD CONSTRAINT DF_EmployeesBirthDate DEFAULT(GETDATE()) FOR BirthDate;
+
+";
+                ;
+                SqlAssert.AreEqualQuery(query, b.Build());
+                ;
             }
         }
 

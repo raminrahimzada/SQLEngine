@@ -80,7 +80,7 @@ namespace SQLEngine.SqlServer
             }
             writer.Indent--;
             writer.Write2(C.END_SCOPE);
-            writer.WriteLine();
+            writer.WriteLine(C.SEMICOLON);
 
             //PK list
             {
@@ -90,7 +90,7 @@ namespace SQLEngine.SqlServer
                     var pkGroups = pkList.GroupBy(pk => pk.PrimaryKeyName).ToArray();
                     if (pkGroups.Any())
                     {
-                        writer.WriteLineComment($"Primary Keys List {_tableName}");
+                        //writer.WriteLineComment($"Primary Keys List {_tableName}");
                         writer.WriteLine();
                     }
                     foreach (var pkGroup in pkGroups)
@@ -103,25 +103,19 @@ namespace SQLEngine.SqlServer
                         }
                         writer.Write(C.ALTER);
                         writer.Write2(C.TABLE);
-                        writer.Write2(I(_tableName));
+                        writer.Write(I(_tableName));
                         writer.Write2(C.ADD);
-                        writer.Write2(C.CONSTRAINT);
+                        writer.Write(C.CONSTRAINT);
                         writer.Write2(I(pkName));
-                        writer.Write2(C.PRIMARY);
+                        writer.Write(C.PRIMARY);
                         writer.Write2(C.KEY);
-                        writer.Write2(C.CLUSTERED);
-                        writer.WriteLine();
+                        writer.Write(C.CLUSTERED);
                         writer.Write2(C.BEGIN_SCOPE);
-                        writer.WriteLine();
                         writer.Indent++;
-                        writer.WriteLineJoined(pkGroup.Select(pkg => I(pkg.Name)).ToArray());
+                        writer.WriteJoined(pkGroup.Select(pkg => I(pkg.Name)).ToArray());
                         writer.Indent--;
-                        writer.Write2(C.END_SCOPE);
-                        writer.Write(C.WITH);
-                        writer.WriteScoped(C.DEFAULT_PK_OPTIONS);
-                        writer.Write2(C.ON);
-                        writer.WriteScoped(C.PRIMARY, C.BEGIN_SQUARE, C.END_SQUARE);
-                        writer.WriteLine();
+                        writer.Write(C.END_SCOPE);
+                        writer.Write(C.SEMICOLON);
                     }
                 }
                 writer.WriteLine();
@@ -145,41 +139,30 @@ namespace SQLEngine.SqlServer
 
                 if (ukList.Any())
                 {
-
-                    writer.WriteLineComment($"List of Unique Keys of {_tableName}");
+                    //writer.WriteLineComment($"List of Unique Keys of {_tableName}");
 
                     foreach (var ukName in ukList)
                     {
                         var ukGroup = cols.Where(c => c.UniqueKeyName == ukName).ToArray();
                         writer.Write(C.ALTER);
                         writer.Write2(C.TABLE);
-                        writer.Write2(I(_tableName));
+                        writer.Write(I(_tableName));
                         writer.Write2(C.ADD);
-                        writer.Write2(C.CONSTRAINT);
+                        writer.Write(C.CONSTRAINT);
                         writer.Write2(I(ukName));
-                        writer.Write2(C.UNIQUE);
-                        writer.Write2(C.NONCLUSTERED);
-                        writer.WriteLine();
-                        writer.Write2(C.BEGIN_SCOPE);
-                        writer.Indent++;
-                        writer.WriteLine();
-                        writer.WriteLineJoined(ukGroup.Select(pkg => pkg.Name + C.SPACE +
+                        writer.Write(C.UNIQUE);
+                        writer.Write(C.BEGIN_SCOPE);
+                        //writer.Indent++;
+                        writer.WriteJoined(ukGroup.Select(pkg => pkg.Name + C.SPACE +
                                                                      (pkg.IsUniqueKeyOrderDescending ? C.DESC : C.ASC))
                             .ToArray());
 
 
-                        writer.Indent--;
-                        writer.Write2(C.END_SCOPE);
-                        writer.Write(C.WITH);
-                        writer.WriteScoped(C.DEFAULT_PK_OPTIONS);
-                        writer.Write2(C.ON);
-                        writer.WriteScoped(C.PRIMARY, C.BEGIN_SQUARE, C.END_SQUARE);
-                        writer.WriteLine();
-
+                        //writer.Indent--;
+                        writer.Write(C.END_SCOPE);
+                        writer.WriteLine(C.SEMICOLON);
                     }
-                    writer.WriteLine();
                 }
-                writer.WriteLine();
             }
 
             //FK list
@@ -188,7 +171,7 @@ namespace SQLEngine.SqlServer
                 var fkList = cols.Where(c => c.IsForeignKey ?? false).ToArray();
                 if (fkList.Any())
                 {
-                    writer.WriteLineComment($"Foreign Keys List of {_tableName}");
+                    //writer.WriteLineComment($"Foreign Keys List of {_tableName}");
                     writer.WriteLine();
 
                     foreach (var fk in fkList)
@@ -209,32 +192,32 @@ namespace SQLEngine.SqlServer
                         writer.Write2(C.TABLE);
                         writer.Write(I(_tableName));
                         writer.Write2(C.WITH);
-                        writer.Write2(C.CHECK);
+                        writer.Write(C.CHECK);
                         writer.Write2(C.ADD);
-                        writer.Write2(C.CONSTRAINT);
+                        writer.Write(C.CONSTRAINT);
                         writer.Write2(I(fkName));
-                        writer.Write2(C.FOREIGN);
+                        writer.Write(C.FOREIGN);
                         writer.Write2(C.KEY);
                         writer.WriteScoped(I(fk.Name));
                         writer.Write2(C.REFERENCES);
-                        writer.WriteLine(I(fk.ForeignKeyTableName));
+                        writer.Write(I(fk.ForeignKeyTableName));
                         writer.Write(C.BEGIN_SCOPE);
-                        writer.WriteLine();
+                        writer.Write(C.SPACE);
                         writer.Indent++;
                         writer.Write(I(fk.ForeignKeyColumnName));
-                        writer.WriteLine();
+                        writer.Write(C.SPACE);
                         writer.Indent--;
                         writer.Write(C.END_SCOPE);
 
-                        writer.WriteLine();
+                        writer.WriteLine(C.SEMICOLON);
 
                         writer.Write(C.ALTER);
                         writer.Write2(C.TABLE);
                         writer.Write(I(_tableName));
                         writer.Write2(C.CHECK);
-                        writer.Write2(C.CONSTRAINT);
+                        writer.Write(C.CONSTRAINT);
                         writer.Write2(I(fkName));
-                        writer.WriteLine();
+                        writer.WriteLine(C.SEMICOLON);
                     }
                 }
             }
@@ -247,7 +230,7 @@ namespace SQLEngine.SqlServer
                 {
                     writer.WriteLine();
 
-                    writer.WriteLineComment($"Default Values List of {_tableName}");
+                    //writer.WriteLineComment($"Default Values List of {_tableName}");
 
                     foreach (var df in defaultValues)
                     {
@@ -261,13 +244,13 @@ namespace SQLEngine.SqlServer
                         writer.Write2(C.TABLE);
                         writer.Write(I(_tableName));
                         writer.Write2(C.ADD);
-                        writer.Write2(C.CONSTRAINT);
+                        writer.Write(C.CONSTRAINT);
                         writer.Write2(I(defaultConstraintName));
-                        writer.Write2(C.DEFAULT);
+                        writer.Write(C.DEFAULT);
                         writer.WriteScoped(df.DefaultValue);
                         writer.Write2(C.FOR);
-                        writer.WriteLine(I(df.Name));
-                        writer.WriteLine();
+                        writer.Write(I(df.Name));
+                        writer.WriteLine(C.SEMICOLON);
                     }
                 }
             }

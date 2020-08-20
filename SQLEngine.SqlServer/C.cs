@@ -63,7 +63,6 @@
         public const string VARBINARYMAX = "VARBINARY(MAX)";
         public const string SMALLINT = "SMALLINT";
 
-        public const string DEFAULT_PK_OPTIONS = "PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF,IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON";
         public const string NONCLUSTERED = "NONCLUSTERED";
         public const string MAX = "MAX";
         public const string FOR = "FOR";

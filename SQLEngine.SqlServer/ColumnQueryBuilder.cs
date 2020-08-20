@@ -130,9 +130,9 @@ namespace SQLEngine.SqlServer
             if (Model.Type == C.DECIMAL)
             {
                 writer.Write(C.BEGIN_SCOPE);
-                writer.Write(Model.Precision);
+                writer.Write(Model.Precision??Query.Settings.DefaultPrecision);
                 writer.Write(C.COMMA);
-                writer.Write(Model.Scale);
+                writer.Write(Model.Scale??Query.Settings.DefaultScale);
                 writer.Write(C.END_SCOPE);
                 writer.Write(C.SPACE);
             }

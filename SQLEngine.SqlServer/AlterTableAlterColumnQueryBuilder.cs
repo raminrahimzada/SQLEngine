@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SQLEngine.SqlServer
+﻿namespace SQLEngine.SqlServer
 {
     internal class AlterTableAlterColumnQueryBuilder : AbstractQueryBuilder
         , IAlterTableNoNameAlterColumnQueryBuilder

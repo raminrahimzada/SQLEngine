@@ -1,26 +1,35 @@
-﻿//namespace SQLEngine.SqlServer
-//{
-//    internal class AlterTableDropColumnQueryBuilder : AlteredTableQueryBuilder
-//    {
-//        internal string ColumnName;
-//        public override void Build(ISqlWriter Writer)
-//        {
-//            Writer.Write(SQLKeywords.ALTER);
-//            Writer.Write2(SQLKeywords.TABLE);
-//            if (!string.IsNullOrEmpty(SchemaName))
-//            {
-//                Writer.Write(I(SchemaName));
-//                Writer.Write(SQLKeywords.DOT);
-//            }
+﻿namespace SQLEngine.SqlServer
+{
+    internal class AlterTableDropColumnQueryBuilder : AbstractQueryBuilder,
+        IAlterTableNoNameDropColumnQueryBuilder
+    {
+        private string _tableName;
+        private string _columnName;
+        public AlterTableDropColumnQueryBuilder Table(string tableName)
+        {
+            _tableName = tableName;
+            return this;
+        }
 
-//            Writer.Write(I(TableName));
-//            Writer.Write(SQLKeywords.SPACE);
-//            Writer.Write(SQLKeywords.DROP);
-//            Writer.Write2(SQLKeywords.COLUMN);
-//            Writer.Write(I(ColumnName));
-//            Writer.Write(SQLKeywords.SEMICOLON);
+        public AlterTableDropColumnQueryBuilder Column(string columnName)
+        {
+            _columnName = columnName;
+            return this;
+        }
 
-//            return;
-//        }
-//    }
-//}
+        public override void Build(ISqlWriter writer)
+        {
+            writer.Write(C.ALTER);
+            writer.Write(C.SPACE);
+            writer.Write(C.TABLE);
+            writer.Write(C.SPACE);
+            writer.Write(_tableName);
+            writer.Write(C.SPACE);
+            writer.Write(C.DROP);
+            writer.Write(C.SPACE);
+            writer.Write(C.COLUMN);
+            writer.Write(C.SPACE);
+            writer.Write(_columnName);
+        }
+    }
+}

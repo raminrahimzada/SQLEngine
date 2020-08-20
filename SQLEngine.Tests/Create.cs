@@ -18,6 +18,8 @@ namespace SQLEngine.Tests
             //demonstration of create-table query
             using (var b = Query.New)
             {
+                var now = b.Helper.Now;
+                var age = b.Column("Age");
                 b.Create.Table("Employees")
                     .Columns(c => new[]
                     {
@@ -29,8 +31,8 @@ namespace SQLEngine.Tests
                         c.Decimal("Weight"),
 
                         //custom column with all props
-                        c.Column("Age").Type("INT").Check("Age>1 && Age<100"),
-                        c.Datetime("BirthDate").DefaultValueRaw("GETDATE()"),
+                        c.Column("Age").Type("INT").Check(age>18&age<100),
+                        c.Datetime("BirthDate").DefaultValue(now),
                         c.Bool("HasDriverLicense"),
 
 

@@ -32,6 +32,13 @@
             return b;
         }
 
+        public IAlterTableNoNameDropConstraintQueryBuilder DropConstraint(string constraintName)
+        {
+            var b = new AlterTableDropConstraintQueryBuilder();
+            _internalBuilder = b.Table(_tableName).Constraint(constraintName);
+            return b;
+        }
+
         public IAlterTableNoNameRenameColumnQueryBuilder RenameColumn(string columnName)
         {
             var b = new AlterTableRenameColumnQueryBuilder();
@@ -49,6 +56,13 @@
         public IAlterTableNoNameAlterColumnNoNewTypeQueryBuilder AlterColumn<T>(string columnName)
         {
             return AlterColumn(columnName).Type<T>();
+        }
+
+        public IAlterTableAddConstraintQueryBuilder AddConstraint(string constraintName)
+        {
+            var b = new AlterTableAddConstraintQueryBuilder();
+            _internalBuilder = b.Table(_tableName).ConstraintName(constraintName);
+            return b;
         }
 
         public override void Dispose()

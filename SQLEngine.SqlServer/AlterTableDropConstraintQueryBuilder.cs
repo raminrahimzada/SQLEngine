@@ -1,26 +1,36 @@
-﻿//namespace SQLEngine.SqlServer
-//{
-//    internal class AlterTableDropConstraintQueryBuilder : AlteredTableQueryBuilder
-//    {
-//        internal string ConstraintName;
-//        public override void Build(ISqlWriter Writer)
-//        {
-//            Writer.Write(SQLKeywords.ALTER);
-//            Writer.Write2(SQLKeywords.TABLE);
-//            if (!string.IsNullOrEmpty(SchemaName))
-//            {
-//                Writer.Write(I(SchemaName));
-//                Writer.Write(SQLKeywords.DOT);
-//            }
+﻿namespace SQLEngine.SqlServer
+{
+    internal class AlterTableDropConstraintQueryBuilder : AbstractQueryBuilder,
+        IAlterTableNoNameDropConstraintQueryBuilder
+    {
+        private string _tableName;
+        private string _constraintName;
 
-//            Writer.Write(I(TableName));
-//            Writer.Write(SQLKeywords.SPACE);
-//            Writer.Write(SQLKeywords.DROP);
-//            Writer.Write2(SQLKeywords.CONSTRAINT);
-//            Writer.Write(I(ConstraintName));
-//            Writer.Write(SQLKeywords.SEMICOLON);
+        public AlterTableDropConstraintQueryBuilder Table(string tableName)
+        {
+            _tableName = tableName;
+            return this;
+        }
 
-//            return;
-//        }
-//    }
-//}
+        public AlterTableDropConstraintQueryBuilder Constraint(string constraintName)
+        {
+            _constraintName = constraintName;
+            return this;
+        }
+
+        public override void Build(ISqlWriter writer)
+        {
+            writer.Write(C.ALTER);
+            writer.Write(C.SPACE);
+            writer.Write(C.TABLE);
+            writer.Write(C.SPACE);
+            writer.Write(_tableName);
+            writer.Write(C.SPACE);
+            writer.Write(C.DROP);
+            writer.Write(C.SPACE);
+            writer.Write(C.CONSTRAINT);
+            writer.Write(C.SPACE);
+            writer.Write(_constraintName);
+        }
+    }
+}

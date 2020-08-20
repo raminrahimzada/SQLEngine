@@ -64,7 +64,7 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public IColumnQueryBuilder DefaultValue(AbstractSqlExpression defaultValue, string defaultConstraintName = null)
+        public IColumnQueryBuilder DefaultValue(ISqlExpression defaultValue, string defaultConstraintName = null)
         {
             Model.DefaultValue = defaultValue.ToSqlString();
             Model.DefaultConstraintName = defaultConstraintName;
@@ -175,6 +175,14 @@ namespace SQLEngine.SqlServer
             }
         }
 
+        public IColumnQueryBuilder Check(AbstractSqlCondition condition)
+        {
+            return Check(condition.ToSqlString());
+        }
+        public IColumnQueryBuilder Check(ISqlExpression expression)
+        {
+            return Check(expression.ToSqlString());
+        }
         public IColumnQueryBuilder Check(string checkExpression)
         {
             if (!string.IsNullOrEmpty(Model.CheckExpression))

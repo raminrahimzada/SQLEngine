@@ -74,6 +74,7 @@
     <Compile Include="TryCatch.cs" />
     <Compile Include="Update.cs" />
     <Compile Include="Transaction.cs" />
+    <Compile Include="Alter.Constraint.cs" />
     <Compile Include="_ExampleStrongTypedTables.cs" />
   </ItemGroup>
   <ItemGroup>

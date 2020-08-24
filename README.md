@@ -31,7 +31,6 @@ Query.Setup<SqlServerQueryBuilder>();
 //future plans
 //Query.Setup<MySqlQueryBuilder>(); 
 //Query.Setup<OracleQueryBuilder>(); 
-//Query.Setup<OracleQueryBuilder>();  
 //Query.Setup<SqliteQueryBuilder>(); 
 ```
 <br/>Usage :

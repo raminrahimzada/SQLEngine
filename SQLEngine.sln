@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLEngine", "SQLEngine\SQLEngine.csproj", "{690C51D3-ED99-4DDF-9673-D041BDF9EDB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLEngine", "SQLEngine\SQLEngine.csproj", "{690C51D3-ED99-4DDF-9673-D041BDF9EDB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLEngine.SqlServer", "SQLEngine.SqlServer\SQLEngine.SqlServer.csproj", "{D1427690-EA4B-4F09-90A4-358BF21F52C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLEngine.SqlServer", "SQLEngine.SqlServer\SQLEngine.SqlServer.csproj", "{D1427690-EA4B-4F09-90A4-358BF21F52C0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLEngine.Tests", "SQLEngine.Tests\SQLEngine.Tests.csproj", "{2932F954-4003-4AF7-B67D-5DDDCC9D13E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLEngine.PostgreSql", "SQLEngine.PostgreSql\SQLEngine.PostgreSql.csproj", "{24F08157-852C-43CB-83F4-054DE699B8F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{2932F954-4003-4AF7-B67D-5DDDCC9D13E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2932F954-4003-4AF7-B67D-5DDDCC9D13E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2932F954-4003-4AF7-B67D-5DDDCC9D13E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24F08157-852C-43CB-83F4-054DE699B8F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F08157-852C-43CB-83F4-054DE699B8F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F08157-852C-43CB-83F4-054DE699B8F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24F08157-852C-43CB-83F4-054DE699B8F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

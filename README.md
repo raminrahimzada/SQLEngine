@@ -26,10 +26,12 @@
 Query.Setup<SqlServerQueryBuilder>();
 
 //in development
-//Query.Setup<OracleQueryBuilder>();  
+//Query.Setup<PostgreSqlQueryBuilder>(); 
+
+//future plans
 //Query.Setup<MySqlQueryBuilder>(); 
 //Query.Setup<OracleQueryBuilder>(); 
-//Query.Setup<PostgreSqlQueryBuilder>(); 
+//Query.Setup<OracleQueryBuilder>();  
 //Query.Setup<SqliteQueryBuilder>(); 
 ```
 <br/>Usage :

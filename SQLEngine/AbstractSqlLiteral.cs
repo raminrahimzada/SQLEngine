@@ -12,6 +12,8 @@ namespace SQLEngine
         public abstract void SetFrom(byte[] data);
 
         public abstract void SetFrom(int i);
+        public abstract void SetFrom(DateTimeOffset d);
+        public abstract void SetFrom(DateTimeOffset? d);
         public abstract void SetFrom(Enum i);
         public abstract void SetFrom(byte i);
         public abstract void SetFrom(byte? i);
@@ -78,6 +80,14 @@ namespace SQLEngine
             return From(x);
         }
         public static implicit operator AbstractSqlLiteral(DateTime? x)
+        {
+            return From(x);
+        }
+        public static implicit operator AbstractSqlLiteral(DateTimeOffset? x)
+        {
+            return From(x);
+        }
+        public static implicit operator AbstractSqlLiteral(DateTimeOffset x)
         {
             return From(x);
         }
@@ -220,6 +230,18 @@ namespace SQLEngine
             return literal;
         }
         public static AbstractSqlLiteral From(char? i)
+        {
+            var literal = CreateEmpty();
+            literal.SetFrom(i);
+            return literal;
+        }
+        public static AbstractSqlLiteral From(DateTimeOffset? i)
+        {
+            var literal = CreateEmpty();
+            literal.SetFrom(i);
+            return literal;
+        }
+        public static AbstractSqlLiteral From(DateTimeOffset i)
         {
             var literal = CreateEmpty();
             literal.SetFrom(i);

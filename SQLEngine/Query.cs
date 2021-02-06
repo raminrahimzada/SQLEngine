@@ -16,21 +16,26 @@ namespace SQLEngine
             public static byte DefaultScale = 4;
             public static int SQLErrorState = 47;
             public static IEnumSqlStringConvertor EnumSqlStringConvertor;
-            public static ITypeConvertor TypeConvertor;           
+            public static ITypeConvertor TypeConvertor;
+            public static string DatetimeOffsetFormat = "yyyy-MM-dd HH:mm:ss.fff zzz";
         }
 
         private static Func<IQueryBuilder> _builderFunction;
-        
+
         /// <summary>
         /// Use This Method to specify Which RDBMS You will use
-        /// </summary>
+        /// </summary>        
         /// <param name="builderFunction"></param>
+        // ReSharper disable once UnusedMember.Global
         public static void Setup(Func<IQueryBuilder> builderFunction)
         {
             _builderFunction = builderFunction;
         }
         /// <summary>
         /// Use This Method to specify Which RDBMS You will use
+        /// <example>
+        /// Query.Setup&gt;SqlServerQueryBuilder&lt;()
+        /// </example>
         /// </summary>
         public static void Setup<T>() where T : IQueryBuilder,new()
         {
@@ -51,7 +56,7 @@ namespace SQLEngine
             {
                 if (_builderFunction == null)
                 {
-                    throw new Exception("Please use Query.Use to setup");
+                    throw new Exception("Please use Query.Setup to setup");
                 }
 
                 return _builderFunction();

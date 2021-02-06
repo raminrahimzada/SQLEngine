@@ -599,6 +599,20 @@ namespace SQLEngine.PostgreSql
             return PostgreSqlLiteral.From(x, includeTime);
         }
 
+        public AbstractSqlLiteral Literal(DateTime? x, bool includeTime = true)
+        {
+            return PostgreSqlLiteral.From(x, includeTime);
+        }
+
+        public AbstractSqlLiteral Literal(DateTimeOffset x)
+        {
+            return AbstractSqlLiteral.From(x);
+        }
+        public AbstractSqlLiteral Literal(DateTimeOffset? x)
+        {
+            return AbstractSqlLiteral.From(x);
+        }
+
         public AbstractSqlLiteral Literal(int x)
         {
             return AbstractSqlLiteral.From(x);

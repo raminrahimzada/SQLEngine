@@ -94,6 +94,9 @@ namespace SQLEngine.Tests.SqlServer
                 literal = q.Literal(DateTime.Parse("01/01/2020"), false);
                 Assert.AreEqual(literal.ToSqlString(), "'2020-01-01'");
 
+                literal = q.Literal(DateTimeOffset.Parse("2021-02-06 09:10:56.777 +04:00"));
+                Assert.AreEqual(literal.ToSqlString(), "'2021-02-06 09:10:56.777 +04:00'");
+
                 literal = Guid.Empty;
                 Assert.AreEqual(literal.ToSqlString(), "'00000000-0000-0000-0000-000000000000'");
 

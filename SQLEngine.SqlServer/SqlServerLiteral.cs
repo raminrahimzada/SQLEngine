@@ -43,6 +43,24 @@ namespace SQLEngine.SqlServer
         {
             _rawSqlString = i.ToString();
         }
+
+        public override void SetFrom(DateTimeOffset d)
+        {
+            _rawSqlString = d.ToString(Query.Settings.DatetimeOffsetFormat);
+            _rawSqlString = $"'{_rawSqlString}'";
+        }
+
+        public override void SetFrom(DateTimeOffset? d)
+        {
+            if (d == null)
+            {
+                _rawSqlString = C.NULL;
+                return;
+            }
+            _rawSqlString = d.Value.ToString(Query.Settings.DatetimeOffsetFormat);
+            _rawSqlString = $"'{_rawSqlString}'";
+        }
+
         public override void SetFrom(Enum i)
         {
             _rawSqlString = EnumSqlStringConvertor.ToSqlString(i);

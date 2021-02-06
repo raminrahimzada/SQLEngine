@@ -594,8 +594,24 @@ namespace SQLEngine.SqlServer
         {
             return SqlServerLiteral.From(x, includeTime);
         }
+        public AbstractSqlLiteral Literal(DateTime? x, bool includeTime = true)
+        {
+            return SqlServerLiteral.From(x, includeTime);
+        }
+        public AbstractSqlLiteral Literal(DateTimeOffset x)
+        {
+            return AbstractSqlLiteral.From(x);
+        }
+        public AbstractSqlLiteral Literal(DateTimeOffset? x)
+        {
+            return AbstractSqlLiteral.From(x);
+        }
 
         public AbstractSqlLiteral Literal(int x)
+        {
+            return AbstractSqlLiteral.From(x);
+        }
+        public AbstractSqlLiteral Literal(int? x)
         {
             return AbstractSqlLiteral.From(x);
         }
@@ -605,10 +621,7 @@ namespace SQLEngine.SqlServer
             return AbstractSqlLiteral.From(x);
         }
 
-        public AbstractSqlLiteral Literal(int? x)
-        {
-            return AbstractSqlLiteral.From(x);
-        }
+       
 
         public AbstractSqlLiteral Literal(byte x)
         {

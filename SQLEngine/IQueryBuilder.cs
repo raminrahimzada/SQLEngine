@@ -92,6 +92,8 @@ namespace SQLEngine
 
         AbstractSqlLiteral Literal(string x, bool isUniCode = true);
         AbstractSqlLiteral Literal(DateTime x, bool includeTime = true);
+        AbstractSqlLiteral Literal(DateTimeOffset x);
+        AbstractSqlLiteral Literal(DateTimeOffset? x);
         AbstractSqlLiteral Literal(int x);
         AbstractSqlLiteral Literal(int? x);
 

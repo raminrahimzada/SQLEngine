@@ -48,7 +48,13 @@ namespace SQLEngine
 
         /// <summary>
         /// Returns new IQueryBuilder object each times
-        /// Use this inside using statement and build your queries 
+        /// <br/>Use this inside using statement and build your queries
+        /// <br/>But before all, please call <see cref="Query.Setup"/> method to specify sql dialect
+        /// <example><code>using(var q = Query.New)
+        /// <br/>{<br/>
+        /// q.Insert.Into....
+        /// <br/>}
+        /// </code></example>
         /// </summary>
         public static IQueryBuilder New
         {

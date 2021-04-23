@@ -6,7 +6,7 @@ namespace SQLEngine.PostgreSql
 {
     internal class InsertQueryBuilder : AbstractQueryBuilder, 
         IInsertNoIntoWithColumns, 
-        IInsertNoValuesQueryBuilder, 
+        IInsertHasValuesQueryBuilder, 
         IInsertNeedValueQueryBuilder,
         IInsertQueryBuilder, 
         IInsertNoIntoQueryBuilder
@@ -42,14 +42,14 @@ namespace SQLEngine.PostgreSql
             return this;
         }
 
-        public IInsertNoValuesQueryBuilder Values(Dictionary<string, ISqlExpression> colsAndValues)
+        public IInsertHasValuesQueryBuilder Values(Dictionary<string, ISqlExpression> colsAndValues)
         {
             _columnsAndValuesDictionary = colsAndValues;
             return this;
         }
  
 
-        public IInsertNoValuesQueryBuilder Values(Dictionary<string, AbstractSqlLiteral> colsAndValuesAsLiterals)
+        public IInsertHasValuesQueryBuilder Values(Dictionary<string, AbstractSqlLiteral> colsAndValuesAsLiterals)
         {
             _columnsAndValuesDictionary =
                 colsAndValuesAsLiterals.ToDictionary(x => x.Key, x => (ISqlExpression) x.Value);
@@ -57,7 +57,7 @@ namespace SQLEngine.PostgreSql
         }
         
 
-        public IInsertNoValuesQueryBuilder Values(Action<ISelectQueryBuilder> builder)
+        public IInsertHasValuesQueryBuilder Values(Action<ISelectQueryBuilder> builder)
         {
             using (var writer=CreateNewWriter())
             using (var select=new SelectQueryBuilder())
@@ -167,13 +167,13 @@ namespace SQLEngine.PostgreSql
         }
 
 
-        public IInsertNoValuesQueryBuilder Values(params ISqlExpression[] values)
+        public IInsertHasValuesQueryBuilder Values(params ISqlExpression[] values)
         {
             _valuesList = values;
             return this;
         }
 
-        public IInsertNoValuesQueryBuilder Values(params AbstractSqlLiteral[] values)
+        public IInsertHasValuesQueryBuilder Values(params AbstractSqlLiteral[] values)
         {
             _valuesList = values.Select(x => (ISqlExpression) x).ToArray();
             return this;

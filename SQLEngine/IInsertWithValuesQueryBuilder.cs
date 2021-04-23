@@ -5,8 +5,10 @@ namespace SQLEngine
 {
     public interface IInsertWithValuesQueryBuilder : IAbstractInsertQueryBuilder
     {
-        IInsertNoValuesQueryBuilder Values(Dictionary<string, ISqlExpression> colsAndValues);
-        IInsertNoValuesQueryBuilder Values(Dictionary<string, AbstractSqlLiteral> colsAndValuesAsLiterals);
-        IInsertNoValuesQueryBuilder Values(Action<ISelectQueryBuilder> builder);
+        IInsertHasValuesQueryBuilder Values(Dictionary<string, ISqlExpression> colsAndValues);
+        IInsertHasValuesQueryBuilder Values(Dictionary<string, AbstractSqlLiteral> colsAndValuesAsLiterals);
+        IInsertHasValuesQueryBuilder Values(Action<ISelectQueryBuilder> builder);
+        IInsertHasValuesQueryBuilder Values(params AbstractSqlLiteral[] literals);
+        IInsertHasValuesQueryBuilder Values(params ISqlExpression[] literals);
     }
 }

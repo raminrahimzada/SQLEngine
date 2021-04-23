@@ -6,14 +6,15 @@ namespace SQLEngine.SqlServer
 {
     internal class InsertQueryBuilder : AbstractQueryBuilder, 
         IInsertNoIntoWithColumns, 
-        IInsertNoValuesQueryBuilder, 
+        IInsertHasValuesQueryBuilder, 
         IInsertNeedValueQueryBuilder,
         IInsertQueryBuilder, 
         IInsertNoIntoQueryBuilder
     {
         private string _tableName;
         private Dictionary<string, ISqlExpression> _columnsAndValuesDictionary=new Dictionary<string, ISqlExpression>();
-        private ISqlExpression[] _valuesList;
+
+        private readonly List<ISqlExpression[]> _valuesList = new List<ISqlExpression[]>();
         private string[] _columnNames;
         private string _selection;
 
@@ -42,14 +43,14 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public IInsertNoValuesQueryBuilder Values(Dictionary<string, ISqlExpression> colsAndValues)
+        public IInsertHasValuesQueryBuilder Values(Dictionary<string, ISqlExpression> colsAndValues)
         {
             _columnsAndValuesDictionary = colsAndValues;
             return this;
         }
  
 
-        public IInsertNoValuesQueryBuilder Values(Dictionary<string, AbstractSqlLiteral> colsAndValuesAsLiterals)
+        public IInsertHasValuesQueryBuilder Values(Dictionary<string, AbstractSqlLiteral> colsAndValuesAsLiterals)
         {
             _columnsAndValuesDictionary =
                 colsAndValuesAsLiterals.ToDictionary(x => x.Key, x => (ISqlExpression) x.Value);
@@ -57,7 +58,7 @@ namespace SQLEngine.SqlServer
         }
         
 
-        public IInsertNoValuesQueryBuilder Values(Action<ISelectQueryBuilder> builder)
+        public IInsertHasValuesQueryBuilder Values(Action<ISelectQueryBuilder> builder)
         {
             using (var writer=CreateNewWriter())
             using (var select=new SelectQueryBuilder())
@@ -93,16 +94,16 @@ namespace SQLEngine.SqlServer
             if (isColumnsAndValues1|| isColumnsAndValues2)
             {
                 var columnNames = _columnNames;
-                var valuesList = _valuesList;
                 if (columnNames == null)
                 {
                     if (_columnsAndValuesDictionary == null) throw Bomb();
                     columnNames = _columnsAndValuesDictionary.Keys.ToArray();
                 }
-                if (valuesList == null)
+                if (_valuesList.Count==0)
                 {
                     if (_columnsAndValuesDictionary == null) throw Bomb();
-                    valuesList = _columnsAndValuesDictionary.Values.ToArray();
+                    var values = _columnsAndValuesDictionary.Values.ToArray();
+                    _valuesList.Add(values);
                 }
                 writer.WriteLine();
                 writer.Indent++;
@@ -115,11 +116,23 @@ namespace SQLEngine.SqlServer
                 writer.Write(C.VALUES);
                 writer.WriteLine();
                 writer.Indent++;
-
-                writer.BeginScope();
-
-                writer.WriteJoined(valuesList.Select(x => x.ToSqlString()).ToArray());
-                writer.EndScope();
+                
+                bool first = true;
+                foreach (var values in _valuesList)
+                {
+                    if (first)
+                    {
+                        first = false;
+                    }
+                    else
+                    {
+                        writer.Write(C.COMMA);
+                    }
+                    writer.BeginScope();
+                    writer.WriteJoined(values.Select(x => x.ToSqlString()).ToArray());
+                    writer.EndScope();
+                }
+                
                 writer.Indent--;
             }
             else if (!string.IsNullOrEmpty(_selection))//selection mode
@@ -151,31 +164,45 @@ namespace SQLEngine.SqlServer
                 writer.WriteLine();
                 writer.Indent++;
 
-                writer.BeginScope();
-                for (int i = 0; i < _valuesList.Length; i++)
+                bool first = true;
+                foreach (var values in _valuesList)
                 {
-                    if (i != 0)
+                    if (first)
+                    {
+                        first = false;
+                    }
+                    else
                     {
                         writer.Write(C.COMMA);
                     }
 
-                    writer.Write(_valuesList[i].ToSqlString());
+                    writer.BeginScope();
+                    for (int i = 0; i < values.Length; i++)
+                    {
+                        if (i != 0)
+                        {
+                            writer.Write(C.COMMA);
+                        }
+
+                        writer.Write(values[i].ToSqlString());
+                    }
+                    writer.EndScope();
                 }
-                writer.EndScope();
                 writer.Indent--;
             }
         }
 
 
-        public IInsertNoValuesQueryBuilder Values(params ISqlExpression[] values)
+        public IInsertHasValuesQueryBuilder Values(params ISqlExpression[] values)
         {
-            _valuesList = values;
+            _valuesList.Add(values);
             return this;
         }
 
-        public IInsertNoValuesQueryBuilder Values(params AbstractSqlLiteral[] values)
+        public IInsertHasValuesQueryBuilder Values(params AbstractSqlLiteral[] values)
         {
-            _valuesList = values.Select(x => (ISqlExpression) x).ToArray();
+            var arr = values.Select(x => (ISqlExpression) x).ToArray();
+            _valuesList.Add(arr);
             return this;
         }
     }

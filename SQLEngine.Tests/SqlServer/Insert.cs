@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SQLEngine.SqlServer;
 
 namespace SQLEngine.Tests.SqlServer
 {
@@ -58,6 +59,62 @@ namespace SQLEngine.Tests.SqlServer
                     ;
 
                 const string query = "INSERT INTO Users(Name , Surname , Age) VALUES (N'Tracey' , N'McBean' , 9)";
+                SqlAssert.AreEqualQuery(q.Build(), query);
+            }
+        }
+
+        [TestMethod]
+        public void Test_Insert_By_Only_Values()
+        {
+            var datetime = DateTime.MinValue;
+            var date = SqlServerLiteral.From(datetime, includeTime: false);
+
+            using (var q = Query.New)
+            {
+                q.Insert
+                    .Into("People")
+                    .Values("Satoshi", "Nakamoto", 1024, datetime,date)
+                    ;
+                const string query =
+                    "INSERT INTO People VALUES (N'Satoshi',N'Nakamoto',1024,'0001-01-01 00:00:00.000','0001-01-01')";
+                SqlAssert.AreEqualQuery(q.Build(), query);
+            }
+        }
+
+
+        [TestMethod]
+        public void Test_Insert_MultipleValues_1()
+        {
+            using (var q = Query.New)
+            {
+                q.Insert
+                    .Into("GOT")
+                    .Values("Daenerys", "Targaryen")
+                    .Values("John", "Snow")
+                    .Values("Illyrio", "Mopatis")
+                    ;
+                
+                const string query =
+                    @"INSERT INTO GOT VALUES (N'Daenerys',N'Targaryen'),(N'John',N'Snow'),(N'Illyrio',N'Mopatis')";
+                SqlAssert.AreEqualQuery(q.Build(), query);
+            }
+        }
+
+        [TestMethod]
+        public void Test_Insert_MultipleValues_2()
+        {
+            using (var q = Query.New)
+            {
+                q.Insert
+                    .Into("GOT")
+                    .Columns("Name","Surname")
+                    .Values("Daenerys", "Targaryen")
+                    .Values("John", "Snow")
+                    .Values("Illyrio", "Mopatis")
+                    ;
+
+                const string query =
+                    @"INSERT INTO GOT(Name,Surname) VALUES (N'Daenerys',N'Targaryen'),(N'John',N'Snow'),(N'Illyrio',N'Mopatis')";
                 SqlAssert.AreEqualQuery(q.Build(), query);
             }
         }

@@ -82,7 +82,9 @@ DROP TABLE dbo.Users
 ";
                 SqlAssert.AreEqualQuery(b.ToString(), query);
             }
-        }       [TestMethod]
+        }     
+        
+        [TestMethod]
         public void Test_Drop_View_1()
         {
             using (var b = Query.New)

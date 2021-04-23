@@ -71,7 +71,9 @@ DELETE TOP(10) from Users WHERE Id = 111
                 var id = q.Column("Id");
                 var isBlocked = q.Column("IsBlocked");
 
-                //query inside that `IN` statement below
+                // query inside that `IN` statement below
+                // SELECT UserId FROM Attachments WHERE IsBlocked = 1
+
                 void BlockedUserIdList(ISelectQueryBuilder _) =>
                     _.Select("UserId")
                         .From("Attachments")

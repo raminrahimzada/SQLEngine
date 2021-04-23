@@ -104,7 +104,7 @@ namespace SQLEngine.Tests.SqlServer
                 Assert.AreEqual(literal.ToSqlString(), "N'Hey'");
 
 
-                literal = q.Literal("Hey", false);
+                literal = q.Literal("Hey", isUniCode: false);
                 Assert.AreEqual(literal.ToSqlString(), "'Hey'");
 
 

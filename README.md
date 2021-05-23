@@ -20,6 +20,10 @@
 |SqlEngine.PostgreSql| ... |
 |SqlEngine.Sqlite| ... | 
  
+## Installation
+```bat
+install-package SQLEngine.SqlServer
+```
 
 ## Configuration 
 ```cs
@@ -48,7 +52,7 @@ using (var q = Query.New)
         .Where(id==11)
         .OrderBy(id);
  
-     var query = q.ToString();
+     var query = q.Build();
 }
 
 
@@ -64,7 +68,7 @@ using (var q = Query.New)
         .Where(id==11)
 	.OrderBy(id);
 
-     var query = q.ToString();
+     var query = q.Build();
 }
 ```
 Above 2 queries will be like that:
@@ -91,7 +95,7 @@ using (var q = Query.New)
         .Where(age > 18 & height <= 1.7)
         ;
     
-    var query = q.ToString();
+    var query = q.Build();
 }
 ```
 Above query will be like that:
@@ -115,7 +119,7 @@ var age = t.Column("Age");
             .Where(age > 18)            
         ;
 	
-  var query = q.ToString();
+  var query = q.Build();
 ```        
 And the result will be
 ```sql
@@ -158,7 +162,7 @@ using (var b = Query.New)
             c.Column("Sum").CalculatedColumn("Amount1 + Amount2"),
         });
         
-        var query = q.ToString();	
+        var query = q.Build();	
 }
 ```
 

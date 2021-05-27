@@ -73,6 +73,11 @@ namespace SQLEngine.PostgreSql
             return item;
         }
 
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
         public ISelectQueryBuilder Select => _Add(new SelectQueryBuilder());
         public IUpdateQueryBuilder Update => _Add(new UpdateQueryBuilder());
         public IDeleteQueryBuilder Delete => _Add(new DeleteQueryBuilder());

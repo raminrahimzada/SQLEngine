@@ -8,7 +8,7 @@ namespace SQLEngine
     public interface IQueryBuilder: IDisposable
     {
         IConditionFilterQueryHelper Helper { get; }
-
+        void Clear();
 
         ISelectQueryBuilder Select { get; }
         IUpdateQueryBuilder Update { get; }

@@ -1,4 +1,4 @@
-﻿namespace SQLEngine.SqlServer
+﻿using SQLEngine;namespace SQLEngine.SqlServer
 {
     internal class CreateDatabaseQueryBuilder : AbstractQueryBuilder, ICreateDatabaseNoNameQueryBuilder
     {

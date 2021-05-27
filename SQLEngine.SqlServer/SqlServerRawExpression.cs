@@ -29,7 +29,7 @@
 
         protected override void SetFrom(AbstractSqlLiteral literal)
         {
-            Expression = literal.ToSqlString();
+            Expression = literal == null ? C.NULL : literal.ToSqlString();
         }
         protected override void SetFrom(AbstractSqlVariable variable)
         {

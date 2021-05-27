@@ -59,6 +59,10 @@ namespace SQLEngine
         /// <returns></returns>
         protected virtual string I(string name)
         {
+            if (!char.IsLetter(name[0]))
+            {
+                return "[" + name + "]";
+            }
             return name;
         }
     }

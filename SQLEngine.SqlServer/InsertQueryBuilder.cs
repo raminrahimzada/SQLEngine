@@ -89,7 +89,9 @@ namespace SQLEngine.SqlServer
             writer.Write2(C.SPACE);
 
             var columnNamesSafe = _columnNames?.Select(I).ToArray();
-            var isColumnsAndValues1 = _columnNames != null && _columnNames.Length > 0;
+            var isColumnsAndValues1 = _columnNames != null && _columnNames.Length > 0 && _valuesList.Count > 0 &&
+                                      _valuesList[0].Length > 0;
+
             var isColumnsAndValues2 = _columnsAndValuesDictionary != null && _columnsAndValuesDictionary.Count > 0;
             if (isColumnsAndValues1|| isColumnsAndValues2)
             {

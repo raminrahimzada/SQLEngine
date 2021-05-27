@@ -20,6 +20,7 @@
         public const string BEGIN_SCOPE = "(";
         public const string END_SCOPE = ")";
         public const string SPACE = " ";
+        public const string AFTER = "AFTER";
         public const string ROLLBACK = "ROLLBACK";
         public const string TRANSACTION = "TRANSACTION";
         public const string COMMIT = "COMMIT";

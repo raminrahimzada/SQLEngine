@@ -1,10 +1,13 @@
 ﻿namespace SQLEngine.SqlServer
 {
     internal class DropTriggerQueryBuilder : AbstractQueryBuilder,
-        IDropTriggerNoNameQueryBuilder, IDropTriggerNoNameIfExistsQueryBuilder
+        IDropTriggerNoNameQueryBuilder
+        , IDropTriggerNoNameIfExistsQueryBuilder
+        , IDropTriggerNoNameNoSchemaIfExistsQueryBuilder
     {
         private bool _checkIfExists;
         private string _triggerName;
+        private string _schemaName;
 
         public IDropTriggerNoNameQueryBuilder Trigger(string triggerName)
         {
@@ -26,9 +29,19 @@
                 writer.Write(C.SPACE);
             }
 
+            if (!string.IsNullOrWhiteSpace(_schemaName))
+            {
+                writer.Write(_schemaName);
+                writer.Write(C.DOT);
+            }
             writer.Write(_triggerName);
         }
 
+        public IDropTriggerNoNameNoSchemaIfExistsQueryBuilder Schema(string schemaName)
+        {
+            _schemaName = schemaName;
+            return this;
+        }
         public IDropTriggerNoNameIfExistsQueryBuilder IfExists()
         {
             _checkIfExists = true;

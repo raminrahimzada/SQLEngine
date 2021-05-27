@@ -69,5 +69,12 @@
             _innerBuilder = x;
             return x;
         }
+
+        public ICreateTriggerNoNameQueryBuilder Trigger(string triggerName)
+        {
+            var x = New<CreateTriggerQueryBuilder>().Name(triggerName);
+            _innerBuilder = x;
+            return x;
+        }
     }
 }

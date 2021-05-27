@@ -32,6 +32,18 @@ namespace SQLEngine.SqlServer
         {
             return builder.Call("SCOPE_IDENTITY");
         }
+        public static ICustomFunctionCallNopBuilder NewId(this ICustomFunctionCallExpressionBuilder builder)
+        {
+            return builder.Call("NEWID");
+        }
+        public static ICustomFunctionCallNopBuilder GetDate(this ICustomFunctionCallExpressionBuilder builder)
+        {
+            return builder.Call("GETDATE");
+        }
+        public static ICustomFunctionCallNopBuilder DbName(this ICustomFunctionCallExpressionBuilder builder)
+        {
+            return builder.Call("DB_NAME");
+        }
         /// <summary>
         /// The ASCII() function returns the ASCII value for the specific character.
         /// </summary>

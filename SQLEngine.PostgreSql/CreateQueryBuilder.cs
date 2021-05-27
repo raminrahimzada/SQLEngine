@@ -69,5 +69,11 @@
             _innerBuilder = x;
             return x;
         }
+
+        public ICreateTriggerNoNameQueryBuilder Trigger(string triggerName)
+        {
+            //TODO
+            throw new System.NotImplementedException();
+        }
     }
 }

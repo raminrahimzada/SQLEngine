@@ -19,6 +19,9 @@ namespace SQLEngine.SqlServer
         {
             if (Name == C.WILCARD) return Name;
             if (!Name.All(char.IsLetterOrDigit)) return "[" + Name + "]";
+            if (Name.Equals("key", StringComparison.InvariantCultureIgnoreCase))return "[" + Name + "]";
+            if (Name.Equals("value", StringComparison.InvariantCultureIgnoreCase))return "[" + Name + "]";
+            if (!char.IsLetter(Name.First()))return "[" + Name + "]";
             return Name;
         }
 

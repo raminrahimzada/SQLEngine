@@ -9,5 +9,6 @@
         ICreateViewNoNameQueryBuilder View(string viewName);
         ICreateIndexNoNameQueryBuilder Index(string indexName);
         ICreateDatabaseNoNameQueryBuilder Database(string databaseName);
+        ICreateTriggerNoNameQueryBuilder Trigger(string triggerName);
     }
 }

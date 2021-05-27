@@ -43,6 +43,10 @@ namespace SQLEngine.SqlServer
             return Build();
         }
 
+        public void Clear()
+        {
+            _list.Clear();
+        }
         public  string Build()
         {
             using (var Writer = SqlWriter.New)

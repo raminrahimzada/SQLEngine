@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SQLEngine.SqlServer;
 
 namespace SQLEngine.Tests.SqlServer
@@ -288,6 +289,31 @@ END
                 ";
 
                 SqlAssert.AreEqualQuery(q.ToString(), query);
+            }
+        }
+        
+        [TestMethod]
+        public void Test_Create_Trigger()
+        {
+            using (var q = Query.New)
+            {
+                q.Create
+                    .Trigger("Trigger_Test")
+                    .ForDelete()
+                    .On("Users", "dbo")
+                    .Body(x =>
+                    {
+                        x.Print("Trigger_Test Executed!");
+                    })
+                    ;
+                const string query =
+                    @"
+                CREATE TRIGGER Trigger_Test ON dbo.Users FOR DELETE 
+                    AS 
+                print(N'Trigger_Test Executed!')
+                ";
+                ;
+                SqlAssert.AreEqualQuery(q.Build(), query);
             }
         }
     }

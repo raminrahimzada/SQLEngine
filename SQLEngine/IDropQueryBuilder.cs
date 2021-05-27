@@ -8,5 +8,6 @@
         IDropFunctionQueryBuilder Function(string funcName);
         IDropViewNoNameQueryBuilder View(string viewName);
         IDropDatabaseNoNameQueryBuilder Database(string databaseName);
+        IDropTriggerNoNameQueryBuilder Trigger(string triggerName);
     }
 }

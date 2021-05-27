@@ -132,7 +132,38 @@ DROP DATABASE facebook
                 SqlAssert.AreEqualQuery(b.ToString(), query);
             }
         }
-        
-       
+
+        [TestMethod]
+        public void Test_Drop_Trigger()
+        {
+            using (var b = Query.New)
+            {
+                b
+                    .Drop
+                    .Trigger("AfterDELETETrigger")
+                    ;
+                const string query = @"
+DROP trigger AfterDELETETrigger
+";
+                SqlAssert.AreEqualQuery(b.ToString(), query);
+            }
+        }
+
+        [TestMethod]
+        public void Test_Drop_Trigger_If_Exists()
+        {
+            using (var b = Query.New)
+            {
+                b
+                    .Drop
+                    .Trigger("AfterDELETETrigger")
+                    .IfExists()
+                    ;
+                const string query = @"
+DROP trigger if exists AfterDELETETrigger 
+";
+                SqlAssert.AreEqualQuery(b.ToString(), query);
+            }
+        }
     }
 }

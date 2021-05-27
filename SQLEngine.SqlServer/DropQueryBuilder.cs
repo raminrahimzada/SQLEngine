@@ -39,6 +39,13 @@
             return b;
         }
 
+        public IDropTriggerNoNameQueryBuilder Trigger(string triggerName)
+        {
+            var b = new DropTriggerQueryBuilder();
+            _internalBuilder = b.Trigger(triggerName);
+            return b;
+        }
+
         public override void Build(ISqlWriter writer)
         {
             _internalBuilder?.Build(writer);

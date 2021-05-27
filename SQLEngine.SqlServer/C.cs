@@ -5,12 +5,14 @@
     /// </summary>
     public static class C
     {
+        
         //There is no sql bool literal so that is another solution
         public const string TRUE = "(1=1)";
         public const string FALSE = "(1=0)";
 
 
         public const string AND="AND";
+        public const string TRIGGER = "TRIGGER";
         public const string MIN = "MIN";
         public const string AVG = "AVG";
         public const string SUM = "SUM";

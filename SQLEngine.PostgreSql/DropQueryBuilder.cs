@@ -39,6 +39,12 @@
             return b;
         }
 
+        public IDropTriggerNoNameQueryBuilder Trigger(string triggerName)
+        {
+            //TODO
+            throw new System.NotImplementedException();
+        }
+
         public override void Build(ISqlWriter writer)
         {
             _internalBuilder?.Build(writer);

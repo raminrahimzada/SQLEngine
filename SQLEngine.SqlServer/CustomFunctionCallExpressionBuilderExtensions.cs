@@ -28,6 +28,10 @@ namespace SQLEngine.SqlServer
         {
             return builder.Call("OBJECT_ID", expression);
         }
+        public static ICustomFunctionCallNopBuilder ObjectId(this ICustomFunctionCallExpressionBuilder builder, AbstractSqlLiteral literal)
+        {
+            return builder.Call("OBJECT_ID", literal);
+        }
         public static ICustomFunctionCallNopBuilder ScopeIdentity(this ICustomFunctionCallExpressionBuilder builder)
         {
             return builder.Call("SCOPE_IDENTITY");

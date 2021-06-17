@@ -308,7 +308,7 @@ END
                     ;
                 const string query =
                     @"
-                CREATE TRIGGER Trigger_Test ON dbo.Users FOR DELETE 
+                CREATE TRIGGER Trigger_Test ON dbo.Users FOR DELETE         
                     AS 
                 print(N'Trigger_Test Executed!')
                 ";

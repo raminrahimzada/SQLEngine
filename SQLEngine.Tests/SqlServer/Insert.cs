@@ -152,5 +152,20 @@ namespace SQLEngine.Tests.SqlServer
                 SqlAssert.AreEqualQuery(q.ToString(), query);
             }
         }
+
+        [TestMethod]
+        public void Test_Insert_With_No_Values()
+        {
+            using (var q = Query.New)
+            {
+                //no values 
+                //see https://stackoverflow.com/questions/2148091/syntax-for-inserting-into-a-table-with-no-values
+
+                q.Insert.Into<UserTable>();
+
+                const string query = "INSERT INTO Users DEFAULT VALUES";
+                SqlAssert.AreEqualQuery(q.ToString(), query);
+            }
+        }
     }
 }

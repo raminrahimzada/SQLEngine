@@ -63,6 +63,11 @@ namespace SQLEngine
             {
                 return "[" + name + "]";
             }
+
+            if (name.Contains(" "))
+            {
+                return "[" + name + "]";
+            }
             return name;
         }
     }

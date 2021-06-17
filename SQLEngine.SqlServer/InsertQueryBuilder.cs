@@ -148,7 +148,7 @@ namespace SQLEngine.SqlServer
                 writer.Write(C.SPACE);
                 writer.Write(_selection);
             }
-            else //normal model 
+            else if(  _valuesList!=null&& _valuesList.Count>0) //normal model 
             {
                 if (_columnNames != null)
                 {
@@ -191,6 +191,12 @@ namespace SQLEngine.SqlServer
                     writer.EndScope();
                 }
                 writer.Indent--;
+            }
+            else
+            {
+                writer.Write(C.DEFAULT);
+                writer.Write(C.SPACE);
+                writer.Write(C.VALUES);
             }
         }
 

@@ -396,11 +396,10 @@ namespace SQLEngine.SqlServer
             }
 
             //simple select -> select 1 as A 'test' as B
-            //if (string.IsNullOrWhiteSpace(_mainTableName))
-            //{
-            //    if (string.IsNullOrWhiteSpace(_mainTableQuery))
-            //        return;
-            //}
+            if (string.IsNullOrWhiteSpace(_mainTableName))
+            {
+                return;
+            }
 
             writer.WriteLine();
             writer.Indent++;

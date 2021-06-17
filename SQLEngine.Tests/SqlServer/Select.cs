@@ -553,5 +553,25 @@ SELECT TOP(1)
 
             }
         }
+        [TestMethod]
+        public void Test_Simple_Select_Variable()
+        {
+            using (var q = Query.New)
+            {
+                var id = q.Declare<int>("id");
+
+                q.Select.Select(id);
+
+                const string queryThat = @"
+DECLARE  @id INT;
+    
+SELECT @id
+
+";
+                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+
+            }
+        }
     }
+
 }

@@ -24,6 +24,43 @@
 ```bat
 install-package SQLEngine.SqlServer
 ```
+## Capabilities
+```sql
+--wilcard column,literal,variable,functional selection syntax
+--standard boolean expressions syntax
+--top syntax with column or wilcard
+--order by syntax
+--variable declaration and set syntax
+--variable set selection  syntax
+--and/or - ing conditions syntax
+--sub query condition syntax
+--table aliasing syntax
+--grouping syntax with group aggregate functions
+--case then syntax
+
+--create table syntax
+--create view syntax
+--create function syntax
+--create procedure syntax
+--create index syntax
+--create database syntax
+--create trigger syntax
+
+--cursor syntax
+
+--normal delete syntax
+--delete top N syntax
+
+--drop table,function,view,trigger,procedure syntax
+--exec procedure,function syntax
+--alter table add/alter/drop statements syntax
+--update table statements syntax
+
+--insert with columns and values syntax
+--insert with only values syntax
+--insert from select  syntax
+--insert with no values syntax
+```
 
 ## Configuration 
 ```cs
@@ -38,6 +75,8 @@ Query.Setup<SqlServerQueryBuilder>();
 //Query.Setup<SqliteQueryBuilder>(); 
 ```
 <br/>Usage :
+
+
 
 ## Demonstration of simple select-where query
 ```sql            

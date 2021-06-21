@@ -64,15 +64,16 @@ EXECUTE addUser  @Name=N'Nikola'
             {
                 var execution =
                         Query.New
-                            .Execute
-                            .Function("UserExists")
-                            .Schema("dbo")
-                            .Arg("Nikola") //Name
-                            .Arg("Tesla") //Surname
-                            .Build()
+                            
+                            .Build() //Surname
 
                     ;
-                q.Declare<bool>("b", q.Raw(execution));
+                q.Declare<bool>("b", x => x.Execute
+                    .Function("UserExists")
+                    .Schema("dbo")
+                    .Arg("Nikola") //Name
+                    .Arg("Tesla")
+                );
                 
                 const string query = @"
 

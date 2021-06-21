@@ -1,18 +1,10 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SQLEngine.SqlServer;
 
 namespace SQLEngine.Tests.SqlServer
 {
-    [TestClass]
     public partial class AllTests
     {
-        [TestInitialize]
-        public void Init()
-        {
-            Query.Setup<SqlServerQueryBuilder>();
-        }
-
         [TestMethod]
         public void Test_Create_Table()
         {

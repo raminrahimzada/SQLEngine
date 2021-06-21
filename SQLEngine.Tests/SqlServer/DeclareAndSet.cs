@@ -1,7 +1,5 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SQLEngine.PostgreSql;
-using SQLEngine.SqlServer;
 using C = SQLEngine.SqlServer.C;
 using CustomFunctionCallExpressionBuilderExtensions = SQLEngine.SqlServer.CustomFunctionCallExpressionBuilderExtensions;
 

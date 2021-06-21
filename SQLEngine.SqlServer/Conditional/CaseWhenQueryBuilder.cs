@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SQLEngine.PostgreSql
+namespace SQLEngine.SqlServer
 {
     internal class CaseWhenQueryBuilder : AbstractQueryBuilder,
         ICaseWhenNeedWhenQueryBuilder, 
@@ -20,25 +20,25 @@ namespace SQLEngine.PostgreSql
 
         public ICaseWhenNeedThenQueryBuilder WhenColumnEquals(string columnName, ISqlExpression expression)
         {
-            _currentWhen = columnName + " " + C.EQUALS + " " + expression.ToSqlString();
+            _currentWhen = columnName + C.SPACE + C.EQUALS + C.SPACE + expression.ToSqlString();
             return this;
         }
 
         public ICaseWhenNeedThenQueryBuilder WhenColumnEquals(string tableAlias, string columnName, ISqlExpression expression)
         {
-            _currentWhen = tableAlias + "." + columnName + " " + C.EQUALS + " " + expression.ToSqlString();
+            _currentWhen = tableAlias + C.DOT + columnName + C.SPACE + C.EQUALS + C.SPACE + expression.ToSqlString();
             return this;
         }
 
         public ICaseWhenNeedThenQueryBuilder WhenColumnEquals(string columnName, AbstractSqlLiteral literal)
         {
-            _currentWhen = columnName + " " + C.EQUALS + " " + literal.ToSqlString();
+            _currentWhen = columnName + C.SPACE + C.EQUALS + C.SPACE + literal.ToSqlString();
             return this;
         }
 
         public ICaseWhenNeedThenQueryBuilder WhenColumnEquals(string tableAlias, string columnName, AbstractSqlLiteral literal)
         {
-            _currentWhen = tableAlias + "." + columnName + " " + C.EQUALS + " " + literal.ToSqlString();
+            _currentWhen = tableAlias + C.DOT + columnName + C.SPACE + C.EQUALS + C.SPACE + literal.ToSqlString();
             return this;
         }
 

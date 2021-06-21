@@ -149,6 +149,23 @@ DROP trigger AfterDELETETrigger
             }
         }
 
+
+        [TestMethod]
+        public void Test_Drop_Procedure()
+        {
+            using (var b = Query.New)
+            {
+                b
+                    .Drop
+                    .Procedure("my_proc_login")
+                    ;
+                const string query = @"
+DROP PROCEDURE my_proc_login
+";
+                SqlAssert.AreEqualQuery(b.ToString(), query);
+            }
+        }
+
         [TestMethod]
         public void Test_Drop_Trigger_If_Exists()
         {

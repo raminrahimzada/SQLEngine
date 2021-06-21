@@ -2,20 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 
-// ReSharper disable UnusedMemberInSuper.Global
-// ReSharper disable InconsistentNaming
 #pragma warning disable IDE1006 // Naming Styles
 
-namespace SQLEngine.PostgreSql
+namespace SQLEngine.SqlServer
 {
-    [Obsolete("Do not Use,Not Completed Development")]
-    public class PostgreSqlQueryBuilder : IQueryBuilder
+    public class SqlServerQueryBuilder : IQueryBuilder
     {
         private static void SetupDefaults()
         {
             //default settings
             Query.Settings.EnumSqlStringConvertor = new IntegerEnumSqlStringConvertor();
-            Query.Settings.TypeConvertor = new TypeConvertor();
+            Query.Settings.TypeConvertor = new DefaultTypeConvertor();
+            Query.Settings.UniqueVariableNameGenerator = new DefaultUniqueVariableNameGenerator();
             Query.Settings.DefaultIdColumnName = "Id";
             Query.Settings.DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
             Query.Settings.DateFormat = "yyyy-MM-dd";
@@ -27,12 +25,12 @@ namespace SQLEngine.PostgreSql
         {
             SetupDefaults();
 
-            PostgreSqlLiteral.Setup();
-            PostgreSqlRawExpression.Setup();
-            PostgreSqlCondition.Setup();
+            SqlServerLiteral.Setup();
+            SqlServerRawExpression.Setup();
+            SqlServerCondition.Setup();
         }
 
-        static PostgreSqlQueryBuilder()
+        static SqlServerQueryBuilder()
         {
             Setup();
         }
@@ -44,25 +42,29 @@ namespace SQLEngine.PostgreSql
             return Build();
         }
 
+        public void Clear()
+        {
+            _list.Clear();
+        }
         public  string Build()
         {
-            using (var Writer = SqlWriter.New)
+            using (var writer = SqlWriter.New)
             {
                 foreach (var builder in _list)
                 {
-                    builder.Build(Writer);
-                    Writer.WriteLine();
+                    builder.Build(writer);
+                    writer.WriteLine();
                 }
 
-                return Writer.Build();
+                return writer.Build();
             }
         }
-        public  void Build(ISqlWriter Writer)
+        public  void Build(ISqlWriter writer)
         {
             foreach (var builder in _list)
             {
-                builder.Build(Writer);
-                Writer.WriteLine();
+                builder.Build(writer);
+                writer.WriteLine();
             }
         }
 
@@ -71,11 +73,6 @@ namespace SQLEngine.PostgreSql
         {
             _list.Add(item);
             return item;
-        }
-
-        public void Clear()
-        {
-            throw new NotImplementedException();
         }
 
         public ISelectQueryBuilder Select => _Add(new SelectQueryBuilder());
@@ -89,7 +86,7 @@ namespace SQLEngine.PostgreSql
         public IDropQueryBuilder Drop => _Add(new DropQueryBuilder());
         public IExecuteQueryBuilder Execute => _Add(new ExecuteQueryBuilder());   
 
-        public IConditionFilterQueryHelper Helper { get; } = new PostgreSqlConditionFilterQueryHelper();
+        public IConditionFilterQueryHelper Helper { get; } = new SqlServerConditionFilterQueryHelper();
 
         public void Union()
         {
@@ -111,17 +108,17 @@ namespace SQLEngine.PostgreSql
         
         public AbstractSqlExpression Raw(string rawSqlExpression)
         {
-            return new PostgreSqlRawExpression(rawSqlExpression);
+            return new SqlServerRawExpression(rawSqlExpression);
         }
-
+        
         public AbstractSqlExpression RawInternal(string rawSqlExpression)
         {
-            return new PostgreSqlRawExpression(rawSqlExpression);
+            return new SqlServerRawExpression(rawSqlExpression);
         }
 
         public AbstractSqlCondition RawCondition(string rawConditionQuery)
         {
-            return new PostgreSqlCondition(rawConditionQuery);
+            return new SqlServerCondition(rawConditionQuery);
         }
 
         public AbstractSqlLiteral Literal(AbstractSqlLiteral literal)
@@ -200,14 +197,14 @@ namespace SQLEngine.PostgreSql
         {
             var str = conditions.Select(x => x.ToSqlString()).ToArray();
             var xx = string.Join(C.OR, str);
-            var condition = PostgreSqlCondition.Raw(xx);
+            var condition = SqlServerCondition.Raw(xx);
             return If(condition);
         }
         public IIfQueryBuilder IfAnd(params AbstractSqlCondition[] conditions)
         {
             var str = conditions.Select(x => x.ToSqlString()).ToArray();
             var xx = string.Join(C.AND, str);
-            var condition = PostgreSqlCondition.Raw(xx);
+            var condition = SqlServerCondition.Raw(xx);
             return If(condition);
         }
         public IIfQueryBuilder If(AbstractSqlCondition condition)
@@ -223,12 +220,12 @@ namespace SQLEngine.PostgreSql
             using (var s=new SelectQueryBuilder())
             {
                 func(s);
-                return If(new PostgreSqlCondition(C.EXISTS, C.BEGIN_SCOPE, s.Build(), C.END_SCOPE));
+                return If(new SqlServerCondition(C.EXISTS, C.BEGIN_SCOPE, s.Build(), C.END_SCOPE));
             }
         }
         public IIfQueryBuilder IfExists(IAbstractSelectQueryBuilder selection)
         {
-            return If(new PostgreSqlCondition(C.NOT,C.SPACE,C.EXISTS , C.BEGIN_SCOPE , selection.Build() , C.END_SCOPE));
+            return If(new SqlServerCondition(C.NOT,C.SPACE,C.EXISTS , C.BEGIN_SCOPE , selection.Build() , C.END_SCOPE));
         }
 
         public IIfQueryBuilder IfNotExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> func)
@@ -236,13 +233,13 @@ namespace SQLEngine.PostgreSql
             using (var s = new SelectQueryBuilder())
             {
                 func(s);
-                return If(new PostgreSqlCondition(C.NOT , C.SPACE , C.EXISTS , C.BEGIN_SCOPE , s.Build() , C.END_SCOPE));
+                return If(new SqlServerCondition(C.NOT , C.SPACE , C.EXISTS , C.BEGIN_SCOPE , s.Build() , C.END_SCOPE));
             }
         }
 
         public IIfQueryBuilder IfNotExists(IAbstractSelectQueryBuilder selection)
         {
-            return If(new PostgreSqlCondition(C.NOT , C.SPACE , C.EXISTS , C.BEGIN_SCOPE , selection.Build() , C.END_SCOPE));
+            return If(new SqlServerCondition(C.NOT , C.SPACE , C.EXISTS , C.BEGIN_SCOPE , selection.Build() , C.END_SCOPE));
         }
 
         public IElseIfQueryBuilder ElseIf(AbstractSqlCondition condition)
@@ -282,56 +279,50 @@ namespace SQLEngine.PostgreSql
             }));
         }
 
-        public AbstractSqlVariable DeclareNew(string type)
-        {
-            throw new NotImplementedException();
-        }
-
-        public AbstractSqlVariable DeclareNew(string type, AbstractSqlLiteral defaultValue)
-        {
-            throw new NotImplementedException();
-        }
 
         public AbstractSqlVariable DeclareNew<T>(AbstractSqlLiteral defaultValue)
         {
-            throw new NotImplementedException();
+            var type = Query.Settings.TypeConvertor.ToSqlType<T>();
+            return DeclareNew(type, defaultValue);
         }
 
         public AbstractSqlVariable DeclareNew<T>()
         {
-            throw new NotImplementedException();
-        }
-
-
-        public AbstractSqlVariable DeclareRandom<T>(string variableName, AbstractSqlLiteral defaultValue)
-        {
             var type = Query.Settings.TypeConvertor.ToSqlType<T>();
-            return DeclareRandom(variableName, type, defaultValue);
+            return DeclareNew(type);
         }
 
         public AbstractSqlVariable Declare(string variableName, string type, Action<IQueryBuilder> builder)
         {
-            throw new NotImplementedException();
+            using (var q = Query.New)
+            {
+                builder(q);
+                using (var t = new DeclarationQueryBuilder())
+                {
+                    var defaultValue = q.Build();
+                    var expression = t.Declare(variableName).OfType(type).Default(q.RawInternal(defaultValue));
+                    _list.Add(expression);
+                    return new SqlServerVariable(variableName);
+                }
+            }
         }
 
         public AbstractSqlVariable Declare<T>(string variableName, Action<IQueryBuilder> builder)
         {
-            throw new NotImplementedException();
+            var type = Query.Settings.TypeConvertor.ToSqlType<T>();
+            return Declare(variableName, type, builder);
         }
 
-        public AbstractSqlVariable DeclareRandom(string variableName, string type, AbstractSqlLiteral defaultValue)
+      
+        public AbstractSqlVariable DeclareNew(string type)
         {
-            variableName = GenerateUniqueVariableName(variableName.ToLowerInvariant());
-
-            return Declare(variableName, type, defaultValue);
-        }
-
-       
-
-        public AbstractSqlVariable DeclareRandom(string variableName, string type)
-        {
-            variableName = GenerateUniqueVariableName(variableName.ToLowerInvariant());
+            var variableName = Query.Settings.UniqueVariableNameGenerator.New();
             return Declare(variableName, type);
+        }
+        public AbstractSqlVariable DeclareNew(string type,AbstractSqlLiteral defaultValue)
+        {
+            var variableName = Query.Settings.UniqueVariableNameGenerator.New();
+            return Declare(variableName, type, defaultValue);
         }
 
         public AbstractSqlVariable Declare(string variableName, string type)
@@ -340,7 +331,7 @@ namespace SQLEngine.PostgreSql
             {
                 var expression = t.Declare(variableName).OfType(type);
                 _list.Add(expression);
-                return new PostgreSqlVariable(variableName);
+                return new SqlServerVariable(variableName);
             }
         }
 
@@ -351,7 +342,7 @@ namespace SQLEngine.PostgreSql
             {
                 var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
                 _list.Add(expression);
-                return new PostgreSqlVariable(variableName);
+                return new SqlServerVariable(variableName);
             }
         }
         public AbstractSqlVariable Declare<T>(string variableName, AbstractSqlLiteral defaultValue)
@@ -361,7 +352,7 @@ namespace SQLEngine.PostgreSql
                 var type = Query.Settings.TypeConvertor.ToSqlType<T>();
                 var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
                 _list.Add(expression);
-                return new PostgreSqlVariable(variableName);
+                return new SqlServerVariable(variableName);
             }
         }
         public AbstractSqlVariable Declare<T>(string variableName)
@@ -371,7 +362,7 @@ namespace SQLEngine.PostgreSql
                 var type = Query.Settings.TypeConvertor.ToSqlType<T>();
                 var expression = t.Declare(variableName).OfType(type);
                 _list.Add(expression);
-                return new PostgreSqlVariable(variableName);
+                return new SqlServerVariable(variableName);
             }
         }
 
@@ -381,7 +372,7 @@ namespace SQLEngine.PostgreSql
             {
                 var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
                 _list.Add(expression);
-                return new PostgreSqlVariable(variableName);
+                return new SqlServerVariable(variableName);
             }
         }
         public AbstractSqlVariable Declare<T>(string variableName, ISqlExpression defaultValue)
@@ -391,7 +382,7 @@ namespace SQLEngine.PostgreSql
                 var type = Query.Settings.TypeConvertor.ToSqlType<T>();
                 var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
                 _list.Add(expression);
-                return new PostgreSqlVariable(variableName);
+                return new SqlServerVariable(variableName);
             }
         }
 
@@ -404,11 +395,11 @@ namespace SQLEngine.PostgreSql
         {
             var t = new SetQueryBuilder();
             var functionCallExpressionBuilder=new CustomFunctionCallExpressionBuilder();
-            ICustomFunctionCallNopBuilder tt = right(functionCallExpressionBuilder);
+            right(functionCallExpressionBuilder);
             using (var writer=SqlWriter.New)
             {
-                tt.Build(writer);
-                var expression = t.Set(variable).To(Raw(writer.Build()));
+                functionCallExpressionBuilder.Build(writer);
+                var expression = t.Set(variable).To(RawInternal(writer.Build()));
                 _list.Add(expression);
             }
         }
@@ -510,88 +501,88 @@ namespace SQLEngine.PostgreSql
             AbstractSqlVariable[] intoVariables,
             Action<IQueryBuilder> body)
         {
-            _list.Add(new RawStringQueryBuilder(Writer =>
+            _list.Add(new RawStringQueryBuilder(writer =>
             {
                 var variableName = cursorName;//"__cursor_" + Guid.NewGuid().ToString().Replace("-", "");
-                Writer.Write(C.DECLARE);
-                Writer.Write(C.SPACE);
-                Writer.Write(cursorName);
-                Writer.Write(C.SPACE);
-                Writer.Write(C.CURSOR);
-                Writer.Write(C.SPACE);
-                Writer.Write(C.FOR);
-                Writer.Write(C.SPACE);
+                writer.Write(C.DECLARE);
+                writer.Write(C.SPACE);
+                writer.Write(cursorName);
+                writer.Write(C.SPACE);
+                writer.Write(C.CURSOR);
+                writer.Write(C.SPACE);
+                writer.Write(C.FOR);
+                writer.Write(C.SPACE);
                 using (var s=new SelectQueryBuilder())
                 {
                     selection(s);
-                    s.Build(Writer);
+                    s.Build(writer);
                 }
-                Writer.WriteLine();
+                writer.WriteLine();
 
-                Writer.Write(C.OPEN);
-                Writer.Write(C.SPACE);
-                Writer.Write(variableName);
+                writer.Write(C.OPEN);
+                writer.Write(C.SPACE);
+                writer.Write(variableName);
 
-                Writer.WriteLine();
-                Writer.Write(C.FETCH);
-                Writer.Write(C.SPACE);
-                Writer.Write(C.NEXT);
-                Writer.Write(C.SPACE);
-                Writer.Write(C.FROM);
-                Writer.Write(C.SPACE);
-                Writer.Write(variableName);
-                Writer.Write(C.SPACE);
-                Writer.Write(C.INTO);
-                Writer.Write(C.SPACE);
-                Writer.Write(intoVariables.JoinWith());
+                writer.WriteLine();
+                writer.Write(C.FETCH);
+                writer.Write(C.SPACE);
+                writer.Write(C.NEXT);
+                writer.Write(C.SPACE);
+                writer.Write(C.FROM);
+                writer.Write(C.SPACE);
+                writer.Write(variableName);
+                writer.Write(C.SPACE);
+                writer.Write(C.INTO);
+                writer.Write(C.SPACE);
+                writer.Write(intoVariables.JoinWith());
 
-                Writer.WriteLine();
-                Writer.Write(C.WHILE);
-                Writer.Write(C.SPACE);
-                Writer.Write(C.FETCH_STATUS);
-                Writer.Write(C.EQUALS);
-                Writer.Write(0L.ToString());
+                writer.WriteLine();
+                writer.Write(C.WHILE);
+                writer.Write(C.SPACE);
+                writer.Write(C.FETCH_STATUS);
+                writer.Write(C.EQUALS);
+                writer.Write(0L.ToString());
 
-                Writer.WriteLine();
+                writer.WriteLine();
 
-                Writer.Write(C.BEGIN);
-                Writer.WriteLine();
-                Writer.Indent++;
+                writer.Write(C.BEGIN);
+                writer.WriteLine();
+                writer.Indent++;
 
                 using (var s = new FunctionBodyQueryBuilder())
                 {
                     body(s);
-                    Writer.Write(s.Build());
+                    writer.Write(s.Build());
                 }
 
-                Writer.WriteLine();
-                Writer.Write(C.FETCH);
-                Writer.Write(C.SPACE);
-                Writer.Write(C.NEXT);
-                Writer.Write(C.SPACE);
-                Writer.Write(C.FROM);
-                Writer.Write(C.SPACE);
-                Writer.Write(variableName);
-                Writer.Write(C.SPACE);
-                Writer.Write(C.INTO);
-                Writer.Write(C.SPACE);
-                Writer.Write(intoVariables.JoinWith());
+                writer.WriteLine();
+                writer.Write(C.FETCH);
+                writer.Write(C.SPACE);
+                writer.Write(C.NEXT);
+                writer.Write(C.SPACE);
+                writer.Write(C.FROM);
+                writer.Write(C.SPACE);
+                writer.Write(variableName);
+                writer.Write(C.SPACE);
+                writer.Write(C.INTO);
+                writer.Write(C.SPACE);
+                writer.Write(intoVariables.JoinWith());
 
-                Writer.WriteLine();
+                writer.WriteLine();
 
-                Writer.Indent--;
-                Writer.Write(C.END);
-                Writer.WriteLine();
+                writer.Indent--;
+                writer.Write(C.END);
+                writer.WriteLine();
 
-                Writer.Write(C.CLOSE);
-                Writer.Write(C.SPACE);
-                Writer.Write(variableName);
-                Writer.WriteLine();
+                writer.Write(C.CLOSE);
+                writer.Write(C.SPACE);
+                writer.Write(variableName);
+                writer.WriteLine();
 
-                Writer.Write(C.DEALLOCATE);
-                Writer.Write(C.SPACE);
-                Writer.Write(variableName);
-                Writer.WriteLine();
+                writer.Write(C.DEALLOCATE);
+                writer.Write(C.SPACE);
+                writer.Write(variableName);
+                writer.WriteLine();
             }));
         }
 
@@ -599,14 +590,11 @@ namespace SQLEngine.PostgreSql
         {
             _list.Add(new RawStringQueryBuilder(writer =>
             {
-                writer.Write(C.RAISE);
-                writer.Write(C.SPACE);
-                writer.Write(C.INFO);
-                writer.Write(C.SPACE);
-                writer.Write("'%'");
-                writer.Write(C.COMMA);
+                writer.Write("print");
+                writer.Write(C.BEGIN_SCOPE);
                 writer.Write(expression.ToSqlString());
-                writer.WriteLine(C.SEMICOLON);
+                writer.Write(C.END_SCOPE);
+                writer.WriteLine();
             }));
             
         }
@@ -625,11 +613,11 @@ namespace SQLEngine.PostgreSql
 
         public AbstractSqlColumn Column(string columnName)
         {
-            return new PostgreSqlColumn(columnName);
+            return new SqlServerColumn(columnName);
         }
         public AbstractSqlColumn Column(string columnName,string tableAlias)
         {
-            return new PostgreSqlColumnWithTableAlias(columnName, tableAlias);
+            return new SqlServerColumnWithTableAlias(columnName, tableAlias);
         }
 
         public AbstractSqlLiteral Literal(string x, bool isUniCode = true)
@@ -639,14 +627,12 @@ namespace SQLEngine.PostgreSql
 
         public AbstractSqlLiteral Literal(DateTime x, bool includeTime = true)
         {
-            return PostgreSqlLiteral.From(x, includeTime);
+            return SqlServerLiteral.From(x, includeTime);
         }
-
         public AbstractSqlLiteral Literal(DateTime? x, bool includeTime = true)
         {
-            return PostgreSqlLiteral.From(x, includeTime);
+            return SqlServerLiteral.From(x, includeTime);
         }
-
         public AbstractSqlLiteral Literal(DateTimeOffset x)
         {
             return AbstractSqlLiteral.From(x);
@@ -660,16 +646,17 @@ namespace SQLEngine.PostgreSql
         {
             return AbstractSqlLiteral.From(x);
         }
+        public AbstractSqlLiteral Literal(int? x)
+        {
+            return AbstractSqlLiteral.From(x);
+        }
 
         public AbstractSqlLiteral Literal(Enum x)
         {
             return AbstractSqlLiteral.From(x);
         }
 
-        public AbstractSqlLiteral Literal(int? x)
-        {
-            return AbstractSqlLiteral.From(x);
-        }
+       
 
         public AbstractSqlLiteral Literal(byte x)
         {

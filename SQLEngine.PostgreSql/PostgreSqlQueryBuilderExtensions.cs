@@ -1,25 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SQLEngine.PostgreSql
 {
     public static class PostgreSqlQueryBuilderExtensions
     {
+        [Obsolete("Do not use")]
         public static PostgreSqlQueryBuilder AsPostgreSql(this IQueryBuilder builder)
         {
-            var sqlServerBuilder = builder as PostgreSqlQueryBuilder;
-            if (sqlServerBuilder == null)
+            if (!(builder is PostgreSqlQueryBuilder sqlServerBuilder))
             {
                 throw new Exception("Builder is not Sql-Server Builder");
             }
             return sqlServerBuilder;
         }
-
-        public static void SetNoCountOn(this PostgreSqlQueryBuilder builder)
-        {
-            builder.AddExpression("SET NOCOUNT ON;");
-        }
+        
         /// <summary>
         /// Throws the exception.
         /// </summary>

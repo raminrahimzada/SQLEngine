@@ -1,4 +1,4 @@
-﻿namespace SQLEngine.PostgreSql
+﻿namespace SQLEngine.SqlServer
 {
     internal class DropQueryBuilder :AbstractQueryBuilder, IDropQueryBuilder, IDropTableQueryBuilder
     {
@@ -41,13 +41,16 @@
 
         public IDropTriggerNoNameQueryBuilder Trigger(string triggerName)
         {
-            //TODO
-            throw new System.NotImplementedException();
+            var b = new DropTriggerQueryBuilder();
+            _internalBuilder = b.Trigger(triggerName);
+            return b;
         }
 
         public IDropProcedureNoNameQueryBuilder Procedure(string procedureName)
         {
-            throw new System.NotImplementedException();
+            var b = new DropProcedureQueryBuilder();
+            _internalBuilder = b.Procedure(procedureName);
+            return b;
         }
 
         public override void Build(ISqlWriter writer)

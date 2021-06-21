@@ -98,6 +98,8 @@
     <Compile Include="SqlServer\Execute.cs" />
     <Compile Include="FutureWorks.cs" />
     <Compile Include="SqlServer\IfElse.cs" />
+    <Compile Include="SqlServer\Miscl.cs" />
+    <Compile Include="SqlServer\_Init.cs" />
     <Compile Include="SqlServer\Insert.cs" />
     <Compile Include="SqlServer\Literal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

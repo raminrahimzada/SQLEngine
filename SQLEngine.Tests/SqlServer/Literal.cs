@@ -38,15 +38,12 @@ namespace SQLEngine.Tests.SqlServer
 
                 literal = 1;
                 Assert.AreEqual(literal.ToSqlString(), "1");
-
                 
                 literal = InputOutput.Input;
                 Assert.AreEqual(literal.ToSqlString(), "1");
 
                 literal = InputOutput.Output;
                 Assert.AreEqual(literal.ToSqlString(), "2");
-
-
 
                 literal = (uint)1;
                 Assert.AreEqual(literal.ToSqlString(), "1");
@@ -68,16 +65,15 @@ namespace SQLEngine.Tests.SqlServer
 
                 literal = (ushort)1;
                 Assert.AreEqual(literal.ToSqlString(), "1");
-
-
-
-
-
+                
                 literal = 1.5D;
                 Assert.AreEqual(literal.ToSqlString(), "1.5");
 
                 literal = true;
                 Assert.AreEqual(literal.ToSqlString(), "1");
+                
+                literal = false;
+                Assert.AreEqual(literal.ToSqlString(), "0");
 
                 literal = 1.5F;
                 Assert.AreEqual(literal.ToSqlString(), "1.5");
@@ -103,6 +99,8 @@ namespace SQLEngine.Tests.SqlServer
                 literal = "Hey";
                 Assert.AreEqual(literal.ToSqlString(), "N'Hey'");
 
+                literal = q.Literal("Hey");
+                Assert.AreEqual(literal.ToSqlString(), "N'Hey'");
 
                 literal = q.Literal("Hey", isUniCode: false);
                 Assert.AreEqual(literal.ToSqlString(), "'Hey'");
@@ -112,7 +110,15 @@ namespace SQLEngine.Tests.SqlServer
                 literal = new byte[] {0, 1, 2};
                 Assert.AreEqual(literal.ToSqlString(), "0x000102");
 
-                
+
+                var dto = new DateTimeOffset(2021, 12, 13, 15, 30, 44, 365, TimeSpan.FromHours(4));
+                literal = AbstractSqlLiteral.From(dto);
+                Assert.AreEqual(literal.ToSqlString(), "'2021-12-13 15:30:44.365 +04:00'");
+
+                literal = AbstractSqlLiteral.From((DateTimeOffset?) dto);
+                Assert.AreEqual(literal.ToSqlString(), "'2021-12-13 15:30:44.365 +04:00'");
+
+
                 literal = (int?) null;
                 Assert.AreEqual(literal.ToSqlString(), C.NULL);
 
@@ -146,6 +152,9 @@ namespace SQLEngine.Tests.SqlServer
                 literal = (DateTime?)null;
                 Assert.AreEqual(literal.ToSqlString(), C.NULL);
                 
+                literal = (DateTimeOffset?)null;
+                Assert.AreEqual(literal.ToSqlString(), C.NULL);
+                
                 
                 literal = (InputOutput?)null;
                 Assert.AreEqual(literal.ToSqlString(), C.NULL);
@@ -155,6 +164,8 @@ namespace SQLEngine.Tests.SqlServer
 
                 literal = (byte[])null;
                 Assert.AreEqual(literal.ToSqlString(), C.NULL);
+
+
             }
         }
         

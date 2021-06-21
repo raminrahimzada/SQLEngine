@@ -2,7 +2,7 @@
 
 namespace SQLEngine.PostgreSql
 {
-    [Obsolete]
+    [Obsolete("Do Not Use")]
     public class CatchFunctionQueryBuilder : PostgreSqlQueryBuilder, ICatchFunctionQueryBuilder
     {
         public ISqlExpression ErrorNumber()

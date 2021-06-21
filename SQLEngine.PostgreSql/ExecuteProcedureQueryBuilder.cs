@@ -30,32 +30,28 @@ namespace SQLEngine.PostgreSql
 
             writer.Write2();
 
-            if (_parametersDictionary != null)
+            if (_parametersDictionary != null && _parametersDictionary.Count > 0)
             {
-                if (_parametersDictionary.Count > 0)
+                var i = 0;
+                foreach (var p in _parametersDictionary)
                 {
-                    var i = 0;
-                    foreach (var p in _parametersDictionary)
-                    {
-                        var key = p.Item1;
-                        var value = p.Item2;
-                        var direction = p.Item3;
+                    var key = p.Item1;
+                    var value = p.Item2;
+                    var direction = p.Item3;
 
-                        //writer.Write(C.VARIABLE_HEADER);
-                        writer.Write(key);
-                        writer.Write(C.EQUALS);
-                        writer.Write(value);
-                        if (direction == ProcedureArgumentDirectionTypes.OUT)
-                        {
-                            writer.Write2(C.OUTPUT);
-                        }
-                        if (i != _parametersDictionary.Count - 1)
-                        {
-                            writer.WriteNewLine();
-                            writer.Write(C.COMMA);
-                        }
-                        i++;
+                    writer.Write(key);
+                    writer.Write(C.EQUALS);
+                    writer.Write(value);
+                    if (direction == ProcedureArgumentDirectionTypes.OUT)
+                    {
+                        writer.Write2(C.OUTPUT);
                     }
+                    if (i != _parametersDictionary.Count - 1)
+                    {
+                        writer.WriteNewLine();
+                        writer.Write(C.COMMA);
+                    }
+                    i++;
                 }
             }
 
@@ -73,6 +69,12 @@ namespace SQLEngine.PostgreSql
             _parametersDictionary.Add(new Tuple<string, string, ProcedureArgumentDirectionTypes>(parameterName, parameterValue.ToSqlString(), ProcedureArgumentDirectionTypes.IN));
             return this;
         }
+        public IExecuteProcedureNeedArgQueryBuilder Arg(string parameterName, AbstractSqlLiteral parameterValue)
+        {
+            _parametersDictionary.Add(new Tuple<string, string, ProcedureArgumentDirectionTypes>(parameterName, parameterValue.ToSqlString(), ProcedureArgumentDirectionTypes.IN));
+            return this;
+        }
+
 
         public IExecuteProcedureNeedArgQueryBuilder ArgOut(string parameterName, AbstractSqlVariable parameterValue)
         {
@@ -80,12 +82,7 @@ namespace SQLEngine.PostgreSql
             return this;
         }
 
-        public IExecuteProcedureNeedArgQueryBuilder Arg(string parameterName, AbstractSqlLiteral parameterValue)
-        {
-            _parametersDictionary.Add(new Tuple<string, string, ProcedureArgumentDirectionTypes>(parameterName, parameterValue.ToSqlString(), ProcedureArgumentDirectionTypes.IN));
-            return this;
-        }
-
+       
         public IExecuteProcedureNeedArgQueryBuilder ArgOut(string parameterName, AbstractSqlLiteral parameterValue)
         {
             _parametersDictionary.Add(new Tuple<string, string, ProcedureArgumentDirectionTypes>(parameterName, parameterValue.ToSqlString(), ProcedureArgumentDirectionTypes.OUT));

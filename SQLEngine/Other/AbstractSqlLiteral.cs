@@ -26,7 +26,7 @@ namespace SQLEngine
         public abstract void SetFrom(double d);
         public abstract void SetFrom(decimal d);
         public abstract void SetFrom(float f);
-        public abstract void SetFrom(short f);
+        public abstract void SetFrom(short s);
         public abstract void SetFrom(sbyte sb);
         public abstract void SetFrom(ushort us);
         public abstract void SetFrom(DateTime dt, bool includeTime = true);

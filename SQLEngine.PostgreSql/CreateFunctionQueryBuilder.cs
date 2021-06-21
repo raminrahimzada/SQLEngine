@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace SQLEngine.PostgreSql
 {
+    [Obsolete("Do Not Use")]
     internal class CreateFunctionQueryBuilder : AbstractQueryBuilder, 
         IAbstractCreateFunctionQueryBuilder, 
         ICreateFunctionQueryBuilder,
@@ -58,7 +59,7 @@ namespace SQLEngine.PostgreSql
 
         public IAbstractCreateFunctionQueryBuilder Body(Action<IFunctionBodyQueryBuilder> body)
         {
-            var builder = new FunctionBodyQueryBuilder();
+            using(var builder = new FunctionBodyQueryBuilder())
             {
                 body(builder);
                 _body = builder;

@@ -248,7 +248,6 @@ namespace SQLEngine.PostgreSql
         public IElseIfQueryBuilder ElseIf(AbstractSqlCondition condition)
         {
             return _Add(new ElseIfQueryBuilder(condition));
-            
         }
 
         public void Else()
@@ -303,11 +302,7 @@ namespace SQLEngine.PostgreSql
         }
 
 
-        public AbstractSqlVariable DeclareRandom<T>(string variableName, AbstractSqlLiteral defaultValue)
-        {
-            var type = Query.Settings.TypeConvertor.ToSqlType<T>();
-            return DeclareRandom(variableName, type, defaultValue);
-        }
+        
 
         public AbstractSqlVariable Declare(string variableName, string type, Action<IQueryBuilder> builder)
         {
@@ -319,20 +314,11 @@ namespace SQLEngine.PostgreSql
             throw new NotImplementedException();
         }
 
-        public AbstractSqlVariable DeclareRandom(string variableName, string type, AbstractSqlLiteral defaultValue)
-        {
-            variableName = GenerateUniqueVariableName(variableName.ToLowerInvariant());
-
-            return Declare(variableName, type, defaultValue);
-        }
+        
 
        
 
-        public AbstractSqlVariable DeclareRandom(string variableName, string type)
-        {
-            variableName = GenerateUniqueVariableName(variableName.ToLowerInvariant());
-            return Declare(variableName, type);
-        }
+        
 
         public AbstractSqlVariable Declare(string variableName, string type)
         {
@@ -348,51 +334,41 @@ namespace SQLEngine.PostgreSql
         public AbstractSqlVariable Declare(string variableName, string type, AbstractSqlLiteral defaultValue)
         {
             var t = new DeclarationQueryBuilder();
-            {
-                var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
-                _list.Add(expression);
-                return new PostgreSqlVariable(variableName);
-            }
+            var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
+            _list.Add(expression);
+            return new PostgreSqlVariable(variableName);
         }
         public AbstractSqlVariable Declare<T>(string variableName, AbstractSqlLiteral defaultValue)
         {
             var t = new DeclarationQueryBuilder();
-            {
-                var type = Query.Settings.TypeConvertor.ToSqlType<T>();
-                var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
-                _list.Add(expression);
-                return new PostgreSqlVariable(variableName);
-            }
+            var type = Query.Settings.TypeConvertor.ToSqlType<T>();
+            var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
+            _list.Add(expression);
+            return new PostgreSqlVariable(variableName);
         }
         public AbstractSqlVariable Declare<T>(string variableName)
         {
             var t = new DeclarationQueryBuilder();
-            {
-                var type = Query.Settings.TypeConvertor.ToSqlType<T>();
-                var expression = t.Declare(variableName).OfType(type);
-                _list.Add(expression);
-                return new PostgreSqlVariable(variableName);
-            }
+            var type = Query.Settings.TypeConvertor.ToSqlType<T>();
+            var expression = t.Declare(variableName).OfType(type);
+            _list.Add(expression);
+            return new PostgreSqlVariable(variableName);
         }
 
         public AbstractSqlVariable Declare(string variableName, string type, ISqlExpression defaultValue)
         {
             var t = new DeclarationQueryBuilder();
-            {
-                var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
-                _list.Add(expression);
-                return new PostgreSqlVariable(variableName);
-            }
+            var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
+            _list.Add(expression);
+            return new PostgreSqlVariable(variableName);
         }
         public AbstractSqlVariable Declare<T>(string variableName, ISqlExpression defaultValue)
         {
             var t = new DeclarationQueryBuilder();
-            {
-                var type = Query.Settings.TypeConvertor.ToSqlType<T>();
-                var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
-                _list.Add(expression);
-                return new PostgreSqlVariable(variableName);
-            }
+            var type = Query.Settings.TypeConvertor.ToSqlType<T>();
+            var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
+            _list.Add(expression);
+            return new PostgreSqlVariable(variableName);
         }
 
         public void SetToScopeIdentity(AbstractSqlVariable variable)
@@ -424,18 +400,14 @@ namespace SQLEngine.PostgreSql
         public void Set(AbstractSqlVariable variable, AbstractSqlVariable value)
         {
             var t = new SetQueryBuilder();
-            {
-                var expression = t.Set(variable).To(value);
-                _list.Add(expression);
-            }
+            var expression = t.Set(variable).To(value);
+            _list.Add(expression);
         }
         public void Set(AbstractSqlVariable variable, AbstractSqlLiteral value)
         {
             var t = new SetQueryBuilder();
-            {
-                var expression = t.Set(variable).To(value);
-                _list.Add(expression);
-            }
+            var expression = t.Set(variable).To(value);
+            _list.Add(expression);
         }
         public void Return()
         {
@@ -493,17 +465,9 @@ namespace SQLEngine.PostgreSql
             
         }
 
-        private static readonly object Sync=new object();
-        private static long _randomFeed = 1;
+        
+        
 
-        public string GenerateUniqueVariableName(string beginning)
-        {
-            lock (Sync)
-            {
-                _randomFeed++;
-                return beginning.ToLowerInvariant() + "__" + _randomFeed;// + Guid.NewGuid().ToString().Replace("-", "_").ToLowerInvariant();
-            }
-        }
         public void Cursor(
             string cursorName,
             Action<ISelectQueryBuilder> selection,
@@ -730,11 +694,11 @@ namespace SQLEngine.PostgreSql
 
         public void Dispose()
         {
+            _list.Clear();
             foreach (var builder in _list)
             {
                 builder.Dispose();
             }
-            _list.Clear();
         }
     }
 }

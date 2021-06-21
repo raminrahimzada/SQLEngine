@@ -8,7 +8,7 @@ namespace SQLEngine.Tests.PostgreSql
     [TestClass]
     public partial class AllTests
     {
-        [Obsolete]
+        [Obsolete("Do Not Use")]
         [TestInitialize]
         public void Initialize()
         {

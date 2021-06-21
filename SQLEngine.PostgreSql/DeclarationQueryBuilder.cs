@@ -43,7 +43,6 @@
         {
             writer.Write(C.DECLARE);
             writer.Write(C.SPACE);
-            //writer.Write(C.VARIABLE_HEADER);
             writer.Write(_variableName);
             writer.Write(C.SPACE);
             writer.Write(_type);

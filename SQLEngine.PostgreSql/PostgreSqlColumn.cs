@@ -21,7 +21,9 @@ namespace SQLEngine.PostgreSql
             if (!Name.All(char.IsLetterOrDigit)) return "[" + Name + "]";
             return Name;
         }
+        #region EqualsTo
 
+        
         protected override AbstractSqlCondition EqualTo(AbstractSqlExpression expression)
         {
             var rawSqlString = ToSqlString() + " = " + expression.ToSqlString();
@@ -74,6 +76,12 @@ namespace SQLEngine.PostgreSql
             return EqualTo((AbstractSqlLiteral)value);
         }
 
+        protected override AbstractSqlCondition EqualTo(AbstractSqlVariable variable)
+        {
+            var rawSqlString = ToSqlString() + " = " + variable.ToSqlString();
+            return PostgreSqlCondition.Raw(rawSqlString);
+        }
+
         protected override AbstractSqlCondition EqualTo(long value)
         {
             return EqualTo((AbstractSqlLiteral)value);
@@ -93,6 +101,11 @@ namespace SQLEngine.PostgreSql
         {
             return EqualTo((AbstractSqlLiteral)value);
         }
+        #endregion
+
+        #region NotEqualTo
+
+
 
         protected override AbstractSqlCondition NotEqualTo(AbstractSqlExpression expression)
         {
@@ -169,16 +182,116 @@ namespace SQLEngine.PostgreSql
         {
             return EqualTo((AbstractSqlLiteral)value);
         }
+        #endregion
+
+        #region Greater
+
+        protected override AbstractSqlCondition Greater(AbstractSqlVariable variable)
+        {
+            var rawSqlString = ToSqlString() + " > " + variable.ToSqlString();
+            return PostgreSqlCondition.Raw(rawSqlString);
+        }
+
+
+        protected override AbstractSqlCondition Greater(byte value)
+        {
+            return Greater((PostgreSqlLiteral)value);
+        }
+
+
+        protected override AbstractSqlCondition Greater(DateTime value)
+        {
+            return Greater((PostgreSqlLiteral)value);
+        }
 
         protected override AbstractSqlCondition Greater(AbstractSqlColumn otherColumn)
         {
             var rawSqlString = ToSqlString() + " > " + otherColumn.ToSqlString();
             return PostgreSqlCondition.Raw(rawSqlString);
         }
+        protected override AbstractSqlCondition Greater(AbstractSqlLiteral value)
+        {
+            var rawSqlString = ToSqlString() + " > " + value.ToSqlString();
+            return PostgreSqlCondition.Raw(rawSqlString);
+        }
+
+        protected override AbstractSqlCondition Greater(double value)
+        {
+            return Greater((PostgreSqlLiteral)value);
+        }
+
+        protected override AbstractSqlCondition Greater(long value)
+        {
+            return Greater((PostgreSqlLiteral)value);
+        }
+
+
+        protected override AbstractSqlCondition Greater(int value)
+        {
+            return Greater((PostgreSqlLiteral)value);
+        }
+        #endregion
+
+        #region GreaterEqual
+
+
+        protected override AbstractSqlCondition GreaterEqual(DateTime value)
+        {
+            return GreaterEqual((PostgreSqlLiteral)value);
+        }
+
+        protected override AbstractSqlCondition GreaterEqual(byte value)
+        {
+            return GreaterEqual((PostgreSqlLiteral)value);
+        }
+
+        protected override AbstractSqlCondition GreaterEqual(double value)
+        {
+            return GreaterEqual((PostgreSqlLiteral)value);
+        }
+
+
+
+        protected override AbstractSqlCondition GreaterEqual(int value)
+        {
+            return GreaterEqual((PostgreSqlLiteral)value);
+        }
+
+
+        protected override AbstractSqlCondition GreaterEqual(long value)
+        {
+            return GreaterEqual((PostgreSqlLiteral)value);
+        }
+
 
         protected override AbstractSqlCondition GreaterEqual(AbstractSqlColumn otherColumn)
         {
             var rawSqlString = ToSqlString() + " >= " + otherColumn.ToSqlString();
+            return PostgreSqlCondition.Raw(rawSqlString);
+        }
+        protected override AbstractSqlCondition GreaterEqual(AbstractSqlVariable variable)
+        {
+            var rawSqlString = ToSqlString() + " >= " + variable.ToSqlString();
+            return PostgreSqlCondition.Raw(rawSqlString);
+        }
+        protected override AbstractSqlCondition GreaterEqual(AbstractSqlLiteral value)
+        {
+            var rawSqlString = ToSqlString() + " >= " + value.ToSqlString();
+            return PostgreSqlCondition.Raw(rawSqlString);
+        }
+        #endregion
+
+        #region Less
+
+
+        protected override AbstractSqlCondition Less(byte value)
+        {
+            return Less((PostgreSqlLiteral)value);
+        }
+
+        protected override AbstractSqlCondition Less(AbstractSqlVariable variable)
+        {
+            var rawSqlString = ToSqlString() + " < " + variable.ToSqlString();
             return PostgreSqlCondition.Raw(rawSqlString);
         }
 
@@ -187,28 +300,56 @@ namespace SQLEngine.PostgreSql
             var rawSqlString = ToSqlString() + " < " + otherColumn.ToSqlString();
             return PostgreSqlCondition.Raw(rawSqlString);
         }
+        protected override AbstractSqlCondition Less(AbstractSqlLiteral value)
+        {
+            var rawSqlString = ToSqlString() + " < " + value.ToSqlString();
+            return PostgreSqlCondition.Raw(rawSqlString);
+        }
+
+        protected override AbstractSqlCondition Less(DateTime value)
+        {
+            return Less((PostgreSqlLiteral)value);
+        }
+        protected override AbstractSqlCondition Less(long value)
+        {
+            return Less((PostgreSqlLiteral)value);
+        }
+
+        protected override AbstractSqlCondition Less(double value)
+        {
+            return Less((PostgreSqlLiteral)value);
+        }
+
+        protected override AbstractSqlCondition Less(int value)
+        {
+            return Less((PostgreSqlLiteral)value);
+        }
+
+
+        #endregion
+
+        #region LessEqual
+
+        protected override AbstractSqlCondition LessEqual(int value)
+        {
+            return LessEqual((PostgreSqlLiteral)value);
+        }
+
+
+        protected override AbstractSqlCondition LessEqual(AbstractSqlVariable variable)
+        {
+            var rawSqlString = ToSqlString() + " <= " + variable.ToSqlString();
+            return PostgreSqlCondition.Raw(rawSqlString);
+        }
+
+        protected override AbstractSqlCondition LessEqual(byte value)
+        {
+            return LessEqual((PostgreSqlLiteral)value);
+        }
 
         protected override AbstractSqlCondition LessEqual(AbstractSqlColumn otherColumn)
         {
             var rawSqlString = ToSqlString() + " <= " + otherColumn.ToSqlString();
-            return PostgreSqlCondition.Raw(rawSqlString);
-        }
-
-        protected override AbstractSqlCondition Greater(AbstractSqlLiteral value)
-        {
-            var rawSqlString = ToSqlString() + " > " + value.ToSqlString();
-            return PostgreSqlCondition.Raw(rawSqlString);
-        }
-
-        protected override AbstractSqlCondition GreaterEqual(AbstractSqlLiteral value)
-        {
-            var rawSqlString = ToSqlString() + " >= " + value.ToSqlString();
-            return PostgreSqlCondition.Raw(rawSqlString);
-        }
-
-        protected override AbstractSqlCondition Less(AbstractSqlLiteral value)
-        {
-            var rawSqlString = ToSqlString() + " < " + value.ToSqlString();
             return PostgreSqlCondition.Raw(rawSqlString);
         }
 
@@ -218,135 +359,25 @@ namespace SQLEngine.PostgreSql
             return PostgreSqlCondition.Raw(rawSqlString);
         }
 
-        protected override AbstractSqlCondition EqualTo(AbstractSqlVariable variable)
-        {
-            var rawSqlString = ToSqlString() + " = " + variable.ToSqlString();
-            return PostgreSqlCondition.Raw(rawSqlString);
-        }
-
-        protected override AbstractSqlCondition GreaterEqual(AbstractSqlVariable variable)
-        {
-            var rawSqlString = ToSqlString() + " >= " + variable.ToSqlString();
-            return PostgreSqlCondition.Raw(rawSqlString);
-        }
-
-        protected override AbstractSqlCondition Greater(AbstractSqlVariable variable)
-        {
-            var rawSqlString = ToSqlString() + " > " + variable.ToSqlString();
-            return PostgreSqlCondition.Raw(rawSqlString);
-        }
-
-        protected override AbstractSqlCondition Less(AbstractSqlVariable variable)
-        {
-            var rawSqlString = ToSqlString() + " < " + variable.ToSqlString();
-            return PostgreSqlCondition.Raw(rawSqlString);
-        }
-
-        protected override AbstractSqlCondition LessEqual(AbstractSqlVariable variable)
-        {
-            var rawSqlString = ToSqlString() + " <= " + variable.ToSqlString();
-            return PostgreSqlCondition.Raw(rawSqlString);
-        }
-
-        protected override AbstractSqlCondition Greater(byte value)
-        {
-            return Greater((PostgreSqlLiteral) value);
-        }
-
-        protected override AbstractSqlCondition GreaterEqual(byte value)
-        {
-            return GreaterEqual((PostgreSqlLiteral)value);
-        }
-
-        protected override AbstractSqlCondition Less(byte value)
-        {
-            return Less((PostgreSqlLiteral)value);
-        }
-
-        protected override AbstractSqlCondition LessEqual(byte value)
-        {
-            return LessEqual((PostgreSqlLiteral)value);
-        }
-
-        protected override AbstractSqlCondition Greater(DateTime value)
-        {
-            return Greater((PostgreSqlLiteral)value);
-        }
-
-        protected override AbstractSqlCondition GreaterEqual(DateTime value)
-        {
-            return GreaterEqual((PostgreSqlLiteral)value);
-        }
-
-        protected override AbstractSqlCondition Less(DateTime value)
-        {
-            return Less((PostgreSqlLiteral)value);
-        }
-
         protected override AbstractSqlCondition LessEqual(DateTime value)
         {
             return LessEqual((PostgreSqlLiteral)value);
-        }
-
-        protected override AbstractSqlCondition Greater(double value)
-        {
-            return Greater((PostgreSqlLiteral)value);
-        }
-
-        protected override AbstractSqlCondition GreaterEqual(double value)
-        {
-            return GreaterEqual((PostgreSqlLiteral)value);
-        }
-
-        protected override AbstractSqlCondition Less(double value)
-        {
-            return Less((PostgreSqlLiteral)value);
         }
 
         protected override AbstractSqlCondition LessEqual(double value)
         {
             return LessEqual((PostgreSqlLiteral)value);
         }
-
-        protected override AbstractSqlCondition Greater(long value)
-        {
-            return Greater((PostgreSqlLiteral)value);
-        }
-
-        protected override AbstractSqlCondition GreaterEqual(long value)
-        {
-            return GreaterEqual((PostgreSqlLiteral)value);
-        }
-
-        protected override AbstractSqlCondition Less(long value)
-        {
-            return Less((PostgreSqlLiteral)value);
-        }
-
         protected override AbstractSqlCondition LessEqual(long value)
         {
             return LessEqual((PostgreSqlLiteral)value);
         }
 
-        protected override AbstractSqlCondition Greater(int value)
-        {
-            return Greater((PostgreSqlLiteral)value);
-        }
 
-        protected override AbstractSqlCondition GreaterEqual(int value)
-        {
-            return GreaterEqual((PostgreSqlLiteral)value);
-        }
 
-        protected override AbstractSqlCondition Less(int value)
-        {
-            return Less((PostgreSqlLiteral)value);
-        }
+        #endregion
 
-        protected override AbstractSqlCondition LessEqual(int value)
-        {
-            return LessEqual((PostgreSqlLiteral)value);
-        }
+
 
         public override AbstractSqlCondition Like(string expression,bool isUnicode=true)
         {
@@ -457,64 +488,99 @@ namespace SQLEngine.PostgreSql
 
             return PostgreSqlCondition.Raw(writer.Build());
         }
+
+        #region Add
+
+        
+
         protected override AbstractSqlExpression Add(AbstractSqlColumn right)
         {
             return new PostgreSqlRawExpression(ToSqlString() ,C.PLUS, right.ToSqlString());
         }
+
+        protected override AbstractSqlExpression Add(AbstractSqlLiteral right)
+        {
+            return new PostgreSqlRawExpression(ToSqlString(), C.ADD, right.ToSqlString());
+        }
+        protected override AbstractSqlExpression Add(AbstractSqlExpression right)
+        {
+            return new PostgreSqlRawExpression(ToSqlString() + "+" + right.ToSqlString());
+        }
+        #endregion
+
+        #region Subtract
+
+
+
+
 
         protected override AbstractSqlExpression Subtract(AbstractSqlColumn right)
         {
             return new PostgreSqlRawExpression(ToSqlString() ,C.MINUS, right.ToSqlString());
         }
 
-        protected override AbstractSqlExpression Divide(AbstractSqlColumn right)
-        {
-            return new PostgreSqlRawExpression(ToSqlString() ,C.DIVIDE, right.ToSqlString());
-        }
-
-        protected override AbstractSqlExpression Multiply(AbstractSqlColumn right)
-        {
-            return new PostgreSqlRawExpression(ToSqlString() ,C.MULTIPLY, right.ToSqlString());
-        }
-
-        protected override AbstractSqlExpression Add(AbstractSqlLiteral right)
-        {
-            return new PostgreSqlRawExpression(ToSqlString(),C.ADD,right.ToSqlString());
-        }
 
         protected override AbstractSqlExpression Subtract(AbstractSqlLiteral right)
         {
             return new PostgreSqlRawExpression(ToSqlString(), C.MINUS, right.ToSqlString());
         }
-
-        protected override AbstractSqlExpression Divide(AbstractSqlLiteral right)
-        {
-            return new PostgreSqlRawExpression(ToSqlString() + "/" + right.ToSqlString());
-        }
-
-        protected override AbstractSqlExpression Multiply(AbstractSqlLiteral right)
-        {
-            return new PostgreSqlRawExpression(ToSqlString() + "*" + right.ToSqlString());
-        }
-
-        protected override AbstractSqlExpression Add(AbstractSqlExpression right)
-        {
-            return new PostgreSqlRawExpression(ToSqlString() + "+" + right.ToSqlString());
-        }
-
         protected override AbstractSqlExpression Subtract(AbstractSqlExpression right)
         {
             return new PostgreSqlRawExpression(ToSqlString() + "-" + right.ToSqlString());
+        }
+
+        #endregion
+
+        #region Divide
+
+
+
+        protected override AbstractSqlExpression Divide(AbstractSqlColumn right)
+        {
+            return new PostgreSqlRawExpression(ToSqlString() ,C.DIVIDE, right.ToSqlString());
+        }
+        protected override AbstractSqlExpression Divide(AbstractSqlLiteral right)
+        {
+            return new PostgreSqlRawExpression(ToSqlString() + "/" + right.ToSqlString());
         }
 
         protected override AbstractSqlExpression Divide(AbstractSqlExpression right)
         {
             return new PostgreSqlRawExpression(ToSqlString() + "/" + right.ToSqlString());
         }
+        #endregion
+
+        #region Multiply
+
+
+
+        protected override AbstractSqlExpression Multiply(AbstractSqlColumn right)
+        {
+            return new PostgreSqlRawExpression(ToSqlString() ,C.MULTIPLY, right.ToSqlString());
+        }
+
+        
+
+        
+
+        
+
+        protected override AbstractSqlExpression Multiply(AbstractSqlLiteral right)
+        {
+            return new PostgreSqlRawExpression(ToSqlString() + "*" + right.ToSqlString());
+        }
+
+
+
+
+
+        
 
         protected override AbstractSqlExpression Multiply(AbstractSqlExpression right)
         {
             return new PostgreSqlRawExpression(ToSqlString() + "*" + right.ToSqlString());
         }
+        #endregion
+
     }
 }

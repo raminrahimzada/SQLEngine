@@ -2,7 +2,7 @@
 
 namespace SQLEngine.PostgreSql
 {
-    [Obsolete]
+    [Obsolete("Do Not Use")]
     internal class FunctionBodyQueryBuilder : PostgreSqlQueryBuilder, IFunctionBodyQueryBuilder
     {
         public AbstractSqlVariable Param(string name)

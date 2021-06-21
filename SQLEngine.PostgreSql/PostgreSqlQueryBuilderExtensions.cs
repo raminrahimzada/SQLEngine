@@ -9,7 +9,7 @@ namespace SQLEngine.PostgreSql
         {
             if (!(builder is PostgreSqlQueryBuilder sqlServerBuilder))
             {
-                throw new Exception("Builder is not Sql-Server Builder");
+                throw new InvalidCastException("Builder is not Sql-Server Builder");
             }
             return sqlServerBuilder;
         }

@@ -149,16 +149,17 @@ namespace SQLEngine.PostgreSql
             _rawSqlString = b ? "1" : "0";
         }
 
-        public override void SetFrom(string str, bool isUnicode = true)
+        public override void SetFrom(string s, bool isUnicode = true)
         {
-            if (str == null) _rawSqlString = C.NULL;
+            if (s == null) _rawSqlString = C.NULL;
             else
             {
-                str = str.Replace("'", "''");
-                str = $"'{str}'";
-                _rawSqlString = isUnicode ? $"{str}" : str;
+                s = s.Replace("'", "''");
+                s = $"'{s}'";
+                _rawSqlString = isUnicode ? $"{s}" : s;
             }
         }
+
 
         public override void SetFrom(double d)
         {
@@ -184,9 +185,9 @@ namespace SQLEngine.PostgreSql
             _rawSqlString = us.ToString();
         }
 
-        public override void SetFrom(DateTime date, bool includeTime = true)
+        public override void SetFrom(DateTime dt, bool includeTime = true)
         {
-            var str = date.ToString((!includeTime) ? Query.Settings.DateFormat : Query.Settings.DateTimeFormat);
+            var str = dt.ToString((!includeTime) ? Query.Settings.DateFormat : Query.Settings.DateTimeFormat);
             _rawSqlString = $"'{str}'";
         }
 

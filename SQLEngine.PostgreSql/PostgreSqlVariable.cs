@@ -20,10 +20,21 @@ namespace SQLEngine.PostgreSql
             return new PostgreSqlRawExpression(sql);
         }
 
+        public override AbstractSqlExpression Add(AbstractSqlLiteral literal)
+        {
+            var expression = "(" + ToSqlString() + " + " + literal.ToSqlString() + ")";
+            return new PostgreSqlRawExpression(expression);
+        }
+
         public override AbstractSqlExpression Subtract(AbstractSqlVariable y)
         {
             var sql = "(" + ToSqlString() + " - " + y.ToSqlString() + ")";
             return new PostgreSqlRawExpression(sql);
+        }
+        public override AbstractSqlExpression Subtract(AbstractSqlLiteral literal)
+        {
+            var expression = "(" + ToSqlString() + " - " + literal.ToSqlString() + ")";
+            return new PostgreSqlRawExpression(expression);
         }
 
         public override AbstractSqlCondition In(params AbstractSqlExpression[] expressions)
@@ -262,11 +273,7 @@ namespace SQLEngine.PostgreSql
             return new PostgreSqlRawExpression(expression);
         }
 
-        public override AbstractSqlExpression Add(AbstractSqlLiteral literal)
-        {
-            var expression = "(" + ToSqlString() + " + " + literal.ToSqlString() + ")";
-            return new PostgreSqlRawExpression(expression);
-        }
+        
 
         public override AbstractSqlExpression Divide(AbstractSqlVariable variable)
         {
@@ -274,11 +281,7 @@ namespace SQLEngine.PostgreSql
             return new PostgreSqlRawExpression(expression);
         }
 
-        public override AbstractSqlExpression Subtract(AbstractSqlLiteral literal)
-        {
-            var expression = "(" + ToSqlString() + " - " + literal.ToSqlString() + ")";
-            return new PostgreSqlRawExpression(expression);
-        }
+        
 
         protected override AbstractSqlExpression SubtractReverse(AbstractSqlLiteral literal)
         {

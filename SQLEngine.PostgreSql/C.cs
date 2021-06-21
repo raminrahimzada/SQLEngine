@@ -1,4 +1,5 @@
-﻿namespace SQLEngine.PostgreSql
+﻿// ReSharper disable InconsistentNaming
+namespace SQLEngine.PostgreSql
 {
     /// <summary>
     /// Represents constant strings in Sql Server 
@@ -37,11 +38,7 @@
         public const string FETCH_STATUS = "@@FETCH_STATUS";
         public const string UNION = "UNION";
         public const string ALL = "ALL";
-        public const string FORMATMESSAGE = "FORMATMESSAGE";
-        public const string RAISERROR = "RAISERROR";
-        public const string NOWAIT = "NOWAIT";
         public const string LIKE = "LIKE";
-        public const string ESCAPE = "ESCAPE";
         public const string CASE = "CASE";
         public const string WHEN = "WHEN";
         public const string THEN = "THEN";
@@ -49,15 +46,12 @@
         public const string NAME = "NAME";
         public const string RETURN = "RETURN";
         
-        //public const string DATETIME = "DATETIME";
         public const string TIMESTAMP = "TIMESTAMP";
 
         public const string DROP = "DROP";
         public const string DATABASE = "DATABASE";
         public const string INT = "INT";
         public const string BIGINT = "BIGINT";
-        //public const string NVARCHAR = "NVARCHAR";
-        //public const string NVARCHARMAX = "NVARCHAR(MAX)";
         public const string VARCHAR = "VARCHAR";
         public const string CHAR = "CHAR";
         public const string NCHAR = "NCHAR";
@@ -68,7 +62,6 @@
         public const string VARBINARYMAX = "VARBINARY(MAX)";
         public const string SMALLINT = "SMALLINT";
 
-        public const string NONCLUSTERED = "NONCLUSTERED";
         public const string MAX = "MAX";
         public const string FOR = "FOR";
         public const string IDENTITY = "IDENTITY";
@@ -114,8 +107,8 @@
         public const string DECLARE = "DECLARE";
         public const string OPEN = "OPEN";
         public const string CAST = "CAST";
-        //public const string VARIABLE_HEADER = "@";
         public const string BEGIN = "BEGIN";
+        
         public const string END = "END";
         public const string GROUP = "GROUP";
         public const string AS = "AS";

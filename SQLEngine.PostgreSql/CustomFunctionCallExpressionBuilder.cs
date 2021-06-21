@@ -6,7 +6,7 @@ namespace SQLEngine.PostgreSql
     {
         private Action<ISqlWriter> _internalBuilder;
 
-        [Obsolete]
+        [Obsolete("Do Not Use")]
         internal CustomFunctionCallExpressionBuilder()
         {
         }

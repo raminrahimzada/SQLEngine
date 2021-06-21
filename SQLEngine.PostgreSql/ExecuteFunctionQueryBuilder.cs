@@ -3,8 +3,7 @@
 namespace SQLEngine.PostgreSql
 {
     internal class ExecuteFunctionQueryBuilder : 
-        AbstractQueryBuilder, 
-        IExecuteFunctionNeedNameQueryBuilder,
+        AbstractQueryBuilder,
         IExecuteFunctionNeedNameAndSchemaQueryBuilder
     {
         private string _functionName;

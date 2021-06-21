@@ -3,22 +3,26 @@
     public interface IAggregateFunctionBuilder : IAbstractQueryBuilder
     {
         IAggregateFunctionBuilder Min(ISqlExpression expression);
-        IAggregateFunctionBuilder Max(ISqlExpression expression);
-        IAggregateFunctionBuilder Count(ISqlExpression expression);
-        IAggregateFunctionBuilder Sum(ISqlExpression expression);
-        IAggregateFunctionBuilder Avg(ISqlExpression expression);
-        
-        
         IAggregateFunctionBuilder Min(AbstractSqlColumn column);
-        IAggregateFunctionBuilder Max(AbstractSqlColumn column);
-        IAggregateFunctionBuilder Count(AbstractSqlColumn column);
-        IAggregateFunctionBuilder Sum(AbstractSqlColumn column);
-        IAggregateFunctionBuilder Avg(AbstractSqlColumn column);
-        
         IAggregateFunctionBuilder Min(string columnName);
+
+        IAggregateFunctionBuilder Max(ISqlExpression expression);
+        IAggregateFunctionBuilder Max(AbstractSqlColumn column);
         IAggregateFunctionBuilder Max(string columnName);
+
+
+        IAggregateFunctionBuilder Count(ISqlExpression expression);
+        IAggregateFunctionBuilder Count(AbstractSqlColumn column);
         IAggregateFunctionBuilder Count(string columnName);
+
+        IAggregateFunctionBuilder Sum(ISqlExpression expression);
+        IAggregateFunctionBuilder Sum(AbstractSqlColumn column);
         IAggregateFunctionBuilder Sum(string columnName);
+
+
+
+        IAggregateFunctionBuilder Avg(ISqlExpression expression);
+        IAggregateFunctionBuilder Avg(AbstractSqlColumn column);
         IAggregateFunctionBuilder Avg(string columnName);
 
 

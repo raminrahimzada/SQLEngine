@@ -1,4 +1,6 @@
-﻿namespace SQLEngine.PostgreSql
+﻿using System;
+
+namespace SQLEngine.PostgreSql
 {
     internal class CreateQueryBuilder : AbstractQueryBuilder, ICreateQueryBuilder
     {
@@ -35,6 +37,7 @@
                 return Table(table.Name);
             }
         }
+        [Obsolete("Do Not Use")]
         public ICreateFunctionNoNameQueryBuilder Function(string funcName)
         {
             var x = New<CreateFunctionQueryBuilder>().Name(funcName);
@@ -72,7 +75,6 @@
 
         public ICreateTriggerNoNameQueryBuilder Trigger(string triggerName)
         {
-            //TODO
             throw new System.NotImplementedException();
         }
     }

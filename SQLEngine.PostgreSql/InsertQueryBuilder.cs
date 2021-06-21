@@ -80,90 +80,90 @@ namespace SQLEngine.PostgreSql
         
         public override void Build(ISqlWriter writer)
         {
-            ValidateAndThrow();
+            //ValidateAndThrow();
 
-            writer.Write(C.INSERT);
-            writer.Write2(C.INTO);
-            writer.Write(I(_tableName));
-            writer.Write2(C.SPACE);
+            //writer.Write(C.INSERT);
+            //writer.Write2(C.INTO);
+            //writer.Write(I(_tableName));
+            //writer.Write2(C.SPACE);
 
-            var columnNamesSafe = _columnNames?.Select(I).ToArray();
-            var isColumnsAndValues1 = _columnNames != null && _columnNames.Length > 0;
-            var isColumnsAndValues2 = _columnsAndValuesDictionary != null && _columnsAndValuesDictionary.Count > 0;
-            if (isColumnsAndValues1|| isColumnsAndValues2)
-            {
-                var columnNames = _columnNames;
-                var valuesList = _valuesList;
-                if (columnNames == null)
-                {
-                    if (_columnsAndValuesDictionary == null) throw Bomb();
-                    columnNames = _columnsAndValuesDictionary.Keys.ToArray();
-                }
-                if (valuesList == null)
-                {
-                    if (_columnsAndValuesDictionary == null) throw Bomb();
-                    valuesList = _columnsAndValuesDictionary.Values.ToArray();
-                }
-                writer.WriteLine();
-                writer.Indent++;
-                writer.BeginScope();
-                writer.WriteJoined(columnNames.ToArray());
-                writer.EndScope();
-                writer.WriteLine();
-                writer.Indent--;
+            //var columnNamesSafe = _columnNames?.Select(I).ToArray();
+            //var isColumnsAndValues1 = _columnNames != null && _columnNames.Length > 0;
+            //var isColumnsAndValues2 = _columnsAndValuesDictionary != null && _columnsAndValuesDictionary.Count > 0;
+            //if (isColumnsAndValues1|| isColumnsAndValues2)
+            //{
+            //    var columnNames = _columnNames;
+            //    var valuesList = _valuesList;
+            //    if (columnNames == null)
+            //    {
+            //        if (_columnsAndValuesDictionary == null) throw Bomb();
+            //        columnNames = _columnsAndValuesDictionary.Keys.ToArray();
+            //    }
+            //    if (valuesList == null)
+            //    {
+            //        if (_columnsAndValuesDictionary == null) throw Bomb();
+            //        valuesList = _columnsAndValuesDictionary.Values.ToArray();
+            //    }
+            //    writer.WriteLine();
+            //    writer.Indent++;
+            //    writer.BeginScope();
+            //    writer.WriteJoined(columnNames.ToArray());
+            //    writer.EndScope();
+            //    writer.WriteLine();
+            //    writer.Indent--;
 
-                writer.Write(C.VALUES);
-                writer.WriteLine();
-                writer.Indent++;
+            //    writer.Write(C.VALUES);
+            //    writer.WriteLine();
+            //    writer.Indent++;
 
-                writer.BeginScope();
+            //    writer.BeginScope();
 
-                writer.WriteJoined(valuesList.Select(x => x.ToSqlString()).ToArray());
-                writer.EndScope();
-                writer.Indent--;
-            }
-            else if (!string.IsNullOrEmpty(_selection))//selection mode
-            {
-                if (_columnNames != null)
-                {
-                    writer.BeginScope();
-                    writer.WriteJoined(columnNamesSafe);
-                    writer.EndScope();
-                }
-                writer.Write(C.SPACE);
-                writer.Write(_selection);
-            }
-            else //normal model 
-            {
-                if (_columnNames != null)
-                {
-                    writer.WriteLine();
-                    writer.Indent++;
-                    writer.BeginScope();
-                    writer.WriteJoined(columnNamesSafe);
-                    writer.EndScope();
-                    writer.Indent--;
+            //    writer.WriteJoined(valuesList.Select(x => x.ToSqlString()).ToArray());
+            //    writer.EndScope();
+            //    writer.Indent--;
+            //}
+            //else if (!string.IsNullOrEmpty(_selection))//selection mode
+            //{
+            //    if (_columnNames != null)
+            //    {
+            //        writer.BeginScope();
+            //        writer.WriteJoined(columnNamesSafe);
+            //        writer.EndScope();
+            //    }
+            //    writer.Write(C.SPACE);
+            //    writer.Write(_selection);
+            //}
+            //else //normal model 
+            //{
+            //    if (_columnNames != null)
+            //    {
+            //        writer.WriteLine();
+            //        writer.Indent++;
+            //        writer.BeginScope();
+            //        writer.WriteJoined(columnNamesSafe);
+            //        writer.EndScope();
+            //        writer.Indent--;
 
-                }
-                writer.WriteLine();
+            //    }
+            //    writer.WriteLine();
 
-                writer.Write(C.VALUES);
-                writer.WriteLine();
-                writer.Indent++;
+            //    writer.Write(C.VALUES);
+            //    writer.WriteLine();
+            //    writer.Indent++;
 
-                writer.BeginScope();
-                for (int i = 0; i < _valuesList.Length; i++)
-                {
-                    if (i != 0)
-                    {
-                        writer.Write(C.COMMA);
-                    }
+            //    writer.BeginScope();
+            //    for (int i = 0; i < _valuesList.Length; i++)
+            //    {
+            //        if (i != 0)
+            //        {
+            //            writer.Write(C.COMMA);
+            //        }
 
-                    writer.Write(_valuesList[i].ToSqlString());
-                }
-                writer.EndScope();
-                writer.Indent--;
-            }
+            //        writer.Write(_valuesList[i].ToSqlString());
+            //    }
+            //    writer.EndScope();
+            //    writer.Indent--;
+            //}
         }
 
 

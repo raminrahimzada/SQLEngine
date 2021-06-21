@@ -28,7 +28,6 @@ namespace SQLEngine.PostgreSql
         }
 
         private readonly List<ArgumentModel> _arguments;
-        //private Action<IProcedureBodyQueryBuilder> _bodyBuilder;
         private string _body;
         private string _schemaName;
         private string _procedureName;
@@ -81,7 +80,7 @@ namespace SQLEngine.PostgreSql
             return this;
         }
 
-        [Obsolete]
+        [Obsolete("Do Not Use")]
         public ICreateProcedureNeedBodyQueryBuilder Body(Action<IProcedureBodyQueryBuilder> body)
         {
             using (var t=new PostgreSqlProcedureBodyQueryBuilder())

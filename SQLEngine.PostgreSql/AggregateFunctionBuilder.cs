@@ -1,10 +1,14 @@
 ﻿namespace SQLEngine.PostgreSql
 {
-    internal class AggregateFunctionBuilder :AbstractQueryBuilder, IAggregateFunctionBuilder
+    internal class AggregateFunctionBuilder : AbstractQueryBuilder, IAggregateFunctionBuilder
     {
         private ISqlExpression _expression;
         private bool? _isDistinct;
         private string _functionName;
+
+        #region Min
+
+
 
         public IAggregateFunctionBuilder Min(ISqlExpression expression)
         {
@@ -23,6 +27,11 @@
         {
             return Min(new PostgreSqlColumn(columnName));
         }
+        #endregion
+
+        #region Max
+
+
 
         public IAggregateFunctionBuilder Max(ISqlExpression expression)
         {
@@ -41,12 +50,34 @@
             return this;
         }
 
+        #endregion
+
+        #region Count
+
+
+
         public IAggregateFunctionBuilder Count(ISqlExpression expression)
         {
             _expression = expression;
             _functionName = C.COUNT;
             return this;
         }
+        public IAggregateFunctionBuilder Count(string columnName)
+        {
+            return Count(new PostgreSqlColumn(columnName));
+        }
+
+        public IAggregateFunctionBuilder Count(AbstractSqlColumn column)
+        {
+            _expression = column;
+            _functionName = C.COUNT;
+            return this;
+        }
+        #endregion
+
+        #region Sum
+
+
 
         public IAggregateFunctionBuilder Sum(ISqlExpression expression)
         {
@@ -54,20 +85,9 @@
             _functionName = C.SUM;
             return this;
         }
-
-        public IAggregateFunctionBuilder Avg(ISqlExpression expression)
+        public IAggregateFunctionBuilder Sum(string columnName)
         {
-            _expression = expression;
-            _functionName = C.AVG;
-            return this;
-        }
-       
-
-        public IAggregateFunctionBuilder Count(AbstractSqlColumn column)
-        {
-            _expression = column;
-            _functionName = C.COUNT;
-            return this;
+            return Sum(new PostgreSqlColumn(columnName));
         }
 
         public IAggregateFunctionBuilder Sum(AbstractSqlColumn column)
@@ -76,6 +96,23 @@
             _functionName = C.SUM;
             return this;
         }
+        #endregion
+
+
+        #region Avg
+
+
+
+        public IAggregateFunctionBuilder Avg(ISqlExpression expression)
+        {
+            _expression = expression;
+            _functionName = C.AVG;
+            return this;
+        }
+
+
+
+
 
         public IAggregateFunctionBuilder Avg(AbstractSqlColumn column)
         {
@@ -83,6 +120,12 @@
             _functionName = C.AVG;
             return this;
         }
+
+        public IAggregateFunctionBuilder Avg(string columnName)
+        {
+            return Avg(new PostgreSqlColumn(columnName));
+        }
+        #endregion
 
         public IAggregateFunctionBuilder Distinct()
         {
@@ -95,26 +138,6 @@
             _isDistinct = false;
             return this;
         }
-
-
-       
-        
-
-        public IAggregateFunctionBuilder Count(string columnName)
-        {
-            return Count(new PostgreSqlColumn(columnName));
-        }
-
-        public IAggregateFunctionBuilder Sum(string columnName)
-        {
-            return Sum(new PostgreSqlColumn(columnName));
-        }
-
-        public IAggregateFunctionBuilder Avg(string columnName)
-        {
-            return Avg(new PostgreSqlColumn(columnName));
-        }
-
 
 
         public override void Build(ISqlWriter writer)

@@ -109,9 +109,9 @@ namespace SQLEngine.PostgreSql
             return this;
         }
 
-        public IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression expression)
+        public IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression rightExpression)
         {
-            _whereCondition = columnName + C.EQUALS + expression.ToSqlString();
+            _whereCondition = columnName + C.EQUALS + rightExpression.ToSqlString();
             return this;
         }
         public IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlVariable variable)

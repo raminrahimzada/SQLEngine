@@ -218,11 +218,11 @@ namespace SQLEngine.PostgreSql
         {
             return _Add(new IfNotQueryBuilder(condition));            
         }
-        public IIfQueryBuilder IfExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> func)
+        public IIfQueryBuilder IfExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
         {
             using (var s=new SelectQueryBuilder())
             {
-                func(s);
+                selector(s);
                 return If(new PostgreSqlCondition(C.EXISTS, C.BEGIN_SCOPE, s.Build(), C.END_SCOPE));
             }
         }
@@ -231,11 +231,11 @@ namespace SQLEngine.PostgreSql
             return If(new PostgreSqlCondition(C.NOT,C.SPACE,C.EXISTS , C.BEGIN_SCOPE , selection.Build() , C.END_SCOPE));
         }
 
-        public IIfQueryBuilder IfNotExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> func)
+        public IIfQueryBuilder IfNotExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
         {
             using (var s = new SelectQueryBuilder())
             {
-                func(s);
+                selector(s);
                 return If(new PostgreSqlCondition(C.NOT , C.SPACE , C.EXISTS , C.BEGIN_SCOPE , s.Build() , C.END_SCOPE));
             }
         }

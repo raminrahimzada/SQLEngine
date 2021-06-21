@@ -13,17 +13,17 @@ namespace SQLEngine.SqlServer
         private string _rawSqlString;
  
 
-        public static SqlServerLiteral From(DateTime? date,bool includeTime=true)
+        public static SqlServerLiteral From(DateTime? dt,bool includeTime=true)
         {
             var result = new SqlServerLiteral();
 
-            if (date == null)
+            if (dt == null)
             {
                 result._rawSqlString = C.NULL;
                 return result;
             }
 
-            var str = date.Value.ToString(!includeTime ? Query.Settings.DateFormat : Query.Settings.DateTimeFormat);
+            var str = dt.Value.ToString(!includeTime ? Query.Settings.DateFormat : Query.Settings.DateTimeFormat);
             result._rawSqlString = $"'{str}'";
             return result;
         }
@@ -44,66 +44,66 @@ namespace SQLEngine.SqlServer
             _rawSqlString = i.ToString();
         }
 
-        public override void SetFrom(DateTimeOffset d)
+        public override void SetFrom(DateTimeOffset dto)
         {
-            _rawSqlString = d.ToString(Query.Settings.DatetimeOffsetFormat);
+            _rawSqlString = dto.ToString(Query.Settings.DatetimeOffsetFormat);
             _rawSqlString = $"'{_rawSqlString}'";
         }
 
-        public override void SetFrom(DateTimeOffset? d)
+        public override void SetFrom(DateTimeOffset? dto)
         {
-            if (d == null)
+            if (dto == null)
             {
                 _rawSqlString = C.NULL;
                 return;
             }
-            _rawSqlString = d.Value.ToString(Query.Settings.DatetimeOffsetFormat);
+            _rawSqlString = dto.Value.ToString(Query.Settings.DatetimeOffsetFormat);
             _rawSqlString = $"'{_rawSqlString}'";
         }
 
-        public override void SetFrom(Enum i)
+        public override void SetFrom(Enum e)
         {
-            _rawSqlString = EnumSqlStringConvertor.ToSqlString(i);
+            _rawSqlString = EnumSqlStringConvertor.ToSqlString(e);
         }
 
-        public override void SetFrom(byte i)
+        public override void SetFrom(byte b)
         {
-            _rawSqlString = i.ToString();
+            _rawSqlString = b.ToString();
         }
 
-        public override void SetFrom(byte? i)
+        public override void SetFrom(byte? b)
         {
-            if (i == null)
+            if (b == null)
             {
                 _rawSqlString = C.NULL;
                 return;
             }
-            _rawSqlString = i.Value.ToString();
+            _rawSqlString = b.Value.ToString();
         }
 
-        public override void SetFrom(sbyte? i)
+        public override void SetFrom(sbyte? sb)
         {
-            if (i == null)
+            if (sb == null)
             {
                 _rawSqlString = C.NULL;
                 return;
             }
-            _rawSqlString = i.Value.ToString();
+            _rawSqlString = sb.Value.ToString();
         }
 
-        public override void SetFrom(sbyte i)
+        public override void SetFrom(sbyte sb)
         {
-            _rawSqlString = i.ToString();
+            _rawSqlString = sb.ToString();
         }
 
-        public override void SetFrom(Guid i)
+        public override void SetFrom(Guid g)
         {
-            _rawSqlString = $"'{i}'";
+            _rawSqlString = $"'{g}'";
         }
 
-        public override void SetFrom(Guid? i)
+        public override void SetFrom(Guid? g)
         {
-            _rawSqlString = i == null ? C.NULL : $"'{i}'";
+            _rawSqlString = g == null ? C.NULL : $"'{g}'";
         }
 
         public override void SetFrom(long l)
@@ -111,9 +111,9 @@ namespace SQLEngine.SqlServer
             _rawSqlString = l.ToString();
         }
 
-        public override void SetFrom(char f)
+        public override void SetFrom(char ch)
         {
-            _rawSqlString = "N'" + f + "'";
+            _rawSqlString = "N'" + ch + "'";
         }
 
         public override void SetFrom(DateTime? dt)
@@ -128,14 +128,14 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        public override void SetFrom(ulong l)
+        public override void SetFrom(ulong ul)
         {
-            _rawSqlString = l.ToString();
+            _rawSqlString = ul.ToString();
         }
 
-        public override void SetFrom(uint l)
+        public override void SetFrom(uint ui)
         {
-            _rawSqlString = l.ToString();
+            _rawSqlString = ui.ToString();
         }
 
         public override void SetFrom(bool b)
@@ -143,14 +143,14 @@ namespace SQLEngine.SqlServer
             _rawSqlString = b ? "1" : "0";
         }
 
-        public override void SetFrom(string str, bool isUnicode = true)
+        public override void SetFrom(string s, bool isUnicode = true)
         {
-            if (str == null) _rawSqlString = C.NULL;
+            if (s == null) _rawSqlString = C.NULL;
             else
             {
-                str = str.Replace("'", "''");
-                str = $"'{str}'";
-                _rawSqlString = isUnicode ? $"N{str}" : str;
+                s = s.Replace("'", "''");
+                s = $"'{s}'";
+                _rawSqlString = isUnicode ? $"N{s}" : s;
             }
         }
 
@@ -173,14 +173,14 @@ namespace SQLEngine.SqlServer
         {
             _rawSqlString = s.ToString();
         }
-        public override void SetFrom(ushort s)
+        public override void SetFrom(ushort us)
         {
-            _rawSqlString = s.ToString();
+            _rawSqlString = us.ToString();
         }
 
-        public override void SetFrom(DateTime date, bool includeTime = true)
+        public override void SetFrom(DateTime dt, bool includeTime = true)
         {
-            var str = date.ToString((!includeTime) ? Query.Settings.DateFormat : Query.Settings.DateTimeFormat);
+            var str = dt.ToString((!includeTime) ? Query.Settings.DateFormat : Query.Settings.DateTimeFormat);
             _rawSqlString = $"'{str}'";
         }
 
@@ -194,14 +194,14 @@ namespace SQLEngine.SqlServer
             _rawSqlString = i.Value.ToString();
         }
 
-        public override void SetFrom(ushort? i)
+        public override void SetFrom(ushort? us)
         {
-            if (i == null)
+            if (us == null)
             {
                 _rawSqlString = C.NULL;
                 return;
             }
-            _rawSqlString = i.Value.ToString();
+            _rawSqlString = us.Value.ToString();
         }
 
         public override void SetFrom(long? l)
@@ -236,24 +236,24 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        public override void SetFrom(ulong? i)
+        public override void SetFrom(ulong? ul)
         {
-            if (i == null)
+            if (ul == null)
             {
                 _rawSqlString = C.NULL;
                 return;
             }
-            _rawSqlString = i.Value.ToString();
+            _rawSqlString = ul.Value.ToString();
         }
 
-        public override void SetFrom(uint? i)
+        public override void SetFrom(uint? ui)
         {
-            if (i == null)
+            if (ui == null)
             {
                 _rawSqlString = C.NULL;
                 return;
             }
-            _rawSqlString = i.Value.ToString();
+            _rawSqlString = ui.Value.ToString();
         }
 
         public override void SetFrom(decimal? d)
@@ -276,25 +276,25 @@ namespace SQLEngine.SqlServer
             _rawSqlString = (f.Value + string.Empty).Replace(',', '.');
         }
 
-        public override void SetFrom(short? s)
+        public override void SetFrom(short? sh)
         {
-            if (s == null)
+            if (sh == null)
             {
                 _rawSqlString = C.NULL;
                 return;
             }
-            _rawSqlString = s.Value.ToString();
+            _rawSqlString = sh.Value.ToString();
         }
 
-        public override void SetFrom(char? f)
+        public override void SetFrom(char? ch)
         {
-            if (f == null)
+            if (ch == null)
             {
                 _rawSqlString = C.NULL;
                 return;
             }
 
-            _rawSqlString = "N'" + f + "'";
+            _rawSqlString = "N'" + ch + "'";
         }
 
 

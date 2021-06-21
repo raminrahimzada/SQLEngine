@@ -55,7 +55,6 @@ namespace SQLEngine.PostgreSql
         }
 
 
-        
         public ICaseWhenNeedWhenQueryBuilder Then(ISqlExpression then)
         {
             _currentThen = then.ToSqlString();
@@ -70,16 +69,16 @@ namespace SQLEngine.PostgreSql
             return this;
         }
 
-        public ICaseWhenNeedWhenQueryBuilder Then(AbstractSqlLiteral then)
+        public ICaseWhenNeedWhenQueryBuilder Then(AbstractSqlLiteral literal)
         {
-            _currentThen = then.ToSqlString();
+            _currentThen = literal.ToSqlString();
             Add();
             return this;
         }
 
-        public ICaseWhenNeedWhenQueryBuilder ThenColumn(string @then)
+        public ICaseWhenNeedWhenQueryBuilder ThenColumn(string columnName)
         {
-            return Then(@then);
+            return Then(columnName);
         }
         public ICaseWhenNeedWhenQueryBuilder ThenColumn(string tableAlias, string columnName)
         {

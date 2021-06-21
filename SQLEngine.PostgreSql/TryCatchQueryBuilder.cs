@@ -2,6 +2,7 @@
 
 namespace SQLEngine.PostgreSql
 {
+    [Obsolete]
     internal class TryCatchQueryBuilder :AbstractQueryBuilder
         , ITryQueryBuilder
         , ITryNoTryQueryBuilder

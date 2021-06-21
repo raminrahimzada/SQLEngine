@@ -8,7 +8,7 @@
 
         IUpdateNoTableAndValuesAndWhereQueryBuilder Where(AbstractSqlCondition condition);
         
-        IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression right);
+        IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression rightExpression);
         IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlVariable variable);
         IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlLiteral literal);
         IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnLike(string columnName, string right);

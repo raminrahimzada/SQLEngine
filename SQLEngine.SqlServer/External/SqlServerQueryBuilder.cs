@@ -215,11 +215,11 @@ namespace SQLEngine.SqlServer
         {
             return _Add(new IfNotQueryBuilder(condition));            
         }
-        public IIfQueryBuilder IfExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> func)
+        public IIfQueryBuilder IfExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
         {
             using (var s=new SelectQueryBuilder())
             {
-                func(s);
+                selector(s);
                 return If(new SqlServerCondition(C.EXISTS, C.BEGIN_SCOPE, s.Build(), C.END_SCOPE));
             }
         }
@@ -228,11 +228,11 @@ namespace SQLEngine.SqlServer
             return If(new SqlServerCondition(C.NOT,C.SPACE,C.EXISTS , C.BEGIN_SCOPE , selection.Build() , C.END_SCOPE));
         }
 
-        public IIfQueryBuilder IfNotExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> func)
+        public IIfQueryBuilder IfNotExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
         {
             using (var s = new SelectQueryBuilder())
             {
-                func(s);
+                selector(s);
                 return If(new SqlServerCondition(C.NOT , C.SPACE , C.EXISTS , C.BEGIN_SCOPE , s.Build() , C.END_SCOPE));
             }
         }
@@ -484,17 +484,6 @@ namespace SQLEngine.SqlServer
             
         }
 
-        private static readonly object Sync=new object();
-        private static long _randomFeed = 1;
-
-        public string GenerateUniqueVariableName(string beginning)
-        {
-            lock (Sync)
-            {
-                _randomFeed++;
-                return beginning.ToLowerInvariant() + "__" + _randomFeed;// + Guid.NewGuid().ToString().Replace("-", "_").ToLowerInvariant();
-            }
-        }
         public void Cursor(
             string cursorName,
             Action<ISelectQueryBuilder> selection,

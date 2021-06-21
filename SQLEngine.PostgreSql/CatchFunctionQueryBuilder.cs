@@ -1,5 +1,8 @@
-﻿namespace SQLEngine.PostgreSql
+﻿using System;
+
+namespace SQLEngine.PostgreSql
 {
+    [Obsolete]
     public class CatchFunctionQueryBuilder : PostgreSqlQueryBuilder, ICatchFunctionQueryBuilder
     {
         public ISqlExpression ErrorNumber()

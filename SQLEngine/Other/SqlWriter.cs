@@ -17,10 +17,12 @@ namespace SQLEngine
             _stringBuilder=new StringBuilder();
             _indentedTextWriter = new IndentedTextWriter(new StringWriter(_stringBuilder));
         }
-
+        [Obsolete("Do not use",true)]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override string ToString()
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
         {
-            throw new Exception("Please Call Build() method Instead of ToString()");
+            return Build();
         }
 
         public void Dispose()
@@ -72,7 +74,7 @@ namespace SQLEngine
             _indentedTextWriter.Write(b);
         }
 
-        public void WriteLine(string expression)
+        public void WriteLine(string expression=null)
         {
             if (expression != null)
                 _indentedTextWriter.WriteLine(expression);

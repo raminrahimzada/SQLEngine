@@ -30,7 +30,7 @@ namespace SQLEngine.SqlServer
 
         public override void Dispose()
         {
-            
+            //nothing to dispose here
         }
 
         public override void Build(ISqlWriter writer)

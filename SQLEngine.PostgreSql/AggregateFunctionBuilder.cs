@@ -12,10 +12,31 @@
             _functionName = C.MIN;
             return this;
         }
+        public IAggregateFunctionBuilder Min(AbstractSqlColumn column)
+        {
+            _expression = column;
+            _functionName = C.MIN;
+            return this;
+        }
+
+        public IAggregateFunctionBuilder Min(string columnName)
+        {
+            return Min(new PostgreSqlColumn(columnName));
+        }
 
         public IAggregateFunctionBuilder Max(ISqlExpression expression)
         {
             _expression = expression;
+            _functionName = C.MAX;
+            return this;
+        }
+        public IAggregateFunctionBuilder Max(string columnName)
+        {
+            return Max(new PostgreSqlColumn(columnName));
+        }
+        public IAggregateFunctionBuilder Max(AbstractSqlColumn column)
+        {
+            _expression = column;
             _functionName = C.MAX;
             return this;
         }
@@ -39,19 +60,8 @@
             _expression = expression;
             _functionName = C.AVG;
             return this;
-        }public IAggregateFunctionBuilder Min(AbstractSqlColumn column)
-        {
-            _expression = column;
-            _functionName = C.MIN;
-            return this;
         }
-
-        public IAggregateFunctionBuilder Max(AbstractSqlColumn column)
-        {
-            _expression = column;
-            _functionName = C.MAX;
-            return this;
-        }
+       
 
         public IAggregateFunctionBuilder Count(AbstractSqlColumn column)
         {
@@ -87,15 +97,8 @@
         }
 
 
-        public IAggregateFunctionBuilder Min(string columnName)
-        {
-            return Min(new PostgreSqlColumn(columnName));
-        }
-
-        public IAggregateFunctionBuilder Max(string columnName)
-        {
-            return Max(new PostgreSqlColumn(columnName));
-        }
+       
+        
 
         public IAggregateFunctionBuilder Count(string columnName)
         {

@@ -272,20 +272,20 @@ namespace SQLEngine.SqlServer
                 return this;
             }
         }
-        public ISelectWithSelectorQueryBuilder Select(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFuncExp)
+        public ISelectWithSelectorQueryBuilder Select(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFunctionCallExpression)
         {
             using (var t=new CustomFunctionCallExpressionBuilder())
             {
-                customFuncExp(t);
+                customFunctionCallExpression(t);
                 _selectors.Add(t.Build());
                 return this;
             }
         }
-        public ISelectWithSelectorQueryBuilder SelectAs(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFuncExp, string alias)
+        public ISelectWithSelectorQueryBuilder SelectAs(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFunctionCallExpression, string alias)
         {
             using (var t=new CustomFunctionCallExpressionBuilder())
             {
-                customFuncExp(t);
+                customFunctionCallExpression(t);
                 _selectors.Add(t.Build() + C.SPACE + C.AS + C.SPACE + alias);
                 return this;
             }
@@ -409,14 +409,6 @@ namespace SQLEngine.SqlServer
             {
                 writer.Write(I(_mainTableName));
             }
-            //else
-            //{
-            //    writer.Write(C.BEGIN_SCOPE);
-            //    writer.Write(C.SPACE);
-            //    writer.Write(_mainTableQuery);
-            //    writer.Write(C.SPACE);
-            //    writer.Write(C.END_SCOPE);
-            //}
             writer.Indent--;
             if (!string.IsNullOrEmpty(_mainTableAlias))
             {
@@ -433,6 +425,19 @@ namespace SQLEngine.SqlServer
                 }
             }
 
+            WhereClause(writer);
+            GroupByClause(writer);
+            HavingClause(writer);
+            OrderByClause(writer);
+        }
+
+        #region helper methods
+
+        
+
+        private void WhereClause(ISqlWriter writer)
+        {
+
             if (!string.IsNullOrEmpty(_whereClause))
             {
                 writer.WriteLine();
@@ -443,8 +448,23 @@ namespace SQLEngine.SqlServer
                 writer.Indent--;
             }
 
-            
+        }
 
+        private void HavingClause(ISqlWriter writer)
+        {
+            if (!string.IsNullOrEmpty(_having))
+            {
+                writer.WriteLine();
+                writer.Indent++;
+                writer.Write(C.HAVING);
+                writer.Write(C.SPACE);
+                writer.Write(_having);
+                writer.Indent--;
+            }
+        }
+
+        private void GroupByClause(ISqlWriter writer)
+        {
             if (_groupByClauses.Any())
             {
                 writer.WriteLine();
@@ -470,16 +490,10 @@ namespace SQLEngine.SqlServer
 
                 writer.Indent--;
             }
+        }
 
-            if (!string.IsNullOrEmpty(_having))
-            {
-                writer.WriteLine();
-                writer.Indent++;
-                writer.Write(C.HAVING);
-                writer.Write(C.SPACE);
-                writer.Write(_having);
-                writer.Indent--;
-            }
+        private void OrderByClause(ISqlWriter writer)
+        {
             if (_orderByClauses != null && _orderByClauses.Any())
             {
                 writer.WriteLine();
@@ -503,6 +517,7 @@ namespace SQLEngine.SqlServer
                 }
             }
         }
+        #endregion
 
         public ISelectOrderBuilder OrderBy(ISqlExpression expression)
         {

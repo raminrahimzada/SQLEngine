@@ -44,12 +44,12 @@ namespace SQLEngine.PostgreSql
             return Parameter(argName,Query.Settings.TypeConvertor.ToSqlType<T>());
         }
 
-        public ICreateProcedureWithArgumentQueryBuilder ParameterOut(string name, string type)
+        public ICreateProcedureWithArgumentQueryBuilder ParameterOut(string argName, string argType)
         {
             _arguments.Add(new ArgumentModel
             {
-                Name = name,
-                Type = type,
+                Name = argName,
+                Type = argType,
                 Direction = ProcedureArgumentDirectionTypes.OUT
             });
             return this;
@@ -60,19 +60,19 @@ namespace SQLEngine.PostgreSql
             return ParameterOut(argName,Query.Settings.TypeConvertor.ToSqlType<T>());
         }
 
-        public ICreateProcedureWithArgumentQueryBuilder Parameter(string name, string type)
+        public ICreateProcedureWithArgumentQueryBuilder Parameter(string argName, string argType)
         {
             _arguments.Add(new ArgumentModel
             {
-                Name = name,
-                Type = type,
+                Name = argName,
+                Type = argType,
                 Direction = ProcedureArgumentDirectionTypes.IN
             });
             return this;
         }
-        public ICreateProcedureNoNameQueryBuilder Name(string procedureName)
+        public ICreateProcedureNoNameQueryBuilder Name(string procName)
         {
-            _procedureName = procedureName;
+            _procedureName = procName;
             return this;
         }
         public ICreateProcedureQueryBuilder Schema(string schemaName)
@@ -81,11 +81,12 @@ namespace SQLEngine.PostgreSql
             return this;
         }
 
-        public ICreateProcedureNeedBodyQueryBuilder Body(Action<IProcedureBodyQueryBuilder> builder)
+        [Obsolete]
+        public ICreateProcedureNeedBodyQueryBuilder Body(Action<IProcedureBodyQueryBuilder> body)
         {
             using (var t=new PostgreSqlProcedureBodyQueryBuilder())
             {
-                builder(t);
+                body(t);
                 _body = t.Build();
             }
             return this;
@@ -118,9 +119,9 @@ namespace SQLEngine.PostgreSql
             writer.WriteLine(C.END);
         }
 
-        public ICreateProcedureNoHeaderQueryBuilder Header(string metaDataHeader)
+        public ICreateProcedureNoHeaderQueryBuilder Header(string procedureHeaderMetaData)
         {
-            _metaDataHeader = metaDataHeader;
+            _metaDataHeader = procedureHeaderMetaData;
             return this;
         }
     }

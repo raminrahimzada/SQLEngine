@@ -200,19 +200,20 @@ namespace SQLEngine.PostgreSql
                 return From(table.Name,alias);
             }
         }
-
+        [Obsolete]
         public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left, ISqlExpression right)
         {
             _selectors.Add(new CustomFunctionCallExpressionBuilder().Assign(left, right));
             return this;
         }
-
+        [Obsolete]
         public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left,
             AbstractSqlLiteral literal)
         {
             _selectors.Add(new CustomFunctionCallExpressionBuilder().Assign(left, literal));
             return this;
         }
+        [Obsolete]
         public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left,
             AbstractSqlColumn column)
         {
@@ -272,20 +273,22 @@ namespace SQLEngine.PostgreSql
                 return this;
             }
         }
-        public ISelectWithSelectorQueryBuilder Select(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFuncExp)
+        [Obsolete]
+        public ISelectWithSelectorQueryBuilder Select(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFunctionCallExpression)
         {
             using (var t=new CustomFunctionCallExpressionBuilder())
             {
-                customFuncExp(t);
+                customFunctionCallExpression(t);
                 _selectors.Add(t.Build());
                 return this;
             }
         }
-        public ISelectWithSelectorQueryBuilder SelectAs(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFuncExp, string alias)
+        [Obsolete]
+        public ISelectWithSelectorQueryBuilder SelectAs(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFunctionCallExpression, string alias)
         {
             using (var t=new CustomFunctionCallExpressionBuilder())
             {
-                customFuncExp(t);
+                customFunctionCallExpression(t);
                 _selectors.Add(t.Build() + C.SPACE + C.AS + C.SPACE + alias);
                 return this;
             }
@@ -572,7 +575,7 @@ namespace SQLEngine.PostgreSql
                 return this;
             }
         }
-
+        [Obsolete]
         public ISelectWithSelectorQueryBuilder Select(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallNopBuilder> aggregate)
         {
             using (var b = new CustomFunctionCallExpressionBuilder())

@@ -12,14 +12,14 @@ namespace SQLEngine
         public abstract void SetFrom(byte[] data);
 
         public abstract void SetFrom(int i);
-        public abstract void SetFrom(DateTimeOffset d);
-        public abstract void SetFrom(DateTimeOffset? d);
-        public abstract void SetFrom(Enum i);
-        public abstract void SetFrom(byte i);
-        public abstract void SetFrom(byte? i);
-        public abstract void SetFrom(sbyte? i);
-        public abstract void SetFrom(Guid i);
-        public abstract void SetFrom(Guid? i);
+        public abstract void SetFrom(DateTimeOffset dto);
+        public abstract void SetFrom(DateTimeOffset? dto);
+        public abstract void SetFrom(Enum e);
+        public abstract void SetFrom(byte b);
+        public abstract void SetFrom(byte? b);
+        public abstract void SetFrom(sbyte? sb);
+        public abstract void SetFrom(Guid g);
+        public abstract void SetFrom(Guid? g);
         public abstract void SetFrom(long l);
         public abstract void SetFrom(bool b);
         public abstract void SetFrom(string s, bool isUnicode = true);
@@ -27,26 +27,26 @@ namespace SQLEngine
         public abstract void SetFrom(decimal d);
         public abstract void SetFrom(float f);
         public abstract void SetFrom(short f);
-        public abstract void SetFrom(sbyte f);
-        public abstract void SetFrom(ushort f);
+        public abstract void SetFrom(sbyte sb);
+        public abstract void SetFrom(ushort us);
         public abstract void SetFrom(DateTime dt, bool includeTime = true);
-        public abstract void SetFrom(char f);
+        public abstract void SetFrom(char ch);
 
         public abstract void SetFrom(int? i);
-        public abstract void SetFrom(ushort? i);
+        public abstract void SetFrom(ushort? us);
         public abstract void SetFrom(long? l);
         public abstract void SetFrom(bool? b);
         public abstract void SetFrom(double? d);
-        public abstract void SetFrom(ulong? d);
-        public abstract void SetFrom(uint? d);
+        public abstract void SetFrom(ulong? ul);
+        public abstract void SetFrom(uint? ui);
         public abstract void SetFrom(decimal? d);
         public abstract void SetFrom(float? f);
-        public abstract void SetFrom(short? f);
-        public abstract void SetFrom(char? f);
+        public abstract void SetFrom(short? sh);
+        public abstract void SetFrom(char? ch);
         public abstract void SetFrom(DateTime? dt);
 
-        public abstract void SetFrom(ulong l);
-        public abstract void SetFrom(uint l);
+        public abstract void SetFrom(ulong ul);
+        public abstract void SetFrom(uint ui);
 
 
 

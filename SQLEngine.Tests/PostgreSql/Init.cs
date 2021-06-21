@@ -1,11 +1,14 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SQLEngine.PostgreSql;
 
 namespace SQLEngine.Tests.PostgreSql
 {
+    
     [TestClass]
     public partial class AllTests
     {
+        [Obsolete]
         [TestInitialize]
         public void Initialize()
         {

@@ -4,6 +4,6 @@
     {
         IAlterTableNoNameAddColumnNoNameNoTypeNameQueryBuilder OfType(string type);
         IAlterTableNoNameAddColumnNoNameNoTypeNameQueryBuilder OfType<T>();
-        IAlterTableNoNameAddColumnNoNameNoNullableQueryBuilder NotNull(bool notnull=true);
+        IAlterTableNoNameAddColumnNoNameNoNullableQueryBuilder NotNull(bool notNull=true);
     }
 }

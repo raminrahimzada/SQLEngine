@@ -168,8 +168,7 @@ namespace SQLEngine.SqlServer
                 writer.WriteScoped(_whereCondition);
             }
             writer.Indent--;
+            writer.WriteLine();
         }
-
-      
     }
 }

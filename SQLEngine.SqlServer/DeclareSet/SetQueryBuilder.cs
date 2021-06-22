@@ -27,6 +27,7 @@
             writer.Write2(C.EQUALS);
             writer.Write(_value.ToSqlString());
             writer.Write(C.SEMICOLON);
+            writer.WriteLine();
         }
 
         public ISetNoSetNoToQueryBuilder To(ISqlExpression value)

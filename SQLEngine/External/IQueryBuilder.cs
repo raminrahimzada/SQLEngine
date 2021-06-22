@@ -26,6 +26,10 @@ namespace SQLEngine
         IIfQueryBuilder IfOr(params AbstractSqlCondition[] conditions);
         IIfQueryBuilder IfAnd(params AbstractSqlCondition[] conditions);
         IIfQueryBuilder If(AbstractSqlCondition condition);
+        
+        IDisposable If2(AbstractSqlCondition condition);
+        IDisposable Else2();
+
         IIfQueryBuilder IfNot(AbstractSqlCondition condition);
         IIfQueryBuilder IfExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector);
         IIfQueryBuilder IfExists(IAbstractSelectQueryBuilder selection);

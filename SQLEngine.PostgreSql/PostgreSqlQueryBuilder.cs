@@ -214,6 +214,17 @@ namespace SQLEngine.PostgreSql
         {
             return _Add(new IfQueryBuilder(condition));            
         }
+
+        public IDisposable If2(AbstractSqlCondition condition)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDisposable Else2()
+        {
+            throw new NotImplementedException();
+        }
+
         public IIfQueryBuilder IfNot(AbstractSqlCondition condition)
         {
             return _Add(new IfNotQueryBuilder(condition));            

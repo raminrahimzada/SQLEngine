@@ -65,7 +65,98 @@ IF(@i = @j)
 ELSE
     print(N'Not-Equal')
 
+";
+                SqlAssert.AreEqualQuery(queryThat, query);
+            }
+        }
 
+
+        [TestMethod]
+        public void Test_If_Disposable_1()
+        {
+            using (var q = Query.New)
+            {
+                q.Clear();
+                var i = q.Declare<int>("i", 1);
+                
+                using (q.If2(i <= 0))
+                {
+                    q.Set(i, -i);
+                }
+                var queryThat = q.Build();
+                ;
+                string query = @"
+DECLARE  @i INT  = (1);
+IF(@i <= 0)
+BEGIN
+    SET  @i  = (0 - @i);
+END
+";
+                SqlAssert.AreEqualQuery(queryThat, query);
+            }
+        }
+
+        [TestMethod]
+        public void Test_If_Disposable_2()
+        {
+            using (var q = Query.New)
+            {
+                var i = q.Declare<int>("i", 1);
+
+                using (q.If2(i <= 0))
+                {
+                    q.Insert.Into<UserTable>().Value("Name", "Tesla");
+                }
+                var queryThat = q.Build();
+                ;
+                string query = @"
+DECLARE  @i INT  = (1);
+IF(@i <= 0)
+BEGIN
+    INSERT INTO Users   
+        (Name)
+    VALUES
+        (N'Tesla')
+END
+
+";
+                SqlAssert.AreEqualQuery(queryThat, query);
+            }
+        }
+
+        [TestMethod]
+        public void Test_If_Disposable_Else_1()
+        {
+            using (var q = Query.New)
+            {
+                var i = q.Declare<int>("i", 1);
+
+                using (q.If2(i <= 0))
+                {
+                    q.Insert.Into<UserTable>().Value("Name", "Tesla");
+                }
+
+                using (q.Else2())
+                {
+                    q.Update.Table<UserTable>().Value("Name", "Tesla").WhereColumnEquals("ID", 1);
+                }
+                var queryThat = q.Build();
+                ;
+                const string query = @"
+DECLARE  @i INT  = (1);
+IF(@i <= 0)
+BEGIN
+    INSERT INTO Users   
+        (Name)
+    VALUES
+        (N'Tesla')
+    END
+ELSE 
+BEGIN
+     UPDATE Users
+         SET Name = N'Tesla'
+         WHERE (ID=1)
+END
 
 ";
                 SqlAssert.AreEqualQuery(queryThat, query);

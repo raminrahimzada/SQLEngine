@@ -429,6 +429,7 @@ namespace SQLEngine.SqlServer
             GroupByClause(writer);
             HavingClause(writer);
             OrderByClause(writer);
+            writer.WriteLine();
         }
 
         #region helper methods

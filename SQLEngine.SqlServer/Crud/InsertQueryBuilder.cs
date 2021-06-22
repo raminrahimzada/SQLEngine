@@ -198,6 +198,7 @@ namespace SQLEngine.SqlServer
                 writer.Write(C.SPACE);
                 writer.Write(C.VALUES);
             }
+            writer.WriteLine();
         }
 
 

@@ -4,13 +4,17 @@ using System.Linq;
 
 namespace SQLEngine.PostgreSql
 {
+    // ReSharper disable NotAccessedField.Local
+#pragma warning disable IDE0052 // Remove unread private members
     internal class CreateTableQueryBuilder : AbstractQueryBuilder, ICreateTableQueryBuilder
     {
         private string _tableName;
         private string _schemaName;
         private readonly List<IColumnQueryBuilder> _columns;
         private bool _systemVersioning;
+
         private string _logFileName;
+
 
         public CreateTableQueryBuilder()
         {
@@ -66,3 +70,4 @@ namespace SQLEngine.PostgreSql
         }
     }
 }
+#pragma warning restore IDE0052 // Remove unread private members

@@ -53,7 +53,7 @@ namespace SQLEngine.SqlServer
                 foreach (var builder in _list)
                 {
                     builder.Build(writer);
-                    writer.WriteLine();
+                    //writer.WriteLine();
                 }
 
                 return writer.Build();
@@ -64,7 +64,7 @@ namespace SQLEngine.SqlServer
             foreach (var builder in _list)
             {
                 builder.Build(writer);
-                writer.WriteLine();
+                //writer.WriteLine();
             }
         }
 
@@ -146,6 +146,7 @@ namespace SQLEngine.SqlServer
                     w.Write(C.SPACE);
                     w.Write(transactionName);
                 }
+                w.WriteLine();
             }));
         }
 
@@ -161,6 +162,7 @@ namespace SQLEngine.SqlServer
                     w.Write(C.SPACE);
                     w.Write(transactionName);
                 }
+                w.WriteLine();
             }));
         }
 
@@ -210,6 +212,51 @@ namespace SQLEngine.SqlServer
         public IIfQueryBuilder If(AbstractSqlCondition condition)
         {
             return _Add(new IfQueryBuilder(condition));            
+        }
+
+        public IDisposable If2(AbstractSqlCondition condition)
+        {
+            //TODO 
+            return new IfDisposable(this,condition);
+        }
+        public IDisposable Else2()
+        {
+            //TODO 
+            return new ElseDisposable(this);
+        }
+
+        class ElseDisposable : IDisposable
+        {
+            private readonly SqlServerQueryBuilder _sqlServerQueryBuilder;
+
+            public ElseDisposable(SqlServerQueryBuilder sqlServerQueryBuilder)
+            {
+                _sqlServerQueryBuilder = sqlServerQueryBuilder;
+                _sqlServerQueryBuilder.Else();
+                _sqlServerQueryBuilder.AddExpression(Environment.NewLine);
+                _sqlServerQueryBuilder.Begin();
+            }
+
+            public void Dispose()
+            {
+                _sqlServerQueryBuilder.End();
+            }
+        }
+        class IfDisposable : IDisposable
+        {
+            private readonly SqlServerQueryBuilder _sqlServerQueryBuilder;
+
+            public IfDisposable(SqlServerQueryBuilder sqlServerQueryBuilder, AbstractSqlCondition abstractSqlCondition)
+            {
+                _sqlServerQueryBuilder = sqlServerQueryBuilder;
+                _sqlServerQueryBuilder.If(abstractSqlCondition);
+                _sqlServerQueryBuilder.Begin();
+            }
+
+            public void Dispose()
+            {
+                _sqlServerQueryBuilder.End();
+            }
         }
         public IIfQueryBuilder IfNot(AbstractSqlCondition condition)
         {

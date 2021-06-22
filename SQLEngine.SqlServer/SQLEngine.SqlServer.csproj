@@ -16,6 +16,10 @@ Sql-Server Adapter</Description>
     <Authors>Ramin Rahimzada</Authors>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\SQLEngine\SQLEngine.csproj" />
   </ItemGroup>

@@ -65,6 +65,7 @@
                 writer.WriteScoped(_topClause.Value.ToString());
                 writer.Write2();
             }
+
             writer.Write2(C.FROM);
 
             writer.Write(I(_tableName));
@@ -74,6 +75,8 @@
                 writer.Write2(C.WHERE);
                 writer.WriteScoped(_whereCondition);
             }
+
+            writer.WriteLine();
         }
     }
 }

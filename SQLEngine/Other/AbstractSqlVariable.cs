@@ -168,6 +168,11 @@
         {
             return x.Subtract(y);
         }
+
+        public static AbstractSqlExpression operator -(AbstractSqlVariable x)
+        {
+            return 0 - x;
+        }
         public static AbstractSqlExpression operator *(AbstractSqlVariable x, AbstractSqlVariable y)
         {
             return x.Multiply(y);

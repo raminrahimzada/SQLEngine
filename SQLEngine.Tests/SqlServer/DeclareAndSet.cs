@@ -1,5 +1,6 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Xunit;
 using C = SQLEngine.SqlServer.C;
 using CustomFunctionCallExpressionBuilderExtensions = SQLEngine.SqlServer.CustomFunctionCallExpressionBuilderExtensions;
 
@@ -7,7 +8,7 @@ namespace SQLEngine.Tests.SqlServer
 {
     public partial class AllTests
     {
-        [TestMethod]
+        [Fact]
         public void Test_Declare_And_Init()
         {
             using (var q = Query.New)
@@ -19,12 +20,12 @@ namespace SQLEngine.Tests.SqlServer
 DECLARE  @i INT  = 1;   
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
               
             }
         }
         
-        [TestMethod]
+        [Fact]
         public void Test_Declare_And_Init_2()
         {
             using (var q = Query.New)
@@ -33,11 +34,11 @@ DECLARE  @i INT  = 1;
                 const string query = @"
 DECLARE  @i INT  = 1;   
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Declare_Only()
         {
             using (var q = Query.New)
@@ -46,11 +47,11 @@ DECLARE  @i INT  = 1;
                 const string query = @"
 DECLARE  @i INT;
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
         
-        [TestMethod]
+        [Fact]
         public void Test_Declare_Only_2()
         {
             using (var q = Query.New)
@@ -59,11 +60,11 @@ DECLARE  @i INT;
                 const string query = @"
 DECLARE  @i INT;
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Declare_And_Set()
         {
             using (var q = Query.New)
@@ -75,11 +76,11 @@ DECLARE  @i INT;
 declare @x int = 47
 SET @x = 48
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Declare_And_Set_Guid()
         {
             using (var q = Query.New)
@@ -92,11 +93,11 @@ SET @x = 48
 DECLARE  @x UNIQUEIDENTIFIER ;
 SET  @x  = '00000000-0000-0000-0000-000000000000';
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Declare_And_Set_With_Function()
         {
             using (var q = Query.New)
@@ -126,12 +127,12 @@ SET  @objId  = OBJECT_ID(@tableName);
 print(@objId)
 
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Test_Declare_And_Set_With_Cast()
         {
             using (var q = Query.New)
@@ -152,7 +153,7 @@ SET  @today  = CAST(@today AS DATE)
 print(@today)
 
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
     }

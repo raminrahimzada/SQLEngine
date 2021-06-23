@@ -1,11 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
 using SQLEngine.SqlServer;
+using Xunit;
 
 namespace SQLEngine.Tests.SqlServer
 {
     public partial class AllTests
     {
-        [TestMethod]
+        [Fact]
         public void Test_Create_Table()
         {
             //demonstration of create-table query
@@ -65,14 +66,14 @@ ALTER TABLE Employees ADD CONSTRAINT DF_EmployeesBirthDate DEFAULT(GETDATE()) FO
 ";
                 ;
                 Query.Setup<SqlServerQueryBuilder>();
-                SqlAssert.AreEqualQuery(queryForSqlServer, b.Build());
+                SqlAssert.EqualQuery(queryForSqlServer, b.Build());
                 ;
 
 
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Create_View()
         {
             using (var q = Query.New)
@@ -92,11 +93,11 @@ CREATE VIEW View_Active_Users AS SELECT  *
     FROM Users
     WHERE IsBlocked = 0
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), originalQuery);
+                SqlAssert.EqualQuery(q.ToString(), originalQuery);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Create_View_2()
         {
             using (var q = Query.New)
@@ -116,11 +117,11 @@ CREATE VIEW View_Active_Users AS SELECT  *
     FROM Users
     WHERE IsBlocked = 0
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), originalQuery);
+                SqlAssert.EqualQuery(q.ToString(), originalQuery);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Create_Function()
         {
             using (var q = Query.New)
@@ -163,11 +164,11 @@ BEGIN
     RETURN(0)
 END
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), originalQuery);
+                SqlAssert.EqualQuery(q.ToString(), originalQuery);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Create_Function_Sum()
         {
             using (var q = Query.New)
@@ -199,11 +200,11 @@ BEGIN
     RETURN (@x + @y)
 END
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), originalQuery);
+                SqlAssert.EqualQuery(q.ToString(), originalQuery);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Create_Procedure()
         {
             using (var q = Query.New)
@@ -241,11 +242,11 @@ END
 
 
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), originalQuery);
+                SqlAssert.EqualQuery(q.ToString(), originalQuery);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Create_Index()
         {
             using (var q = Query.New)
@@ -262,11 +263,11 @@ END
                 CREATE UNIQUE  INDEX IX_Unique_Email ON Users ( Email ) 
                 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
         
-        [TestMethod]
+        [Fact]
         public void Test_Create_Database()
         {
             using (var q = Query.New)
@@ -280,11 +281,11 @@ END
                 CREATE DATABASE FacebookDB
                 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
         
-        [TestMethod]
+        [Fact]
         public void Test_Create_Trigger()
         {
             using (var q = Query.New)
@@ -305,7 +306,7 @@ END
                 print(N'Trigger_Test Executed!')
                 ";
                 ;
-                SqlAssert.AreEqualQuery(q.Build(), query);
+                SqlAssert.EqualQuery(q.Build(), query);
             }
         }
     }

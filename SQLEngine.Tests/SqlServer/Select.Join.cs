@@ -1,11 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
+using Xunit;
 
 namespace SQLEngine.Tests.SqlServer
 {
     public partial class AllTests
     {
 
-        [TestMethod]
+        [Fact]
         public void Test_Select_Simple_Join_With_Raw_Condition()
         {
             using (var q = Query.New)
@@ -28,12 +29,12 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Test_Select_Simple_Join_1()
         {
             using (var q = Query.New)
@@ -54,11 +55,11 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Select_Simple_Join_2()
         {
             using (var q = Query.New)
@@ -79,10 +80,10 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Select_Simple_Join_3()
         {
             using (var q = Query.New)
@@ -103,11 +104,11 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Select_Simple_Join_4()
         {
             using (var q = Query.New)
@@ -128,11 +129,11 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Select_Simple_Join_5()
         {
             using (var q = Query.New)
@@ -153,10 +154,10 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Select_Multiple_Join_1()
         {
             using (var q = Query.New)
@@ -177,10 +178,10 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Select_Multiple_Join_11()
         {
             using (var q = Query.New)
@@ -201,10 +202,10 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Select_Multiple_Join_2()
         {
             using (var q = Query.New)
@@ -229,11 +230,11 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Select_Multiple_Join_3()
         {
             using (var q = Query.New)
@@ -258,10 +259,10 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Select_Multiple_Join_4()
         {
             using (var q = Query.New)
@@ -286,10 +287,10 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Left_Select_Simple_Join_With_Raw_Condition()
         {
             using (var q = Query.New)
@@ -312,12 +313,12 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Test_Left_Select_Simple_Join_1()
         {
             using (var q = Query.New)
@@ -338,11 +339,11 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Left_Select_Simple_Join_2()
         {
             using (var q = Query.New)
@@ -363,10 +364,10 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Left_Select_Simple_Join_3()
         {
             using (var q = Query.New)
@@ -387,13 +388,13 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
        
 
-        [TestMethod]
+        [Fact]
         public void Test_Left_Select_Simple_Join_4()
         {
             using (var q = Query.New)
@@ -414,11 +415,11 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Left_Select_Simple_Join_5()
         {
             using (var q = Query.New)
@@ -439,11 +440,11 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Left_Select_Simple_Join_6()
         {
             using (var q = Query.New)
@@ -464,10 +465,10 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Left_Select_Multiple_Join_1()
         {
             using (var q = Query.New)
@@ -488,10 +489,10 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Left_Select_Multiple_Join_11()
         {
             using (var q = Query.New)
@@ -512,10 +513,10 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Left_Select_Multiple_Join_2()
         {
             using (var q = Query.New)
@@ -540,11 +541,11 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Left_Select_Multiple_Join_3()
         {
             using (var q = Query.New)
@@ -569,10 +570,10 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Left_Select_Multiple_Join_4()
         {
             using (var q = Query.New)
@@ -597,7 +598,7 @@ SELECT TOP(1)   *
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using SQLEngine.SqlServer;
+using Xunit;
 
 namespace SQLEngine.Tests.SqlServer
 {
     public partial class AllTests
     {
-        [TestMethod]
+        [Fact]
         public void Test_Insert_By_Value()
         {
             using (var q = Query.New)
@@ -22,11 +23,11 @@ namespace SQLEngine.Tests.SqlServer
                 const string query =
                     "INSERT INTO Users (Name,Surname,Age,Height) VALUES (N'Ramin' , N'Rahimzada' , 26, 1.84)";
                 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Insert_By_Dictionary()
         {
             using (var q = Query.New)
@@ -44,10 +45,10 @@ namespace SQLEngine.Tests.SqlServer
                     ;
 
                 const string query = "INSERT INTO Users(Name , Surname , Age, Id) VALUES (N'Ramin' , N'Rahimzada' , 26 ,'00000000-0000-0000-0000-000000000000')";
-                SqlAssert.AreEqualQuery(q.Build(), query);
+                SqlAssert.EqualQuery(q.Build(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Insert_By_Columns_And_Values()
         {
             using (var q = Query.New)
@@ -59,11 +60,11 @@ namespace SQLEngine.Tests.SqlServer
                     ;
 
                 const string query = "INSERT INTO Users(Name , Surname , Age) VALUES (N'Tracey' , N'McBean' , 9)";
-                SqlAssert.AreEqualQuery(q.Build(), query);
+                SqlAssert.EqualQuery(q.Build(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Insert_By_Only_Values()
         {
             var datetime = DateTime.MinValue;
@@ -77,12 +78,12 @@ namespace SQLEngine.Tests.SqlServer
                     ;
                 const string query =
                     "INSERT INTO People VALUES (N'Satoshi',N'Nakamoto',1024,'0001-01-01 00:00:00.000','0001-01-01')";
-                SqlAssert.AreEqualQuery(q.Build(), query);
+                SqlAssert.EqualQuery(q.Build(), query);
             }
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Test_Insert_MultipleValues_1()
         {
             using (var q = Query.New)
@@ -96,11 +97,11 @@ namespace SQLEngine.Tests.SqlServer
                 
                 const string query =
                     @"INSERT INTO GOT VALUES (N'Daenerys',N'Targaryen'),(N'John',N'Snow'),(N'Illyrio',N'Mopatis')";
-                SqlAssert.AreEqualQuery(q.Build(), query);
+                SqlAssert.EqualQuery(q.Build(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Insert_MultipleValues_2()
         {
             using (var q = Query.New)
@@ -115,11 +116,11 @@ namespace SQLEngine.Tests.SqlServer
 
                 const string query =
                     @"INSERT INTO GOT(Name,Surname) VALUES (N'Daenerys',N'Targaryen'),(N'John',N'Snow'),(N'Illyrio',N'Mopatis')";
-                SqlAssert.AreEqualQuery(q.Build(), query);
+                SqlAssert.EqualQuery(q.Build(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Insert_By_Select()
         {
             using (var q = Query.New)
@@ -132,11 +133,11 @@ namespace SQLEngine.Tests.SqlServer
                     )
                     ;
                 const string query = "INSERT INTO Users  SELECT  *  FROM Users_Backup";
-                SqlAssert.AreEqualQuery(q.Build(), query);
+                SqlAssert.EqualQuery(q.Build(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Insert_By_Select_Strong_Typed()
         {
             using (var q = Query.New)
@@ -149,11 +150,11 @@ namespace SQLEngine.Tests.SqlServer
                     );
 
                 const string query = "INSERT INTO Users  SELECT  *  FROM AnotherUsers";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Insert_With_No_Values()
         {
             using (var q = Query.New)
@@ -164,7 +165,7 @@ namespace SQLEngine.Tests.SqlServer
                 q.Insert.Into<UserTable>();
 
                 const string query = "INSERT INTO Users DEFAULT VALUES";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
     }

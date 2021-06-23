@@ -1,10 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
+using Xunit;
 
 namespace SQLEngine.Tests.SqlServer
 {
     public partial class AllTests
     {
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Try_Catch()
         {
             using (var q = Query.New)
@@ -30,7 +31,7 @@ END CATCH
 
 ";
                 ;
-                SqlAssert.AreEqualQuery(q.ToString(),query);
+                SqlAssert.EqualQuery(q.ToString(),query);
             }
         }
     }

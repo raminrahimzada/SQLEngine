@@ -1,10 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
+using Xunit;
 
 namespace SQLEngine.Tests.SqlServer
 {
     public partial class AllTests
     {
-        [TestMethod]
+        [Fact]
         public void Test_Complex_Query_1()
         {
             using (var q=Query.New)
@@ -68,7 +69,7 @@ print(@divide)
 
 
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
 
             }
         }

@@ -4,7 +4,8 @@
 
 
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
+
 
 #if CHECK_QUERY_COMPILATION
 using System.Data.SqlClient;
@@ -17,7 +18,7 @@ namespace SQLEngine.Tests
 {
     public static class SqlAssert
     {
-        public static void AreEqualQuery(string queryActual, string queryExpected)
+        public static void EqualQuery(string queryActual, string queryExpected)
         {
             const string splitter = " \r\n\t;(),.=";
             string[] FormatQuery(string query)
@@ -35,8 +36,7 @@ namespace SQLEngine.Tests
 #endif
             var arrActual = FormatQuery(queryActual);
             var arrExpected = FormatQuery(queryExpected);
-
-            CollectionAssert.AreEqual(arrExpected, arrActual);
+            Assert.Equal(arrExpected, arrActual);
         }
 
 #if CHECK_QUERY_COMPILATION

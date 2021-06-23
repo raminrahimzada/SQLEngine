@@ -1,10 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
+using Xunit;
 
 namespace SQLEngine.Tests.SqlServer
 {
     public partial class AllTests
     {
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AddConstraint_Default_Value()
         {
             using (var q = Query.New)
@@ -23,11 +24,11 @@ ALTER TABLE Users ADD CONSTRAINT DF_For_ProfilePicture DEFAULT N'defaultUser.jpg
 
 ";
 
-                SqlAssert.AreEqualQuery(q.Build(), query);
+                SqlAssert.EqualQuery(q.Build(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AddConstraint_Primary_Key()
         {
             using (var q = Query.New)
@@ -43,11 +44,11 @@ ALTER TABLE Users ADD CONSTRAINT DF_For_ProfilePicture DEFAULT N'defaultUser.jpg
 ALTER TABLE Users ADD CONSTRAINT PK_Id PRIMARY KEY (Id);
 ";
 
-                SqlAssert.AreEqualQuery(q.Build(), query);
+                SqlAssert.EqualQuery(q.Build(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AddConstraint_Primary_Key_2()
         {
             using (var q = Query.New)
@@ -63,11 +64,11 @@ ALTER TABLE Users ADD CONSTRAINT PK_Id PRIMARY KEY (Id);
 ALTER TABLE Users ADD CONSTRAINT PK_Name_And_Surname PRIMARY KEY (Name,Surname);
 ";
 
-                SqlAssert.AreEqualQuery(q.Build(), query);
+                SqlAssert.EqualQuery(q.Build(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AddConstraint_Foreign_Key()
         {
             using (var q = Query.New)
@@ -87,10 +88,10 @@ ALTER TABLE Users ADD CONSTRAINT FK_Referral_User FOREIGN KEY (ReferralUserId) R
 
 ";
 
-                SqlAssert.AreEqualQuery(q.Build(), query);
+                SqlAssert.EqualQuery(q.Build(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AddConstraint_Foreign_Key_2()
         {
             using (var q = Query.New)
@@ -109,11 +110,11 @@ ALTER TABLE Users ADD CONSTRAINT FK_Referral_User FOREIGN KEY (ReferralUserId) R
 ALTER TABLE Users ADD CONSTRAINT FK_Referral_User FOREIGN KEY (ReferralUserId) REFERENCES Users(Id);
 ";
 
-                SqlAssert.AreEqualQuery(q.Build(), query);
+                SqlAssert.EqualQuery(q.Build(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AddConstraint_Check()
         {
             using (var q = Query.New)
@@ -132,11 +133,11 @@ ALTER TABLE Users ADD CONSTRAINT FK_Referral_User FOREIGN KEY (ReferralUserId) R
 ALTER TABLE Users ADD CONSTRAINT CK_Age_18 CHECK (Age > 18)
 ";
 
-                SqlAssert.AreEqualQuery(q.Build(), query);
+                SqlAssert.EqualQuery(q.Build(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AddConstraint_Check_2()
         {
             using (var q = Query.New)
@@ -155,11 +156,11 @@ ALTER TABLE Users ADD CONSTRAINT CK_Age_18 CHECK (Age > 18)
 ALTER TABLE Users ADD CONSTRAINT CK_Age_18_100 CHECK (Age > 18 and Age < 100)
 ";
 
-                SqlAssert.AreEqualQuery(q.Build(), query);
+                SqlAssert.EqualQuery(q.Build(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_DropConstraint()
         {
             using (var q = Query.New)
@@ -176,7 +177,7 @@ ALTER TABLE Users ADD CONSTRAINT CK_Age_18_100 CHECK (Age > 18 and Age < 100)
 ALTER TABLE Users DROP CONSTRAINT Constraint1;
 ";
 
-                SqlAssert.AreEqualQuery(q.Build(), query);
+                SqlAssert.EqualQuery(q.Build(), query);
             }
         }
     }

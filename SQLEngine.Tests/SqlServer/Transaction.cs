@@ -1,10 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
+using Xunit;
 
 namespace SQLEngine.Tests.SqlServer
 {
     public partial class AllTests
     {
-        [TestMethod]
+        [Fact]
         public void Test_Transaction()
         {
             using (var q=Query.New)
@@ -22,12 +23,12 @@ BEGIN TRANSACTION
 COMMIT TRANSACTION
 
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Test_Transaction_With_Names()
         {
             using (var q = Query.New)
@@ -49,11 +50,11 @@ BEGIN TRANSACTION outerTran
 COMMIT TRANSACTION outerTran
 
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Transaction_With_Try()
         {
             using (var q = Query.New)
@@ -93,7 +94,7 @@ BEGIN CATCH
     ROLLBACK TRANSACTION
 END CATCH
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
     }

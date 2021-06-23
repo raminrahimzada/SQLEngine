@@ -1,10 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
+using Xunit;
 
 namespace SQLEngine.Tests.SqlServer
 {
     public partial class AllTests
     {
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AddColumn()
         {
             using (var q = Query.New)
@@ -23,11 +24,11 @@ namespace SQLEngine.Tests.SqlServer
 ALTER TABLE Users ADD  Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ";
 
-                SqlAssert.AreEqualQuery(q.Build(), query);
+                SqlAssert.EqualQuery(q.Build(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AddColumn_2()
         {
             using (var q = Query.New)
@@ -46,11 +47,11 @@ ALTER TABLE Users ADD  Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ALTER TABLE Users ADD  Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ";
 
-                SqlAssert.AreEqualQuery(q.Build(), query);
+                SqlAssert.EqualQuery(q.Build(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AddColumn_OfType_Strong_Typed()
         {
             using (var q = Query.New)
@@ -69,11 +70,11 @@ ALTER TABLE Users ADD  Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ALTER TABLE Users ADD  Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AddColumn_OfType_Strong_Typed_2()
         {
             using (var q = Query.New)
@@ -92,10 +93,10 @@ ALTER TABLE Users ADD  Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ALTER TABLE Users ADD Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AddColumn_OfType_Strong_Typed_3()
         {
             using (var q = Query.New)
@@ -113,10 +114,10 @@ ALTER TABLE Users ADD Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ALTER TABLE Users ADD Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_DropColumn()
         {
             using (var q = Query.New)
@@ -131,10 +132,10 @@ ALTER TABLE Users ADD Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
 ALTER TABLE  Users  DROP  COLUMN  Age 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_RenameColumn()
         {
             using (var q = Query.New)
@@ -152,10 +153,10 @@ EXECUTE sys.sp_rename  @objtype=N'COLUMN'
 	,@newname=N'Age_Of_User';
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AlterColumn()
         {
             using (var q = Query.New)
@@ -176,10 +177,10 @@ ALTER TABLE Users ADD CONSTRAINT DF_Users_Name  DEFAULT N'Anonymous' FOR Name
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AlterColumn_3()
         {
             using (var q = Query.New)
@@ -200,10 +201,10 @@ ALTER TABLE Users ADD CONSTRAINT DF_my_awesome_constraint  DEFAULT N'Anonymous' 
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AlterColumn_2()
         {
             using (var q = Query.New)
@@ -224,11 +225,11 @@ ALTER TABLE Users ADD CONSTRAINT DF_Users_Name DEFAULT N'Anonymous' FOR Name
 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
         
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AlterColumn_Decimal()
         {
             using (var q = Query.New)
@@ -246,11 +247,11 @@ ALTER TABLE Users ADD CONSTRAINT DF_Users_Name DEFAULT N'Anonymous' FOR Name
 ALTER TABLE Users ALTER COLUMN Weight decimal(18,4) NOT NULL 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AlterColumn_Decimal_2()
         {
             using (var q = Query.New)
@@ -268,11 +269,11 @@ ALTER TABLE Users ALTER COLUMN Weight decimal(18,4) NOT NULL
 ALTER TABLE Users ALTER COLUMN Weight decimal(18,4) NOT NULL 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Alter_Table_AlterColumn_Decimal_3()
         {
             using (var q = Query.New)
@@ -289,7 +290,7 @@ ALTER TABLE Users ALTER COLUMN Weight decimal(18,4) NOT NULL
 ALTER TABLE Users ALTER COLUMN Weight decimal(18,4) NOT NULL 
 ";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 

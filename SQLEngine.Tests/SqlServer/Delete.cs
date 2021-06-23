@@ -1,10 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
+using Xunit;
 
 namespace SQLEngine.Tests.SqlServer
 {
     public partial class AllTests
     {
-        [TestMethod]
+        [Fact]
         public void Test_Delete_Table_1()
         {
             using (var q = Query.New)
@@ -20,10 +21,10 @@ namespace SQLEngine.Tests.SqlServer
                 var query = @"
 DELETE from Users WHERE Id = 111
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Delete_Table_2()
         {
             using (var b = Query.New)
@@ -39,11 +40,11 @@ DELETE from Users WHERE Id = 111
                 const string query = @"
 DELETE from Users WHERE Id = 111
 ";
-                SqlAssert.AreEqualQuery(b.ToString(), query);
+                SqlAssert.EqualQuery(b.ToString(), query);
             }
         }
         
-        [TestMethod]
+        [Fact]
         public void Test_Delete_Table_3()
         {
             using (var b = Query.New)
@@ -59,11 +60,11 @@ DELETE from Users WHERE Id = 111
                 var query = @"
 DELETE TOP(10) from Users WHERE Id = 111
 ";
-                SqlAssert.AreEqualQuery(b.ToString(), query);
+                SqlAssert.EqualQuery(b.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Delete_Table_4()
         {
             using (var q = Query.New)
@@ -95,7 +96,7 @@ WHERE
         WHERE IsBlocked = 1)
 )
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
     }

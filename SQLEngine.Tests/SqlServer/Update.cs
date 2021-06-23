@@ -1,11 +1,12 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Xunit;
 
 namespace SQLEngine.Tests.SqlServer
 {
     public partial class AllTests
     {
-        [TestMethod]
+        [Fact]
         public void Test_Update_1()
         {
             using (var q = Query.New)
@@ -22,11 +23,11 @@ namespace SQLEngine.Tests.SqlServer
                 const string query =
                     "UPDATE TOP(5)  Users SET NAME = N'Ramin' , SURNAME = N'Rahimzada' , AGE = 18 WHERE (ID = 41)";
 
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Update_Filter_1()
         {
             using (var q = Query.New)
@@ -46,11 +47,11 @@ namespace SQLEngine.Tests.SqlServer
      SET Age = 21
      WHERE (Id = 17)
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Update_Filter_2()
         {
             using (var q = Query.New)
@@ -70,12 +71,12 @@ namespace SQLEngine.Tests.SqlServer
      SET CanWatchMovie = 1
      WHERE (Age >= 18)
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Test_Update_Filter_3()
         {
             using (var q = Query.New)
@@ -97,11 +98,11 @@ namespace SQLEngine.Tests.SqlServer
      SET Blocked = 1
      WHERE (LastLoginDate <= '2000-01-01 00:00:00.000')
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Update_Filter_4()
         {
             using (var q = Query.New)
@@ -123,7 +124,7 @@ UPDATE TOP(5) Users
  SET Blocked = 1 , BlockDate = '2020-01-01 00:00:00.000'
  WHERE ((Id < 100) AND (Id > 10))
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
     }

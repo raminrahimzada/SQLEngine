@@ -1,10 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
+using Xunit;
 
 namespace SQLEngine.Tests.SqlServer
 {
     public partial class AllTests
     {
-        [TestMethod]
+        [Fact]
         public void Test_Simple_If_Else_For_Max_Value()
         {
             using (var q = Query.New)
@@ -37,11 +38,11 @@ ELSE
     SET  @max  = 0;
 
 ";
-                SqlAssert.AreEqualQuery(queryThat, query);
+                SqlAssert.EqualQuery(queryThat, query);
             }
         }
         
-        [TestMethod]
+        [Fact]
         public void Test_Simple_If_Else_2()
         {
             using (var q = Query.New)
@@ -66,12 +67,12 @@ ELSE
     print(N'Not-Equal')
 
 ";
-                SqlAssert.AreEqualQuery(queryThat, query);
+                SqlAssert.EqualQuery(queryThat, query);
             }
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Test_If_Disposable_1()
         {
             using (var q = Query.New)
@@ -92,11 +93,11 @@ BEGIN
     SET  @i  = (0 - @i);
 END
 ";
-                SqlAssert.AreEqualQuery(queryThat, query);
+                SqlAssert.EqualQuery(queryThat, query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_If_Disposable_2()
         {
             using (var q = Query.New)
@@ -120,11 +121,11 @@ BEGIN
 END
 
 ";
-                SqlAssert.AreEqualQuery(queryThat, query);
+                SqlAssert.EqualQuery(queryThat, query);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_If_Disposable_Else_1()
         {
             using (var q = Query.New)
@@ -158,7 +159,7 @@ BEGIN
          WHERE (ID=1)
 END
 ";
-                SqlAssert.AreEqualQuery(queryThat, query);
+                SqlAssert.EqualQuery(queryThat, query);
             }
         }
     }

@@ -1,10 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
+using Xunit;
 
 namespace SQLEngine.Tests.SqlServer
 {
     public partial class AllTests
     {
-        [TestMethod]
+        [Fact]
         public void Test_Execute_Procedure_1()
         {
             using (var q = Query.New)
@@ -27,10 +28,10 @@ EXECUTE dbo.addUser  @Name=N'Nikola'
 	,@IsReallyFamousInventor=1;
 
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Execute_Procedure_2()
         {
             using (var q = Query.New)
@@ -52,12 +53,12 @@ EXECUTE addUser  @Name=N'Nikola'
 	,@IsReallyFamousInventor=1;
 
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Test_Execute_Function_1()
         {
             using (var q = Query.New)
@@ -79,7 +80,7 @@ EXECUTE addUser  @Name=N'Nikola'
 
 DECLARE @b BIT = dbo.UserExists (N'Nikola', N'Tesla')
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
 

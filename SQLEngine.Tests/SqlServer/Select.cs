@@ -1,13 +1,14 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using SQLEngine.SqlServer;
+using Xunit;
 
 namespace SQLEngine.Tests.SqlServer
 {
     public partial class AllTests
     {
         
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_1()
         {
             using (var q = Query.New)
@@ -24,12 +25,12 @@ SELECT TOP(1)  *
     FROM Users
     WHERE Id = 17
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_2()
         {
             using (var q = Query.New)
@@ -47,11 +48,11 @@ SELECT TOP(1)  *
     FROM Users
     WHERE UserName = N'admin'
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_3()
         {
             using (var q = Query.New)
@@ -69,11 +70,11 @@ SELECT TOP(1)  *
     FROM Users
     WHERE Age > 18
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_Order()
         {
             using (var q = Query.New)
@@ -94,11 +95,11 @@ SELECT TOP(1)   *
     ORDER BY Id
 
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_With_function()
         {
             using (var q = Query.New)
@@ -120,11 +121,11 @@ SELECT TOP(1)  Name, LEN(Name), TRIM(Name)
     FROM Users
 
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_Assign()
         {
             using (var q = Query.New)
@@ -152,11 +153,11 @@ SELECT TOP(1)  @myCreatedDate=CreatedDate
     WHERE Id = 17
     ORDER BY Id
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_Between()
         {
             using (var q = Query.New)
@@ -174,11 +175,11 @@ SELECT TOP(1) *
     FROM Users
     WHERE (Age BETWEEN 10 AND 60)
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_Between_2()
         {
             using (var q = Query.New)
@@ -204,12 +205,12 @@ SELECT TOP(1)   *
     FROM Users
     WHERE (Age BETWEEN '2020-07-21' AND '2020-07-22')
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_In()
         {
             using (var q = Query.New)
@@ -228,12 +229,12 @@ SELECT TOP(1) *
     FROM Users
     WHERE Age IN (11,22,33)
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_Like()
         {
             using (var q = Query.New)
@@ -253,12 +254,12 @@ SELECT TOP(1)   *
     FROM Users
     WHERE (Name LIKE N'J_hn') AND (Surname LIKE N'Sm_th')
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_In_With_Select()
         {
             using (var q = Query.New)
@@ -289,12 +290,12 @@ SELECT TOP(1)   *
             ORDER BY CreateDate DESC
     )
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_With_Alias_1()
         {
             using (var q = Query.New)
@@ -312,11 +313,11 @@ SELECT TOP(1)   *
     FROM Users AS U
     WHERE U.UserName = N'admin'
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_Simple_Filter()
         {
             using (var q = Query.New)
@@ -336,12 +337,12 @@ SELECT TOP(1)  Name , Surname
     FROM Users
     WHERE Age > 18
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_Complex_Filter_1()
         {
             using (var q = Query.New)
@@ -368,11 +369,11 @@ SELECT TOP(1)  Name , Surname
     WHERE (Age > 18) and (Height < 1.7)
 
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_Complex_Filter_2()
         {
             using (var q = Query.New)
@@ -396,12 +397,12 @@ SELECT TOP(1)  Name , Surname
     FROM Users
     WHERE (Age > 18) AND (Height <= 1.7) AND (Id = 1)
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }
        
-        [TestMethod]
+        [Fact]
         public void Test_Select_Group_1()
         {
             using (var q=Query.New)
@@ -424,11 +425,11 @@ SELECT Age , COUNT(Id) , SUM(Weight) , COUNT(DISTINCT Name)
     GROUP BY Age
 
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
 
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Select_Group_2()
         {
             using (var q=Query.New)
@@ -448,11 +449,11 @@ SELECT TOP(1)  Age , COUNT(*)
     FROM Users AS U
     GROUP BY Age
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
 
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Select_Group_3()
         {
             using (var q = Query.New)
@@ -481,13 +482,13 @@ SELECT TOP(1)  Age , COUNT(*)
     HAVING count(Age) > 5
     ORDER BY COUNT(Id)
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), query);
+                SqlAssert.EqualQuery(q.ToString(), query);
 
             }
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_Case_When()
         {
             using (var q = Query.New)
@@ -514,11 +515,11 @@ SELECT TOP(1)
     END) AS AgeStatus
     FROM Users
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_Case_When_End()
         {
             using (var q = Query.New)
@@ -549,11 +550,11 @@ SELECT TOP(1)
     ) AS AgeStatus
     FROM Users
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_Simple_Select_Variable()
         {
             using (var q = Query.New)
@@ -568,7 +569,7 @@ DECLARE  @id INT;
 SELECT @id
 
 ";
-                SqlAssert.AreEqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
 
             }
         }

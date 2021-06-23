@@ -4,7 +4,12 @@ namespace SQLEngine
 {
     public abstract class AbstractSqlExpression: ISqlExpression
     {
-        protected static Func<AbstractSqlExpression> CreateEmpty;
+        private static Func<AbstractSqlExpression> _createEmpty;
+
+        protected static void SetCreateEmpty(Func<AbstractSqlExpression> func)
+        {
+            _createEmpty = func;
+        }
 
         public abstract string ToSqlString();
 
@@ -13,13 +18,13 @@ namespace SQLEngine
 
         public static implicit operator AbstractSqlExpression(AbstractSqlLiteral literal)
         {
-            var expression = CreateEmpty();
+            var expression = _createEmpty();
             expression.SetFrom(literal);
             return expression;
         }
         public static implicit operator AbstractSqlExpression(AbstractSqlVariable literal)
         {
-            var expression = CreateEmpty();
+            var expression = _createEmpty();
             expression.SetFrom(literal);
             return expression;
         }

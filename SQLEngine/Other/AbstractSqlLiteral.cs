@@ -7,7 +7,12 @@ namespace SQLEngine
     {
         public abstract string ToSqlString();
 
-        protected static Func<AbstractSqlLiteral> CreateEmpty;
+        private static Func<AbstractSqlLiteral> _createEmpty;
+
+        protected static void SetCreateEmpty(Func<AbstractSqlLiteral> func)
+        {
+            _createEmpty = func;
+        }
 
         public abstract void SetFrom(byte[] data);
 
@@ -195,199 +200,199 @@ namespace SQLEngine
 
         public static AbstractSqlLiteral From(int i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(Enum i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(short i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(sbyte i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(ushort i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(char i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(char? i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(DateTimeOffset? i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(DateTimeOffset i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(DateTime? i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(long i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(ulong i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(uint i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(byte i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(int? i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(short? i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(ushort? i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(double? i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(ulong? i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(uint? i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(double i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(decimal i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(Guid i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(Guid? i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(bool i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(DateTime i,bool includeTime=true)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i, includeTime);
             return literal;
         }
         public static AbstractSqlLiteral From(bool? i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(decimal? i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(long? i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(byte? i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(sbyte? i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(params byte[] i)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(i);
             return literal;
         }
         public static AbstractSqlLiteral From(string str, bool isUnicode = true)
         {
-            var literal = CreateEmpty();
+            var literal = _createEmpty();
             literal.SetFrom(str, isUnicode);
             return literal;
         }

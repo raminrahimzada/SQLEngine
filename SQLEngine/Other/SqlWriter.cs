@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SQLEngine
 {
-    public class SqlWriter:ISqlWriter
+    public sealed class SqlWriter:ISqlWriter
     {
         private readonly StringBuilder _stringBuilder;
         private readonly IndentedTextWriter _indentedTextWriter;
@@ -26,6 +26,10 @@ namespace SQLEngine
             return Build();
         }
 
+        ~SqlWriter()
+        {
+            
+        }
         public void Dispose()
         {
             _indentedTextWriter?.Dispose();

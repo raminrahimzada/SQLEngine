@@ -143,7 +143,6 @@ namespace SQLEngine.SqlServer
             }
         }
         private string _mainTableName;
-        //private string _mainTableQuery;
         private string _mainTableAlias;
         private readonly SelectorCollection _selectors = new();
         private string _whereClause;

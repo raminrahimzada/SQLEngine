@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace SQLEngine
 {
@@ -7,6 +8,11 @@ namespace SQLEngine
     {
         public SqlEngineException(string message) : base(message)
         {
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
         }
     }
 }

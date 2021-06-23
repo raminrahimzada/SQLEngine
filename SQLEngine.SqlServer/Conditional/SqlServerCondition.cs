@@ -2,9 +2,13 @@
 {
     internal class SqlServerCondition : AbstractSqlCondition
     {
+        public static SqlServerCondition CreateEmptyThis()
+        {
+            return new();
+        }
         public static void Setup()
         {
-            CreateEmpty = () => new SqlServerCondition();
+            SetCreateEmpty(CreateEmptyThis);
         }
 
         private string _rawSqlString;

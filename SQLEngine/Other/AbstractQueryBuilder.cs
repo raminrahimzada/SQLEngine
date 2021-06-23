@@ -8,7 +8,7 @@ namespace SQLEngine
         {
             return new SqlWriter();
         }
-        protected ISqlWriter Writer { get; private set; }
+        protected ISqlWriter Writer { get; }
 
  
         public int Indent

@@ -13,9 +13,5 @@
         IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlLiteral literal);
         IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnLike(string columnName, string right);
 
-        //IUpdateNoTableAndValuesAndWhereQueryBuilder Where(
-        //    Func<BinaryConditionExpressionBuilder, BinaryConditionExpressionBuilder> builder);
-
-        //IUpdateNoTableAndValuesAndWhereQueryBuilder Where(Func<ExistsConditionBuilder, ExistsConditionBuilder> builder);
     }
 }

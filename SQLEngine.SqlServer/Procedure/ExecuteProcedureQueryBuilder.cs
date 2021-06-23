@@ -30,32 +30,29 @@ namespace SQLEngine.SqlServer
 
             writer.Write2();
 
-            if (_parametersDictionary != null)
+            if (_parametersDictionary is {Count: > 0})
             {
-                if (_parametersDictionary.Count > 0)
+                var i = 0;
+                foreach (var p in _parametersDictionary)
                 {
-                    var i = 0;
-                    foreach (var p in _parametersDictionary)
-                    {
-                        var key = p.Item1;
-                        var value = p.Item2;
-                        var direction = p.Item3;
+                    var key = p.Item1;
+                    var value = p.Item2;
+                    var direction = p.Item3;
 
-                        writer.Write(C.VARIABLE_HEADER);
-                        writer.Write(key);
-                        writer.Write(C.EQUALS);
-                        writer.Write(value);
-                        if (direction == ProcedureArgumentDirectionTypes.OUT)
-                        {
-                            writer.Write2(C.OUTPUT);
-                        }
-                        if (i != _parametersDictionary.Count - 1)
-                        {
-                            writer.WriteNewLine();
-                            writer.Write(C.COMMA);
-                        }
-                        i++;
+                    writer.Write(C.VARIABLE_HEADER);
+                    writer.Write(key);
+                    writer.Write(C.EQUALS);
+                    writer.Write(value);
+                    if (direction == ProcedureArgumentDirectionTypes.OUT)
+                    {
+                        writer.Write2(C.OUTPUT);
                     }
+                    if (i != _parametersDictionary.Count - 1)
+                    {
+                        writer.WriteNewLine();
+                        writer.Write(C.COMMA);
+                    }
+                    i++;
                 }
             }
 

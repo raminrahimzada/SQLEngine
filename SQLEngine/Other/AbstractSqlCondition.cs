@@ -4,7 +4,12 @@ namespace SQLEngine
 {
     public abstract class AbstractSqlCondition : ISqlExpression
     {
-        protected static Func<AbstractSqlCondition> CreateEmpty;
+        private static Func<AbstractSqlCondition> _createEmpty;
+
+        protected static void SetCreateEmpty(Func<AbstractSqlCondition> func)
+        {
+            _createEmpty = func;
+        }
 
         public abstract string ToSqlString();
 
@@ -29,14 +34,14 @@ namespace SQLEngine
         
         public static implicit operator AbstractSqlCondition(bool? x)
         {
-            var empty = CreateEmpty();
+            var empty = _createEmpty();
             empty.SetRaw(x);
             return empty;
         }
 
         public static implicit operator AbstractSqlCondition(bool x)
         {
-            var empty = CreateEmpty();
+            var empty = _createEmpty();
             empty.SetRaw(x);
             return empty;
         }

@@ -42,7 +42,11 @@
         }
         public IColumnQueryBuilder String(string columnName, bool isUniCode = true, bool isVariable = true)
         {
-            var type = isVariable ? isUniCode ? C.NVARCHAR : C.VARCHAR : isUniCode ? C.NCHAR : C.CHAR;
+            string type;
+            if (isVariable)
+                type = isUniCode ? C.NVARCHAR : C.VARCHAR;
+            else
+                type = isUniCode ? C.NCHAR : C.CHAR;
             return New<ColumnQueryBuilder>().Name(columnName).Type(type);
         }
         public IColumnQueryBuilder Decimal(string columnName)

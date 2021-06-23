@@ -11,8 +11,6 @@ namespace SQLEngine.SqlServer
     , ICreateProcedureNoNameQueryBuilder
     , ICreateProcedureNoHeaderQueryBuilder
     {
-        //for sp builder
-
         private class ArgumentModel
         {
             public string Name { get; set; }
@@ -22,13 +20,12 @@ namespace SQLEngine.SqlServer
             public string Build()
             {
                 if (Direction == ProcedureArgumentDirectionTypes.OUT)
-                    return Name.AsSQLVariable() + " " + Type + " " + C.OUTPUT;
-                return Name.AsSQLVariable() + " " + Type;
+                    return $"{Name.AsSQLVariable()} {Type} {C.OUTPUT}";
+                return $"{Name.AsSQLVariable()} {Type}";
             }
         }
 
         private readonly List<ArgumentModel> _arguments;
-        //private Action<IProcedureBodyQueryBuilder> _bodyBuilder;
         private string _body;
         private string _schemaName;
         private string _procedureName;
@@ -81,11 +78,11 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public ICreateProcedureNeedBodyQueryBuilder Body(Action<IProcedureBodyQueryBuilder> builder)
+        public ICreateProcedureNeedBodyQueryBuilder Body(Action<IProcedureBodyQueryBuilder> body)
         {
             using (var t=new SqlServerProcedureBodyQueryBuilder())
             {
-                builder(t);
+                body(t);
                 _body = t.Build();
             }
             return this;

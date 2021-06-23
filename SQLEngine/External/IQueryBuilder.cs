@@ -16,10 +16,11 @@ namespace SQLEngine
         IDropQueryBuilder Drop { get; }
         IExecuteQueryBuilder Execute { get; }
         
-
-        //void Union();
-        //void UnionAll();
-        
+        /*
+        not sure how to use these
+        void Union();
+        void UnionAll();
+        */
         void Truncate(string tableName);
         void Truncate<TTable>() where TTable : ITable, new();
         

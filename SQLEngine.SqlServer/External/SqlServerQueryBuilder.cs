@@ -53,7 +53,6 @@ namespace SQLEngine.SqlServer
                 foreach (var builder in _list)
                 {
                     builder.Build(writer);
-                    //writer.WriteLine();
                 }
 
                 return writer.Build();
@@ -64,7 +63,6 @@ namespace SQLEngine.SqlServer
             foreach (var builder in _list)
             {
                 builder.Build(writer);
-                //writer.WriteLine();
             }
         }
 
@@ -216,12 +214,10 @@ namespace SQLEngine.SqlServer
 
         public IDisposable If2(AbstractSqlCondition condition)
         {
-            //TODO 
             return new IfDisposable(this,condition);
         }
         public IDisposable Else2()
         {
-            //TODO 
             return new ElseDisposable(this);
         }
 
@@ -526,7 +522,6 @@ namespace SQLEngine.SqlServer
                 writer.WriteEx(comment);
                 writer.Write("*/ ");
                 writer.WriteLine("");
-                //writer.WriteLine("PRINT(" + comment.ToSQL() + ");");
             }));
             
         }
@@ -539,7 +534,7 @@ namespace SQLEngine.SqlServer
         {
             _list.Add(new RawStringQueryBuilder(writer =>
             {
-                var variableName = cursorName;//"__cursor_" + Guid.NewGuid().ToString().Replace("-", "");
+                var variableName = cursorName;
                 writer.Write(C.DECLARE);
                 writer.Write(C.SPACE);
                 writer.Write(cursorName);
@@ -757,15 +752,19 @@ namespace SQLEngine.SqlServer
             return AbstractSqlLiteral.From(x);
         }
 
-        
-
-        public void Dispose()
+        public virtual void Dispose(bool b)
         {
             foreach (var builder in _list)
             {
                 builder.Dispose();
             }
             _list.Clear();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

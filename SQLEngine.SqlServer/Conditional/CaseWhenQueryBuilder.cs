@@ -77,9 +77,9 @@ namespace SQLEngine.SqlServer
         }
 
 
-        public ICaseWhenNeedWhenQueryBuilder ThenColumn(string @then)
+        public ICaseWhenNeedWhenQueryBuilder ThenColumn(string columnName)
         {
-            return Then(@then);
+            return Then(columnName);
         }
         public ICaseWhenNeedWhenQueryBuilder ThenColumn(string tableAlias, string columnName)
         {

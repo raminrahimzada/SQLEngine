@@ -6,7 +6,7 @@ namespace SQLEngine.SqlServer
     {
         internal static void Setup()
         {
-            CreateEmpty = () => new SqlServerLiteral();
+            SetCreateEmpty(() => new SqlServerLiteral());
         }
 
         private static IEnumSqlStringConvertor EnumSqlStringConvertor => Query.Settings.EnumSqlStringConvertor;

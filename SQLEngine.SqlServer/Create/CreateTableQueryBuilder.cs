@@ -166,8 +166,6 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
                 {
                     writer.WriteLine();
 
-                    //writer.WriteLineComment($"Default Values List of {_tableName}");
-
                     foreach (var df in defaultValues)
                     {
                         var defaultConstraintName = df.DefaultConstraintName;
@@ -198,7 +196,6 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
                 var fkList = cols.Where(c => c.IsForeignKey ?? false).ToArray();
                 if (fkList.Any())
                 {
-                    //writer.WriteLineComment($"Foreign Keys List of {_tableName}");
                     writer.WriteLine();
 
                     foreach (var fk in fkList)
@@ -267,7 +264,6 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
 
                 if (ukList.Any())
                 {
-                    //writer.WriteLineComment($"List of Unique Keys of {_tableName}");
 
                     foreach (var ukName in ukList)
                     {
@@ -280,13 +276,13 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
                         writer.Write2(I(ukName));
                         writer.Write(C.UNIQUE);
                         writer.Write(C.BEGIN_SCOPE);
-                        //writer.Indent++;
+                        writer.Indent++;
                         writer.WriteJoined(ukGroup.Select(pkg => pkg.Name + C.SPACE +
                                                                  (pkg.IsUniqueKeyOrderDescending ? C.DESC : C.ASC))
                             .ToArray());
 
 
-                        //writer.Indent--;
+                        writer.Indent--;
                         writer.Write(C.END_SCOPE);
                         writer.WriteLine(C.SEMICOLON);
                     }
@@ -303,7 +299,6 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
                     var pkGroups = pkList.GroupBy(pk => pk.PrimaryKeyName).ToArray();
                     if (pkGroups.Any())
                     {
-                        //writer.WriteLineComment($"Primary Keys List {_tableName}");
                         writer.WriteLine();
                     }
                     foreach (var pkGroup in pkGroups)

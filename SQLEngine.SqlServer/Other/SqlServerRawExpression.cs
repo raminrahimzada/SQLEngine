@@ -4,7 +4,7 @@
     {
         internal static void Setup()
         {
-            CreateEmpty = () => new SqlServerRawExpression();
+            SetCreateEmpty(() => new SqlServerRawExpression());
         }
         public string Expression { get; set; }
 

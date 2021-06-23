@@ -6,7 +6,7 @@ namespace SQLEngine.SqlServer
         ICaseWhenNeedWhenQueryBuilder, 
         ICaseWhenNeedThenQueryBuilder
     {
-        private readonly List<string> _casesList = new List<string>();
+        private readonly List<string> _casesList = new();
         private string _currentWhen = string.Empty;
         private string _currentThen = string.Empty;
         private string _elseCase;

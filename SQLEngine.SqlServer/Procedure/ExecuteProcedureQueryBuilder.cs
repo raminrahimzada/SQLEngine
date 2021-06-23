@@ -9,7 +9,7 @@ namespace SQLEngine.SqlServer
         private string _schemaName;
 
         private readonly List<Tuple<string, string, ProcedureArgumentDirectionTypes>>
-            _parametersDictionary = new List<Tuple<string, string, ProcedureArgumentDirectionTypes>>();
+            _parametersDictionary = new();
 
         public IExecuteProcedureNeedArgQueryBuilder Name(string procedureName)
         {

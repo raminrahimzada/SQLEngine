@@ -5,11 +5,24 @@
     /// </summary>
     public static class C
     {
-        
         //There is no sql bool literal so that is another solution
         public const string TRUE = "(1=1)";
         public const string FALSE = "(1=0)";
 
+        public const char SPACE = ' ';
+        public const char PLUS = '+';
+        public const char MINUS = '-';
+        public const char MULTIPLY = '*';
+        public const char DIVIDE = '/';
+        public const char DOT = '.';
+        public const char BEGIN_SQUARE = '[';
+        public const char END_SQUARE = ']';
+        public const char WILCARD = '*';
+        public const char EQUALS = '=';
+        public const char COMMA = ',';
+        public const char SEMICOLON = ';';
+        public const char BEGIN_SCOPE = '(';
+        public const char END_SCOPE = ')';
 
         public const string AND="AND";
         public const string TRIGGER = "TRIGGER";
@@ -17,9 +30,7 @@
         public const string AVG = "AVG";
         public const string SUM = "SUM";
         public const string COUNT = "COUNT";
-        public const string BEGIN_SCOPE = "(";
-        public const string END_SCOPE = ")";
-        public const string SPACE = " ";
+        
         public const string AFTER = "AFTER";
         public const string ROLLBACK = "ROLLBACK";
         public const string TRANSACTION = "TRANSACTION";
@@ -75,10 +86,7 @@
         public const string UNIQUE = "UNIQUE";
         public const string CHECK = "CHECK";
         public const string ADD = "ADD";
-        public const string PLUS = "+";
-        public const string MINUS = "-";
-        public const string MULTIPLY = "*";
-        public const string DIVIDE = "/";
+        
         public const string DESC = "DESC";
         public const string ASC = "ASC";
         public const string KEY = "KEY";
@@ -105,9 +113,7 @@
         public const string DISTINCT = "DISTINCT";
         public const string CLOSE = "CLOSE";
         public const string DEALLOCATE = "DEALLOCATE";
-        public const string DOT = ".";
-        public const string BEGIN_SQUARE = "[";
-        public const string END_SQUARE = "]";
+   
         public const string RETURNS = "RETURNS";
         public const string DECLARE = "DECLARE";
         public const string OPEN = "OPEN";
@@ -120,9 +126,8 @@
         public const string PERSISTED = "PERSISTED";
         public const string ON = "ON";
         public const string HAVING = "HAVING";
-        public const string EQUALS = "=";
-        public const string COMMA = ",";
-        public const string SEMICOLON = ";";
+
+
         public const string UPDATE = "UPDATE";
         public const string ELSE = "ELSE";
         public const string EXISTS = "EXISTS";
@@ -133,7 +138,7 @@
         public const string TOP = "TOP";
         public const string FROM = "FROM";
         public const string SELECT = "SELECT";
-        public const string WILCARD = "*";
+        
         public const string WHERE = "WHERE";
         public const string EXECUTE = "EXECUTE";
         public const string ORDER = "ORDER";

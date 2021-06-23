@@ -30,7 +30,14 @@ namespace SQLEngine.SqlServer
             writer.Write("*/");
         }
         public static void WriteScoped(this ISqlWriter writer, string expression,
-            string beginScope = C.BEGIN_SCOPE, string endScope = C.END_SCOPE)
+            string beginScope="(", string endScope=")")
+        {
+            writer.Write(beginScope);
+            writer.Write(expression);
+            writer.Write(endScope);
+        }
+        public static void WriteScoped(this ISqlWriter writer, char expression,
+            char beginScope = C.BEGIN_SCOPE, char endScope = C.END_SCOPE)
         {
             writer.Write(beginScope);
             writer.Write(expression);
@@ -86,10 +93,14 @@ namespace SQLEngine.SqlServer
                 }
             }
 
-            if (expression[expression.Length - 1] != '\n')
-                writer.Write(expression[expression.Length - 1]);
+            if (expression[^1] != '\n')
+                writer.Write(expression[^1]);
         }
         public static void Write2(this ISqlWriter writer, string expression = "")
+        {
+            writer.WriteScoped(expression, C.SPACE.ToString(), C.SPACE.ToString());
+        }
+        public static void Write2(this ISqlWriter writer, char expression)
         {
             writer.WriteScoped(expression, C.SPACE, C.SPACE);
         }

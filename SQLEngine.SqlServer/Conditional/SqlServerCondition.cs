@@ -54,7 +54,7 @@
 
         public static SqlServerCondition Raw(string rawSqlString)
         {
-            return new SqlServerCondition(rawSqlString);
+            return new(rawSqlString);
         }
 
         

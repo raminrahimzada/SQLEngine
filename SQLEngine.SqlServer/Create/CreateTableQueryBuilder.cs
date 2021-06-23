@@ -83,13 +83,13 @@ namespace SQLEngine.SqlServer
             writer.WriteLine(C.SEMICOLON);
 
             //PK list
-            PKList(writer, cols);
+            PrimaryKeyList(writer, cols);
 
             //unique index list
-            UXList(writer, cols);
+            UniqueIndexList(writer, cols);
 
             //FK list
-            FKList(writer, cols);
+            ForeignKeyList(writer, cols);
 
             //default values
             DefaultValues(writer, cols);
@@ -192,7 +192,7 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
             }
         }
 
-        private void FKList(ISqlWriter writer, ColumnModel[] cols)
+        private void ForeignKeyList(ISqlWriter writer, ColumnModel[] cols)
         {
             {
                 var fkList = cols.Where(c => c.IsForeignKey ?? false).ToArray();
@@ -250,7 +250,7 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
             }
         }
 
-        private void UXList(ISqlWriter writer, ColumnModel[] cols)
+        private void UniqueIndexList(ISqlWriter writer, ColumnModel[] cols)
         {
             {
                 foreach (var t in cols.Where(c => c.IsUniqueKey ?? false))
@@ -294,7 +294,7 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
             }
         }
 
-        private void PKList(ISqlWriter writer, ColumnModel[] cols)
+        private void PrimaryKeyList(ISqlWriter writer, ColumnModel[] cols)
         {
             {
                 var pkList = cols.Where(c => c.IsPrimary ?? false).ToArray();

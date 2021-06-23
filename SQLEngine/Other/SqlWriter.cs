@@ -29,6 +29,7 @@ namespace SQLEngine
         public void Dispose()
         {
             _indentedTextWriter?.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         public int Indent
@@ -75,14 +76,23 @@ namespace SQLEngine
             _indentedTextWriter.Write(b);
         }
 
-        public void WriteLine(string expression=null)
+        public void WriteLine(string expression)
         {
-            if (expression != null)
+            if (!string.IsNullOrWhiteSpace(expression))
                 _indentedTextWriter.WriteLine(expression);
             else
                 _indentedTextWriter.WriteLine();
         }
 
+        public void WriteLine(char? expression = null)
+        {
+            if (expression != null)
+            {
+                _indentedTextWriter.Write(expression.Value);
+            }
+
+            _indentedTextWriter.WriteLine();
+        }
         public string Build()
         {
             return _stringBuilder.ToString();

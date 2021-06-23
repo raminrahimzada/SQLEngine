@@ -97,7 +97,7 @@ namespace SQLEngine.SqlServer
         
         internal class SelectorCollection
         {
-            private readonly List<string> _rawSqlQueryList = new List<string>();
+            private readonly List<string> _rawSqlQueryList = new();
 
             public void Add(IAbstractQueryBuilder abstractQueryBuilder)
             {                
@@ -145,17 +145,17 @@ namespace SQLEngine.SqlServer
         private string _mainTableName;
         //private string _mainTableQuery;
         private string _mainTableAlias;
-        private readonly SelectorCollection _selectors = new SelectorCollection();
+        private readonly SelectorCollection _selectors = new();
         private string _whereClause;
         private int? _topClause;
         private bool? _hasDistinct;
 
-        private JoinModel _currentJoinModel=new JoinModel();
-        private readonly List<JoinModel> _joinsList = new List<JoinModel>();
+        private JoinModel _currentJoinModel=new();
+        private readonly List<JoinModel> _joinsList = new();
 
         private string _having;
-        private readonly List<OrderByQueryModel> _orderByClauses = new List<OrderByQueryModel>();
-        private readonly List<string> _groupByClauses=new List<string>();
+        private readonly List<OrderByQueryModel> _orderByClauses = new();
+        private readonly List<string> _groupByClauses=new();
 
         private static void MutateAliasName(ref string alias)
         {
@@ -167,8 +167,8 @@ namespace SQLEngine.SqlServer
                 alias.EndsWith(C.END_SQUARE)
             )
                 return;
-            alias = alias.Replace(C.BEGIN_SQUARE, "\\" + C.BEGIN_SQUARE);
-            alias = alias.Replace(C.END_SQUARE, "\\" + C.END_SQUARE);
+            alias = alias.Replace(C.BEGIN_SQUARE.ToString(), "\\" + C.BEGIN_SQUARE);
+            alias = alias.Replace(C.END_SQUARE.ToString(), "\\" + C.END_SQUARE);
             alias = string.Concat(C.BEGIN_SQUARE, alias, C.END_SQUARE);
         }
 

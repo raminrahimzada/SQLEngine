@@ -17,7 +17,7 @@ namespace SQLEngine.SqlServer
 
         public override string ToSqlString()
         {
-            if (Name == C.WILCARD) return Name;
+            if (Name == C.WILCARD + string.Empty) return Name;
             if (!Name.All(char.IsLetterOrDigit)) return "[" + Name + "]";
             if (Name.Equals("key", StringComparison.InvariantCultureIgnoreCase))return "[" + Name + "]";
             if (Name.Equals("value", StringComparison.InvariantCultureIgnoreCase))return "[" + Name + "]";
@@ -462,22 +462,22 @@ namespace SQLEngine.SqlServer
         }
         protected override AbstractSqlExpression Add(AbstractSqlColumn right)
         {
-            return new SqlServerRawExpression(ToSqlString() ,C.PLUS, right.ToSqlString());
+            return new SqlServerRawExpression(ToSqlString() ,C.PLUS + string.Empty, right.ToSqlString());
         }
 
         protected override AbstractSqlExpression Subtract(AbstractSqlColumn right)
         {
-            return new SqlServerRawExpression(ToSqlString() ,C.MINUS, right.ToSqlString());
+            return new SqlServerRawExpression(ToSqlString() ,C.MINUS + string.Empty, right.ToSqlString());
         }
 
         protected override AbstractSqlExpression Divide(AbstractSqlColumn right)
         {
-            return new SqlServerRawExpression(ToSqlString() ,C.DIVIDE, right.ToSqlString());
+            return new SqlServerRawExpression(ToSqlString() ,C.DIVIDE + string.Empty, right.ToSqlString());
         }
 
         protected override AbstractSqlExpression Multiply(AbstractSqlColumn right)
         {
-            return new SqlServerRawExpression(ToSqlString() ,C.MULTIPLY, right.ToSqlString());
+            return new SqlServerRawExpression(ToSqlString() ,C.MULTIPLY + string.Empty, right.ToSqlString());
         }
 
         protected override AbstractSqlExpression Add(AbstractSqlLiteral right)
@@ -487,7 +487,7 @@ namespace SQLEngine.SqlServer
 
         protected override AbstractSqlExpression Subtract(AbstractSqlLiteral right)
         {
-            return new SqlServerRawExpression(ToSqlString(), C.MINUS, right.ToSqlString());
+            return new SqlServerRawExpression(ToSqlString(), C.MINUS + string.Empty, right.ToSqlString());
         }
 
         protected override AbstractSqlExpression Divide(AbstractSqlLiteral right)

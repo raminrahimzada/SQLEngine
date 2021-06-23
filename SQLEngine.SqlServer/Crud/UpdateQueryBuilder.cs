@@ -13,7 +13,7 @@ namespace SQLEngine.SqlServer
         IUpdateNoTableAndValuesQueryBuilder
     {
         private string _tableName;
-        private Dictionary<string, string> _columnsAndValuesDictionary=new Dictionary<string, string>();
+        private Dictionary<string, string> _columnsAndValuesDictionary=new();
         private string _whereCondition;
         private int? _topClause;
 

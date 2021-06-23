@@ -9,7 +9,8 @@ namespace SQLEngine
         void Write(byte? b);
         void Write(int? b);
         void Write(char b);
-        void WriteLine(string expression = null);
+        void WriteLine(string expression);
+        void WriteLine(char? expression = null);
         string Build();
     }
 }

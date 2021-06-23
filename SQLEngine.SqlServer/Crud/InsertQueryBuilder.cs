@@ -12,9 +12,9 @@ namespace SQLEngine.SqlServer
         IInsertNoIntoQueryBuilder
     {
         private string _tableName;
-        private Dictionary<string, ISqlExpression> _columnsAndValuesDictionary=new Dictionary<string, ISqlExpression>();
+        private Dictionary<string, ISqlExpression> _columnsAndValuesDictionary=new();
 
-        private readonly List<ISqlExpression[]> _valuesList = new List<ISqlExpression[]>();
+        private readonly List<ISqlExpression[]> _valuesList = new();
         private string[] _columnNames;
         private string _selection;
 

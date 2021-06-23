@@ -35,7 +35,7 @@ namespace SQLEngine.SqlServer
             Setup();
         }
 
-        private readonly List<IAbstractQueryBuilder> _list = new List<IAbstractQueryBuilder>();
+        private readonly List<IAbstractQueryBuilder> _list = new();
 
         public override string ToString()
         {
@@ -267,12 +267,12 @@ namespace SQLEngine.SqlServer
             using (var s=new SelectQueryBuilder())
             {
                 selector(s);
-                return If(new SqlServerCondition(C.EXISTS, C.BEGIN_SCOPE, s.Build(), C.END_SCOPE));
+                return If(new SqlServerCondition(C.EXISTS, C.BEGIN_SCOPE+string.Empty, s.Build(), C.END_SCOPE + string.Empty));
             }
         }
         public IIfQueryBuilder IfExists(IAbstractSelectQueryBuilder selection)
         {
-            return If(new SqlServerCondition(C.SPACE, C.EXISTS, C.BEGIN_SCOPE, selection.Build(), C.END_SCOPE));
+            return If(new SqlServerCondition(C.SPACE+string.Empty, C.EXISTS, C.BEGIN_SCOPE + string.Empty, selection.Build(), C.END_SCOPE + string.Empty));
         }
 
         public IIfQueryBuilder IfNotExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
@@ -280,13 +280,13 @@ namespace SQLEngine.SqlServer
             using (var s = new SelectQueryBuilder())
             {
                 selector(s);
-                return If(new SqlServerCondition(C.NOT , C.SPACE , C.EXISTS , C.BEGIN_SCOPE , s.Build() , C.END_SCOPE));
+                return If(new SqlServerCondition(C.NOT , C.SPACE +string.Empty, C.EXISTS , C.BEGIN_SCOPE + string.Empty, s.Build() , C.END_SCOPE + string.Empty));
             }
         }
 
         public IIfQueryBuilder IfNotExists(IAbstractSelectQueryBuilder selection)
         {
-            return If(new SqlServerCondition(C.NOT , C.SPACE , C.EXISTS , C.BEGIN_SCOPE , selection.Build() , C.END_SCOPE));
+            return If(new SqlServerCondition(C.NOT , C.SPACE + string.Empty, C.EXISTS , C.BEGIN_SCOPE + string.Empty, selection.Build() , C.END_SCOPE + string.Empty));
         }
 
         public IElseIfQueryBuilder ElseIf(AbstractSqlCondition condition)
@@ -297,7 +297,7 @@ namespace SQLEngine.SqlServer
 
         public void Else()
         {
-            _list.Add(new RawStringQueryBuilder(w => w.Write(C.ELSE, C.SPACE)));
+            _list.Add(new RawStringQueryBuilder(w => w.Write(C.ELSE, C.SPACE + string.Empty)));
         }
 
         public void Begin()

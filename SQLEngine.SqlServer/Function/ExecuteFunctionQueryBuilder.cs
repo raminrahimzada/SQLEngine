@@ -9,7 +9,7 @@ namespace SQLEngine.SqlServer
         private string _functionName;
 
         private readonly List<string>
-            _parametersList = new List<string>();
+            _parametersList = new();
 
         private string _schemaName;
 

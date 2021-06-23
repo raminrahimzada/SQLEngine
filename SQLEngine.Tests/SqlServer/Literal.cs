@@ -38,86 +38,86 @@ namespace SQLEngine.Tests.SqlServer
 
 
                 literal = 1;
-                Assert.Equal(literal.ToSqlString(), "1");
+                Assert.Equal("1", literal.ToSqlString());
                 
                 literal = InputOutput.Input;
-                Assert.Equal(literal.ToSqlString(), "1");
+                Assert.Equal("1", literal.ToSqlString());
 
                 literal = InputOutput.Output;
-                Assert.Equal(literal.ToSqlString(), "2");
+                Assert.Equal("2", literal.ToSqlString());
 
                 literal = (uint)1;
-                Assert.Equal(literal.ToSqlString(), "1");
+                Assert.Equal("1", literal.ToSqlString());
 
                 literal = 1L;
-                Assert.Equal(literal.ToSqlString(), "1");
+                Assert.Equal("1", literal.ToSqlString());
 
                 literal = (ulong)1;
-                Assert.Equal(literal.ToSqlString(), "1");
+                Assert.Equal("1", literal.ToSqlString());
 
                 literal = (byte)1;
-                Assert.Equal(literal.ToSqlString(), "1");
+                Assert.Equal("1", literal.ToSqlString());
 
                 literal = (sbyte)1;
-                Assert.Equal(literal.ToSqlString(), "1");
+                Assert.Equal("1", literal.ToSqlString());
 
                 literal = (short)1;
-                Assert.Equal(literal.ToSqlString(), "1");
+                Assert.Equal("1", literal.ToSqlString());
 
                 literal = (ushort)1;
-                Assert.Equal(literal.ToSqlString(), "1");
+                Assert.Equal("1", literal.ToSqlString());
                 
                 literal = 1.5D;
-                Assert.Equal(literal.ToSqlString(), "1.5");
+                Assert.Equal("1.5", literal.ToSqlString());
 
                 literal = true;
-                Assert.Equal(literal.ToSqlString(), "1");
+                Assert.Equal("1", literal.ToSqlString());
                 
                 literal = false;
-                Assert.Equal(literal.ToSqlString(), "0");
+                Assert.Equal("0",literal.ToSqlString());
 
                 literal = 1.5F;
-                Assert.Equal(literal.ToSqlString(), "1.5");
+                Assert.Equal("1.5",literal.ToSqlString());
 
                 literal = 1.5M;
-                Assert.Equal(literal.ToSqlString(), "1.5");
+                Assert.Equal("1.5",literal.ToSqlString());
 
                 literal = 'A';
-                Assert.Equal(literal.ToSqlString(), "N'A'");
+                Assert.Equal("N'A'",literal.ToSqlString());
 
                 literal = DateTime.Parse("01/01/2020");
-                Assert.Equal(literal.ToSqlString(), "'2020-01-01 00:00:00.000'");
+                Assert.Equal("'2020-01-01 00:00:00.000'",literal.ToSqlString());
 
                 literal = q.Literal(DateTime.Parse("01/01/2020"), false);
-                Assert.Equal(literal.ToSqlString(), "'2020-01-01'");
+                Assert.Equal("'2020-01-01'",literal.ToSqlString());
 
                 literal = q.Literal(DateTimeOffset.Parse("2021-02-06 09:10:56.777 +04:00"));
-                Assert.Equal(literal.ToSqlString(), "'2021-02-06 09:10:56.777 +04:00'");
+                Assert.Equal("'2021-02-06 09:10:56.777 +04:00'",literal.ToSqlString());
 
                 literal = Guid.Empty;
-                Assert.Equal(literal.ToSqlString(), "'00000000-0000-0000-0000-000000000000'");
+                Assert.Equal("'00000000-0000-0000-0000-000000000000'",literal.ToSqlString());
 
                 literal = "Hey";
-                Assert.Equal(literal.ToSqlString(), "N'Hey'");
+                Assert.Equal("N'Hey'",literal.ToSqlString());
 
                 literal = q.Literal("Hey");
-                Assert.Equal(literal.ToSqlString(), "N'Hey'");
+                Assert.Equal("N'Hey'",literal.ToSqlString());
 
                 literal = q.Literal("Hey", isUniCode: false);
-                Assert.Equal(literal.ToSqlString(), "'Hey'");
+                Assert.Equal("'Hey'",literal.ToSqlString());
 
 
 
                 literal = new byte[] {0, 1, 2};
-                Assert.Equal(literal.ToSqlString(), "0x000102");
+                Assert.Equal("0x000102",literal.ToSqlString());
 
 
                 var dto = new DateTimeOffset(2021, 12, 13, 15, 30, 44, 365, TimeSpan.FromHours(4));
                 literal = AbstractSqlLiteral.From(dto);
-                Assert.Equal(literal.ToSqlString(), "'2021-12-13 15:30:44.365 +04:00'");
+                Assert.Equal("'2021-12-13 15:30:44.365 +04:00'",literal.ToSqlString());
 
                 literal = AbstractSqlLiteral.From((DateTimeOffset?) dto);
-                Assert.Equal(literal.ToSqlString(), "'2021-12-13 15:30:44.365 +04:00'");
+                Assert.Equal("'2021-12-13 15:30:44.365 +04:00'",literal.ToSqlString());
 
 
                 literal = (int?) null;
@@ -179,76 +179,76 @@ namespace SQLEngine.Tests.SqlServer
 
 
                 expression = 1;
-                Assert.Equal(expression.ToSqlString(), "1");
+                Assert.Equal("1",expression.ToSqlString());
 
 
                 expression= true;
-                Assert.Equal(expression.ToSqlString(), "1");
+                Assert.Equal("1",expression.ToSqlString());
 
 
                 expression = (uint)1;
-                Assert.Equal(expression.ToSqlString(), "1");
+                Assert.Equal("1",expression.ToSqlString());
 
                 expression = 1L;
-                Assert.Equal(expression.ToSqlString(), "1");
+                Assert.Equal("1",expression.ToSqlString());
 
                 expression = (ulong)1;
-                Assert.Equal(expression.ToSqlString(), "1");
+                Assert.Equal("1",expression.ToSqlString());
 
                 expression = (byte)1;
-                Assert.Equal(expression.ToSqlString(), "1");
+                Assert.Equal("1", expression.ToSqlString());
 
                 expression = (sbyte)1;
-                Assert.Equal(expression.ToSqlString(), "1");
+                Assert.Equal("1", expression.ToSqlString());
 
                 expression = (short)1;
-                Assert.Equal(expression.ToSqlString(), "1");
+                Assert.Equal("1", expression.ToSqlString());
 
                 expression = (ushort)1;
-                Assert.Equal(expression.ToSqlString(), "1");
+                Assert.Equal("1", expression.ToSqlString());
 
                 expression = InputOutput.Input;
-                Assert.Equal(expression.ToSqlString(), "1");
+                Assert.Equal("1", expression.ToSqlString());
 
 
                 expression = InputOutput.Output;
-                Assert.Equal(expression.ToSqlString(), "2");
+                Assert.Equal("2", expression.ToSqlString());
 
 
 
 
                 expression = 1.5D;
-                Assert.Equal(expression.ToSqlString(), "1.5");
+                Assert.Equal("1.5", expression.ToSqlString());
 
                 expression = 1.5F;
-                Assert.Equal(expression.ToSqlString(), "1.5");
+                Assert.Equal("1.5", expression.ToSqlString());
 
                 expression = 1.5M;
-                Assert.Equal(expression.ToSqlString(), "1.5");
+                Assert.Equal("1.5",expression.ToSqlString());
 
                 expression = 'A';
-                Assert.Equal(expression.ToSqlString(), "N'A'");
+                Assert.Equal("N'A'",expression.ToSqlString());
 
                 expression = DateTime.Parse("01/01/2020");
-                Assert.Equal(expression.ToSqlString(), "'2020-01-01 00:00:00.000'");
+                Assert.Equal("'2020-01-01 00:00:00.000'",expression.ToSqlString());
 
                 expression = q.Literal(DateTime.Parse("01/01/2020"), false);
-                Assert.Equal(expression.ToSqlString(), "'2020-01-01'");
+                Assert.Equal("'2020-01-01'",expression.ToSqlString());
 
                 expression = Guid.Empty;
-                Assert.Equal(expression.ToSqlString(), "'00000000-0000-0000-0000-000000000000'");
+                Assert.Equal( "'00000000-0000-0000-0000-000000000000'",expression.ToSqlString());
 
                 expression = "Hey";
-                Assert.Equal(expression.ToSqlString(), "N'Hey'");
+                Assert.Equal("N'Hey'",expression.ToSqlString());
 
 
                 expression = q.Literal("Hey", false);
-                Assert.Equal(expression.ToSqlString(), "'Hey'");
+                Assert.Equal("'Hey'",expression.ToSqlString());
 
 
 
                 expression = new byte[] {0, 1, 2};
-                Assert.Equal(expression.ToSqlString(), "0x000102");
+                Assert.Equal("0x000102",expression.ToSqlString());
 
                 
 

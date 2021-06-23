@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLEngine.SqlServer", "SQLE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLEngine.Tests", "SQLEngine.Tests\SQLEngine.Tests.csproj", "{2932F954-4003-4AF7-B67D-5DDDCC9D13E0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLEngine.PostgreSql", "SQLEngine.PostgreSql\SQLEngine.PostgreSql.csproj", "{24F08157-852C-43CB-83F4-054DE699B8F0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{2932F954-4003-4AF7-B67D-5DDDCC9D13E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2932F954-4003-4AF7-B67D-5DDDCC9D13E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2932F954-4003-4AF7-B67D-5DDDCC9D13E0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{24F08157-852C-43CB-83F4-054DE699B8F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{24F08157-852C-43CB-83F4-054DE699B8F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{24F08157-852C-43CB-83F4-054DE699B8F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{24F08157-852C-43CB-83F4-054DE699B8F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

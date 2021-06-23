@@ -9,7 +9,6 @@ using Xunit;
 
 #if CHECK_QUERY_COMPILATION
 using System.Data.SqlClient;
-using SQLEngine.PostgreSql;
 using SQLEngine.SqlServer;
 #endif
 
@@ -55,12 +54,6 @@ namespace SQLEngine.Tests
                         _connectionString = "Server=MATRIX\\SERVER19;Database=master;Trusted_Connection=True;";
                         ValidateQueryInSqlServer(sqlQuery);
                         break;
-
-                    case PostgreSqlQueryBuilder _:
-                        _connectionString = "Server=localhost;User Id=postgres;Password=mysupersecurepasswordhere;Database=postgres;";
-                        //ValidateQueryInPostgreSql(sqlQuery);
-                        break;
-
                 }
             }
         }
@@ -84,29 +77,7 @@ namespace SQLEngine.Tests
             }
             catch (System.Exception e)
             {
-                Assert.Fail(e.Message);
-            }
-        }
-
-        public static void ValidateQueryInPostgreSql(string sqlQuery)
-        {
-            try
-            {
-                using (var connection = new Npgsql.NpgsqlConnection(_connectionString))
-                {
-                    connection.Open();
-                    var cmd = connection.CreateCommand();
-
-                    //cmd.CommandText = "SET NOEXEC ON;SET PARSEONLY ON;";
-                    //cmd.ExecuteNonQuery();
-                    cmd.CommandText = sqlQuery;
-                    cmd.ExecuteNonQuery();
-                    cmd.Dispose();
-                }
-            }
-            catch (System.Exception e)
-            {
-                Assert.Fail(e.Message);
+                Assert.True(false,e.Message);
             }
         }
 #endif

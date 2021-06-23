@@ -451,7 +451,7 @@ namespace SQLEngine.PostgreSql
         {
             if (expressions.Length == 0)
             {
-                throw new Exception("At least one element needed in -IN query needed");
+                throw new SqlEngineException("At least one element needed in -IN query needed");
             }
             var expression = this.ToSqlString() + " IN (" +
                              string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
@@ -462,7 +462,7 @@ namespace SQLEngine.PostgreSql
         {
             if (expressions.Length == 0)
             {
-                throw new Exception("At least one element needed in -NOT IN query needed");
+                throw new SqlEngineException("At least one element needed in -NOT IN query needed");
             }
             var expression = this.ToSqlString() + " NOT IN (" +
                              string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";

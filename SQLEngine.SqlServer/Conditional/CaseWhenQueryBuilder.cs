@@ -55,7 +55,6 @@ namespace SQLEngine.SqlServer
         }
 
 
-        
         public ICaseWhenNeedWhenQueryBuilder Then(ISqlExpression then)
         {
             _currentThen = then.ToSqlString();
@@ -76,6 +75,7 @@ namespace SQLEngine.SqlServer
             Add();
             return this;
         }
+
 
         public ICaseWhenNeedWhenQueryBuilder ThenColumn(string @then)
         {

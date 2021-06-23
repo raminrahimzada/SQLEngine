@@ -5,7 +5,7 @@
         ICaseWhenNeedWhenQueryBuilder Then(ISqlExpression @then);
         ICaseWhenNeedWhenQueryBuilder Then(AbstractSqlColumn column);
 
-        ICaseWhenNeedWhenQueryBuilder Then(AbstractSqlLiteral literal);
+        ICaseWhenNeedWhenQueryBuilder Then(AbstractSqlLiteral then);
         
         ICaseWhenNeedWhenQueryBuilder ThenColumn(string columnName);
         ICaseWhenNeedWhenQueryBuilder ThenColumn(string tableAlias, string columnName);

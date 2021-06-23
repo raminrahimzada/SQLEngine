@@ -157,7 +157,6 @@ BEGIN
          SET Name = N'Tesla'
          WHERE (ID=1)
 END
-
 ";
                 SqlAssert.AreEqualQuery(queryThat, query);
             }

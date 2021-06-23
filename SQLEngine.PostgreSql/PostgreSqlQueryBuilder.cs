@@ -129,6 +129,11 @@ namespace SQLEngine.PostgreSql
             return literal;
         }
 
+        public AbstractSqlLiteral Literal(string x)
+        {
+            throw new NotImplementedException();
+        }
+
         public ITryNoTryQueryBuilder Try(Action<IQueryBuilder> builder)
         {
             var t = new TryCatchQueryBuilder();
@@ -610,6 +615,11 @@ namespace SQLEngine.PostgreSql
         public AbstractSqlLiteral Literal(string x, bool isUniCode = true)
         {
             return AbstractSqlLiteral.From(x,isUniCode);
+        }
+
+        public AbstractSqlLiteral Literal(DateTime x)
+        {
+            throw new NotImplementedException();
         }
 
         public AbstractSqlLiteral Literal(DateTime x, bool includeTime = true)

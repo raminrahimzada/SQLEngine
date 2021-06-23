@@ -44,12 +44,12 @@ namespace SQLEngine.SqlServer
             return Parameter(argName,Query.Settings.TypeConvertor.ToSqlType<T>());
         }
 
-        public ICreateProcedureWithArgumentQueryBuilder ParameterOut(string name, string type)
+        public ICreateProcedureWithArgumentQueryBuilder ParameterOut(string argName, string argType)
         {
             _arguments.Add(new ArgumentModel
             {
-                Name = name,
-                Type = type,
+                Name = argName,
+                Type = argType,
                 Direction = ProcedureArgumentDirectionTypes.OUT
             });
             return this;
@@ -60,12 +60,12 @@ namespace SQLEngine.SqlServer
             return ParameterOut(argName,Query.Settings.TypeConvertor.ToSqlType<T>());
         }
 
-        public ICreateProcedureWithArgumentQueryBuilder Parameter(string name, string type)
+        public ICreateProcedureWithArgumentQueryBuilder Parameter(string argName, string argType)
         {
             _arguments.Add(new ArgumentModel
             {
-                Name = name,
-                Type = type,
+                Name = argName,
+                Type = argType,
                 Direction = ProcedureArgumentDirectionTypes.IN
             });
             return this;
@@ -118,9 +118,9 @@ namespace SQLEngine.SqlServer
             writer.WriteLine(C.END);
         }
 
-        public ICreateProcedureNoHeaderQueryBuilder Header(string metaDataHeader)
+        public ICreateProcedureNoHeaderQueryBuilder Header(string procedureHeaderMetaData)
         {
-            _metaDataHeader = metaDataHeader;
+            _metaDataHeader = procedureHeaderMetaData;
             return this;
         }
     }

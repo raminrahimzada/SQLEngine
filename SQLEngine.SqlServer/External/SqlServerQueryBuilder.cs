@@ -272,7 +272,7 @@ namespace SQLEngine.SqlServer
         }
         public IIfQueryBuilder IfExists(IAbstractSelectQueryBuilder selection)
         {
-            return If(new SqlServerCondition(C.NOT,C.SPACE,C.EXISTS , C.BEGIN_SCOPE , selection.Build() , C.END_SCOPE));
+            return If(new SqlServerCondition(C.SPACE, C.EXISTS, C.BEGIN_SCOPE, selection.Build(), C.END_SCOPE));
         }
 
         public IIfQueryBuilder IfNotExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
@@ -656,14 +656,22 @@ namespace SQLEngine.SqlServer
             return new SqlServerColumnWithTableAlias(columnName, tableAlias);
         }
 
-        public AbstractSqlLiteral Literal(string x, bool isUniCode = true)
+        public AbstractSqlLiteral Literal(string x, bool isUniCode )
         {
             return AbstractSqlLiteral.From(x,isUniCode);
         }
+        public AbstractSqlLiteral Literal(string x)
+        {
+            return AbstractSqlLiteral.From(x,true);
+        }
 
-        public AbstractSqlLiteral Literal(DateTime x, bool includeTime = true)
+        public AbstractSqlLiteral Literal(DateTime x, bool includeTime)
         {
             return SqlServerLiteral.From(x, includeTime);
+        }
+        public AbstractSqlLiteral Literal(DateTime x)
+        {
+            return SqlServerLiteral.From(x, true);
         }
         public AbstractSqlLiteral Literal(DateTime? x, bool includeTime = true)
         {

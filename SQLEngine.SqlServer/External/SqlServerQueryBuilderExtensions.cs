@@ -8,10 +8,9 @@ namespace SQLEngine.SqlServer
     {
         public static SqlServerQueryBuilder AsSqlServer(this IQueryBuilder builder)
         {
-            var sqlServerBuilder = builder as SqlServerQueryBuilder;
-            if (sqlServerBuilder == null)
+            if (!(builder is SqlServerQueryBuilder sqlServerBuilder))
             {
-                throw new Exception("Builder is not Sql-Server Builder");
+                throw new SqlEngineException("Builder is not Sql-Server Builder");
             }
             return sqlServerBuilder;
         }

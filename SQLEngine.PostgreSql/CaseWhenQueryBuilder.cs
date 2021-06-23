@@ -69,9 +69,9 @@ namespace SQLEngine.PostgreSql
             return this;
         }
 
-        public ICaseWhenNeedWhenQueryBuilder Then(AbstractSqlLiteral literal)
+        public ICaseWhenNeedWhenQueryBuilder Then(AbstractSqlLiteral then)
         {
-            _currentThen = literal.ToSqlString();
+            _currentThen = then.ToSqlString();
             Add();
             return this;
         }

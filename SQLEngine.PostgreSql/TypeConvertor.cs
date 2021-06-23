@@ -68,7 +68,7 @@ namespace SQLEngine.PostgreSql
                     return (C.BIT);
                 }
             }
-            throw new Exception("Complex type " + type.FullName + " cannot be converted to sql type");
+            throw new SqlEngineException("Complex type " + type.FullName + " cannot be converted to sql type");
         }
     }
 }

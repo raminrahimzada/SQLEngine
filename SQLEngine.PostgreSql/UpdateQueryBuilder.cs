@@ -24,9 +24,9 @@ namespace SQLEngine.PostgreSql
             {
                 Bomb();
             }
-            if (_topClause != null)
+            if (_topClause <= 0)
             {
-                if (_topClause.Value <= 0) Bomb();
+                Bomb();
             }
         }
 

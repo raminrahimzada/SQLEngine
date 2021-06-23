@@ -31,7 +31,7 @@ namespace SQLEngine
         #region NotEqualTo
         protected abstract AbstractSqlCondition NotEqualTo(AbstractSqlExpression expression);
         protected abstract AbstractSqlCondition NotEqualTo(AbstractSqlColumn otherColumn);
-        protected abstract AbstractSqlCondition NotEqualTo(AbstractSqlVariable otherColumn);
+        protected abstract AbstractSqlCondition NotEqualTo(AbstractSqlVariable variable);
         protected abstract AbstractSqlCondition NotEqualTo(AbstractSqlLiteral value);
         protected abstract AbstractSqlCondition NotEqualTo(int value);
         protected abstract AbstractSqlCondition NotEqualTo(byte value);

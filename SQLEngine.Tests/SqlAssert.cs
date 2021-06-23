@@ -46,18 +46,19 @@ namespace SQLEngine.Tests
 
         public static void ValidateQueryInServer(string sqlQuery)
         {
+            if (string.IsNullOrWhiteSpace(sqlQuery)) return;
             using (var b = Query.New)
             {
                 switch (b)
                 {
                     case SqlServerQueryBuilder _:
-                        _connectionString = "Server=.\\SERVER17;Database=SqlEngineTest;Trusted_Connection=True;";
+                        _connectionString = "Server=MATRIX\\SERVER19;Database=master;Trusted_Connection=True;";
                         ValidateQueryInSqlServer(sqlQuery);
                         break;
 
                     case PostgreSqlQueryBuilder _:
                         _connectionString = "Server=localhost;User Id=postgres;Password=mysupersecurepasswordhere;Database=postgres;";
-                        ValidateQueryInPostgreSql(sqlQuery);
+                        //ValidateQueryInPostgreSql(sqlQuery);
                         break;
 
                 }

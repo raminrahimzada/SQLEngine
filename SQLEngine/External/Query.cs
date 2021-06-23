@@ -64,7 +64,7 @@ namespace SQLEngine
             {
                 if (_builderFunction == null)
                 {
-                    throw new Exception("Please use Query.Setup to setup");
+                    throw new SqlEngineException("Please use Query.Setup to setup");
                 }
 
                 return _builderFunction();

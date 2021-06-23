@@ -17,6 +17,7 @@ namespace SQLEngine
             _stringBuilder=new StringBuilder();
             _indentedTextWriter = new IndentedTextWriter(new StringWriter(_stringBuilder));
         }
+
         [Obsolete("Do not use",true)]
 #pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override string ToString()

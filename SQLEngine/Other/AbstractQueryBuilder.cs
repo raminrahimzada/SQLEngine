@@ -47,10 +47,10 @@ namespace SQLEngine
             Writer?.Dispose();
         }
 
-        protected Exception Bomb(string message = "")
+        protected SqlEngineException Bomb(string message = "")
         {
             if (string.IsNullOrEmpty(message)) message = "Invalid Usage of QueryBuilder: " + GetType().Name;
-            throw new Exception(message);
+            throw new SqlEngineException(message);
         }
         /// <summary>
         /// validates the names of identifier 

@@ -11,72 +11,72 @@ namespace SQLEngine.PostgreSql
         IInsertQueryBuilder, 
         IInsertNoIntoQueryBuilder
     {
-        private string _tableName;
-        private Dictionary<string, ISqlExpression> _columnsAndValuesDictionary=new Dictionary<string, ISqlExpression>();
-        private ISqlExpression[] _valuesList;
-        private string[] _columnNames;
-        private string _selection;
+        //private string _tableName;
+        //private Dictionary<string, ISqlExpression> _columnsAndValuesDictionary=new Dictionary<string, ISqlExpression>();
+        //private ISqlExpression[] _valuesList;
+        //private string[] _columnNames;
+        //private string _selection;
 
-        public IInsertNoIntoQueryBuilder Into(string tableName)
-        {
-            _tableName = tableName;
-            return this;
-        }
+        //public IInsertNoIntoQueryBuilder Into(string tableName)
+        //{
+        //    _tableName = tableName;
+        //    return this;
+        //}
 
-        public IInsertNoIntoQueryBuilder Into<TTable>() where TTable : ITable, new()
-        {
-            using (var table=new TTable())
-            {
-                return Into(table.Name);
-            }
-        }
+        //public IInsertNoIntoQueryBuilder Into<TTable>() where TTable : ITable, new()
+        //{
+        //    using (var table=new TTable())
+        //    {
+        //        return Into(table.Name);
+        //    }
+        //}
 
-        public IInsertNeedValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue)
-        {
-            _columnsAndValuesDictionary.Add(columnName, columnValue);
-            return this;
-        }
-        public IInsertNeedValueQueryBuilder Value(string columnName, AbstractSqlVariable variable)
-        {
-            _columnsAndValuesDictionary.Add(columnName, variable);
-            return this;
-        }
+        //public IInsertNeedValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue)
+        //{
+        //    _columnsAndValuesDictionary.Add(columnName, columnValue);
+        //    return this;
+        //}
+        //public IInsertNeedValueQueryBuilder Value(string columnName, AbstractSqlVariable variable)
+        //{
+        //    _columnsAndValuesDictionary.Add(columnName, variable);
+        //    return this;
+        //}
 
-        public IInsertHasValuesQueryBuilder Values(Dictionary<string, ISqlExpression> colsAndValues)
-        {
-            _columnsAndValuesDictionary = colsAndValues;
-            return this;
-        }
+        //public IInsertHasValuesQueryBuilder Values(Dictionary<string, ISqlExpression> colsAndValues)
+        //{
+        //    _columnsAndValuesDictionary = colsAndValues;
+        //    return this;
+        //}
  
 
-        public IInsertHasValuesQueryBuilder Values(Dictionary<string, AbstractSqlLiteral> colsAndValuesAsLiterals)
-        {
-            _columnsAndValuesDictionary =
-                colsAndValuesAsLiterals.ToDictionary(x => x.Key, x => (ISqlExpression) x.Value);
-            return this;
-        }
+        //public IInsertHasValuesQueryBuilder Values(Dictionary<string, AbstractSqlLiteral> colsAndValuesAsLiterals)
+        //{
+        //    _columnsAndValuesDictionary =
+        //        colsAndValuesAsLiterals.ToDictionary(x => x.Key, x => (ISqlExpression) x.Value);
+        //    return this;
+        //}
         
 
-        public IInsertHasValuesQueryBuilder Values(Action<ISelectQueryBuilder> builder)
-        {
-            using (var writer=CreateNewWriter())
-            using (var select=new SelectQueryBuilder())
-            {
-                builder(select);
-                select.Build(writer);
-                _selection = writer.Build();
-            }
+        //public IInsertHasValuesQueryBuilder Values(Action<ISelectQueryBuilder> builder)
+        //{
+        //    using (var writer=CreateNewWriter())
+        //    using (var select=new SelectQueryBuilder())
+        //    {
+        //        builder(select);
+        //        select.Build(writer);
+        //        _selection = writer.Build();
+        //    }
 
-            return this;
-        }
+        //    return this;
+        //}
 
 
          
-        public IInsertNoIntoWithColumns Columns(params string[] columnNames)
-        {
-            _columnNames = columnNames;
-            return this;
-        }
+        //public IInsertNoIntoWithColumns Columns(params string[] columnNames)
+        //{
+        //    _columnNames = columnNames;
+        //    return this;
+        //}
         
         public override void Build(ISqlWriter writer)
         {
@@ -169,14 +169,67 @@ namespace SQLEngine.PostgreSql
 
         public IInsertHasValuesQueryBuilder Values(params ISqlExpression[] values)
         {
-            _valuesList = values;
-            return this;
+            throw new NotImplementedException();
+        }
+
+        IInsertHasValuesQueryBuilder IInsertWithValuesQueryBuilder.Values(Action<ISelectQueryBuilder> builder)
+        {
+            throw new NotImplementedException();
         }
 
         public IInsertHasValuesQueryBuilder Values(params AbstractSqlLiteral[] values)
         {
-            _valuesList = values.Select(x => (ISqlExpression) x).ToArray();
-            return this;
+            throw new NotImplementedException();
+        }
+
+        public IInsertHasValuesQueryBuilder Values(Dictionary<string, ISqlExpression> colsAndValues)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IInsertHasValuesQueryBuilder Values(Dictionary<string, AbstractSqlLiteral> colsAndValuesAsLiterals)
+        {
+            throw new NotImplementedException();
+        }
+
+        IInsertHasValuesQueryBuilder IInsertNoIntoWithColumns.Values(Action<ISelectQueryBuilder> builder)
+        {
+            throw new NotImplementedException();
+        }
+
+        IInsertNeedValueQueryBuilder IInsertNeedValueQueryBuilder.Value(string columnName, AbstractSqlLiteral columnValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        IInsertNeedValueQueryBuilder IInsertNoIntoQueryBuilder.Value(string columnName, AbstractSqlVariable variable)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IInsertNoIntoWithColumns Columns(params string[] columnNames)
+        {
+            throw new NotImplementedException();
+        }
+
+        IInsertNeedValueQueryBuilder IInsertNoIntoQueryBuilder.Value(string columnName, AbstractSqlLiteral columnValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        IInsertNeedValueQueryBuilder IInsertNeedValueQueryBuilder.Value(string columnName, AbstractSqlVariable variable)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IInsertNoIntoQueryBuilder Into(string tableName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IInsertNoIntoQueryBuilder Into<TTable>() where TTable : ITable, new()
+        {
+            throw new NotImplementedException();
         }
     }
 }

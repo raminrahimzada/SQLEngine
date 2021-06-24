@@ -13,9 +13,9 @@ namespace SQLEngine.SqlServer
 
     internal sealed class JoinModel
     {
-        private string ToString(SqlServerJoinTypes joinType)
+        private string JoinTypeString()
         {
-            switch (joinType)
+            switch (JoinType)
             {
                 case SqlServerJoinTypes.InnerJoin:
                     return "INNER JOIN";
@@ -24,7 +24,7 @@ namespace SQLEngine.SqlServer
                 case SqlServerJoinTypes.RightJoin:
                     return "RIGHT JOIN";
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(joinType), joinType, null);
+                    throw new ArgumentOutOfRangeException(nameof(JoinType), JoinType, null);
             }
         }
         public string TableName { get; set; }
@@ -36,7 +36,7 @@ namespace SQLEngine.SqlServer
         {
             return string.Concat(
                 C.SPACE,
-                ToString(JoinType),
+                JoinTypeString(),
                 C.SPACE,
                 TableName,
                 C.SPACE,
@@ -125,13 +125,7 @@ namespace SQLEngine.SqlServer
                 _rawSqlQueryList.Add(rawExpression);
             }
 
-            public int Count => _rawSqlQueryList.Count;
-
-            public string[] ToArray()
-            {
-                return _rawSqlQueryList.ToArray();
-            }
-
+            
             public void Add(AbstractSqlColumn column)
             {
                 _rawSqlQueryList.Add(column.ToSqlString());
@@ -141,6 +135,13 @@ namespace SQLEngine.SqlServer
             {
                 _rawSqlQueryList.Add(expression.ToSqlString());
             }
+            public int Count => _rawSqlQueryList.Count;
+
+            public string[] ToArray()
+            {
+                return _rawSqlQueryList.ToArray();
+            }
+
         }
         private string _mainTableName;
         private string _mainTableAlias;
@@ -200,24 +201,23 @@ namespace SQLEngine.SqlServer
             }
         }
 
+        
         public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left, ISqlExpression right)
         {
             _selectors.Add(new CustomFunctionCallExpressionBuilder().Assign(left, right));
             return this;
         }
-
-        public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left,
-            AbstractSqlLiteral literal)
+        public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left, AbstractSqlLiteral literal)
         {
             _selectors.Add(new CustomFunctionCallExpressionBuilder().Assign(left, literal));
             return this;
         }
-        public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left,
-            AbstractSqlColumn column)
+        public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left, AbstractSqlColumn column)
         {
             _selectors.Add(new CustomFunctionCallExpressionBuilder().Assign(left, column));
             return this;
         }
+        
         public ISelectWithSelectorQueryBuilder Select(ISqlExpression expression)
         {
             _selectors.Add(expression);
@@ -233,34 +233,12 @@ namespace SQLEngine.SqlServer
             _selectors.Add(new SqlServerColumn(columnName));
             return this;
         }
-        public ISelectWithSelectorQueryBuilder SelectLiteral(AbstractSqlLiteral literal)
-        {
-            _selectors.Add(literal);
-            return this;
-        }
         public ISelectWithSelectorQueryBuilder Select(Action<IAggregateFunctionBuilder> body)
         {
             var a = new AggregateFunctionBuilder();
             body(a);
             _selectors.Add(new OrderByQueryModel(a, false));
             return this;
-        }
-
-        public ISelectWithSelectorQueryBuilder SelectAs(ISqlExpression selector, string alias)
-        {
-            MutateAliasName(ref alias);
-            _selectors.Add($"{selector} {C.AS} {alias}");
-            return this;
-        }
-        public ISelectWithSelectorQueryBuilder SelectAs(Func<ICaseWhenNeedWhenQueryBuilder, ICaseWhenQueryBuilder> caseWhen, string alias)
-        {
-            MutateAliasName(ref alias);
-            using (var t=new CaseWhenQueryBuilder())
-            {
-                caseWhen(t);
-                _selectors.Add($"{t.Build()} {C.AS} {alias}");
-                return this;
-            }
         }
         public ISelectWithSelectorQueryBuilder Select(Func<ICaseWhenNeedWhenQueryBuilder, ICaseWhenQueryBuilder> caseWhen)
         {
@@ -280,6 +258,7 @@ namespace SQLEngine.SqlServer
                 return this;
             }
         }
+        
         public ISelectWithSelectorQueryBuilder SelectAs(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFunctionCallExpression, string alias)
         {
             using (var t=new CustomFunctionCallExpressionBuilder())
@@ -289,8 +268,28 @@ namespace SQLEngine.SqlServer
                 return this;
             }
         }
-
-
+        public ISelectWithSelectorQueryBuilder SelectAs(ISqlExpression selector, string alias)
+        {
+            MutateAliasName(ref alias);
+            _selectors.Add($"{selector} {C.AS} {alias}");
+            return this;
+        }
+        public ISelectWithSelectorQueryBuilder SelectAs(Func<ICaseWhenNeedWhenQueryBuilder, ICaseWhenQueryBuilder> caseWhen, string alias)
+        {
+            MutateAliasName(ref alias);
+            using (var t = new CaseWhenQueryBuilder())
+            {
+                caseWhen(t);
+                _selectors.Add($"{t.Build()} {C.AS} {alias}");
+                return this;
+            }
+        }
+        
+        public ISelectWithSelectorQueryBuilder SelectLiteral(AbstractSqlLiteral literal)
+        {
+            _selectors.Add(literal);
+            return this;
+        }
         public ISelectWithoutWhereQueryBuilder WhereAnd(params AbstractSqlCondition[] conditions)
         {
             _whereClause = string.Join(C.AND,

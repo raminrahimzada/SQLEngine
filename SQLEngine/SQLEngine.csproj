@@ -13,6 +13,9 @@
     <PackageTags>csharp C# sql t-sql my-sql postgresql</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Ramin Rahimzada</Authors>
+    <AnalysisLevel>preview</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
   </PropertyGroup>
 
   <ItemGroup>

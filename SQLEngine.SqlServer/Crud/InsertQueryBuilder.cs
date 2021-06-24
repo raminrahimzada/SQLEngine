@@ -89,53 +89,12 @@ namespace SQLEngine.SqlServer
             writer.Write2(C.SPACE);
 
             var columnNamesSafe = _columnNames?.Select(I).ToArray();
-            var isColumnsAndValues1 = _columnNames != null && _columnNames.Length > 0 && _valuesList.Count > 0 &&
-                                      _valuesList[0].Length > 0;
+            var isColumnsAndValues1 = _columnNames is {Length: > 0} && _valuesList.Count > 0 && _valuesList[0].Length > 0;
 
-            var isColumnsAndValues2 = _columnsAndValuesDictionary != null && _columnsAndValuesDictionary.Count > 0;
+            var isColumnsAndValues2 = _columnsAndValuesDictionary is {Count: > 0};
             if (isColumnsAndValues1|| isColumnsAndValues2)
             {
-                var columnNames = _columnNames;
-                if (columnNames == null)
-                {
-                    if (_columnsAndValuesDictionary == null) throw Bomb();
-                    columnNames = _columnsAndValuesDictionary.Keys.ToArray();
-                }
-                if (_valuesList.Count==0)
-                {
-                    if (_columnsAndValuesDictionary == null) throw Bomb();
-                    var values = _columnsAndValuesDictionary.Values.ToArray();
-                    _valuesList.Add(values);
-                }
-                writer.WriteLine();
-                writer.Indent++;
-                writer.BeginScope();
-                writer.WriteJoined(columnNames.ToArray());
-                writer.EndScope();
-                writer.WriteLine();
-                writer.Indent--;
-
-                writer.Write(C.VALUES);
-                writer.WriteLine();
-                writer.Indent++;
-                
-                bool first = true;
-                foreach (var values in _valuesList)
-                {
-                    if (first)
-                    {
-                        first = false;
-                    }
-                    else
-                    {
-                        writer.Write(C.COMMA);
-                    }
-                    writer.BeginScope();
-                    writer.WriteJoined(values.Select(x => x.ToSqlString()).ToArray());
-                    writer.EndScope();
-                }
-                
-                writer.Indent--;
+                ColumnMode(writer);
             }
             else if (!string.IsNullOrEmpty(_selection))//selection mode
             {
@@ -148,49 +107,9 @@ namespace SQLEngine.SqlServer
                 writer.Write(C.SPACE);
                 writer.Write(_selection);
             }
-            else if(  _valuesList!=null&& _valuesList.Count>0) //normal model 
+            else if(  _valuesList is {Count: > 0}) //normal model 
             {
-                if (_columnNames != null)
-                {
-                    writer.WriteLine();
-                    writer.Indent++;
-                    writer.BeginScope();
-                    writer.WriteJoined(columnNamesSafe);
-                    writer.EndScope();
-                    writer.Indent--;
-
-                }
-                writer.WriteLine();
-
-                writer.Write(C.VALUES);
-                writer.WriteLine();
-                writer.Indent++;
-
-                bool first = true;
-                foreach (var values in _valuesList)
-                {
-                    if (first)
-                    {
-                        first = false;
-                    }
-                    else
-                    {
-                        writer.Write(C.COMMA);
-                    }
-
-                    writer.BeginScope();
-                    for (int i = 0; i < values.Length; i++)
-                    {
-                        if (i != 0)
-                        {
-                            writer.Write(C.COMMA);
-                        }
-
-                        writer.Write(values[i].ToSqlString());
-                    }
-                    writer.EndScope();
-                }
-                writer.Indent--;
+                NormalMode(writer, columnNamesSafe);
             }
             else
             {
@@ -199,6 +118,97 @@ namespace SQLEngine.SqlServer
                 writer.Write(C.VALUES);
             }
             writer.WriteLine();
+        }
+
+        private void NormalMode(ISqlWriter writer, string[] columnNamesSafe)
+        {
+            if (_columnNames != null)
+            {
+                writer.WriteLine();
+                writer.Indent++;
+                writer.BeginScope();
+                writer.WriteJoined(columnNamesSafe);
+                writer.EndScope();
+                writer.Indent--;
+
+            }
+            writer.WriteLine();
+
+            writer.Write(C.VALUES);
+            writer.WriteLine();
+            writer.Indent++;
+
+            bool first = true;
+            foreach (var values in _valuesList)
+            {
+                if (first)
+                {
+                    first = false;
+                }
+                else
+                {
+                    writer.Write(C.COMMA);
+                }
+
+                writer.BeginScope();
+                for (int i = 0; i < values.Length; i++)
+                {
+                    if (i != 0)
+                    {
+                        writer.Write(C.COMMA);
+                    }
+
+                    writer.Write(values[i].ToSqlString());
+                }
+                writer.EndScope();
+            }
+            writer.Indent--;
+        }
+
+        private void ColumnMode(ISqlWriter writer)
+        {
+            var columnNames = _columnNames;
+            if (columnNames == null)
+            {
+                if (_columnsAndValuesDictionary == null) throw Bomb();
+                columnNames = _columnsAndValuesDictionary.Keys.ToArray();
+            }
+            if (_valuesList.Count == 0)
+            {
+                if (_columnsAndValuesDictionary == null) throw Bomb();
+                var values = _columnsAndValuesDictionary.Values.ToArray();
+                _valuesList.Add(values);
+            }
+            writer.WriteLine();
+            writer.Indent++;
+            writer.BeginScope();
+            writer.WriteJoined(columnNames.ToArray());
+            writer.EndScope();
+            writer.WriteLine();
+            writer.Indent--;
+
+            writer.Write(C.VALUES);
+            writer.WriteLine();
+            writer.Indent++;
+
+            bool first = true;
+            foreach (var values in _valuesList)
+            {
+                if (first)
+                {
+                    first = false;
+                }
+                else
+                {
+                    writer.Write(C.COMMA);
+                }
+                writer.BeginScope();
+                writer.WriteJoined(values.Select(x => x.ToSqlString()).ToArray());
+                writer.EndScope();
+            }
+
+            writer.Indent--;
+
         }
 
 

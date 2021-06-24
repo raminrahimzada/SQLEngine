@@ -59,11 +59,9 @@ namespace SQLEngine.SqlServer
         public IAbstractCreateFunctionQueryBuilder Body(Action<IFunctionBodyQueryBuilder> body)
         {
             var builder = new FunctionBodyQueryBuilder();
-            {
-                body(builder);
-                _body = builder;
-                return this;
-            }
+            body(builder);
+            _body = builder;
+            return this;
         }
 
         public override void Build(ISqlWriter writer)

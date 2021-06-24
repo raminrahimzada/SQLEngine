@@ -11,24 +11,24 @@ using Xunit;
 using System.Data.SqlClient;
 using SQLEngine.SqlServer;
 #endif
-
-
 namespace SQLEngine.Tests
 {
     public static class SqlAssert
     {
+        private static string[] FormatQuery(string query)
+        {
+            return query
+                .Split(SPLITTER.ToCharArray())
+                .Select(s => s.ToLowerInvariant())
+                .Select(s => s.Trim(SPLITTER.ToCharArray()))
+                .Where(s => !string.IsNullOrEmpty(s))
+                .ToArray();
+        }
+
+        private const string SPLITTER = " \r\n\t;(),.=";
+
         public static void EqualQuery(string queryActual, string queryExpected)
         {
-            const string splitter = " \r\n\t;(),.=";
-            string[] FormatQuery(string query)
-            {
-                return query
-                    .Split(splitter.ToCharArray())
-                    .Select(s=>s.ToLowerInvariant())
-                    .Select(s => s.Trim(splitter.ToCharArray()))
-                    .Where(s => !string.IsNullOrEmpty(s))
-                    .ToArray();
-            }
 #if CHECK_QUERY_COMPILATION
             ValidateQueryInServer(queryActual);
             ValidateQueryInServer(queryExpected);

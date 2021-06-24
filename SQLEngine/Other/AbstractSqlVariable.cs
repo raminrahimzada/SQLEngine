@@ -2,7 +2,7 @@
 {
 #pragma warning disable CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
 #pragma warning disable CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
-    public abstract class AbstractSqlVariable: ISqlExpression
+    public abstract class AbstractSqlVariable : ISqlExpression
 #pragma warning restore CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
 #pragma warning restore CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
     {
@@ -14,7 +14,7 @@
 
         public abstract AbstractSqlCondition In(params AbstractSqlExpression[] expressions);
         public abstract AbstractSqlCondition In(params AbstractSqlLiteral[] expressions);
-        
+
         public abstract AbstractSqlCondition NotIn(params AbstractSqlExpression[] expressions);
         public abstract AbstractSqlCondition NotIn(params AbstractSqlLiteral[] expressions);
 
@@ -33,14 +33,12 @@
         protected abstract AbstractSqlCondition LessEqual(AbstractSqlExpression abstractSqlVariable);
 
 
-
-        
         protected abstract AbstractSqlCondition Greater(AbstractSqlLiteral literal);
         protected abstract AbstractSqlCondition GreaterEqual(AbstractSqlLiteral literal);
         protected abstract AbstractSqlCondition Less(AbstractSqlLiteral literal);
         protected abstract AbstractSqlCondition LessEqual(AbstractSqlLiteral literal);
-        
-        
+
+
         protected abstract AbstractSqlCondition Greater(AbstractSqlColumn column);
         protected abstract AbstractSqlCondition GreaterEqual(AbstractSqlColumn column);
         protected abstract AbstractSqlCondition Less(AbstractSqlColumn column);
@@ -57,7 +55,7 @@
         protected abstract AbstractSqlCondition NotEqualsTo(AbstractSqlColumn column);
         protected abstract AbstractSqlCondition NotEqualsTo(AbstractSqlLiteral literal);
 
-        
+
         protected abstract AbstractSqlCondition EqualsTo(AbstractSqlVariable variable);
         protected abstract AbstractSqlCondition NotEqualsTo(AbstractSqlVariable variable);
 
@@ -65,6 +63,7 @@
         {
             return x.NotEqualsTo(y);
         }
+
         public static AbstractSqlCondition operator ==(AbstractSqlVariable x, AbstractSqlVariable y)
         {
             return x.EqualsTo(y);
@@ -74,27 +73,32 @@
         {
             return x.NotEqualsTo(y);
         }
-        
+
         public static AbstractSqlCondition operator !=(AbstractSqlVariable x, AbstractSqlLiteral y)
         {
             return x.NotEqualsTo(y);
         }
+
         public static AbstractSqlCondition operator ==(AbstractSqlVariable x, AbstractSqlLiteral y)
         {
             return x.EqualsTo(y);
         }
+
         public static AbstractSqlCondition operator >(AbstractSqlVariable x, AbstractSqlLiteral y)
         {
             return x.Greater(y);
         }
+
         public static AbstractSqlCondition operator <(AbstractSqlVariable x, AbstractSqlLiteral y)
         {
             return x.Less(y);
         }
+
         public static AbstractSqlCondition operator >=(AbstractSqlVariable x, AbstractSqlLiteral y)
         {
             return x.GreaterEqual(y);
         }
+
         public static AbstractSqlCondition operator <=(AbstractSqlVariable x, AbstractSqlLiteral y)
         {
             return x.LessEqual(y);
@@ -105,6 +109,7 @@
         {
             return x.Less(y);
         }
+
         public static AbstractSqlCondition operator <=(AbstractSqlVariable x, AbstractSqlColumn y)
         {
             return x.LessEqual(y);
@@ -114,6 +119,7 @@
         {
             return x.Greater(y);
         }
+
         public static AbstractSqlCondition operator >=(AbstractSqlVariable x, AbstractSqlColumn y)
         {
             return x.GreaterEqual(y);
@@ -123,6 +129,7 @@
         {
             return x.Less(y);
         }
+
         public static AbstractSqlCondition operator <=(AbstractSqlVariable x, AbstractSqlVariable y)
         {
             return x.LessEqual(y);
@@ -132,6 +139,7 @@
         {
             return x.Greater(y);
         }
+
         public static AbstractSqlCondition operator >=(AbstractSqlVariable x, AbstractSqlVariable y)
         {
             return x.GreaterEqual(y);
@@ -142,6 +150,7 @@
         {
             return x.Less(y);
         }
+
         public static AbstractSqlCondition operator <=(AbstractSqlVariable x, AbstractSqlExpression y)
         {
             return x.LessEqual(y);
@@ -151,12 +160,11 @@
         {
             return x.Greater(y);
         }
+
         public static AbstractSqlCondition operator >=(AbstractSqlVariable x, AbstractSqlExpression y)
         {
             return x.GreaterEqual(y);
         }
-
-
 
 
         public static AbstractSqlExpression operator +(AbstractSqlVariable x, AbstractSqlVariable y)
@@ -173,16 +181,17 @@
         {
             return 0 - x;
         }
+
         public static AbstractSqlExpression operator *(AbstractSqlVariable x, AbstractSqlVariable y)
         {
             return x.Multiply(y);
         }
 
-        public abstract  AbstractSqlExpression Multiply(AbstractSqlVariable variable);
-        public abstract  AbstractSqlExpression Multiply(AbstractSqlLiteral variable);
-        public abstract  AbstractSqlExpression Add(AbstractSqlLiteral literal);
-        public abstract  AbstractSqlExpression Divide(AbstractSqlVariable variable);
-        public abstract  AbstractSqlExpression Subtract(AbstractSqlLiteral literal);
+        public abstract AbstractSqlExpression Multiply(AbstractSqlVariable variable);
+        public abstract AbstractSqlExpression Multiply(AbstractSqlLiteral variable);
+        public abstract AbstractSqlExpression Add(AbstractSqlLiteral literal);
+        public abstract AbstractSqlExpression Divide(AbstractSqlVariable variable);
+        public abstract AbstractSqlExpression Subtract(AbstractSqlLiteral literal);
 
 
         public static AbstractSqlExpression operator -(AbstractSqlLiteral x, AbstractSqlVariable y)
@@ -203,21 +212,23 @@
         {
             return y.Add(x);
         }
+
         public static AbstractSqlExpression operator +(AbstractSqlVariable x, AbstractSqlLiteral y)
         {
             return x.Add(y);
         }
 
-        
+
         public static AbstractSqlExpression operator -(AbstractSqlVariable x, AbstractSqlLiteral y)
         {
             return x.Subtract(y);
         }
+
         public static AbstractSqlExpression operator *(AbstractSqlLiteral x, AbstractSqlVariable y)
         {
             return y.Multiply(x);
         }
-        
+
         public static AbstractSqlExpression operator /(AbstractSqlVariable x, AbstractSqlVariable y)
         {
             return x.Divide(y);

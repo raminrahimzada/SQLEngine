@@ -118,7 +118,7 @@ SET  @x  = '00000000-0000-0000-0000-000000000000';
 
                 const string query = @"
 
-DECLARE  @tableName NVARCHAR ;
+DECLARE  @tableName NVARCHAR(MAX);
 SET  @tableName  = N'Users';
 
 DECLARE  @objId INT ;

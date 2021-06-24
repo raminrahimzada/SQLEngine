@@ -7,67 +7,56 @@ namespace SQLEngine.SqlServer
         public string ToSqlType<T>()
         {
             var type = typeof(T);
+            if (type == typeof(int))
             {
-                if (type == typeof(int))
-                {
-                    return (C.INT);
-                }
-            }
-            {
-                if (type == typeof(uint))
-                {
-                    return (C.INT);
-                }
-            }
-            {
-                if (type == typeof(long))
-                {
-                    return (C.BIGINT);
-                }
-            }
-            {
-                if (type == typeof(ulong))
-                {
-                    return (C.BIGINT);
-                }
+                return (C.INT);
             }
 
+            if (type == typeof(uint))
             {
-                if (type == typeof(byte))
-                {
-                    return (C.TINYINT);
-                }
+                return (C.INT);
             }
+
+            if (type == typeof(long))
             {
-                if (type == typeof(Guid))
-                {
-                    return (C.UNIQUEIDENTIFIER);
-                }
+                return (C.BIGINT);
             }
+
+            if (type == typeof(ulong))
             {
-                if (type == typeof(DateTime))
-                {
-                    return (C.DATETIME);
-                }
+                return (C.BIGINT);
             }
+
+            if (type == typeof(byte))
             {
-                if (type == typeof(string))
-                {
-                    return (C.NVARCHAR);
-                }
+                return (C.TINYINT);
             }
+
+            if (type == typeof(Guid))
             {
-                if (type == typeof(decimal))
-                {
-                    return (C.DECIMAL);
-                }
+                return (C.UNIQUEIDENTIFIER);
             }
+
+            if (type == typeof(DateTime))
             {
-                if (type == typeof(bool))
-                {
-                    return (C.BIT);
-                }
+                return (C.DATETIME);
             }
+
+            if (type == typeof(string))
+            {
+                return (C.NVARCHARMAX);
+            }
+
+            if (type == typeof(decimal))
+            {
+                return (C.DECIMAL);
+            }
+
+            if (type == typeof(bool))
+            {
+                return (C.BIT);
+            }
+
             throw new SqlEngineException("Complex type " + type.FullName + " cannot be converted to sql type");
         }
     }

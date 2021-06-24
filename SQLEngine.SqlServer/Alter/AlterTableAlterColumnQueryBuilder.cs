@@ -36,10 +36,11 @@
             writer.Write2(C.ALTER);
             writer.Write(C.COLUMN);
             writer.Write2(_columnName);
-            writer.Write(_newType);
+            
 
             if (_size != null)
             {
+                writer.Write(_newType.Replace(C.BEGIN_SCOPE + C.MAX + C.END_SCOPE, string.Empty));
                 writer.Write(C.BEGIN_SCOPE);
                 writer.Write(_size);
                 if (_scale != null)
@@ -49,6 +50,11 @@
                 }
                 writer.Write(C.END_SCOPE);
             }
+            else
+            {
+                writer.Write(_newType);
+            }
+
             if (_canBeNull != null)
             {
                 if (!_canBeNull.Value)

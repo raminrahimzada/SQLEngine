@@ -127,209 +127,201 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
 
         private void Descriptions(ISqlWriter writer, ColumnModel[] cols)
         {
+            var descriptions = cols.Where(c => !string.IsNullOrEmpty(c.Description)).ToArray();
+            if (descriptions.Any())
             {
-                var descriptions = cols.Where(c => !string.IsNullOrEmpty(c.Description)).ToArray();
-                if (descriptions.Any())
+                foreach (var model in descriptions)
                 {
-                    foreach (var model in descriptions)
-                    {
-                        var t = new ExecuteQueryBuilder();
-                        // https://stackoverflow.com/a/3754214/7901692
+                    var t = new ExecuteQueryBuilder();
+                    // https://stackoverflow.com/a/3754214/7901692
 
-                        var schemaName = _schemaName;
-                        if (string.IsNullOrEmpty(schemaName)) schemaName = "dbo";
+                    var schemaName = _schemaName;
+                    if (string.IsNullOrEmpty(schemaName)) schemaName = "dbo";
 
-                        t.Procedure("sp_addextendedproperty")
-                            .Arg("name", "MS_Description".ToSQL())
-                            .Arg("value", model.Description.ToSQL())
+                    t.Procedure("sp_addextendedproperty")
+                        .Arg("name", "MS_Description".ToSQL())
+                        .Arg("value", model.Description.ToSQL())
 
-                            .Arg("level0type", "Schema".ToSQL())
-                            .Arg("level0name", schemaName.ToSQL())
+                        .Arg("level0type", "Schema".ToSQL())
+                        .Arg("level0name", schemaName.ToSQL())
 
-                            .Arg("level1type", "Table".ToSQL())
-                            .Arg("level1name", _tableName.ToSQL())
+                        .Arg("level1type", "Table".ToSQL())
+                        .Arg("level1name", _tableName.ToSQL())
 
-                            .Arg("level2type", "Column".ToSQL())
-                            .Arg("level2name", model.Name.ToSQL())
-                            .Build(writer);
-                    }
+                        .Arg("level2type", "Column".ToSQL())
+                        .Arg("level2name", model.Name.ToSQL())
+                        .Build(writer);
                 }
             }
         }
 
         private void DefaultValues(ISqlWriter writer, ColumnModel[] cols)
         {
+            var defaultValues = cols.Where(c => c.DefaultValue != null).ToArray();
+
+            if (defaultValues.Any())
             {
-                var defaultValues = cols.Where(c => c.DefaultValue != null).ToArray();
+                writer.WriteLine();
 
-                if (defaultValues.Any())
+                foreach (var df in defaultValues)
                 {
-                    writer.WriteLine();
-
-                    foreach (var df in defaultValues)
+                    var defaultConstraintName = df.DefaultConstraintName;
+                    if (string.IsNullOrEmpty(defaultConstraintName))
                     {
-                        var defaultConstraintName = df.DefaultConstraintName;
-                        if (string.IsNullOrEmpty(defaultConstraintName))
-                        {
-                            defaultConstraintName = "DF_" + _tableName + df.Name;
-                        }
-
-                        writer.Write(C.ALTER);
-                        writer.Write2(C.TABLE);
-                        writer.Write(I(_tableName));
-                        writer.Write2(C.ADD);
-                        writer.Write(C.CONSTRAINT);
-                        writer.Write2(I(defaultConstraintName));
-                        writer.Write(C.DEFAULT);
-                        writer.WriteScoped(df.DefaultValue);
-                        writer.Write2(C.FOR);
-                        writer.Write(I(df.Name));
-                        writer.WriteLine(C.SEMICOLON);
+                        defaultConstraintName = "DF_" + _tableName + df.Name;
                     }
+
+                    writer.Write(C.ALTER);
+                    writer.Write2(C.TABLE);
+                    writer.Write(I(_tableName));
+                    writer.Write2(C.ADD);
+                    writer.Write(C.CONSTRAINT);
+                    writer.Write2(I(defaultConstraintName));
+                    writer.Write(C.DEFAULT);
+                    writer.WriteScoped(df.DefaultValue);
+                    writer.Write2(C.FOR);
+                    writer.Write(I(df.Name));
+                    writer.WriteLine(C.SEMICOLON);
                 }
             }
         }
 
         private void ForeignKeyList(ISqlWriter writer, ColumnModel[] cols)
         {
+            var fkList = cols.Where(c => c.IsForeignKey ?? false).ToArray();
+            if (fkList.Any())
             {
-                var fkList = cols.Where(c => c.IsForeignKey ?? false).ToArray();
-                if (fkList.Any())
+                writer.WriteLine();
+
+                foreach (var fk in fkList)
                 {
-                    writer.WriteLine();
-
-                    foreach (var fk in fkList)
+                    var fkName = fk.ForeignKeyConstraintName;
+                    if (string.IsNullOrEmpty(fkName))
                     {
-                        var fkName = fk.ForeignKeyConstraintName;
-                        if (string.IsNullOrEmpty(fkName))
-                        {
-                            fkName = "FK_" + I(_tableName) + "_" + fk.Name + "__" + I(fk.ForeignKeyTableName) + "_" +
-                                     fk.ForeignKeyColumnName;
-                        }
+                        fkName = "FK_" + I(_tableName) + "_" + fk.Name + "__" + I(fk.ForeignKeyTableName) + "_" +
+                                 fk.ForeignKeyColumnName;
+                    }
 
-                        fkName = fkName
+                    fkName = fkName
                             .Replace(".", "")
                             .Replace("[", "")
                             .Replace("]", "")
-                            ;
-                        writer.Write(C.ALTER);
-                        writer.Write2(C.TABLE);
-                        writer.Write(I(_tableName));
-                        writer.Write2(C.WITH);
-                        writer.Write(C.CHECK);
-                        writer.Write2(C.ADD);
-                        writer.Write(C.CONSTRAINT);
-                        writer.Write2(I(fkName));
-                        writer.Write(C.FOREIGN);
-                        writer.Write2(C.KEY);
-                        writer.WriteScoped(I(fk.Name));
-                        writer.Write2(C.REFERENCES);
-                        writer.Write(I(fk.ForeignKeyTableName));
-                        writer.Write(C.BEGIN_SCOPE);
-                        writer.Write(C.SPACE);
-                        writer.Indent++;
-                        writer.Write(I(fk.ForeignKeyColumnName));
-                        writer.Write(C.SPACE);
-                        writer.Indent--;
-                        writer.Write(C.END_SCOPE);
+                        ;
+                    writer.Write(C.ALTER);
+                    writer.Write2(C.TABLE);
+                    writer.Write(I(_tableName));
+                    writer.Write2(C.WITH);
+                    writer.Write(C.CHECK);
+                    writer.Write2(C.ADD);
+                    writer.Write(C.CONSTRAINT);
+                    writer.Write2(I(fkName));
+                    writer.Write(C.FOREIGN);
+                    writer.Write2(C.KEY);
+                    writer.WriteScoped(I(fk.Name));
+                    writer.Write2(C.REFERENCES);
+                    writer.Write(I(fk.ForeignKeyTableName));
+                    writer.Write(C.BEGIN_SCOPE);
+                    writer.Write(C.SPACE);
+                    writer.Indent++;
+                    writer.Write(I(fk.ForeignKeyColumnName));
+                    writer.Write(C.SPACE);
+                    writer.Indent--;
+                    writer.Write(C.END_SCOPE);
 
-                        writer.WriteLine(C.SEMICOLON);
+                    writer.WriteLine(C.SEMICOLON);
 
-                        writer.Write(C.ALTER);
-                        writer.Write2(C.TABLE);
-                        writer.Write(I(_tableName));
-                        writer.Write2(C.CHECK);
-                        writer.Write(C.CONSTRAINT);
-                        writer.Write2(I(fkName));
-                        writer.WriteLine(C.SEMICOLON);
-                    }
+                    writer.Write(C.ALTER);
+                    writer.Write2(C.TABLE);
+                    writer.Write(I(_tableName));
+                    writer.Write2(C.CHECK);
+                    writer.Write(C.CONSTRAINT);
+                    writer.Write2(I(fkName));
+                    writer.WriteLine(C.SEMICOLON);
                 }
             }
         }
 
         private void UniqueIndexList(ISqlWriter writer, ColumnModel[] cols)
         {
+            foreach (var t in cols.Where(c => c.IsUniqueKey ?? false))
             {
-                foreach (var t in cols.Where(c => c.IsUniqueKey ?? false))
+                if (string.IsNullOrEmpty(t.UniqueKeyName))
                 {
-                    if (string.IsNullOrEmpty(t.UniqueKeyName))
-                    {
-                        t.UniqueKeyName = "IX_" + _tableName + "_" + t.Name;
-                    }
+                    t.UniqueKeyName = "IX_" + _tableName + "_" + t.Name;
                 }
+            }
 
-                var ukList = cols.Where(c => c.IsUniqueKey ?? false).Select(c => c.UniqueKeyName)
-                    .Distinct()
-                    .ToArray();
+            var ukList = cols.Where(c => c.IsUniqueKey ?? false).Select(c => c.UniqueKeyName)
+                .Distinct()
+                .ToArray();
 
-                if (ukList.Any())
-                {
+            if (!ukList.Any()) return;
 
-                    foreach (var ukName in ukList)
-                    {
-                        var ukGroup = cols.Where(c => c.UniqueKeyName == ukName).ToArray();
-                        writer.Write(C.ALTER);
-                        writer.Write2(C.TABLE);
-                        writer.Write(I(_tableName));
-                        writer.Write2(C.ADD);
-                        writer.Write(C.CONSTRAINT);
-                        writer.Write2(I(ukName));
-                        writer.Write(C.UNIQUE);
-                        writer.Write(C.BEGIN_SCOPE);
-                        writer.Indent++;
-                        writer.WriteJoined(ukGroup.Select(pkg => pkg.Name + C.SPACE +
-                                                                 (pkg.IsUniqueKeyOrderDescending ? C.DESC : C.ASC))
-                            .ToArray());
+            foreach (var ukName in ukList)
+            {
+                var ukGroup = cols.Where(c => c.UniqueKeyName == ukName).ToArray();
+                writer.Write(C.ALTER);
+                writer.Write2(C.TABLE);
+                writer.Write(I(_tableName));
+                writer.Write2(C.ADD);
+                writer.Write(C.CONSTRAINT);
+                writer.Write2(I(ukName));
+                writer.Write(C.UNIQUE);
+                writer.Write(C.BEGIN_SCOPE);
+                writer.Indent++;
+                writer.WriteJoined(ukGroup.Select(pkg => pkg.Name + C.SPACE +
+                                                         (pkg.IsUniqueKeyOrderDescending ? C.DESC : C.ASC))
+                    .ToArray());
 
 
-                        writer.Indent--;
-                        writer.Write(C.END_SCOPE);
-                        writer.WriteLine(C.SEMICOLON);
-                    }
-                }
+                writer.Indent--;
+                writer.Write(C.END_SCOPE);
+                writer.WriteLine(C.SEMICOLON);
             }
         }
 
         private void PrimaryKeyList(ISqlWriter writer, ColumnModel[] cols)
         {
+            var pkList = cols.Where(c => c.IsPrimary ?? false).ToArray();
+            if (pkList.Any())
             {
-                var pkList = cols.Where(c => c.IsPrimary ?? false).ToArray();
-                if (pkList.Any())
+                var pkGroups = pkList.GroupBy(pk => pk.PrimaryKeyName).ToArray();
+                if (pkGroups.Any())
                 {
-                    var pkGroups = pkList.GroupBy(pk => pk.PrimaryKeyName).ToArray();
-                    if (pkGroups.Any())
-                    {
-                        writer.WriteLine();
-                    }
-                    foreach (var pkGroup in pkGroups)
-                    {
-                        var pkName = pkGroup.Key;
-                        if (string.IsNullOrEmpty(pkName))
-                        {
-                            pkName = "PK_" + _tableName + "_" +
-                                     pkList.FirstOrDefault(x => x.PrimaryKeyName == pkGroup.Key)?.Name;
-                        }
-                        writer.Write(C.ALTER);
-                        writer.Write2(C.TABLE);
-                        writer.Write(I(_tableName));
-                        writer.Write2(C.ADD);
-                        writer.Write(C.CONSTRAINT);
-                        writer.Write2(I(pkName));
-                        writer.Write(C.PRIMARY);
-                        writer.Write2(C.KEY);
-                        writer.Write(C.CLUSTERED);
-                        writer.Write2(C.BEGIN_SCOPE);
-                        writer.Indent++;
-                        writer.WriteJoined(pkGroup.Select(pkg => I(pkg.Name)).ToArray());
-                        writer.Indent--;
-                        writer.Write(C.END_SCOPE);
-                        writer.Write(C.SEMICOLON);
-                    }
+                    writer.WriteLine();
                 }
-                writer.WriteLine();
+
+                foreach (var pkGroup in pkGroups)
+                {
+                    var pkName = pkGroup.Key;
+                    if (string.IsNullOrEmpty(pkName))
+                    {
+                        pkName = "PK_" + _tableName + "_" +
+                                 pkList.FirstOrDefault(x => x.PrimaryKeyName == pkGroup.Key)?.Name;
+                    }
+
+                    writer.Write(C.ALTER);
+                    writer.Write2(C.TABLE);
+                    writer.Write(I(_tableName));
+                    writer.Write2(C.ADD);
+                    writer.Write(C.CONSTRAINT);
+                    writer.Write2(I(pkName));
+                    writer.Write(C.PRIMARY);
+                    writer.Write2(C.KEY);
+                    writer.Write(C.CLUSTERED);
+                    writer.Write2(C.BEGIN_SCOPE);
+                    writer.Indent++;
+                    writer.WriteJoined(pkGroup.Select(pkg => I(pkg.Name)).ToArray());
+                    writer.Indent--;
+                    writer.Write(C.END_SCOPE);
+                    writer.Write(C.SEMICOLON);
+                }
             }
+
+            writer.WriteLine();
         }
 
+        // ReSharper disable once UnusedMember.Global
         public ICreateTableQueryBuilder SystemVersioned(bool systemVersioning, string logFileName = null)
         {
             _systemVersioning = systemVersioning;

@@ -49,6 +49,10 @@ namespace SQLEngine
                 _indentedTextWriter.Write(expression);
             }
         }
+        public void Write(string expression)
+        {
+            _indentedTextWriter.Write(expression);
+        }
 
         public void Write(byte? b)
         {

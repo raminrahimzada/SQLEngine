@@ -45,5 +45,5 @@ jobs:
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"SQLEngine" /o:"raminrahimzada" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet restore
           dotnet build
-          dotnet test
+          dotnet test  --collect:"Code Coverage"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"

@@ -11,10 +11,13 @@
         IAggregateFunctionBuilder Max(string columnName);
 
 
+        IAggregateFunctionBuilder Count(AbstractSqlLiteral literal);
         IAggregateFunctionBuilder Count(ISqlExpression expression);
         IAggregateFunctionBuilder Count(AbstractSqlColumn column);
         IAggregateFunctionBuilder Count(string columnName);
 
+
+        IAggregateFunctionBuilder Sum(AbstractSqlLiteral literal);
         IAggregateFunctionBuilder Sum(ISqlExpression expression);
         IAggregateFunctionBuilder Sum(AbstractSqlColumn column);
         IAggregateFunctionBuilder Sum(string columnName);

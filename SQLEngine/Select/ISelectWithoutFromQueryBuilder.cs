@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine
 {
-    public interface ISelectWithoutFromQueryBuilder : ISelectWithSelectorQueryBuilder, ISelectOrderBuilder
+    public interface ISelectWithoutFromQueryBuilder : ISelectOrderBuilder, ISelectWhereQueryBuilder, IJoinedQueryBuilder
     {
         ISelectOrderBuilder OrderBy(ISqlExpression expression);
         ISelectOrderBuilder OrderByDesc(ISqlExpression expression);

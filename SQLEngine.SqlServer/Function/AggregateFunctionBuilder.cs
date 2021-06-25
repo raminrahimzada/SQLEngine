@@ -53,6 +53,12 @@
             _functionName = C.COUNT;
             return this;
         }
+        public IAggregateFunctionBuilder Count(AbstractSqlLiteral literal)
+        {
+            _expression = literal;
+            _functionName = C.COUNT;
+            return this;
+        }
         public IAggregateFunctionBuilder Count(string columnName)
         {
             return Count(new SqlServerColumn(columnName));
@@ -70,6 +76,12 @@
         public IAggregateFunctionBuilder Sum(AbstractSqlColumn column)
         {
             _expression = column;
+            _functionName = C.SUM;
+            return this;
+        }
+        public IAggregateFunctionBuilder Sum(AbstractSqlLiteral literal)
+        {
+            _expression = literal;
             _functionName = C.SUM;
             return this;
         }

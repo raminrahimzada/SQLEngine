@@ -60,7 +60,8 @@ namespace SQLEngine.SqlServer
         ISelectWithoutFromAndGroupNeedHavingConditionQueryBuilder,
         ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder,
         IJoinedNeedsOnQueryBuilder,
-        IJoinedNeedsOnEqualsToQueryBuilder
+        IJoinedNeedsOnEqualsToQueryBuilder,
+        IJoinedQueryBuilder
     {
         internal sealed class OrderByQueryModel
         {

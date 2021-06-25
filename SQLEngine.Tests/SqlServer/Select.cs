@@ -573,6 +573,36 @@ SELECT @id
 
             }
         }
+        [Fact]
+        public void Test_Select_Keywords_Order()
+        {
+            using (var q=Query.New)
+            {
+                var id = q.Column("ID");
+                var age = q.Column("Age");
+                q
+                    .Select
+                    .Top(1)
+                    .Select(id)
+                    .Select(age)
+                    .Select(x => x.Count(1))
+                    .SelectLiteral(123)
+                    .From("table1")
+                    .GroupBy(id)
+                    .GroupBy(age)
+                    .Having(age > id)
+                    .OrderBy(o => o.Avg(age));
+                const string queryExpected = @"
+SELECT TOP(1)  ID , Age , COUNT(1) , 123
+    FROM table1
+    GROUP BY ID,Age 
+    HAVING Age > ID
+    ORDER BY AVG(Age)
+
+";
+                SqlAssert.EqualQuery(q.ToString(), queryExpected);
+            }
+        }
     }
 
 }

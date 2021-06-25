@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine
 {
-    public interface ISelectWhereQueryBuilder : IAbstractSelectQueryBuilder
+    public interface ISelectWhereQueryBuilder //: IAbstractSelectQueryBuilder
     {
         ISelectWithoutWhereQueryBuilder Where(AbstractSqlCondition condition);
 

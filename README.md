@@ -24,6 +24,12 @@
 ```bat
 install-package SQLEngine.SqlServer
 ```
+```cs
+// Setup builder before using Query.New
+// Maybe in static ctor ?
+Query.Setup<SqlServerQueryBuilder>();
+```
+
 ## Capabilities
 ```sql
 --wilcard column,literal,variable,functional selection syntax
@@ -62,18 +68,7 @@ install-package SQLEngine.SqlServer
 --insert with no values syntax
 ```
 
-## Configuration 
-```cs
-Query.Setup<SqlServerQueryBuilder>();
-
-//in development
-//Query.Setup<PostgreSqlQueryBuilder>(); 
-
-//future plans
-//Query.Setup<MySqlQueryBuilder>(); 
-//Query.Setup<OracleQueryBuilder>(); 
-//Query.Setup<SqliteQueryBuilder>(); 
-```
+ 
 <br/>Usage :
 
 

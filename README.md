@@ -25,6 +25,8 @@
 install-package SQLEngine.SqlServer
 ```
 ```cs
+// Setup builder before using Query.New
+// Maybe in static ctor ?
 Query.Setup<SqlServerQueryBuilder>();
 ```
 

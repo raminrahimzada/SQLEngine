@@ -75,8 +75,12 @@ namespace SQLEngine.Tests
                     cmd.Dispose();
                 }
             }
-            catch (System.Exception e)
+            catch (SqlException e)
             {
+                //Invalid object name
+                //if (e.Class == 16) return;
+                //duplicate thing
+                //if (e.Class == 11) return;
                 Assert.True(false,e.Message);
             }
         }

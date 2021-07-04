@@ -48,16 +48,7 @@ namespace SQLEngine.SqlServer
             }));
         }
 
-        public string Build()
-        {
-            using (var writer = SqlWriter.New)
-            {
-                foreach (var builder in _list) builder.Build(writer);
-
-                return writer.Build();
-            }
-        }
-
+      
         public void Clear()
         {
             _list.Clear();
@@ -296,11 +287,7 @@ namespace SQLEngine.SqlServer
 
         public IDeleteQueryBuilder Delete => _Add(new DeleteQueryBuilder());
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+        
 
         public IDropQueryBuilder Drop => _Add(new DropQueryBuilder());
 
@@ -397,6 +384,10 @@ namespace SQLEngine.SqlServer
 
         public IInsertQueryBuilder Insert => _Add(new InsertQueryBuilder());
 
+        public AbstractSqlLiteral Literal(DateTime? x, bool includeTime = true)
+        {
+            return SqlServerLiteral.From(x, includeTime);
+        }
         public AbstractSqlLiteral Literal(AbstractSqlLiteral literal)
         {
             return literal;
@@ -460,6 +451,17 @@ namespace SQLEngine.SqlServer
             }));
         }
 
+        public void Return(string sql)
+        {
+            _list.Add(new RawStringQueryBuilder(writer =>
+            {
+                writer.Write(C.RETURN);
+                writer.WriteWithScoped(sql);
+                writer.WriteLine();
+            }));
+        }
+
+
         public void Return(ISqlExpression expression)
         {
             _list.Add(new RawStringQueryBuilder(writer =>
@@ -516,28 +518,22 @@ namespace SQLEngine.SqlServer
         public void Set(AbstractSqlVariable variable, AbstractSqlExpression value)
         {
             var t = new SetQueryBuilder();
-            {
-                var expression = t.Set(variable).To(value);
-                _list.Add(expression);
-            }
+            var expression = t.Set(variable).To(value);
+            _list.Add(expression);
         }
 
         public void Set(AbstractSqlVariable variable, AbstractSqlVariable value)
         {
             var t = new SetQueryBuilder();
-            {
-                var expression = t.Set(variable).To(value);
-                _list.Add(expression);
-            }
+            var expression = t.Set(variable).To(value);
+            _list.Add(expression);
         }
 
         public void Set(AbstractSqlVariable variable, AbstractSqlLiteral value)
         {
             var t = new SetQueryBuilder();
-            {
-                var expression = t.Set(variable).To(value);
-                _list.Add(expression);
-            }
+            var expression = t.Set(variable).To(value);
+            _list.Add(expression);
         }
 
         public void SetToScopeIdentity(AbstractSqlVariable variable)
@@ -576,7 +572,6 @@ namespace SQLEngine.SqlServer
             Query.Settings.EnumSqlStringConvertor = new IntegerEnumSqlStringConvertor();
             Query.Settings.TypeConvertor = new DefaultTypeConvertor();
             Query.Settings.UniqueVariableNameGenerator = new DefaultUniqueVariableNameGenerator();
-            Query.Settings.DefaultIdColumnName = "Id";
             Query.Settings.DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
             Query.Settings.DateFormat = "yyyy-MM-dd";
             Query.Settings.DefaultPrecision = 18;
@@ -602,6 +597,15 @@ namespace SQLEngine.SqlServer
         {
             foreach (var builder in _list) builder.Build(writer);
         }
+        public string Build()
+        {
+            using (var writer = SqlWriter.New)
+            {
+                foreach (var builder in _list) builder.Build(writer);
+
+                return writer.Build();
+            }
+        }
 
 
         private T _Add<T>(T item) where T : IAbstractQueryBuilder
@@ -625,21 +629,12 @@ namespace SQLEngine.SqlServer
             }));
         }
 
-        public void Return(string sql)
+     
+        public void Dispose()
         {
-            _list.Add(new RawStringQueryBuilder(writer =>
-            {
-                writer.Write(C.RETURN);
-                writer.WriteWithScoped(sql);
-                writer.WriteLine();
-            }));
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
-
-        public AbstractSqlLiteral Literal(DateTime? x, bool includeTime = true)
-        {
-            return SqlServerLiteral.From(x, includeTime);
-        }
-
         public virtual void Dispose(bool b)
         {
             foreach (var builder in _list) builder.Dispose();

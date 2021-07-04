@@ -60,8 +60,7 @@ namespace SQLEngine.SqlServer
         ISelectWithoutFromAndGroupNeedHavingConditionQueryBuilder,
         ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder,
         IJoinedNeedsOnQueryBuilder,
-        IJoinedNeedsOnEqualsToQueryBuilder,
-        IJoinedQueryBuilder
+        IJoinedNeedsOnEqualsToQueryBuilder
     {
         internal sealed class OrderByQueryModel
         {
@@ -173,6 +172,8 @@ namespace SQLEngine.SqlServer
             alias = string.Concat(C.BEGIN_SQUARE, alias, C.END_SQUARE);
         }
 
+
+
         public ISelectWithoutFromQueryBuilder From(string tableName, string alias)
         {
             MutateAliasName(ref alias);
@@ -185,7 +186,6 @@ namespace SQLEngine.SqlServer
             _mainTableName = tableName;
             return this;
         }
-
         public ISelectWithoutFromQueryBuilder From<TTable>() where TTable : ITable,new()
         {
             using (var table=new TTable())
@@ -193,7 +193,6 @@ namespace SQLEngine.SqlServer
                 return From(table.Name);
             }
         }
-
         public ISelectWithoutFromQueryBuilder From<TTable>(string alias) where TTable : ITable,new()
         {
             using (var table = new TTable())
@@ -219,6 +218,7 @@ namespace SQLEngine.SqlServer
             return this;
         }
         
+
         public ISelectWithSelectorQueryBuilder Select(ISqlExpression expression)
         {
             _selectors.Add(expression);
@@ -259,7 +259,28 @@ namespace SQLEngine.SqlServer
                 return this;
             }
         }
-        
+        public ISelectWithSelectorQueryBuilder Select(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate)
+        {
+            using (var b = new AggregateFunctionBuilder())
+            {
+                aggregate(b);
+                _selectors.Add(new OrderByQueryModel(b, false));
+                return this;
+            }
+        }
+
+        public ISelectWithSelectorQueryBuilder Select(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallNopBuilder> aggregate)
+        {
+            using (var b = new CustomFunctionCallExpressionBuilder())
+            {
+                aggregate(b);
+                _selectors.Add(new OrderByQueryModel(b));
+                return this;
+            }
+        }
+
+
+
         public ISelectWithSelectorQueryBuilder SelectAs(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFunctionCallExpression, string alias)
         {
             using (var t=new CustomFunctionCallExpressionBuilder())
@@ -286,6 +307,8 @@ namespace SQLEngine.SqlServer
             }
         }
         
+
+
         public ISelectWithSelectorQueryBuilder SelectLiteral(AbstractSqlLiteral literal)
         {
             _selectors.Add(literal);
@@ -310,6 +333,7 @@ namespace SQLEngine.SqlServer
             );
             return this;
         }
+
 
         public ISelectWithoutWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression right)
         {
@@ -524,13 +548,6 @@ namespace SQLEngine.SqlServer
             _orderByClauses.Add(new OrderByQueryModel(expression));
             return this;
         }
-        
-        public ISelectOrderBuilder OrderByDesc(ISqlExpression expression)
-        {
-            _orderByClauses.Add(new OrderByQueryModel(expression, true));
-            return this;
-        }
-
         public ISelectOrderBuilder OrderBy(AbstractSqlColumn column)
         {
             _orderByClauses.Add(new OrderByQueryModel(column));
@@ -540,17 +557,22 @@ namespace SQLEngine.SqlServer
         {
             return OrderBy(new SqlServerColumn(columnName));
         }
+
+
         public ISelectOrderBuilder OrderByDesc(string columnName)
         {
             return OrderByDesc(new SqlServerColumn(columnName));
         }
-
+        public ISelectOrderBuilder OrderByDesc(ISqlExpression expression)
+        {
+            _orderByClauses.Add(new OrderByQueryModel(expression, true));
+            return this;
+        }
         public ISelectOrderBuilder OrderByDesc(AbstractSqlColumn column)
         {
             _orderByClauses.Add(new OrderByQueryModel(column, true));
             return this;
         }
-
         
 
         public ISelectWithoutFromAndGroupQueryBuilder GroupBy(ISqlExpression expression)
@@ -558,14 +580,8 @@ namespace SQLEngine.SqlServer
             _groupByClauses.Add(expression.ToSqlString());
             return this;
         }
-     
        
-        public ISelectWithoutFromAndGroupNeedHavingConditionQueryBuilder Having(AbstractSqlCondition condition)
-        {
-            _having = condition.ToSqlString();
-            return this;
-        }
-
+      
       
         public ISelectWithoutFromAndGroupQueryBuilder GroupBy(AbstractSqlColumn column)
         {
@@ -577,26 +593,15 @@ namespace SQLEngine.SqlServer
             return GroupBy(new SqlServerColumn(columnName));
         }
 
-        public ISelectWithSelectorQueryBuilder Select(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate)
+        public ISelectWithoutFromAndGroupNeedHavingConditionQueryBuilder Having(AbstractSqlCondition condition)
         {
-            using (var b=new AggregateFunctionBuilder())
-            {
-                aggregate(b);
-                _selectors.Add(new OrderByQueryModel(b,false));
-                return this;
-            }
+            _having = condition.ToSqlString();
+            return this;
         }
 
-        public ISelectWithSelectorQueryBuilder Select(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallNopBuilder> aggregate)
-        {
-            using (var b = new CustomFunctionCallExpressionBuilder())
-            {
-                aggregate(b);
-                _selectors.Add(new OrderByQueryModel(b));
-                return this;
-            }
-        }
 
+
+        
         public ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder 
             OrderBy(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate)
         {

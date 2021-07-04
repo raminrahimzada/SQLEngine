@@ -17,7 +17,6 @@
         }
 
         public string Name => "Customers";
-        public string PrimaryColumnName => Query.Settings.DefaultIdColumnName;
     }
     public class UserTable : ITable
     {

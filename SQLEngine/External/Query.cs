@@ -9,7 +9,6 @@ namespace SQLEngine
         /// </summary>
         public static class Settings
         {
-            public static string DefaultIdColumnName = "Id";
             public static string DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
             public static string DateFormat = "yyyy-MM-dd";
             public static byte DefaultPrecision = 18;

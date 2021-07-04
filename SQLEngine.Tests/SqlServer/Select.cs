@@ -357,7 +357,7 @@ SELECT TOP(1)  Name , Surname
                     .Select("Surname")
                     .From("Users")
 
-                    .WhereAnd(age > 18, height < 1.7)
+                    .Where(age > 18 & height < 1.7)
                     //or like that
                     //.Where(age > 18 & height < 1.7)
                     ;

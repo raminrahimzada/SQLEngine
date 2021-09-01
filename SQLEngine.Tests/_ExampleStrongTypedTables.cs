@@ -1,4 +1,6 @@
-﻿namespace SQLEngine.Tests
+﻿using System;
+
+namespace SQLEngine.Tests
 {
     public class OrderTable : ITable
     {
@@ -20,12 +22,22 @@
     }
     public class UserTable : ITable
     {
+        public byte IdByte { get; set; }
+
         public void Dispose()
         {
         }
 
         public string Name => "Users";
         public string PrimaryColumnName => "Id";
+        public int IdInteger { get; set; }
+        public long IdLong { get; set; }
+        public Guid IdGuid{ get; set; }
+        public double Weight{ get; set; }
+        public float Height{ get; set; }
+        public byte Age { get; set; }
+        public bool IsFemale { get; set; }
+        public short IdShort { get; set; }
     }
     public class AttachmentsTable : ITable
     {

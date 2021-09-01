@@ -39,24 +39,25 @@ namespace SQLEngine.Tests.SqlServer
         [Fact]
         public void Test_Declare_Unique()
         {
-            using (var b = Query.New)
+            Query.Settings.UniqueVariableNameGenerator.Reset();
+            using (var q = Query.New)
             {
                 int counter = 0;
                 for (int i = 0; i < 1000; i++)
                 {
                     {
-                        var id = b.DeclareNew<int>();
+                        var id = q.DeclareNew<int>();
                         counter++;
                         Assert.Equal(id.ToSqlString(), $"@v{counter}");
-                        SqlAssert.EqualQuery(b.Build(), $"declare {id} int;");
-                        b.Clear();
+                        SqlAssert.EqualQuery(q.Build(), $"declare {id} int;");
+                        q.Clear();
                     }
                     {
-                        var id = b.DeclareNew<int>(i);
+                        var id = q.DeclareNew<int>(i);
                         counter++;
                         Assert.Equal(id.ToSqlString(), $"@v{counter}");
-                        SqlAssert.EqualQuery(b.Build(), $"declare {id} int={i};");
-                        b.Clear();
+                        SqlAssert.EqualQuery(q.Build(), $"declare {id} int={i};");
+                        q.Clear();
                     }
                     
                 }

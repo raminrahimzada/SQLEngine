@@ -234,6 +234,11 @@ namespace SQLEngine.SqlServer
             _selectors.Add(new SqlServerColumn(columnName));
             return this;
         }
+        public ISelectWithSelectorQueryBuilder Select(string columnName,string tableAlias)
+        {
+            _selectors.Add(new SqlServerColumn(columnName, tableAlias));
+            return this;
+        }
         public ISelectWithSelectorQueryBuilder Select(Action<IAggregateFunctionBuilder> body)
         {
             var a = new AggregateFunctionBuilder();
@@ -421,6 +426,7 @@ namespace SQLEngine.SqlServer
             //simple select -> select 1 as A 'test' as B
             if (string.IsNullOrWhiteSpace(_mainTableName))
             {
+                writer.WriteLine();
                 return;
             }
 

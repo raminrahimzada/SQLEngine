@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
 #pragma warning disable IDE1006 // Naming Styles
@@ -388,6 +389,8 @@ namespace SQLEngine.SqlServer
         {
             return SqlServerLiteral.From(x, includeTime);
         }
+
+        [Pure]
         public AbstractSqlLiteral Literal(AbstractSqlLiteral literal)
         {
             return literal;

@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine
 {
-    public interface IJoinedQueryBuilder //: ISelectWhereQueryBuilder
+    public interface IJoinedQueryBuilder : ISelectWhereQueryBuilder
     {
         IJoinedNeedsOnQueryBuilder InnerJoin(string targetTableName, string targetTableAlias);
         IJoinedNeedsOnQueryBuilder InnerJoin<TTable>(string targetTableAlias) where TTable : ITable, new();

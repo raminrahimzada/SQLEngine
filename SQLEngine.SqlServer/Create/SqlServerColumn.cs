@@ -5,9 +5,15 @@ namespace SQLEngine.SqlServer
 {
     internal class SqlServerColumn : AbstractSqlColumn
     {
+        public string TableAlias { get; set; }
         public SqlServerColumn(string name)
         {
             Name = name;
+        }
+        public SqlServerColumn(string name,string tableAlias)
+        {
+            Name = name;
+            TableAlias = tableAlias;
         }
 
         public override string ToString()
@@ -17,12 +23,22 @@ namespace SQLEngine.SqlServer
 
         public override string ToSqlString()
         {
-            if (Name == C.WILCARD + string.Empty) return Name;
-            if (!Name.All(char.IsLetterOrDigit)) return "[" + Name + "]";
-            if (Name.Equals("key", StringComparison.InvariantCultureIgnoreCase)) return "[" + Name + "]";
-            if (Name.Equals("value", StringComparison.InvariantCultureIgnoreCase)) return "[" + Name + "]";
-            if (!char.IsLetter(Name.First())) return "[" + Name + "]";
-            return Name;
+            string ToSqlStringNoAlias()
+            {
+                if (Name == C.WILCARD + string.Empty) return Name;
+                if (!Name.All(char.IsLetterOrDigit)) return "[" + Name + "]";
+                if (Name.Equals("key", StringComparison.InvariantCultureIgnoreCase)) return "[" + Name + "]";
+                if (Name.Equals("value", StringComparison.InvariantCultureIgnoreCase)) return "[" + Name + "]";
+                if (!char.IsLetter(Name.First())) return "[" + Name + "]";
+                return Name;
+            }
+
+            if (!string.IsNullOrWhiteSpace(TableAlias))
+            {
+                return TableAlias + C.DOT + ToSqlStringNoAlias();
+            }
+
+            return ToSqlStringNoAlias();
         }
 
         public override AbstractSqlCondition Like(string expression, bool isUnicode = true)

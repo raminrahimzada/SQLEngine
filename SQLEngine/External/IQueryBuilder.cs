@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
 namespace SQLEngine
 {
@@ -101,7 +102,7 @@ namespace SQLEngine
         AbstractSqlColumn Column(string columnName);
         AbstractSqlColumn Column(string columnName,string tableAlias);
 
-
+        [Pure]
         AbstractSqlLiteral Literal(AbstractSqlLiteral literal);
 
         //AbstractSqlLiteral Literal(string x);

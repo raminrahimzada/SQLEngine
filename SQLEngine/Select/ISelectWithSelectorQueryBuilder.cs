@@ -14,8 +14,9 @@ namespace SQLEngine
 
         ISelectWithSelectorQueryBuilder Select(AbstractSqlColumn column);
         ISelectWithSelectorQueryBuilder Select(string columnName);
+        ISelectWithSelectorQueryBuilder Select(string columnName,string tableAlias);
         
-  
+        
 
         ISelectWithSelectorQueryBuilder Select(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFunctionCallExpression);
         ISelectWithSelectorQueryBuilder Select(ISqlExpression expression);

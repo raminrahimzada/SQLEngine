@@ -15,6 +15,25 @@ namespace SQLEngine.Tests.SqlServer
         }
 
         [Fact]
+        public void Test_NewLine_After_Literal_Select()
+        {
+            using (var q=Query.New)
+            {
+                var ok1 = q.DeclareNew<bool>(false);
+                var ok2 = q.DeclareNew<bool>(false);
+                q.Select.Select(ok1);
+                q.Delete.Top(1).Table("Users");
+                const string expected = @"
+DECLARE  @v1 BIT  = 0;
+DECLARE  @v2 BIT  = 0;
+SELECT @v1
+DELETE TOP(1)   FROM Users
+";
+                var actual = q.Build();
+                SqlAssert.EqualQuery(actual, expected);
+            }
+        }
+        [Fact]
         public void Test_All_Literals_Conversion_AbstractSqlCondition_With_Literal()
         {
             AbstractSqlCondition condition = true;

@@ -42,10 +42,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"SQLEngine" /o:"raminrahimzada" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"  /d:sonar.cs.vscoveragexml.reportsPaths=<projectdirectory>\TestResults\*.coveragexml
           dotnet restore
           dotnet build
-          dotnet test "mytests.csproj" --collect "Code Coverage" --logger trx --results-directory "TestsResults"
-          Get-ChildItem -Recurse -Filter "*.coverage" | Foreach-Object {$outfile ="$([System.IO.Path]::GetFileNameWithoutExtension($_.FullName)).coveragexml"    $output = [System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName($_.FullName), $outfile) & $env:CodeCoveragePath\CodeCoverage.exe analyze /output:$output $_.FullName  }
-          Get-ChildItem -Recurse -Filter "*.coveragexml" | Foreach-Object { $file = Join-Path -Path $_.Directory -ChildPath $_.Name Copy-Item $file -Destination 'TestsResults' }
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          dotnet test 

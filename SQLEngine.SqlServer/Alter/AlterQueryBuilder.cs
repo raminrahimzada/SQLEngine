@@ -3,10 +3,10 @@
     internal class AlterQueryBuilder :AbstractQueryBuilder, IAlterQueryBuilder
     {
         private IAbstractQueryBuilder _internalBuilder;
-        public IAlterTableNoNameQueryBuilder Table(string tableName)
+        public IAlterTableNoNameQueryBuilder Table(string tableName,string schema)
         {
             var b = new AlterTableQueryBuilder();
-            _internalBuilder = b.TableName(tableName);
+            _internalBuilder = b.TableName(tableName,schema);
             return b;
         }
 
@@ -14,7 +14,7 @@
         {
             using (var table=new TTable())
             {
-                return Table(table.Name);
+                return Table(table.Name,table.Schema);
             }
         }
 

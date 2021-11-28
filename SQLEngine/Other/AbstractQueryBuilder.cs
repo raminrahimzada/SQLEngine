@@ -52,23 +52,10 @@ namespace SQLEngine
             if (string.IsNullOrEmpty(message)) message = "Invalid Usage of QueryBuilder: " + GetType().Name;
             throw new SqlEngineException(message);
         }
-        /// <summary>
-        /// validates the names of identifier 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        protected virtual string I(string name)
-        {
-            if (!char.IsLetter(name[0]))
-            {
-                return "[" + name + "]";
-            }
 
-            if (name.Contains(" "))
-            {
-                return "[" + name + "]";
-            }
-            return name;
+        protected string I(string name)
+        {
+            return Query.Settings.EscapeStrategy.Escape(name);
         }
     }
 }

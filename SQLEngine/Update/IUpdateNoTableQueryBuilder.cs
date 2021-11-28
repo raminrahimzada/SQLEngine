@@ -9,5 +9,8 @@ namespace SQLEngine
         IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue);
         IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlVariable variable);
         IUpdateNoTableSingleValueQueryBuilder Value(string columnName, ISqlExpression expression);
+        IUpdateNoTableSingleValueQueryBuilder Value(AbstractSqlColumn column, ISqlExpression expression);
+        IUpdateNoTableSingleValueQueryBuilder Value(AbstractSqlColumn column, AbstractSqlLiteral expression);
+        IUpdateNoTableSingleValueQueryBuilder Value(AbstractSqlColumn column, AbstractSqlVariable expression);
     }
 }

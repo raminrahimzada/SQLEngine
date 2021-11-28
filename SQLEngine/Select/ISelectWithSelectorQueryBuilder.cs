@@ -40,7 +40,10 @@ namespace SQLEngine
     {
         ISelectWithoutFromQueryBuilder From(string tableName, string alias);
         ISelectWithoutFromQueryBuilder From(string tableName);
-        ISelectWithoutFromQueryBuilder From<TTable>() where TTable : ITable, new();
-        ISelectWithoutFromQueryBuilder From<TTable>(string alias) where TTable : ITable, new();
+        ISelectWithoutFromQueryBuilder<TTable> From<TTable>() where TTable : ITable, new();
+        ISelectWithoutFromQueryBuilder<TTable> From<TTable>(string alias) where TTable : ITable, new();
+        ISelectWithoutFromQueryBuilder<TView> FromView<TView>() where TView : IView, new();
+        ISelectWithoutFromQueryBuilder<TView> FromView<TView>(string alias) where TView : IView, new();
+
     }
 }

@@ -6,11 +6,13 @@
         IDeleteExceptWhereQueryBuilder
     {
         private string _tableName;
+        private string _schema;
         private int? _topClause;
         private string _whereCondition;
-        public IDeleteExceptTableNameQueryBuilder Table(string tableName)
+        public IDeleteExceptTableNameQueryBuilder Table(string tableName, string schemaName)
         {
             _tableName = tableName;
+            _schema = schemaName;
             return this;
         }
 
@@ -18,7 +20,7 @@
         {
             using (var table=new TTable())
             {
-                return Table(table.Name);
+                return Table(table.Name,table.Schema);
             }
         }
 
@@ -67,7 +69,11 @@
             }
 
             writer.Write2(C.FROM);
-
+            if (!string.IsNullOrWhiteSpace(_schema))
+            {
+                writer.Write(_schema);
+                writer.Write(C.DOT);
+            }
             writer.Write(I(_tableName));
 
             if (!string.IsNullOrEmpty(_whereCondition))

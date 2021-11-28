@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer
 {
-    public class SqlServerQueryBuilder : IQueryBuilder
+    public partial class SqlServerQueryBuilder
     {
         private readonly List<IAbstractQueryBuilder> _list = new();
 
@@ -49,20 +49,9 @@ namespace SQLEngine.SqlServer
             }));
         }
 
-      
         public void Clear()
         {
             _list.Clear();
-        }
-
-        public AbstractSqlColumn Column(string columnName)
-        {
-            return new SqlServerColumn(columnName);
-        }
-
-        public AbstractSqlColumn Column(string columnName, string tableAlias)
-        {
-            return new SqlServerColumnWithTableAlias(columnName, tableAlias);
         }
 
         public void Comment(string comment)
@@ -218,7 +207,6 @@ namespace SQLEngine.SqlServer
             return new SqlServerVariable(variableName);
         }
 
-
         public AbstractSqlVariable Declare(string variableName, string type, AbstractSqlLiteral defaultValue)
         {
             var t = new DeclarationQueryBuilder();
@@ -307,6 +295,7 @@ namespace SQLEngine.SqlServer
             return _Add(new ElseIfQueryBuilder(condition));
         }
 
+        [Obsolete("Do not use",true)]
         public void End()
         {
             _list.Add(new RawStringQueryBuilder(w =>
@@ -320,25 +309,18 @@ namespace SQLEngine.SqlServer
 
         public IConditionFilterQueryHelper Helper { get; } = new SqlServerConditionFilterQueryHelper();
 
-        public IIfQueryBuilder If(AbstractSqlCondition condition)
+        [Obsolete("Do not use",true)]
+        public IIfQueryBuilder IfOld(AbstractSqlCondition condition)
         {
             return _Add(new IfQueryBuilder(condition));
         }
 
-        public IDisposable If2(AbstractSqlCondition condition)
+        public IDisposable If(AbstractSqlCondition condition)
         {
             return new IfDisposable(this, condition);
         }
 
-        public IIfQueryBuilder IfAnd(params AbstractSqlCondition[] conditions)
-        {
-            var str = conditions.Select(x => x.ToSqlString()).ToArray();
-            var xx = string.Join(C.AND, str);
-            var condition = SqlServerCondition.Raw(xx);
-            return If(condition);
-        }
-
-        public IIfQueryBuilder IfExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
+        public IDisposable IfExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
         {
             using (var s = new SelectQueryBuilder())
             {
@@ -348,18 +330,18 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        public IIfQueryBuilder IfExists(IAbstractSelectQueryBuilder selection)
+        public IDisposable IfExists(IAbstractSelectQueryBuilder selection)
         {
             return If(new SqlServerCondition(C.SPACE + string.Empty, C.EXISTS, C.BEGIN_SCOPE + string.Empty,
                 selection.Build(), C.END_SCOPE + string.Empty));
         }
 
-        public IIfQueryBuilder IfNot(AbstractSqlCondition condition)
-        {
-            return _Add(new IfNotQueryBuilder(condition));
-        }
+        //public IIfQueryBuilder IfNot(AbstractSqlCondition condition)
+        //{
+        //    return _Add(new IfNotQueryBuilder(condition));
+        //}
 
-        public IIfQueryBuilder IfNotExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
+        public IDisposable IfNotExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
         {
             using (var s = new SelectQueryBuilder())
             {
@@ -369,43 +351,23 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        public IIfQueryBuilder IfNotExists(IAbstractSelectQueryBuilder selection)
+        public IDisposable IfNotExists(IAbstractSelectQueryBuilder selection)
         {
             return If(new SqlServerCondition(C.NOT, C.SPACE + string.Empty, C.EXISTS, C.BEGIN_SCOPE + string.Empty,
                 selection.Build(), C.END_SCOPE + string.Empty));
         }
 
-        public IIfQueryBuilder IfOr(params AbstractSqlCondition[] conditions)
-        {
-            var str = conditions.Select(x => x.ToSqlString()).ToArray();
-            var xx = string.Join(C.OR, str);
-            var condition = SqlServerCondition.Raw(xx);
-            return If(condition);
-        }
+        //public IIfQueryBuilder IfOr(params AbstractSqlCondition[] conditions)
+        //{
+        //    var str = conditions.Select(x => x.ToSqlString()).ToArray();
+        //    var xx = string.Join(C.OR, str);
+        //    var condition = SqlServerCondition.Raw(xx);
+        //    return IfOld(condition);
+        //}
 
         public IInsertQueryBuilder Insert => _Add(new InsertQueryBuilder());
 
-        public AbstractSqlLiteral Literal(DateTime? x, bool includeTime = true)
-        {
-            return SqlServerLiteral.From(x, includeTime);
-        }
-
-        [Pure]
-        public AbstractSqlLiteral Literal(AbstractSqlLiteral literal)
-        {
-            return literal;
-        }
-
-        public AbstractSqlLiteral Literal(string x, bool isUniCode)
-        {
-            return AbstractSqlLiteral.From(x, isUniCode);
-        }
-
-        public AbstractSqlLiteral Literal(DateTime x, bool includeTime)
-        {
-            return SqlServerLiteral.From(x, includeTime);
-        }
-
+       
         public void Print(ISqlExpression expression)
         {
             _list.Add(new RawStringQueryBuilder(writer =>
@@ -430,20 +392,7 @@ namespace SQLEngine.SqlServer
             }));
         }
 
-        public AbstractSqlExpression Raw(string rawSqlExpression)
-        {
-            return new SqlServerRawExpression(rawSqlExpression);
-        }
-
-        public AbstractSqlCondition RawCondition(string rawConditionQuery)
-        {
-            return new SqlServerCondition(rawConditionQuery);
-        }
-
-        public AbstractSqlExpression RawInternal(string rawSqlExpression)
-        {
-            return new SqlServerRawExpression(rawSqlExpression);
-        }
+       
 
         public void Return()
         {
@@ -464,7 +413,6 @@ namespace SQLEngine.SqlServer
             }));
         }
 
-
         public void Return(ISqlExpression expression)
         {
             _list.Add(new RawStringQueryBuilder(writer =>
@@ -474,6 +422,26 @@ namespace SQLEngine.SqlServer
                 writer.Write(expression.ToSqlString());
                 writer.WriteLine(C.SPACE);
             }));
+        }
+
+        public void Goto(string labelName)
+        {
+            _list.Add(new RawStringQueryBuilder(writer =>
+            {
+                writer.Write(C.GOTO);
+                writer.Write(C.SPACE);
+                writer.Write(labelName);
+                writer.WriteLine(C.SEMICOLON);
+            }));
+        }
+
+        public IDisposable Label(string labelName)
+        {
+            return new LabelDisposable(this, labelName);
+        }
+        public IDisposable While(AbstractSqlCondition condition)
+        {
+            return new WhileDisposable(this, condition);
         }
 
         public void Return(AbstractSqlLiteral literal)
@@ -519,6 +487,13 @@ namespace SQLEngine.SqlServer
         }
 
         public void Set(AbstractSqlVariable variable, AbstractSqlExpression value)
+        {
+            var t = new SetQueryBuilder();
+            var expression = t.Set(variable).To(value);
+            _list.Add(expression);
+        }
+
+        public void Set(AbstractSqlVariable variable, ISqlExpression value)
         {
             var t = new SetQueryBuilder();
             var expression = t.Set(variable).To(value);
@@ -575,6 +550,8 @@ namespace SQLEngine.SqlServer
             Query.Settings.EnumSqlStringConvertor = new IntegerEnumSqlStringConvertor();
             Query.Settings.TypeConvertor = new DefaultTypeConvertor();
             Query.Settings.UniqueVariableNameGenerator = new DefaultUniqueVariableNameGenerator();
+            Query.Settings.EscapeStrategy = new SqlEscapeStrategy();
+            Query.Settings.ExpressionCompiler = new SqlExpressionCompiler();
             Query.Settings.DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
             Query.Settings.DateFormat = "yyyy-MM-dd";
             Query.Settings.DefaultPrecision = 18;
@@ -658,7 +635,11 @@ namespace SQLEngine.SqlServer
 
             public void Dispose()
             {
-                _sqlServerQueryBuilder.End();
+                _sqlServerQueryBuilder.AddRaw(writer =>
+                {
+                    writer.Indent--;
+                    writer.WriteLine(C.END);
+                });
             }
         }
 
@@ -666,17 +647,89 @@ namespace SQLEngine.SqlServer
         {
             private readonly SqlServerQueryBuilder _sqlServerQueryBuilder;
 
-            public IfDisposable(SqlServerQueryBuilder sqlServerQueryBuilder, AbstractSqlCondition abstractSqlCondition)
+            public IfDisposable(SqlServerQueryBuilder sqlServerQueryBuilder, AbstractSqlCondition condition)
             {
                 _sqlServerQueryBuilder = sqlServerQueryBuilder;
-                _sqlServerQueryBuilder.If(abstractSqlCondition);
-                _sqlServerQueryBuilder.Begin();
+                _sqlServerQueryBuilder.AddRaw(writer =>
+                {
+                    writer.Write(C.IF);
+                    writer.Write(C.BEGIN_SCOPE);
+                    writer.Write(condition.ToSqlString());
+                    writer.WriteLine(C.END_SCOPE);
+                    writer.WriteLine(C.BEGIN);
+                    writer.Indent++;
+                });
             }
 
             public void Dispose()
             {
-                _sqlServerQueryBuilder.End();
+                _sqlServerQueryBuilder.AddRaw(writer =>
+                {
+                    writer.Indent--;
+                    writer.WriteLine(C.END);
+                });
             }
+        }
+        private class WhileDisposable : IDisposable
+        {
+            private readonly SqlServerQueryBuilder _sqlServerQueryBuilder;
+
+            public WhileDisposable(SqlServerQueryBuilder sqlServerQueryBuilder, AbstractSqlCondition condition)
+            {
+                _sqlServerQueryBuilder = sqlServerQueryBuilder;
+                _sqlServerQueryBuilder.AddRaw(writer =>
+                {
+                    writer.Write(C.WHILE);
+                    writer.Write(C.BEGIN_SCOPE);
+                    writer.Write(condition.ToSqlString());
+                    writer.WriteLine(C.END_SCOPE);
+                    writer.WriteLine(C.BEGIN);
+                    writer.Indent++;
+                });
+            }
+
+            public void Dispose()
+            {
+                _sqlServerQueryBuilder.AddRaw(writer =>
+                {
+                    writer.Indent--;
+                    writer.WriteLine(C.END);
+                });
+            }
+        }
+        private class LabelDisposable : IDisposable
+        {
+            private readonly SqlServerQueryBuilder _sqlServerQueryBuilder;
+
+            public LabelDisposable(SqlServerQueryBuilder sqlServerQueryBuilder, string labelName)
+            {
+                Contract.Assert(!string.IsNullOrWhiteSpace(labelName));
+                Contract.Assert(!labelName.Contains(' '));
+
+                _sqlServerQueryBuilder = sqlServerQueryBuilder;
+
+                _sqlServerQueryBuilder.AddRaw(writer =>
+                {
+                    writer.Write(labelName);
+                    writer.WriteLine(C.COLON);
+                    writer.WriteLine(C.BEGIN);
+                    writer.Indent++;
+                });
+            }
+
+            public void Dispose()
+            {
+                _sqlServerQueryBuilder.AddRaw(writer =>
+                {
+                    writer.Indent--;
+                    writer.WriteLine(C.END);
+                });
+            }
+        }
+
+        private void AddRaw(Action<ISqlWriter> func)
+        {
+            _list.Add(new RawStringQueryBuilder(func));
         }
     }
 }

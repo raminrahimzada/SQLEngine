@@ -38,6 +38,7 @@ namespace SQLEngine.SqlServer
             });
             return this;
         }
+
         public FunctionQueryBuilder Name(string functionName)
         {
             _functionName = functionName;
@@ -94,6 +95,7 @@ namespace SQLEngine.SqlServer
 
             using (var o = Query.New)
             {
+                writer.Indent--;
                 _bodyBuilder(o);
                 writer.Indent--;
                 writer.WriteLine(C.END);

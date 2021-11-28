@@ -6,6 +6,8 @@ namespace SQLEngine.SqlServer
         ICreateViewNoNameNoBodyQueryBuilder
     {
         private string _viewName;
+        private string _schema;
+
         private Action<ISelectQueryBuilder> _selectionBuilder;
         public ICreateViewNoNameNoBodyQueryBuilder As(Action<ISelectQueryBuilder> selectionBuilder)
         {
@@ -18,6 +20,11 @@ namespace SQLEngine.SqlServer
             _viewName = viewName;
             return this;
         }
+        public ICreateViewNoNameQueryBuilder Schema(string schema)
+        {
+            _schema = schema;
+            return this;
+        }
 
         public override void Build(ISqlWriter writer)
         {
@@ -25,6 +32,11 @@ namespace SQLEngine.SqlServer
             writer.Write(C.SPACE);
             writer.Write(C.VIEW);
             writer.Write(C.SPACE);
+            if (!string.IsNullOrWhiteSpace(_schema))
+            {
+                writer.Write(_schema);
+                writer.Write(C.DOT);
+            }
             writer.Write(_viewName);
             writer.Write(C.SPACE);
             writer.Write(C.AS);

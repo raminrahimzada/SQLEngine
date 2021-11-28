@@ -335,62 +335,74 @@ namespace SQLEngine.SqlServer
 
         protected override AbstractSqlCondition NotEqualTo(AbstractSqlLiteral value)
         {
-            return EqualTo((AbstractSqlLiteral) (SqlServerLiteral) value);
+            var rawSqlString = ToSqlString() + " <> " + value.ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
         }
 
         protected override AbstractSqlCondition NotEqualTo(int value)
         {
-            return EqualTo((AbstractSqlLiteral) value);
+            var rawSqlString = ToSqlString() + " <> " + AbstractSqlLiteral.From(value).ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
         }
 
         protected override AbstractSqlCondition NotEqualTo(byte value)
         {
-            return EqualTo((AbstractSqlLiteral) value);
+            var rawSqlString = ToSqlString() + " <> " + AbstractSqlLiteral.From(value).ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
         }
 
         protected override AbstractSqlCondition NotEqualTo(byte[] value)
         {
-            return EqualTo((AbstractSqlLiteral) value);
+            var rawSqlString = ToSqlString() + " <> " + AbstractSqlLiteral.From(value).ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
         }
 
         protected override AbstractSqlCondition NotEqualTo(DateTime value)
         {
-            return EqualTo((AbstractSqlLiteral) value);
+            var rawSqlString = ToSqlString() + " <> " + AbstractSqlLiteral.From(value).ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
         }
 
         protected override AbstractSqlCondition NotEqualTo(bool value)
         {
-            return EqualTo((AbstractSqlLiteral) value);
+            var rawSqlString = ToSqlString() + " <> " + AbstractSqlLiteral.From(value).ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
         }
 
         protected override AbstractSqlCondition NotEqualTo(string value)
         {
-            return EqualTo((AbstractSqlLiteral) value);
+            var rawSqlString = ToSqlString() + " <> " + AbstractSqlLiteral.From(value).ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
         }
 
         protected override AbstractSqlCondition NotEqualTo(Guid value)
         {
-            return EqualTo((AbstractSqlLiteral) value);
+            var rawSqlString = ToSqlString() + " <> " + AbstractSqlLiteral.From(value).ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
         }
 
         protected override AbstractSqlCondition NotEqualTo(long value)
         {
-            return EqualTo((AbstractSqlLiteral) value);
+            var rawSqlString = ToSqlString() + " <> " + AbstractSqlLiteral.From(value).ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
         }
 
         protected override AbstractSqlCondition NotEqualTo(decimal value)
         {
-            return EqualTo((AbstractSqlLiteral) value);
+            var rawSqlString = ToSqlString() + " <> " + AbstractSqlLiteral.From(value).ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
         }
 
         protected override AbstractSqlCondition NotEqualTo(double value)
         {
-            return EqualTo((AbstractSqlLiteral) value);
+            var rawSqlString = ToSqlString() + " <> " + AbstractSqlLiteral.From(value).ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
         }
 
         protected override AbstractSqlCondition NotEqualTo(float value)
         {
-            return EqualTo((AbstractSqlLiteral) value);
+            var rawSqlString = ToSqlString() + " <> " + AbstractSqlLiteral.From(value).ToSqlString();
+            return SqlServerCondition.Raw(rawSqlString);
         }
 
         #endregion

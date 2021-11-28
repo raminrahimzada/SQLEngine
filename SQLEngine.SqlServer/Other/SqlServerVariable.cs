@@ -197,8 +197,16 @@ namespace SQLEngine.SqlServer
 
         public override AbstractSqlExpression Multiply(AbstractSqlVariable variable)
         {
-            var expression = "(" + ToSqlString() + " * " + variable.ToSqlString() + ")";
+            var expression = $"({ToSqlString()} * {variable.ToSqlString()})";
             return new SqlServerRawExpression(expression);
+        }
+        public override AbstractSqlExpression Multiply(ISqlExpression expression)
+        {
+            return new SqlServerRawExpression($"({ToSqlString()} * {expression.ToSqlString()})");
+        }
+        public override AbstractSqlExpression MultiplyReverse(ISqlExpression expression)
+        {
+            return new SqlServerRawExpression($"({expression.ToSqlString()} * {ToSqlString()})");
         }
 
         public override AbstractSqlExpression Multiply(AbstractSqlLiteral variable)

@@ -7,6 +7,7 @@
         ICreateFunctionNoNameQueryBuilder Function(string funcName);
         ICreateProcedureNoNameQueryBuilder Procedure(string procName);
         ICreateViewNoNameQueryBuilder View(string viewName);
+        ICreateViewNoNameQueryBuilder View<TView>() where TView: IView,new();
         ICreateIndexNoNameQueryBuilder Index(string indexName);
         ICreateDatabaseNoNameQueryBuilder Database(string databaseName);
         ICreateTriggerNoNameQueryBuilder Trigger(string triggerName);

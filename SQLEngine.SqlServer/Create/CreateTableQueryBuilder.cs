@@ -79,7 +79,8 @@ namespace SQLEngine.SqlServer
                 writer.WriteLine(C.COMMA);
             }
             writer.Indent--;
-            writer.Write2(C.END_SCOPE);
+            writer.Write(C.SPACE);
+            writer.Write(C.END_SCOPE);
             writer.WriteLine(C.SEMICOLON);
 
             //PK list
@@ -173,6 +174,11 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
 
                     writer.Write(C.ALTER);
                     writer.Write2(C.TABLE);
+                    if (!string.IsNullOrEmpty(_schemaName))
+                    {
+                        writer.Write(I(_schemaName));
+                        writer.Write(C.DOT);
+                    }
                     writer.Write(I(_tableName));
                     writer.Write2(C.ADD);
                     writer.Write(C.CONSTRAINT);
@@ -209,6 +215,11 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
                         ;
                     writer.Write(C.ALTER);
                     writer.Write2(C.TABLE);
+                    if (!string.IsNullOrEmpty(_schemaName))
+                    {
+                        writer.Write(I(_schemaName));
+                        writer.Write(C.DOT);
+                    }
                     writer.Write(I(_tableName));
                     writer.Write2(C.WITH);
                     writer.Write(C.CHECK);
@@ -219,6 +230,11 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
                     writer.Write2(C.KEY);
                     writer.WriteScoped(I(fk.Name));
                     writer.Write2(C.REFERENCES);
+                    if (!string.IsNullOrEmpty(fk.ForeignKeySchemaName))
+                    {
+                        writer.Write(I(fk.ForeignKeySchemaName));
+                        writer.Write(C.DOT);
+                    }
                     writer.Write(I(fk.ForeignKeyTableName));
                     writer.Write(C.BEGIN_SCOPE);
                     writer.Write(C.SPACE);
@@ -232,6 +248,11 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
 
                     writer.Write(C.ALTER);
                     writer.Write2(C.TABLE);
+                    if (!string.IsNullOrEmpty(_schemaName))
+                    {
+                        writer.Write(I(_schemaName));
+                        writer.Write(C.DOT);
+                    }
                     writer.Write(I(_tableName));
                     writer.Write2(C.CHECK);
                     writer.Write(C.CONSTRAINT);
@@ -262,6 +283,11 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
                 var ukGroup = cols.Where(c => c.UniqueKeyName == ukName).ToArray();
                 writer.Write(C.ALTER);
                 writer.Write2(C.TABLE);
+                if (!string.IsNullOrEmpty(_schemaName))
+                {
+                    writer.Write(I(_schemaName));
+                    writer.Write(C.DOT);
+                }
                 writer.Write(I(_tableName));
                 writer.Write2(C.ADD);
                 writer.Write(C.CONSTRAINT);
@@ -302,6 +328,11 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
 
                     writer.Write(C.ALTER);
                     writer.Write2(C.TABLE);
+                    if (!string.IsNullOrEmpty(_schemaName))
+                    {
+                        writer.Write(I(_schemaName));
+                        writer.Write(C.DOT);
+                    }
                     writer.Write(I(_tableName));
                     writer.Write2(C.ADD);
                     writer.Write(C.CONSTRAINT);
@@ -309,7 +340,7 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
                     writer.Write(C.PRIMARY);
                     writer.Write2(C.KEY);
                     writer.Write(C.CLUSTERED);
-                    writer.Write2(C.BEGIN_SCOPE);
+                    writer.Write(C.BEGIN_SCOPE);
                     writer.Indent++;
                     writer.WriteJoined(pkGroup.Select(pkg => I(pkg.Name)).ToArray());
                     writer.Indent--;

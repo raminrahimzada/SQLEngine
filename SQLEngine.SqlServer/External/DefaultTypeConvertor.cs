@@ -47,9 +47,19 @@ namespace SQLEngine.SqlServer
                 return (C.NVARCHARMAX);
             }
 
+            if (type == typeof(char))
+            {
+                return (C.NCHAR1);
+            }
+
             if (type == typeof(decimal))
             {
                 return (C.DECIMAL);
+            }
+
+            if (type == typeof(float))
+            {
+                return ("FLOAT");
             }
 
             if (type == typeof(bool))

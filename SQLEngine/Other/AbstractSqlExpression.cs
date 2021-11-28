@@ -185,5 +185,11 @@ namespace SQLEngine
             return (AbstractSqlLiteral)x;
         }
 
+        public static AbstractSqlExpression operator *(AbstractSqlExpression left, ISqlExpression right)
+        {
+            return left.Multiply(right);
+        }
+
+        protected abstract AbstractSqlExpression Multiply(ISqlExpression right);
     }
 }

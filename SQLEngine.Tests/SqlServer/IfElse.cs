@@ -14,7 +14,7 @@ namespace SQLEngine.Tests.SqlServer
                 var j = q.Declare<int>("j",9);
                 var max = q.Declare<int>("max");
 
-                q.If(i < j);
+                q.IfOld(i < j);
                 q.Set(max, j);
                 
                 q.ElseIf(i > j);
@@ -50,7 +50,7 @@ ELSE
                 var i = q.Declare<int>("i",7);
                 var j = q.Declare<int>("j",9);
 
-                q.If(i == j);
+                q.IfOld(i == j);
                 q.Print("Equal");
                 q.Else();
                 q.Print("Not-Equal");
@@ -80,7 +80,7 @@ ELSE
                 q.Clear();
                 var i = q.Declare<int>("i", 1);
                 
-                using (q.If2(i <= 0))
+                using (q.If(i <= 0))
                 {
                     q.Set(i, -i);
                 }
@@ -104,7 +104,7 @@ END
             {
                 var i = q.Declare<int>("i", 1);
 
-                using (q.If2(i <= 0))
+                using (q.If(i <= 0))
                 {
                     q.Insert.Into<UserTable>().Value("Name", "Tesla");
                 }
@@ -114,7 +114,7 @@ END
 DECLARE  @i INT  = (1);
 IF(@i <= 0)
 BEGIN
-    INSERT INTO Users   
+    INSERT INTO dbo.Users   
         (Name)
     VALUES
         (N'Tesla')
@@ -132,7 +132,7 @@ END
             {
                 var i = q.Declare<int>("i", 1);
 
-                using (q.If2(i <= 0))
+                using (q.If(i <= 0))
                 {
                     q.Insert.Into<UserTable>().Value("Name", "Tesla");
                 }
@@ -147,17 +147,18 @@ END
 DECLARE  @i INT  = (1);
 IF(@i <= 0)
 BEGIN
-    INSERT INTO Users   
+    INSERT INTO dbo.Users   
         (Name)
     VALUES
         (N'Tesla')
-    END
+END
 ELSE 
 BEGIN
-     UPDATE Users
+     UPDATE dbo.Users
          SET Name = N'Tesla'
          WHERE (ID=1)
 END
+
 ";
                 SqlAssert.EqualQuery(queryThat, query);
             }

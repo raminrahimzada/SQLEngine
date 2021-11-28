@@ -17,8 +17,10 @@ namespace SQLEngine
             public static string DatetimeOffsetFormat = "yyyy-MM-dd HH:mm:ss.fff zzz";
 
             public static IEnumSqlStringConvertor EnumSqlStringConvertor;
+            public static IEscapeStrategy EscapeStrategy;
             public static ITypeConvertor TypeConvertor;
             public static IUniqueVariableNameGenerator UniqueVariableNameGenerator;
+            public static IExpressionCompiler ExpressionCompiler { get; set; }
         }
 
         private static Func<IQueryBuilder> _builderFunction;

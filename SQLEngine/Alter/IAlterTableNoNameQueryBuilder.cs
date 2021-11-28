@@ -47,7 +47,7 @@
     }
     public interface IAlterTableAddConstraintForeignKeyQueryBuilder : IAbstractQueryBuilder
     {
-        IAlterTableAddConstraintForeignKeyReferencesQueryBuilder References(string tableName, string columnName);
+        IAlterTableAddConstraintForeignKeyReferencesQueryBuilder References(string tableName,string schema, string columnName);
 
         IAlterTableAddConstraintForeignKeyReferencesQueryBuilder References<TTable>(string columnName)
             where TTable : ITable, new();

@@ -18,14 +18,14 @@ namespace SQLEngine.Tests.SqlServer
                     .Select
                     .Top(1)
                     .From("Customers", "C")
-                    .InnerJoin("Orders", "O")
+                    .InnerJoin("Orders", "dbo","O")
                     .On(col1 == col2)
                     ;
 
                 const string query = @" 
 SELECT TOP(1)   * 
     FROM Customers AS C
-	INNER JOIN Orders AS O ON O.CustomerId = C.Id
+	INNER JOIN dbo.Orders AS O ON O.CustomerId = C.Id
 
 ";
 
@@ -43,7 +43,7 @@ SELECT TOP(1)   *
                     .Select
                     .Top(1)
                     .From("Customers", "C")
-                    .InnerJoin("Orders", "O")
+                    .InnerJoin("Orders","dbo", "O")
                             .OnColumn("CustomerId","O")
                             .IsEqualsTo("Id","C")
                     ;
@@ -51,7 +51,7 @@ SELECT TOP(1)   *
                 const string query = @" 
 SELECT TOP(1)   * 
     FROM Customers AS C
-	INNER JOIN Orders AS O ON O.CustomerId = C.Id
+	INNER JOIN dbo.Orders AS O ON O.CustomerId = C.Id
 
 ";
 
@@ -68,15 +68,16 @@ SELECT TOP(1)   *
                     .Select
                     .Top(1)
                     .From<CustomerTable>("C")
-                    .InnerJoin("Orders", "O")
+                    .InnerJoin("Orders","dbo", "O")
                             .OnColumn("CustomerId", "O")
                             .IsEqualsTo("Id", "C")
                     ;
 
                 const string query = @" 
 SELECT TOP(1)   * 
-    FROM Customers AS C
-	INNER JOIN Orders AS O ON O.CustomerId = C.Id
+    FROM dbo.Customers AS C
+	 INNER JOIN dbo.Orders AS O ON O.CustomerId = C.Id
+
 
 ";
 
@@ -99,8 +100,8 @@ SELECT TOP(1)   *
 
                 const string query = @" 
 SELECT TOP(1)   * 
-    FROM Customers AS C
-	INNER JOIN Orders AS O ON O.CustomerId = C.Id
+    FROM dbo.Customers AS C
+	INNER JOIN dbo.Orders AS O ON O.CustomerId = C.Id
 
 ";
 
@@ -124,8 +125,8 @@ SELECT TOP(1)   *
 
                 const string query = @" 
 SELECT TOP(1)   * 
-    FROM Customers AS C
-	INNER JOIN Orders AS O ON C.PartnerId = O.PartnerId
+    FROM dbo.Customers AS C
+	INNER JOIN dbo.Orders AS O ON C.PartnerId = O.PartnerId
 
 ";
 
@@ -149,8 +150,8 @@ SELECT TOP(1)   *
 
                 const string query = @" 
 SELECT TOP(1)   * 
-    FROM Customers AS C
-	INNER JOIN Orders AS O ON O.PartnerId = C.CustomerPartnerId
+    FROM dbo.Customers AS C
+	INNER JOIN dbo.Orders AS O ON O.PartnerId = C.CustomerPartnerId
 
 ";
 
@@ -166,7 +167,7 @@ SELECT TOP(1)   *
                     .Select
                     .Top(1)
                     .From("Customers", "C")
-                    .InnerJoin("Orders", "O")
+                    .InnerJoin("Orders","dbo", "O")
                             .OnColumn("PartnerId","O")
                             .IsEqualsTo("PartnerId","C")
                     ;
@@ -174,7 +175,7 @@ SELECT TOP(1)   *
                 const string query = @" 
 SELECT TOP(1)   * 
     FROM Customers AS C
-	INNER JOIN Orders AS O ON O.PartnerId = C.PartnerId
+	INNER JOIN dbo.Orders AS O ON O.PartnerId = C.PartnerId
 
 ";
 
@@ -190,7 +191,7 @@ SELECT TOP(1)   *
                     .Select
                     .Top(1)
                     .From("Customers", "C")
-                    .InnerJoin("Orders", "O")
+                    .InnerJoin("Orders","dbo", "O")
                     .OnColumn("PartnerId")
                     .IsEqualsTo("PartnerId", "C")
                     ;
@@ -198,7 +199,7 @@ SELECT TOP(1)   *
                 const string query = @" 
 SELECT TOP(1)   * 
     FROM Customers AS C
-	INNER JOIN Orders AS O ON O.PartnerId = C.PartnerId
+	INNER JOIN dbo.Orders AS O ON O.PartnerId = C.PartnerId
 
 ";
 
@@ -224,9 +225,9 @@ SELECT TOP(1)   *
 
                 const string query = @" 
 SELECT TOP(1)   * 
-    FROM Customers AS C
-	    INNER JOIN Orders AS O ON O.PartnerId = C.CustomerPartnerId
-	    INNER JOIN Users AS U ON U.Id = O.ExecutorUserId
+    FROM dbo.Customers AS C
+	    INNER JOIN dbo.Orders AS O ON O.PartnerId = C.CustomerPartnerId
+	    INNER JOIN dbo.Users AS U ON U.Id = O.ExecutorUserId
 
 ";
 
@@ -253,9 +254,10 @@ SELECT TOP(1)   *
 
                 const string query = @" 
 SELECT TOP(1)   * 
-    FROM Customers AS C
-	    INNER JOIN Orders AS O ON O.PartnerId = C.CustomerPartnerId
-	    INNER JOIN Users AS U ON U.Id = O.ExecutorUserId
+    FROM dbo.Customers AS C
+	 INNER JOIN dbo.Orders AS O ON O.PartnerId = C.CustomerPartnerId
+	 INNER JOIN dbo.Users AS U ON U.Id = O.ExecutorUserId
+
 
 ";
 
@@ -281,9 +283,9 @@ SELECT TOP(1)   *
 
                 const string query = @" 
 SELECT TOP(1)   * 
-    FROM Customers AS C
-	    INNER JOIN Orders AS O ON O.PartnerId = C.CustomerPartnerId
-	    INNER JOIN Users AS U ON U.Id = O.ExecutorUserId
+    FROM dbo.Customers AS C
+	    INNER JOIN dbo.Orders AS O ON O.PartnerId = C.CustomerPartnerId
+	    INNER JOIN dbo.Users AS U ON U.Id = O.ExecutorUserId
 
 ";
 
@@ -302,14 +304,14 @@ SELECT TOP(1)   *
                     .Select
                     .Top(1)
                     .From("Customers", "C")
-                    .LeftJoin("Orders", "O")
+                    .LeftJoin("Orders","dbo", "O")
                     .On(col1 == col2)
                     ;
 
                 const string query = @" 
 SELECT TOP(1)   * 
     FROM Customers AS C
-	Left JOIN Orders AS O ON O.CustomerId = C.Id
+	Left JOIN dbo.Orders AS O ON O.CustomerId = C.Id
 
 ";
 
@@ -327,7 +329,7 @@ SELECT TOP(1)   *
                     .Select
                     .Top(1)
                     .From("Customers", "C")
-                    .LeftJoin("Orders", "O")
+                    .LeftJoin("Orders","dbo", "O")
                             .OnColumn("CustomerId","O")
                             .IsEqualsTo("Id","C")
                     ;
@@ -335,7 +337,7 @@ SELECT TOP(1)   *
                 const string query = @" 
 SELECT TOP(1)   * 
     FROM Customers AS C
-	Left JOIN Orders AS O ON O.CustomerId = C.Id
+	Left JOIN dbo.Orders AS O ON O.CustomerId = C.Id
 
 ";
 
@@ -352,15 +354,15 @@ SELECT TOP(1)   *
                     .Select
                     .Top(1)
                     .From<CustomerTable>("C")
-                    .LeftJoin("Orders", "O")
+                    .LeftJoin("Orders","dbo", "O")
                             .OnColumn("CustomerId", "O")
                             .IsEqualsTo("Id", "C")
                     ;
 
                 const string query = @" 
 SELECT TOP(1)   * 
-    FROM Customers AS C
-	Left JOIN Orders AS O ON O.CustomerId = C.Id
+    FROM dbo.Customers AS C
+	Left JOIN dbo.Orders AS O ON O.CustomerId = C.Id
 
 ";
 
@@ -383,8 +385,8 @@ SELECT TOP(1)   *
 
                 const string query = @" 
 SELECT TOP(1)   * 
-    FROM Customers AS C
-	Left JOIN Orders AS O ON O.CustomerId = C.Id
+    FROM dbo.Customers AS C
+	Left JOIN dbo.Orders AS O ON O.CustomerId = C.Id
 
 ";
 
@@ -410,8 +412,8 @@ SELECT TOP(1)   *
 
                 const string query = @" 
 SELECT TOP(1)   * 
-    FROM Customers AS C
-	Left JOIN Orders AS O ON C.PartnerId = O.PartnerId
+    FROM dbo.Customers AS C
+	Left JOIN dbo.Orders AS O ON C.PartnerId = O.PartnerId
 
 ";
 
@@ -435,8 +437,8 @@ SELECT TOP(1)   *
 
                 const string query = @" 
 SELECT TOP(1)   * 
-    FROM Customers AS C
-	Left JOIN Orders AS O ON O.PartnerId = C.CustomerPartnerId
+    FROM dbo.Customers AS C
+	Left JOIN dbo.Orders AS O ON O.PartnerId = C.CustomerPartnerId
 
 ";
 
@@ -460,8 +462,8 @@ SELECT TOP(1)   *
 
                 const string query = @" 
 SELECT TOP(1)   * 
-    FROM Customers AS C
-	Left JOIN Orders AS O ON O.CustomerId = C.Id
+    FROM dbo.Customers AS C
+	Left JOIN dbo.Orders AS O ON O.CustomerId = C.Id
 
 ";
 
@@ -477,7 +479,7 @@ SELECT TOP(1)   *
                     .Select
                     .Top(1)
                     .From("Customers", "C")
-                    .LeftJoin("Orders", "O")
+                    .LeftJoin("Orders","dbo", "O")
                             .OnColumn("PartnerId","O")
                             .IsEqualsTo("PartnerId","C")
                     ;
@@ -485,7 +487,7 @@ SELECT TOP(1)   *
                 const string query = @" 
 SELECT TOP(1)   * 
     FROM Customers AS C
-	Left JOIN Orders AS O ON O.PartnerId = C.PartnerId
+	Left JOIN dbo.Orders AS O ON O.PartnerId = C.PartnerId
 
 ";
 
@@ -501,7 +503,7 @@ SELECT TOP(1)   *
                     .Select
                     .Top(1)
                     .From("Customers", "C")
-                    .LeftJoin("Orders", "O")
+                    .LeftJoin("Orders","dbo", "O")
                     .OnColumn("PartnerId")
                     .IsEqualsTo("PartnerId", "C")
                     ;
@@ -509,7 +511,7 @@ SELECT TOP(1)   *
                 const string query = @" 
 SELECT TOP(1)   * 
     FROM Customers AS C
-	Left JOIN Orders AS O ON O.PartnerId = C.PartnerId
+	Left JOIN dbo.Orders AS O ON O.PartnerId = C.PartnerId
 
 ";
 
@@ -535,9 +537,9 @@ SELECT TOP(1)   *
 
                 const string query = @" 
 SELECT TOP(1)   * 
-    FROM Customers AS C
-	    Left JOIN Orders AS O ON O.PartnerId = C.CustomerPartnerId
-	    Left JOIN Users AS U ON U.Id = O.ExecutorUserId
+    FROM dbo.Customers AS C
+	    Left JOIN dbo.Orders AS O ON O.PartnerId = C.CustomerPartnerId
+	    Left JOIN dbo.Users AS U ON U.Id = O.ExecutorUserId
 
 ";
 
@@ -564,9 +566,9 @@ SELECT TOP(1)   *
 
                 const string query = @" 
 SELECT TOP(1)   * 
-    FROM Customers AS C
-	    Left JOIN Orders AS O ON O.PartnerId = C.CustomerPartnerId
-	    Left JOIN Users AS U ON U.Id = O.ExecutorUserId
+    FROM dbo.Customers AS C
+	    Left JOIN dbo.Orders AS O ON O.PartnerId = C.CustomerPartnerId
+	    Left JOIN dbo.Users AS U ON U.Id = O.ExecutorUserId
 
 ";
 
@@ -592,9 +594,9 @@ SELECT TOP(1)   *
 
                 const string query = @" 
 SELECT TOP(1)   * 
-    FROM Customers AS C
-	    Left JOIN Orders AS O ON O.PartnerId = C.CustomerPartnerId
-	    Left JOIN Users AS U ON U.Id = O.ExecutorUserId
+    FROM dbo.Customers AS C
+	    Left JOIN dbo.Orders AS O ON O.PartnerId = C.CustomerPartnerId
+	    Left JOIN dbo.Users AS U ON U.Id = O.ExecutorUserId
 
 ";
 

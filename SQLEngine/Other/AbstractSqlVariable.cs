@@ -186,9 +186,20 @@
         {
             return x.Multiply(y);
         }
+        public static AbstractSqlExpression operator *(AbstractSqlVariable x, ISqlExpression y)
+        {
+            return x.Multiply(y);
+        }
+        public static AbstractSqlExpression operator *(ISqlExpression y,AbstractSqlVariable x)
+        {
+            return x.MultiplyReverse(y);
+        }
 
+        public abstract AbstractSqlExpression Multiply(ISqlExpression expression);
+        public abstract AbstractSqlExpression MultiplyReverse(ISqlExpression expression);
         public abstract AbstractSqlExpression Multiply(AbstractSqlVariable variable);
         public abstract AbstractSqlExpression Multiply(AbstractSqlLiteral variable);
+
         public abstract AbstractSqlExpression Add(AbstractSqlLiteral literal);
         public abstract AbstractSqlExpression Divide(AbstractSqlVariable variable);
         public abstract AbstractSqlExpression Subtract(AbstractSqlLiteral literal);

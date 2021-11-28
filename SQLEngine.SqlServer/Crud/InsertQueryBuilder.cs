@@ -12,15 +12,17 @@ namespace SQLEngine.SqlServer
         IInsertNoIntoQueryBuilder
     {
         private string _tableName;
+        private string _schemaName;
         private Dictionary<string, ISqlExpression> _columnsAndValuesDictionary=new();
 
         private readonly List<ISqlExpression[]> _valuesList = new();
         private string[] _columnNames;
         private string _selection;
 
-        public IInsertNoIntoQueryBuilder Into(string tableName)
+        public IInsertNoIntoQueryBuilder Into(string tableName,string schemaName)
         {
             _tableName = tableName;
+            _schemaName = schemaName;
             return this;
         }
 
@@ -28,7 +30,7 @@ namespace SQLEngine.SqlServer
         {
             using (var table=new TTable())
             {
-                return Into(table.Name);
+                return Into(table.Name,table.Schema);
             }
         }
 
@@ -85,6 +87,11 @@ namespace SQLEngine.SqlServer
 
             writer.Write(C.INSERT);
             writer.Write2(C.INTO);
+            if (!string.IsNullOrWhiteSpace(_schemaName))
+            {
+                writer.Write(_schemaName);
+                writer.Write(C.DOT);
+            }
             writer.Write(I(_tableName));
             writer.Write2(C.SPACE);
 

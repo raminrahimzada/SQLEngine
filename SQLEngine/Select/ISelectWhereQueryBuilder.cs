@@ -1,4 +1,7 @@
-﻿namespace SQLEngine
+﻿using System;
+using System.Linq.Expressions;
+
+namespace SQLEngine
 {
     public interface ISelectWhereQueryBuilder //: IAbstractSelectQueryBuilder
     {
@@ -16,5 +19,10 @@
         //ISelectWithoutWhereQueryBuilder WhereColumnEquals(AbstractSqlColumn column, ISqlExpression right);
         //ISelectWithoutWhereQueryBuilder WhereColumnEquals(AbstractSqlColumn column, AbstractSqlLiteral literal);
         //ISelectWithoutWhereQueryBuilder WhereColumnEquals(AbstractSqlColumn column, AbstractSqlVariable variable);
+    }
+
+    public interface ISelectWhereQueryBuilder<TTable> : ISelectWhereQueryBuilder
+    {
+        ISelectWithoutWhereQueryBuilder Where(Expression<Func<TTable,bool>> condition);
     }
 }

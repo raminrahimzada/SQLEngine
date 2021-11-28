@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace SQLEngine.SqlServer
 {
@@ -29,6 +30,7 @@ namespace SQLEngine.SqlServer
         }
         public string TableName { get; set; }
         public string TableAlias { get; set; }
+        public string TableSchema { get; set; }
         public SqlServerJoinTypes JoinType { get; set; }
         public AbstractSqlCondition Condition { get; set; }
 
@@ -38,6 +40,7 @@ namespace SQLEngine.SqlServer
                 C.SPACE,
                 JoinTypeString(),
                 C.SPACE,
+                string.IsNullOrWhiteSpace(TableSchema)?string.Empty: TableSchema+C.DOT,
                 TableName,
                 C.SPACE,
                 C.AS,
@@ -51,6 +54,31 @@ namespace SQLEngine.SqlServer
         }
     }
 
+    internal class SelectQueryBuilder<TTable> : SelectQueryBuilder,
+        ISelectWithoutFromQueryBuilder<TTable>
+    {
+        public SelectQueryBuilder(SelectQueryBuilder builder)
+        {
+            _mainTableName = builder._mainTableName;
+            _mainTableAlias = builder._mainTableAlias;
+            _mainTableSchema = builder._mainTableSchema;
+            _selectors = builder._selectors;
+            _whereClause = builder._whereClause;
+            _topClause = builder._topClause;
+            _hasDistinct = builder._hasDistinct;
+            _having = builder._having;
+
+            _currentJoinModel = builder._currentJoinModel;
+            _joinsList = builder._joinsList;
+            _groupByClauses = builder._groupByClauses;
+        }
+
+        public ISelectWithoutWhereQueryBuilder Where(Expression<Func<TTable, bool>> expression)
+        {
+            _whereClause = Query.Settings.ExpressionCompiler.Compile(expression);
+            return this;
+        }
+    }
     internal class SelectQueryBuilder : AbstractQueryBuilder, 
         ISelectQueryBuilder, 
         ISelectNoTopQueryBuilder,
@@ -143,19 +171,21 @@ namespace SQLEngine.SqlServer
             }
 
         }
-        private string _mainTableName;
-        private string _mainTableAlias;
-        private readonly SelectorCollection _selectors = new();
-        private string _whereClause;
-        private int? _topClause;
-        private bool? _hasDistinct;
+        internal string _mainTableName;
+        internal string _mainTableSchema;
+        internal string _mainTableAlias;
+        internal SelectorCollection _selectors = new();
+        internal string _whereClause;
+        internal int? _topClause;
+        internal bool? _hasDistinct;
+        internal string _having;
 
-        private JoinModel _currentJoinModel=new();
-        private readonly List<JoinModel> _joinsList = new();
+        internal JoinModel _currentJoinModel=new();
 
-        private string _having;
-        private readonly List<OrderByQueryModel> _orderByClauses = new();
-        private readonly List<string> _groupByClauses=new();
+        internal List<JoinModel> _joinsList = new();
+        internal List<OrderByQueryModel> _orderByClauses = new();
+        internal List<string> _groupByClauses=new();
+        private SelectQueryBuilder _actualBuilder;
 
         private static void MutateAliasName(ref string alias)
         {
@@ -171,9 +201,16 @@ namespace SQLEngine.SqlServer
             alias = alias.Replace(C.END_SQUARE.ToString(), "\\" + C.END_SQUARE);
             alias = string.Concat(C.BEGIN_SQUARE, alias, C.END_SQUARE);
         }
-
-
-
+        public ISelectWithoutFromQueryBuilder<TTable> From<TTable>(string tableName,string schema, string alias)
+        {
+            MutateAliasName(ref alias);
+            _mainTableName = tableName;
+            _mainTableSchema = schema;
+            _mainTableAlias = alias;
+            var newBuilder= new SelectQueryBuilder<TTable>(this);
+            _actualBuilder = newBuilder;
+            return newBuilder;
+        }
         public ISelectWithoutFromQueryBuilder From(string tableName, string alias)
         {
             MutateAliasName(ref alias);
@@ -186,18 +223,51 @@ namespace SQLEngine.SqlServer
             _mainTableName = tableName;
             return this;
         }
-        public ISelectWithoutFromQueryBuilder From<TTable>() where TTable : ITable,new()
+        public ISelectWithoutFromQueryBuilder Schema(string schema)
+        {
+            _mainTableSchema = schema;
+            return this;
+        }
+        public ISelectWithoutFromQueryBuilder<TTable> From<TTable>() where TTable : ITable,new()
         {
             using (var table=new TTable())
             {
-                return From(table.Name);
+                _mainTableName = table.Name;
+                _mainTableSchema = table.Schema;
+                var builder = new SelectQueryBuilder<TTable>(this);
+                _actualBuilder = builder;
+                return builder;
             }
         }
-        public ISelectWithoutFromQueryBuilder From<TTable>(string alias) where TTable : ITable,new()
+
+        public ISelectWithoutFromQueryBuilder<TView> FromView<TView>() where TView : IView, new()
+        {
+            using (var table=new TView())
+            {
+                _mainTableName = table.Name;
+                _mainTableSchema = table.Schema;
+                var builder = new SelectQueryBuilder<TView>(this);
+                _actualBuilder = builder;
+                return builder;
+            }
+        }
+        public ISelectWithoutFromQueryBuilder<TView> FromView<TView>(string alias) where TView : IView, new()
+        {
+            using (var table = new TView())
+            {
+                _mainTableName = table.Name;
+                _mainTableSchema = table.Schema;
+                _mainTableAlias = alias;
+                var builder = new SelectQueryBuilder<TView>(this);
+                _actualBuilder = builder;
+                return builder;
+            }
+        }
+        public ISelectWithoutFromQueryBuilder<TTable> From<TTable>(string alias) where TTable : ITable,new()
         {
             using (var table = new TTable())
             {
-                return From(table.Name,alias);
+                return From<TTable>(table.Name, table.Schema, alias);
             }
         }
 
@@ -291,23 +361,24 @@ namespace SQLEngine.SqlServer
             using (var t=new CustomFunctionCallExpressionBuilder())
             {
                 customFunctionCallExpression(t);
-                _selectors.Add(t.Build() + C.SPACE + C.AS + C.SPACE + alias);
+                _selectors.Add(C.BEGIN_SCOPE+t.Build()+C.END_SCOPE + C.SPACE + C.AS + C.SPACE + alias);
                 return this;
             }
         }
         public ISelectWithSelectorQueryBuilder SelectAs(ISqlExpression selector, string alias)
         {
             MutateAliasName(ref alias);
-            _selectors.Add($"{selector} {C.AS} {alias}");
+            _selectors.Add($"({selector.ToSqlString()}) {C.AS} {alias}");
             return this;
         }
+
         public ISelectWithSelectorQueryBuilder SelectAs(Func<ICaseWhenNeedWhenQueryBuilder, ICaseWhenQueryBuilder> caseWhen, string alias)
         {
             MutateAliasName(ref alias);
             using (var t = new CaseWhenQueryBuilder())
             {
                 caseWhen(t);
-                _selectors.Add($"{t.Build()} {C.AS} {alias}");
+                _selectors.Add($"({t.Build()}) {C.AS} {alias}");
                 return this;
             }
         }
@@ -397,6 +468,11 @@ namespace SQLEngine.SqlServer
 
         public override void Build(ISqlWriter writer)
         {
+            if (_actualBuilder != null)
+            {
+                _actualBuilder.Build(writer);
+                return;
+            }
             ValidateAndThrow();
             writer.Write(C.SELECT);
             writer.Write(C.SPACE);
@@ -436,7 +512,12 @@ namespace SQLEngine.SqlServer
             writer.Write(C.SPACE);
             if (!string.IsNullOrWhiteSpace(_mainTableName))
             {
-                writer.Write(I(_mainTableName));
+                if (!string.IsNullOrWhiteSpace(_mainTableSchema))
+                {
+                    writer.Write(_mainTableSchema);
+                    writer.Write(C.DOT);
+                }
+                writer.Write(Query.Settings.EscapeStrategy.Escape(_mainTableName));
             }
             writer.Indent--;
             if (!string.IsNullOrEmpty(_mainTableAlias))
@@ -581,22 +662,28 @@ namespace SQLEngine.SqlServer
         }
         
 
-        public ISelectWithoutFromAndGroupQueryBuilder GroupBy(ISqlExpression expression)
+        public ISelectWithoutFromAndGroupQueryBuilder GroupBy(params ISqlExpression[] expressions)
         {
-            _groupByClauses.Add(expression.ToSqlString());
+            _groupByClauses.AddRange(expressions.Select(x => x.ToSqlString()));
             return this;
         }
        
       
       
-        public ISelectWithoutFromAndGroupQueryBuilder GroupBy(AbstractSqlColumn column)
+        public ISelectWithoutFromAndGroupQueryBuilder GroupBy(params AbstractSqlColumn[] columns)
         {
-            _groupByClauses.Add(column.ToSqlString());
+            _groupByClauses.AddRange(columns.Select(x => x.ToSqlString()));
             return this;
         }
-        public ISelectWithoutFromAndGroupQueryBuilder GroupBy(string columnName)
+        public ISelectWithoutFromAndGroupQueryBuilder GroupBy(params SqlServerColumn[] columns)
         {
-            return GroupBy(new SqlServerColumn(columnName));
+            _groupByClauses.AddRange(columns.Select(x => x.ToSqlString()));
+            return this;
+        }
+        public ISelectWithoutFromAndGroupQueryBuilder GroupBy(params string[] columnNames)
+        {
+            var columns= columnNames.Select(columnName => new SqlServerColumn(columnName)).ToArray();
+            return GroupBy(columns);
         }
 
         public ISelectWithoutFromAndGroupNeedHavingConditionQueryBuilder Having(AbstractSqlCondition condition)
@@ -627,10 +714,11 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        public IJoinedNeedsOnQueryBuilder InnerJoin(string targetTableName, string targetTableAlias)
+        public IJoinedNeedsOnQueryBuilder InnerJoin(string targetTableName,string schema, string targetTableAlias)
         {
             _currentJoinModel.TableName = targetTableName;
             _currentJoinModel.TableAlias = targetTableAlias;
+            _currentJoinModel.TableSchema = schema;
             _currentJoinModel.JoinType = SqlServerJoinTypes.InnerJoin;
             return this;
         }
@@ -639,13 +727,14 @@ namespace SQLEngine.SqlServer
         {
             using (var table=new TTable())
             {
-                return InnerJoin(table.Name, targetTableAlias);
+                return InnerJoin(table.Name,table.Schema, targetTableAlias);
             }
         } 
-        public IJoinedNeedsOnQueryBuilder RightJoin(string targetTableName, string targetTableAlias)
+        public IJoinedNeedsOnQueryBuilder RightJoin(string targetTableName, string schema, string targetTableAlias)
         {
             _currentJoinModel.TableName = targetTableName;
             _currentJoinModel.TableAlias = targetTableAlias;
+            _currentJoinModel.TableSchema = schema;
             _currentJoinModel.JoinType = SqlServerJoinTypes.RightJoin;
             return this;
         }
@@ -654,15 +743,16 @@ namespace SQLEngine.SqlServer
         {
             using (var table=new TTable())
             {
-                return RightJoin(table.Name, targetTableAlias);
+                return RightJoin(table.Name,table.Schema, targetTableAlias);
             }
         } 
         
         
-        public IJoinedNeedsOnQueryBuilder LeftJoin(string targetTableName, string targetTableAlias)
+        public IJoinedNeedsOnQueryBuilder LeftJoin(string targetTableName,string targetTableSchema, string targetTableAlias)
         {
             _currentJoinModel.TableName = targetTableName;
             _currentJoinModel.TableAlias = targetTableAlias;
+            _currentJoinModel.TableSchema = targetTableSchema;
             _currentJoinModel.JoinType = SqlServerJoinTypes.LeftJoin;
             return this;
         }
@@ -671,7 +761,7 @@ namespace SQLEngine.SqlServer
         {
             using (var table=new TTable())
             {
-                return LeftJoin(table.Name, targetTableAlias);
+                return LeftJoin(table.Name,table.Schema, targetTableAlias);
             }
         }
 

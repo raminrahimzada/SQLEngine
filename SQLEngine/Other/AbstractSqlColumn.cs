@@ -1,8 +1,18 @@
 ﻿using System;
+using System.Linq;
 
 namespace SQLEngine
 {
-#pragma warning disable 660,661
+    public static class AbstractSqlColumnExtensions
+    {
+        public static AbstractSqlCondition In(this AbstractSqlColumn column,params string[] stringArray)
+        {
+            AbstractSqlLiteral[] expressions = stringArray.Select(x => (AbstractSqlLiteral)x).ToArray();
+            return column.In(expressions);
+        }
+
+    }
+#pragma warning disable 660, 661
     public abstract class AbstractSqlColumn : ISqlExpression
 #pragma warning restore 660,661
     {

@@ -44,7 +44,7 @@ SELECT TOP(1)  *
 
                 var queryThat = @"
 SELECT TOP(1)  * 
-    FROM Users
+    FROM dbo.Users
     WHERE UserName = N'admin'
 ";
                 SqlAssert.EqualQuery(q.ToString(), queryThat);
@@ -66,7 +66,7 @@ SELECT TOP(1)  *
 
                 var queryThat = @"
 SELECT TOP(1)  * 
-    FROM Users
+    FROM dbo.Users
     WHERE Age > 18
 ";
                 SqlAssert.EqualQuery(q.ToString(), queryThat);
@@ -171,7 +171,7 @@ SELECT TOP(1)  @myCreatedDate=CreatedDate
 
                 const string queryThat = @"
 SELECT TOP(1) * 
-    FROM Users
+    FROM dbo.Users
     WHERE (Age BETWEEN 10 AND 60)
 ";
                 SqlAssert.EqualQuery(q.ToString(), queryThat);
@@ -201,7 +201,7 @@ SELECT TOP(1) *
 
                 const string queryThat = @"
 SELECT TOP(1)   * 
-    FROM Users
+    FROM dbo.Users
     WHERE (Age BETWEEN '2020-07-21' AND '2020-07-22')
 ";
                 SqlAssert.EqualQuery(q.ToString(), queryThat);
@@ -225,7 +225,7 @@ SELECT TOP(1)   *
 
                 const string queryThat = @"
 SELECT TOP(1) * 
-    FROM Users
+    FROM dbo.Users
     WHERE Age IN (11,22,33)
 ";
                 SqlAssert.EqualQuery(q.ToString(), queryThat);
@@ -250,7 +250,7 @@ SELECT TOP(1) *
 
                 const string queryThat = @"
 SELECT TOP(1)   * 
-    FROM Users
+    FROM dbo.Users
     WHERE (Name LIKE N'J_hn') AND (Surname LIKE N'Sm_th')
 ";
                 SqlAssert.EqualQuery(q.ToString(), queryThat);
@@ -282,10 +282,10 @@ SELECT TOP(1)   *
 
                 const string queryThat = @"
 SELECT TOP(1)   * 
-    FROM Users
+    FROM dbo.Users
     WHERE Age IN (
         SELECT TOP(10)  AnotherAge
-            FROM AnotherUsers
+            FROM dbo.AnotherUsers
             ORDER BY CreateDate DESC
     )
 ";
@@ -309,7 +309,7 @@ SELECT TOP(1)   *
 
                 var queryThat = @"
 SELECT TOP(1)   * 
-    FROM Users AS U
+    FROM dbo.Users AS U
     WHERE U.UserName = N'admin'
 ";
                 SqlAssert.EqualQuery(q.ToString(), queryThat);
@@ -394,7 +394,8 @@ SELECT TOP(1)  Name , Surname
 
 SELECT TOP(1)  Name , Surname
     FROM Users
-    WHERE (Age > 18) AND (Height <= 1.7) AND (Id = 1)
+    WHERE ((Age > 18) AND (Height <= 1.7)) AND (Id <> 1)
+
 ";
                 SqlAssert.EqualQuery(q.ToString(), queryThat);
 
@@ -445,7 +446,7 @@ SELECT Age , COUNT(Id) , SUM(Weight) , COUNT(DISTINCT Name)
 
                 string query= @"
 SELECT TOP(1)  Age , COUNT(*)
-    FROM Users AS U
+    FROM dbo.Users AS U
     GROUP BY Age
 ";
                 SqlAssert.EqualQuery(q.ToString(), query);
@@ -476,12 +477,49 @@ SELECT TOP(1)  Age , COUNT(*)
 
                 string query = @"
 SELECT TOP(1)  Age , COUNT(*)
-    FROM Users AS U
+    FROM dbo.Users AS U
     GROUP BY Age 
     HAVING count(Age) > 5
     ORDER BY COUNT(Id)
 ";
                 SqlAssert.EqualQuery(q.ToString(), query);
+
+            }
+        }
+        
+        
+        [Fact]
+        public void Test_Select_Group_4()
+        {
+            //TODO
+            return;
+            using (var q = Query.New)
+            {
+                var id1 = q.Column("ID1");
+                var id2 = q.Column("ID2");
+                var okVar = q.DeclareNew<bool>(false);
+
+                //TODO this should be rafactored
+                //lack of api 
+                var condition = q.RawCondition("count(Age) > 5");
+
+                q
+                    .Select
+                    .Top(1)
+                    .SelectAssign(okVar,true)
+                    .From<UserTable>("U")
+                    .GroupBy(id1,id2)
+                    .Having(condition)
+                    ;
+                var actual = q.Build();
+                ;
+                string expected = @"
+SELECT TOP(1)  Age , COUNT(*)
+    FROM Users AS U
+    GROUP BY Age 
+    HAVING count(Age) > 5
+";
+                SqlAssert.EqualQuery(actual, expected);
 
             }
         }
@@ -512,7 +550,7 @@ SELECT TOP(1)
     (CASE WHEN Age <= 18 THEN N'Teeneger'
           WHEN Age > 18  THEN N'Non-Teeneger'
     END) AS AgeStatus
-    FROM Users
+    FROM dbo.Users
 ";
                 SqlAssert.EqualQuery(q.ToString(), queryThat);
 
@@ -547,7 +585,7 @@ SELECT TOP(1)
             ELSE N'LGBT' 
         END
     ) AS AgeStatus
-    FROM Users
+    FROM dbo.Users
 ";
                 SqlAssert.EqualQuery(q.ToString(), queryThat);
 

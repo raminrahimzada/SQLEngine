@@ -38,7 +38,7 @@ DELETE from Users WHERE Id = 111
                     ;
 
                 const string query = @"
-DELETE from Users WHERE Id = 111
+DELETE from dbo.Users WHERE Id = 111
 ";
                 SqlAssert.EqualQuery(b.ToString(), query);
             }
@@ -58,7 +58,7 @@ DELETE from Users WHERE Id = 111
                     ;
 
                 var query = @"
-DELETE TOP(10) from Users WHERE Id = 111
+DELETE TOP(10) from dbo.Users WHERE Id = 111
 ";
                 SqlAssert.EqualQuery(b.ToString(), query);
             }
@@ -88,7 +88,7 @@ DELETE TOP(10) from Users WHERE Id = 111
                     ;
 
                 var query = @"
-DELETE TOP(10)   FROM Users 
+DELETE TOP(10)   FROM dbo.Users 
 WHERE 
 (
     Id  IN (SELECT UserId

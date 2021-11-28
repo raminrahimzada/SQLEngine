@@ -23,7 +23,7 @@ namespace SQLEngine.Tests.SqlServer
                     {
                         c.Long("ID").Identity(),
                         c.Long("UserID")
-                            .ForeignKey("USERS", "ID").NotNull(),
+                            .ForeignKey("USERS","dbo", "ID").NotNull(),
 
                         c.String("Name").MaxLength(50).Unique(),
                         c.Decimal("Weight"),
@@ -45,7 +45,7 @@ namespace SQLEngine.Tests.SqlServer
                 var queryForSqlServer = @"
 CREATE TABLE Employees  ( 
     ID BIGINT IDENTITY(1,1) NOT NULL,
-    UserID BIGINT  NOT NULL CHECK  ( UserID>0 )  ,
+    UserID BIGINT  NOT NULL,
     Name NVARCHAR (50) NULL,
     Weight DECIMAL (18,4) NULL,
     Age TINYINT NULL CHECK  ( (Age > 18) AND (Age < 100) )  ,
@@ -53,23 +53,23 @@ CREATE TABLE Employees  (
     HasDriverLicense BIT NULL,
     Amount1 DECIMAL (18,4) NULL,
     Amount2 DECIMAL (18,4) NULL,
-    SumAmount AS (Amount1+Amount2) PERSISTED
- ) 
+    SumAmount AS (Amount1+Amount2) PERSISTED ,
+ ) ;
 
 ALTER TABLE Employees ADD CONSTRAINT PK_Employees_ID PRIMARY KEY CLUSTERED ( ID);
 ALTER TABLE Employees ADD CONSTRAINT IX_Employees_Name UNIQUE(Name ASC);
 ALTER TABLE Employees ADD CONSTRAINT IX_Amount1_Amount2 UNIQUE(Amount1 DESC , Amount2 ASC);
-ALTER TABLE Employees WITH CHECK ADD CONSTRAINT FK_Employees_UserID__USERS_ID FOREIGN KEY (UserID) REFERENCES USERS( ID );
+
+ALTER TABLE Employees WITH CHECK ADD CONSTRAINT FK_Employees_UserID__USERS_ID FOREIGN KEY (UserID) REFERENCES dbo.USERS( ID );
 ALTER TABLE Employees CHECK CONSTRAINT FK_Employees_UserID__USERS_ID ;
+
 ALTER TABLE Employees ADD CONSTRAINT DF_EmployeesBirthDate DEFAULT(GETDATE()) FOR BirthDate;
 
 ";
                 ;
                 Query.Setup<SqlServerQueryBuilder>();
-                SqlAssert.EqualQuery(queryForSqlServer, b.Build());
-                ;
-
-
+                var actual = b.Build();
+                SqlAssert.EqualQuery(actual,queryForSqlServer);
             }
         }
 
@@ -114,8 +114,10 @@ CREATE VIEW View_Active_Users AS SELECT  *
 
                 const string originalQuery = @"
 CREATE VIEW View_Active_Users AS SELECT  * 
-    FROM Users
+    FROM dbo.Users
     WHERE IsBlocked = 0
+
+
 ";
                 SqlAssert.EqualQuery(q.ToString(), originalQuery);
             }
@@ -137,7 +139,7 @@ CREATE VIEW View_Active_Users AS SELECT  *
                         var x = f.Param("x");
                         var y = f.Param("y");
                         
-                        f.If(x > y);
+                        f.IfOld(x > y);
                         f.Return(x);
                         f.Else();
                         f.Return(y);

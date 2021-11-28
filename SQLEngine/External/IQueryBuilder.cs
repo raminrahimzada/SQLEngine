@@ -25,18 +25,18 @@ namespace SQLEngine
         void Truncate(string tableName);
         void Truncate<TTable>() where TTable : ITable, new();
         
-        IIfQueryBuilder IfOr(params AbstractSqlCondition[] conditions);
-        IIfQueryBuilder IfAnd(params AbstractSqlCondition[] conditions);
-        IIfQueryBuilder If(AbstractSqlCondition condition);
+        //IIfQueryBuilder IfOr(params AbstractSqlCondition[] conditions);
+        //IIfQueryBuilder IfAnd(params AbstractSqlCondition[] conditions);
+        IIfQueryBuilder IfOld(AbstractSqlCondition condition);
         
-        IDisposable If2(AbstractSqlCondition condition);
+        IDisposable If(AbstractSqlCondition condition);
         IDisposable Else2();
 
-        IIfQueryBuilder IfNot(AbstractSqlCondition condition);
-        IIfQueryBuilder IfExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector);
-        IIfQueryBuilder IfExists(IAbstractSelectQueryBuilder selection);
-        IIfQueryBuilder IfNotExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector);
-        IIfQueryBuilder IfNotExists(IAbstractSelectQueryBuilder selection);
+        //IIfQueryBuilder IfNot(AbstractSqlCondition condition);
+        IDisposable IfExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector);
+        IDisposable IfExists(IAbstractSelectQueryBuilder selection);
+        IDisposable IfNotExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector);
+        IDisposable IfNotExists(IAbstractSelectQueryBuilder selection);
 
 
         IElseIfQueryBuilder ElseIf(AbstractSqlCondition condition);
@@ -79,6 +79,7 @@ namespace SQLEngine
         void SetToScopeIdentity(AbstractSqlVariable variable);
         void Set(AbstractSqlVariable variable, Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallNopBuilder> right);
         void Set(AbstractSqlVariable variable, AbstractSqlExpression value);
+        void Set(AbstractSqlVariable variable, ISqlExpression value);
         void Set(AbstractSqlVariable variable, AbstractSqlVariable value);
         void Set(AbstractSqlVariable variable, AbstractSqlLiteral value);
         
@@ -99,6 +100,40 @@ namespace SQLEngine
         void Print(ISqlExpression expression);
         void Print(AbstractSqlLiteral literal);
         
+        [Pure]
+        AbstractSqlExpression Now();
+
+        [Pure]
+        AbstractSqlExpression Rand();
+
+        [Pure]
+        ISqlExpression Len(ISqlExpression expression);
+        [Pure]
+        ISqlExpression Cast(ISqlExpression expression,string asType);
+
+        AbstractSqlExpression CallFunc(string functionName, string schema = null);
+        AbstractSqlExpression CallFunc(string functionName, string schema = null,params AbstractSqlLiteral[] expressions);
+        AbstractSqlExpression CallFunc(string functionName, string schema = null,params ISqlExpression[] expressions);
+        AbstractSqlExpression CallFunc(string functionName, string schema = null,params AbstractSqlExpression[] expressions);
+
+        void Goto(string labelName);
+        IDisposable Label(string labelName);
+        IDisposable While(AbstractSqlCondition condition);
+
+
+        [Pure]
+        AbstractSqlExpression SubString(ISqlExpression expression, ISqlExpression start, ISqlExpression length);
+        AbstractSqlExpression SubString(ISqlExpression expression, AbstractSqlLiteral start, AbstractSqlLiteral length);
+        AbstractSqlExpression SubString(ISqlExpression expression, AbstractSqlLiteral start, ISqlExpression length);
+        AbstractSqlExpression SubString(ISqlExpression expression, ISqlExpression start, AbstractSqlLiteral length);
+        
+        
+        AbstractSqlExpression SubString(AbstractSqlLiteral expression, ISqlExpression start, ISqlExpression length);
+        AbstractSqlExpression SubString(AbstractSqlLiteral expression, AbstractSqlLiteral start, AbstractSqlLiteral length);
+        AbstractSqlExpression SubString(AbstractSqlLiteral expression, AbstractSqlLiteral start, ISqlExpression length);
+        AbstractSqlExpression SubString(AbstractSqlLiteral expression, ISqlExpression start, AbstractSqlLiteral length);
+
+
         AbstractSqlColumn Column(string columnName);
         AbstractSqlColumn Column(string columnName,string tableAlias);
 

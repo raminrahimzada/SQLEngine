@@ -78,7 +78,7 @@ ALTER TABLE Users ADD CONSTRAINT PK_Name_And_Surname PRIMARY KEY (Name,Surname);
                     .Table("Users")
                     .AddConstraint("FK_Referral_User")
                     .ForeignKey("ReferralUserId")
-                    .References("Users", "Id")
+                    .References("Users", null,"Id")
                     ;
                  
 
@@ -91,6 +91,7 @@ ALTER TABLE Users ADD CONSTRAINT FK_Referral_User FOREIGN KEY (ReferralUserId) R
                 SqlAssert.EqualQuery(q.Build(), query);
             }
         }
+
         [Fact]
         public void Test_Alter_Table_AddConstraint_Foreign_Key_2()
         {
@@ -107,7 +108,7 @@ ALTER TABLE Users ADD CONSTRAINT FK_Referral_User FOREIGN KEY (ReferralUserId) R
 
                 const string query =
                     @"
-ALTER TABLE Users ADD CONSTRAINT FK_Referral_User FOREIGN KEY (ReferralUserId) REFERENCES Users(Id);
+ALTER TABLE Users ADD CONSTRAINT FK_Referral_User FOREIGN KEY (ReferralUserId) REFERENCES dbo.Users(Id);
 ";
 
                 SqlAssert.EqualQuery(q.Build(), query);

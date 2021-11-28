@@ -2,6 +2,18 @@
 
 namespace SQLEngine.SqlServer
 {
+    public class SqlEscapeStrategy : IEscapeStrategy
+    {
+        public string Escape(string name)
+        {
+            if (name.Contains(' ')) return $"[{name}]";
+            if (!char.IsLetter(name[0]))
+            {
+                return $"[{name}]";
+            }
+            return name;
+        }
+    }
     public class DefaultUniqueVariableNameGenerator : IUniqueVariableNameGenerator
     {
         private int _last;

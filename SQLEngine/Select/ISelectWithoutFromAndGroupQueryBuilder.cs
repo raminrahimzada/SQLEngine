@@ -1,10 +1,12 @@
-﻿namespace SQLEngine
+﻿using System;
+
+namespace SQLEngine
 {
     public interface ISelectWithoutFromAndGroupQueryBuilder : IAbstractQueryBuilder
     {
-        ISelectWithoutFromAndGroupQueryBuilder GroupBy(ISqlExpression expression);
-        ISelectWithoutFromAndGroupQueryBuilder GroupBy(AbstractSqlColumn expression);
-        ISelectWithoutFromAndGroupQueryBuilder GroupBy(string columnName);
+        ISelectWithoutFromAndGroupQueryBuilder GroupBy(params ISqlExpression[] expressions);
+        ISelectWithoutFromAndGroupQueryBuilder GroupBy(params AbstractSqlColumn[] expressions);
+        ISelectWithoutFromAndGroupQueryBuilder GroupBy(params string[] columnNames);
         ISelectWithoutFromAndGroupNeedHavingConditionQueryBuilder Having(AbstractSqlCondition condition);
     }
 }

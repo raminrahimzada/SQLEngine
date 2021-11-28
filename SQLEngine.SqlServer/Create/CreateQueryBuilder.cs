@@ -32,7 +32,7 @@
         {
             using (var table=new TTable())
             {
-                return Table(table.Name);
+                return Table(table.Name).Schema(table.Schema);
             }
         }
         public ICreateFunctionNoNameQueryBuilder Function(string funcName)
@@ -54,6 +54,16 @@
             var x = New<CreateViewQueryBuilder>().Name(viewName);
             _innerBuilder = x;
             return x;
+        }
+        public ICreateViewNoNameQueryBuilder View<TView>() where TView:IView,new()
+        {
+            using (var view=new TView())
+            {
+                var x = New<CreateViewQueryBuilder>().Name(view.Name).Schema(view.Schema);
+                _innerBuilder = x;
+                return x;
+            }
+           
         }
 
         public ICreateIndexNoNameQueryBuilder Index(string indexName)

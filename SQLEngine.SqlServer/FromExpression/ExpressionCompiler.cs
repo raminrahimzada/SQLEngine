@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace SQLEngine.SqlServer
 {
-    public class TSQLExpressionCompiler: IExpressionCompiler
+    public class SqlExpressionCompiler: IExpressionCompiler
     {
         public string Compile<T>(Expression<Func<T, bool>> expression)
         {
@@ -650,6 +650,48 @@ namespace SQLEngine.SqlServer
                     }
                     ;
                 }
+
+
+                if (leftPropertyType == typeof(byte))
+                {
+                    if (rightType == typeof(short))
+                    {
+                        var rightValue = (short)constantExpression.Value;
+                        if (rightValue is < byte.MaxValue and > byte.MinValue)
+                        {
+                            return Compile(memberExpression) + @operator + Compile(right);
+                        }
+                        else
+                        {
+                            throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                    if (rightType == typeof(int))
+                    {
+                        var rightValue = (int)constantExpression.Value;
+                        if (rightValue is < byte.MaxValue and > byte.MinValue)
+                        {
+                            return Compile(memberExpression) + @operator + Compile(right);
+                        }
+                        else
+                        {
+                            throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                    if (rightType == typeof(long))
+                    {
+                        var rightValue = (long)constantExpression.Value;
+                        if (rightValue is < byte.MaxValue and > byte.MinValue)
+                        {
+                            return Compile(memberExpression) + @operator + Compile(right);
+                        }
+                        else
+                        {
+                            throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                    ;
+                }
                 ;
             }
 
@@ -733,7 +775,8 @@ namespace SQLEngine.SqlServer
                         catch
                         {
                         }
-                        return "[" + memberExpression.Member.Name + "]";
+
+                        return Query.Settings.EscapeStrategy.Escape(memberExpression.Member.Name);
                     }
                     break;
                 case ExpressionType.MemberInit:
@@ -910,12 +953,27 @@ namespace SQLEngine.SqlServer
             return "CAST(" + Compile(expression) + " AS " + Compile(type) + ")";
         }
 
-        private static string ToSqlString(object? value)
+        private static string ToSqlString(object value)
         {
             if (value == null) return "NULL";
-            if (value is int i) return i.ToString();
-            if (value is long l) return l.ToString();
-            throw null;
+            AbstractSqlLiteral literal = null;
+            if (value is int x1) literal = AbstractSqlLiteral.From(x1);
+            if (value is long x2) literal = AbstractSqlLiteral.From(x2);
+            if (value is short x3) literal = AbstractSqlLiteral.From(x3);
+            if (value is double x4) literal = AbstractSqlLiteral.From(x4);
+            if (value is decimal x5) literal = AbstractSqlLiteral.From(x5);
+            if (value is float x6) literal = AbstractSqlLiteral.From(x6);
+            if (value is char x7) literal = AbstractSqlLiteral.From(x7);
+            if (value is string x8) literal = AbstractSqlLiteral.From(x8);
+            if (value is byte x9) literal = AbstractSqlLiteral.From(x9);
+            if (value is Guid x10) literal = AbstractSqlLiteral.From(x10);
+
+            if (literal == null)
+            {
+                throw null;
+            }
+
+            return literal.ToSqlString();
         }
 
         private static string Compile(Type value)
@@ -951,7 +1009,7 @@ namespace SQLEngine.SqlServer
 
             throw null;
         }
-        private static string Compile(object? value)
+        private static string Compile(object value)
         {
             if (value is int[] intArr)
             {

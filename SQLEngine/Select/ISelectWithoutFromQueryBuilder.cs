@@ -1,7 +1,12 @@
-﻿namespace SQLEngine
+﻿using System;
+using System.Linq.Expressions;
+
+namespace SQLEngine
 {
-    public interface ISelectWithoutFromQueryBuilder : ISelectOrderBuilder, ISelectWhereQueryBuilder, IJoinedQueryBuilder
+    public interface ISelectWithoutFromQueryBuilder : ISelectOrderBuilder, IJoinedQueryBuilder
     {
+        ISelectWithoutFromQueryBuilder Schema(string schema);
+
         ISelectOrderBuilder OrderBy(ISqlExpression expression);
         ISelectOrderBuilder OrderByDesc(ISqlExpression expression);
         
@@ -10,8 +15,13 @@
         ISelectOrderBuilder OrderByDesc(string columnName);
         ISelectOrderBuilder OrderBy(string columnName);
         
-        ISelectWithoutFromAndGroupQueryBuilder GroupBy(ISqlExpression expression);
-        ISelectWithoutFromAndGroupQueryBuilder GroupBy(AbstractSqlColumn column);
-        ISelectWithoutFromAndGroupQueryBuilder GroupBy(string columnName);
+        ISelectWithoutFromAndGroupQueryBuilder GroupBy(params ISqlExpression[] expressions);
+        ISelectWithoutFromAndGroupQueryBuilder GroupBy(params AbstractSqlColumn[] columns);
+        ISelectWithoutFromAndGroupQueryBuilder GroupBy(params string[] columnNames);
+    }
+
+    public interface ISelectWithoutFromQueryBuilder<TTable> : ISelectWithoutFromQueryBuilder, ISelectOrderBuilder, IJoinedQueryBuilder
+    {
+        ISelectWithoutWhereQueryBuilder Where(Expression<Func<TTable, bool>> expression);
     }
 }

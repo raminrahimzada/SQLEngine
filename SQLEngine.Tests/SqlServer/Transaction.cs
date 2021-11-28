@@ -19,7 +19,7 @@ namespace SQLEngine.Tests.SqlServer
 
                 var query = @"
 BEGIN TRANSACTION
- DELETE  FROM Users
+ DELETE  FROM dbo.Users
 COMMIT TRANSACTION
 
 ";
@@ -45,7 +45,7 @@ COMMIT TRANSACTION
                 var query = @"
 BEGIN TRANSACTION outerTran
     BEGIN TRANSACTION innerTran
-        DELETE  FROM Users
+        DELETE  FROM dbo.Users
     COMMIT TRANSACTION innerTran
 COMMIT TRANSACTION outerTran
 
@@ -82,7 +82,7 @@ COMMIT TRANSACTION outerTran
                 var query = @"
 BEGIN TRY
     BEGIN TRANSACTION
-        DELETE  FROM Users
+        DELETE  FROM dbo.Users
         EXECUTE dbo.SendMoney  @from=N'Alice'
 	        ,@to=N'Bob'
 	        ,@amount=25.0;

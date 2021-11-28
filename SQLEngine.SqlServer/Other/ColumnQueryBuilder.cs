@@ -10,9 +10,9 @@ namespace SQLEngine.SqlServer
         {
             Model = new ColumnModel();
         }
-        public IColumnQueryBuilder NotNull()
+        public IColumnQueryBuilder NotNull(bool notNull = true)
         {
-            Model.NotNull = true;
+            Model.NotNull = notNull;
             return this;
         }
         public IColumnQueryBuilder Name(string name)
@@ -40,13 +40,15 @@ namespace SQLEngine.SqlServer
             Model.Type = type;
             return this;
         }
-        public IColumnQueryBuilder ForeignKey(string tableName, string columnName, string fkName = null)
+        public IColumnQueryBuilder ForeignKey(string tableName,string schemaName, string columnName, string fkName = null)
         {
             Model.IsForeignKey = true;
             Model.ForeignKeyConstraintName = fkName;
             Model.ForeignKeyTableName = tableName;
             Model.ForeignKeyColumnName = columnName;
-            return Check(Model.Name + ">0");
+            Model.ForeignKeySchemaName = schemaName;
+            return this;
+            //return Check(Model.Name + ">0");
         }
 
         public IColumnQueryBuilder MaxLength(int? maxLen)

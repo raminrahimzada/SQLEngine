@@ -12,12 +12,14 @@ namespace SQLEngine.SqlServer
         IAlterTableAddConstraintCheckQueryBuilder
     {
         private string _tableName;
+        private string _schema;
         private string _constraintName;
         
         private string[] _primaryKeyColumns;
 
         private string _foreignKeyColumn;
         private string _foreignKeyReferenceTableName;
+        private string _foreignKeyReferenceTableSchema;
         private string _foreignKeyReferenceColumnName;
 
 
@@ -33,11 +35,15 @@ namespace SQLEngine.SqlServer
 
         public override void Build(ISqlWriter writer)
         {
-
             writer.Write(C.ALTER);
             writer.Write(C.SPACE);
             writer.Write(C.TABLE);
             writer.Write(C.SPACE);
+            if (!string.IsNullOrWhiteSpace(_schema))
+            {
+                writer.Write(_schema);
+                writer.Write(C.DOT);
+            }
             writer.Write(_tableName);
             writer.Write(C.SPACE);
             writer.Write(C.ADD);
@@ -79,6 +85,11 @@ namespace SQLEngine.SqlServer
 
                 writer.Write(C.REFERENCES);
                 writer.Write(C.SPACE);
+                if (!string.IsNullOrWhiteSpace(_foreignKeyReferenceTableSchema))
+                {
+                    writer.Write(_foreignKeyReferenceTableSchema);
+                    writer.Write(C.DOT);
+                }
                 writer.Write(_foreignKeyReferenceTableName);
                 writer.Write(C.BEGIN_SCOPE);
                 writer.Write(_foreignKeyReferenceColumnName);
@@ -110,9 +121,10 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        public AlterTableAddConstraintQueryBuilder Table(string tableName)
+        public AlterTableAddConstraintQueryBuilder Table(string tableName,string schema)
         {
             _tableName = tableName;
+            _schema = schema;
             return this;
         }
 
@@ -177,9 +189,10 @@ namespace SQLEngine.SqlServer
             return this;
         }
 
-        public IAlterTableAddConstraintForeignKeyReferencesQueryBuilder References(string tableName, string columnName)
+        public IAlterTableAddConstraintForeignKeyReferencesQueryBuilder References(string tableName,string schema, string columnName)
         {
             _foreignKeyReferenceTableName = tableName;
+            _foreignKeyReferenceTableSchema= schema;
             _foreignKeyReferenceColumnName = columnName;
             return this;
         }
@@ -189,6 +202,7 @@ namespace SQLEngine.SqlServer
             using (var table=new TTable())
             {
                 _foreignKeyReferenceTableName = table.Name;
+                _foreignKeyReferenceTableSchema = table.Schema;
                 _foreignKeyReferenceColumnName = columnName;
                 return this;
             }

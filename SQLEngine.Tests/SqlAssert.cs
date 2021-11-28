@@ -3,6 +3,8 @@
 //#define CHECK_QUERY_COMPILATION
 
 
+using System;
+using System.Diagnostics;
 using System.Linq;
 using Xunit;
 
@@ -26,7 +28,8 @@ namespace SQLEngine.Tests
         }
 
         private const string SPLITTER = " \r\n\t;(),.=";
-
+        
+        [DebuggerNonUserCode]
         public static void EqualQuery(string queryActual, string queryExpected)
         {
 #if CHECK_QUERY_COMPILATION
@@ -35,7 +38,13 @@ namespace SQLEngine.Tests
 #endif
             var arrActual = FormatQuery(queryActual);
             var arrExpected = FormatQuery(queryExpected);
-            Assert.Equal(arrExpected, arrActual);
+            foreach (var (first, second) in arrExpected.Zip(arrActual))
+            {
+                if (!string.Equals(first, second, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Assert.True(false, $"SQL Query should be :\r\n{queryExpected} but got :\r\n{queryActual}");
+                }
+            }
         }
 
 #if CHECK_QUERY_COMPILATION

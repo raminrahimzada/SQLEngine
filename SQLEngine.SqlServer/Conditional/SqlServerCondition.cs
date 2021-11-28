@@ -1,4 +1,6 @@
-﻿namespace SQLEngine.SqlServer
+﻿using System.Diagnostics.Contracts;
+
+namespace SQLEngine.SqlServer
 {
     internal class SqlServerCondition : AbstractSqlCondition
     {
@@ -55,12 +57,11 @@
             var result = "(" + ToSqlString() + ") OR (" + condition.ToSqlString() + ")";
             return Raw(result);
         }
-
+        
+        [Pure]
         public static SqlServerCondition Raw(string rawSqlString)
         {
-            return new(rawSqlString);
+            return new SqlServerCondition(rawSqlString);
         }
-
-        
     }
 }

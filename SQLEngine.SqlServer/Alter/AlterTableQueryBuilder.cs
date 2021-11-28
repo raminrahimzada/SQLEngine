@@ -7,9 +7,11 @@
     {
         private IAbstractQueryBuilder _internalBuilder;
         private string _tableName;
-        public IAlterTableNoNameQueryBuilder TableName(string tableName)
+        private string _schema;
+        public IAlterTableNoNameQueryBuilder TableName(string tableName, string schema)
         {
             _tableName = tableName;
+            _schema = schema;
             return this;
         }
       
@@ -61,7 +63,7 @@
         public IAlterTableAddConstraintQueryBuilder AddConstraint(string constraintName)
         {
             var b = new AlterTableAddConstraintQueryBuilder();
-            _internalBuilder = b.Table(_tableName).ConstraintName(constraintName);
+            _internalBuilder = b.Table(_tableName,_schema).ConstraintName(constraintName);
             return b;
         }
 

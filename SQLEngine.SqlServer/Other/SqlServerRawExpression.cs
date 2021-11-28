@@ -35,5 +35,10 @@
         {
             Expression = variable.ToSqlString();
         }
+
+        protected override AbstractSqlExpression Multiply(ISqlExpression right)
+        {
+            return new SqlServerRawExpression($"({Expression})*({right.ToSqlString()})");
+        }
     }
 }

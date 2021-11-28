@@ -20,6 +20,7 @@ namespace SQLEngine.SqlServer
         {
             _parameters=new List<string>();
         }
+
         public ICreateFunctionNoNameQueryBuilder Name(string funcName)
         {
             _name = funcName;
@@ -78,9 +79,9 @@ namespace SQLEngine.SqlServer
             writer.Write(_name);
             writer.WriteLine();
             writer.WriteLine(C.BEGIN_SCOPE);
-            Indent++;
+            writer.Indent++;
             writer.WriteLineJoined(_parameters);
-            Indent--;
+            writer.Indent--;
             writer.WriteLine(C.END_SCOPE);
             writer.Write(C.RETURNS);
             writer.Write(C.SPACE);
@@ -88,10 +89,10 @@ namespace SQLEngine.SqlServer
             writer.WriteLine();
             writer.Write(C.BEGIN);
             writer.WriteLine();
-            Indent++;
+            writer.Indent++;
             _body.Build(writer);
-            Indent--;
-            writer.Write(C.END);
+            writer.Indent--;
+            writer.WriteLine(C.END);
         }
     }
 }

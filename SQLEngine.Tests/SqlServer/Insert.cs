@@ -149,7 +149,7 @@ namespace SQLEngine.Tests.SqlServer
                             .From<AnotherUsersTable>()
                     );
 
-                const string query = "INSERT INTO Users  SELECT  *  FROM AnotherUsers";
+                const string query = "INSERT INTO dbo.Users  SELECT  *  FROM dbo.AnotherUsers";
                 SqlAssert.EqualQuery(q.ToString(), query);
             }
         }
@@ -164,7 +164,7 @@ namespace SQLEngine.Tests.SqlServer
 
                 q.Insert.Into<UserTable>();
 
-                const string query = "INSERT INTO Users DEFAULT VALUES";
+                const string query = "INSERT INTO dbo.Users DEFAULT VALUES";
                 SqlAssert.EqualQuery(q.ToString(), query);
             }
         }

@@ -13,6 +13,7 @@ namespace SQLEngine.SqlServer
         IUpdateNoTableAndValuesQueryBuilder
     {
         private string _tableName;
+        private string _tableSchema;
         private Dictionary<string, string> _columnsAndValuesDictionary=new();
         private string _whereCondition;
         private int? _topClause;
@@ -30,9 +31,10 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        public IUpdateNoTableQueryBuilder Table(string tableName)
+        public IUpdateNoTableQueryBuilder Table(string tableName,string schema)
         {
             _tableName = tableName;
+            _tableSchema = schema;
             return this;
         }
 
@@ -40,7 +42,7 @@ namespace SQLEngine.SqlServer
         {
             using (var table=new TTable())
             {
-                return Table(table.Name);
+                return Table(table.Name,table.Schema);
             }
         }
 
@@ -86,6 +88,22 @@ namespace SQLEngine.SqlServer
         public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, ISqlExpression expression)
         {
             _columnsAndValuesDictionary.Add(columnName, expression.ToSqlString());
+            return this;
+        }
+        public IUpdateNoTableSingleValueQueryBuilder Value(AbstractSqlColumn column, ISqlExpression expression)
+        {
+            _columnsAndValuesDictionary.Add(column.ToSqlString(), expression.ToSqlString());
+            return this;
+        }
+        public IUpdateNoTableSingleValueQueryBuilder Value(AbstractSqlColumn column, AbstractSqlLiteral expression)
+        {
+            _columnsAndValuesDictionary.Add(column.ToSqlString(), expression.ToSqlString());
+            return this;
+        }
+
+        public IUpdateNoTableSingleValueQueryBuilder Value(AbstractSqlColumn column, AbstractSqlVariable expression)
+        {
+            _columnsAndValuesDictionary.Add(column.ToSqlString(), expression.ToSqlString());
             return this;
         }
 
@@ -142,6 +160,13 @@ namespace SQLEngine.SqlServer
                 writer.WriteScoped(_topClause.Value.ToString());
                 writer.Write(C.SPACE);
             }
+
+            if (!string.IsNullOrWhiteSpace(_tableSchema))
+            {
+                writer.Write(_tableSchema);
+                writer.Write(C.DOT);
+            }
+
             writer.Write(I(_tableName));
             writer.WriteLine();
             writer.Indent++;

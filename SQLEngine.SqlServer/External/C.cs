@@ -21,6 +21,7 @@
         public const char EQUALS = '=';
         public const char COMMA = ',';
         public const char SEMICOLON = ';';
+        public const char COLON = ':';
         public const char BEGIN_SCOPE = '(';
         public const char END_SCOPE = ')';
 
@@ -39,6 +40,7 @@
         public const string CATCH = "CATCH";
 
         public const string DELETE = "DELETE";
+        public const string GOTO = "GOTO";
         public const string IF = "IF";
         public const string INDEX = "INDEX";
         public const string UNIQUEIDENTIFIER = "UNIQUEIDENTIFIER";
@@ -67,6 +69,7 @@
         public const string BIGINT = "BIGINT";
         public const string NVARCHAR = "NVARCHAR";
         public const string NVARCHARMAX = "NVARCHAR(MAX)";
+        public const string NCHAR1 = "NCHAR(1)";
         public const string VARCHAR = "VARCHAR";
         public const string CHAR = "CHAR";
         public const string NCHAR = "NCHAR";

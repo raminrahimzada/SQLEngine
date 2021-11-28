@@ -2,33 +2,29 @@
 
 namespace SQLEngine.Tests
 {
-    public class OrderTable : ITable
+    public abstract class BaseTable : ITable
     {
         public void Dispose()
         {
-            
         }
 
-        public string Name => "Orders";
+        public abstract string Name { get; }
+        public string Schema => "dbo";
     }
-    public class CustomerTable : ITable
+    public class OrderTable : BaseTable
     {
-        public void Dispose()
-        {
-            
-        }
+        public  override string Name => "Orders";
+    }
+    public class CustomerTable : BaseTable
+    {
+        public override string Name => "Customers";
+    }
+    public class UserTable : BaseTable
+    {
+        public override string Name => "Users";
 
-        public string Name => "Customers";
-    }
-    public class UserTable : ITable
-    {
+
         public byte IdByte { get; set; }
-
-        public void Dispose()
-        {
-        }
-
-        public string Name => "Users";
         public string PrimaryColumnName => "Id";
         public int IdInteger { get; set; }
         public long IdLong { get; set; }
@@ -38,42 +34,28 @@ namespace SQLEngine.Tests
         public byte Age { get; set; }
         public bool IsFemale { get; set; }
         public short IdShort { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public string Surname { get; set; }
     }
-    public class AttachmentsTable : ITable
+    public  class AttachmentsTable : BaseTable
     {
-        public void Dispose()
-        {
-        }
-
-        public string Name => "Attachments";
+        public override string Name => "Attachments";
         public string PrimaryColumnName => "Id";
     }
-    public class AnotherUsersTable : ITable
+    public class AnotherUsersTable : BaseTable
     {
-        public void Dispose()
-        {
-        }
-
-        public string Name => "AnotherUsers";
+        public override string Name => "AnotherUsers";
         public string PrimaryColumnName => "Id";
     }
-    public class SalesTable : ITable
+    public class SalesTable : BaseTable
     {
-        public void Dispose()
-        {
-        }
-
-        public string Name => "Sales";
+        public override string Name => "Sales";
         public string PrimaryColumnName => "Id";
     }
 
-    public class PhotosTable : ITable
+    public class PhotosTable : BaseTable
     {
-        public void Dispose()
-        {
-        }
-
-        public string Name => "Photos";
+        public override string Name => "Photos";
         public string PrimaryColumnName => "Id";
     }
 }

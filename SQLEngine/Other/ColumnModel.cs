@@ -3,6 +3,7 @@
     public class ColumnModel
     {
         public string ForeignKeyConstraintName { get; set; }
+        public string ForeignKeySchemaName { get; set; }
         public bool? NotNull { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

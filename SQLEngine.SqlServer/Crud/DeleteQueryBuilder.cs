@@ -9,7 +9,7 @@
         private string _schema;
         private int? _topClause;
         private string _whereCondition;
-        public IDeleteExceptTableNameQueryBuilder Table(string tableName, string schemaName)
+        public IDeleteExceptTableNameQueryBuilder Table(string tableName, string schemaName=null)
         {
             _tableName = tableName;
             _schema = schemaName;

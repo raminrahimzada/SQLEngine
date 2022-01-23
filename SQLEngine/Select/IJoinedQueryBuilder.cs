@@ -9,7 +9,7 @@
         IJoinedNeedsOnQueryBuilder InnerJoin(string targetTableName,string schema, string targetTableAlias);
         IJoinedNeedsOnQueryBuilder InnerJoin<TTable>(string targetTableAlias) where TTable : ITable, new();
 
-        IJoinedNeedsOnQueryBuilder LeftJoin(string targetTableName, string schema, string targetTableAlias);
+        IJoinedNeedsOnQueryBuilder LeftJoin(string targetTableName, string targetTableSchema, string targetTableAlias);
         IJoinedNeedsOnQueryBuilder LeftJoin<TTable>(string targetTableAlias) where TTable : ITable, new();
 
 

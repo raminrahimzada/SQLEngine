@@ -19,7 +19,7 @@ namespace SQLEngine.SqlServer
         private string[] _columnNames;
         private string _selection;
 
-        public IInsertNoIntoQueryBuilder Into(string tableName,string schemaName)
+        public IInsertNoIntoQueryBuilder Into(string tableName,string schemaName=null)
         {
             _tableName = tableName;
             _schemaName = schemaName;

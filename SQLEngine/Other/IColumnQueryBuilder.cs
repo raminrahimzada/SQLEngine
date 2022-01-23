@@ -9,7 +9,7 @@
         IColumnQueryBuilder Precision(byte precision);
         IColumnQueryBuilder Scale(byte scale);
         IColumnQueryBuilder Type(string type);
-        IColumnQueryBuilder ForeignKey(string tableName,string schema, string columnName, string fkName = null);
+        IColumnQueryBuilder ForeignKey(string tableName,string schemaName, string columnName, string fkName = null);
         IColumnQueryBuilder MaxLength(int? maxLen);
         IColumnQueryBuilder Unique(string keyName = null, bool descending = false);
         IColumnQueryBuilder DefaultValue(ISqlExpression defaultValue, string defaultConstraintName = null);

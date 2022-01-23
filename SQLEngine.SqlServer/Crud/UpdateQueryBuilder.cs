@@ -31,7 +31,7 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        public IUpdateNoTableQueryBuilder Table(string tableName,string schema)
+        public IUpdateNoTableQueryBuilder Table(string tableName,string schema=null)
         {
             _tableName = tableName;
             _tableSchema = schema;

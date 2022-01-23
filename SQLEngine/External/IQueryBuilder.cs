@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 
 namespace SQLEngine
@@ -8,13 +9,28 @@ namespace SQLEngine
         IConditionFilterQueryHelper Helper { get; }
         void Clear();
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ISelectQueryBuilder Select { get; }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IUpdateQueryBuilder Update { get; }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IDeleteQueryBuilder Delete { get; }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IInsertQueryBuilder Insert { get; }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ICreateQueryBuilder Create { get; }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IAlterQueryBuilder Alter { get; }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IDropQueryBuilder Drop { get; }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IExecuteQueryBuilder Execute { get; }
         
         /*

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
@@ -21,6 +22,7 @@ namespace SQLEngine.SqlServer
             _list.Add(new RawStringQueryBuilder(w => { w.WriteLine(rawExpression); }));
         }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public IAlterQueryBuilder Alter => _Add(new AlterQueryBuilder());
 
         public void Begin()
@@ -83,6 +85,7 @@ namespace SQLEngine.SqlServer
             }));
         }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ICreateQueryBuilder Create => _Add(new CreateQueryBuilder());
 
         public void Cursor(
@@ -273,11 +276,12 @@ namespace SQLEngine.SqlServer
             var variableName = Query.Settings.UniqueVariableNameGenerator.New();
             return Declare(variableName, type, defaultValue);
         }
-
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public IDeleteQueryBuilder Delete => _Add(new DeleteQueryBuilder());
 
-        
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public IDropQueryBuilder Drop => _Add(new DropQueryBuilder());
 
         public void Else()
@@ -305,8 +309,10 @@ namespace SQLEngine.SqlServer
             }));
         }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public IExecuteQueryBuilder Execute => _Add(new ExecuteQueryBuilder());
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public IConditionFilterQueryHelper Helper { get; } = new SqlServerConditionFilterQueryHelper();
 
         [Obsolete("Do not use",true)]
@@ -364,7 +370,7 @@ namespace SQLEngine.SqlServer
         //    var condition = SqlServerCondition.Raw(xx);
         //    return IfOld(condition);
         //}
-
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public IInsertQueryBuilder Insert => _Add(new InsertQueryBuilder());
 
        
@@ -470,6 +476,7 @@ namespace SQLEngine.SqlServer
             }));
         }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ISelectQueryBuilder Select => _Add(new SelectQueryBuilder());
 
         public void Set(AbstractSqlVariable variable,
@@ -541,7 +548,8 @@ namespace SQLEngine.SqlServer
             _list.Add(expression);
             return expression;
         }
-
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public IUpdateQueryBuilder Update => _Add(new UpdateQueryBuilder());
 
         private static void SetupDefaults()

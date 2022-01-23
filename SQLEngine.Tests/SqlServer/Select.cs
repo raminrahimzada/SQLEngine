@@ -28,6 +28,30 @@ SELECT TOP(1)  *
 
             }
         }
+        
+        [Fact]
+        public void Test_Simple_Select_1_1()
+        {
+            using (var q = Query.New)
+            {
+                q.Select
+                    .Select("PROVIDER_ID")
+                    .Select("PROVIDER_TYPE")
+                    .Select("NAME")
+                    .Select("SECRET")
+                    .From<UserTable>()
+                    .Where(q.Column("ENABLED") == true);
+                const string queryThat = @"
+SELECT [PROVIDER_ID] , [PROVIDER_TYPE] , NAME , SECRET
+    FROM dbo.Users
+    WHERE ENABLED = 1
+
+";
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
+                SqlAssert.EqualQuery(q.ToString(), queryThat);
+
+            }
+        }
 
         [Fact]
         public void Test_Simple_Select_2()

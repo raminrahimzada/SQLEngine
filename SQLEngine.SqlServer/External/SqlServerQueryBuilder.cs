@@ -326,7 +326,7 @@ namespace SQLEngine.SqlServer
             return new IfDisposable(this, condition);
         }
 
-        public IDisposable IfExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
+        public IDisposable IfExists(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
         {
             using (var s = new SelectQueryBuilder())
             {
@@ -336,18 +336,18 @@ namespace SQLEngine.SqlServer
             }
         }
 
-        public IDisposable IfExists(IAbstractSelectQueryBuilder selection)
-        {
-            return If(new SqlServerCondition(C.SPACE + string.Empty, C.EXISTS, C.BEGIN_SCOPE + string.Empty,
-                selection.Build(), C.END_SCOPE + string.Empty));
-        }
+        //public IDisposable IfExists(IAbstractSelectQueryBuilder selection)
+        //{
+        //    return If(new SqlServerCondition(C.SPACE + string.Empty, C.EXISTS, C.BEGIN_SCOPE + string.Empty,
+        //        selection.Build(), C.END_SCOPE + string.Empty));
+        //}
 
         //public IIfQueryBuilder IfNot(AbstractSqlCondition condition)
         //{
         //    return _Add(new IfNotQueryBuilder(condition));
         //}
 
-        public IDisposable IfNotExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
+        public IDisposable IfNotExists(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
         {
             using (var s = new SelectQueryBuilder())
             {

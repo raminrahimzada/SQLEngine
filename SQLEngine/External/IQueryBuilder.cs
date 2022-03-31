@@ -49,10 +49,10 @@ namespace SQLEngine
         IDisposable Else2();
 
         //IIfQueryBuilder IfNot(AbstractSqlCondition condition);
-        IDisposable IfExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector);
-        IDisposable IfExists(IAbstractSelectQueryBuilder selection);
-        IDisposable IfNotExists(Func<IAbstractSelectQueryBuilder, IAbstractSelectQueryBuilder> selector);
-        IDisposable IfNotExists(IAbstractSelectQueryBuilder selection);
+        IDisposable IfExists(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> selector);
+        //IDisposable IfExists(IAbstractSelectQueryBuilder selection);
+        IDisposable IfNotExists(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> selector);
+        //IDisposable IfNotExists(IAbstractSelectQueryBuilder selection);
 
 
         IElseIfQueryBuilder ElseIf(AbstractSqlCondition condition);

@@ -1,6 +1,6 @@
 ﻿//Activate and configure connection string below  to check for sql compilation
 
-//#define CHECK_QUERY_COMPILATION
+#define CHECK_QUERY_COMPILATION
 
 
 using System;

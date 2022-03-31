@@ -6,6 +6,30 @@ namespace SQLEngine.Tests.SqlServer
     public partial class AllTests
     {
         [Fact]
+        public void Test_If_Exists_Sub_Case()
+        {
+            using (var q = Query.New)
+            {
+                using (q.IfExists(select => select.Top(1).From("users")))
+                {
+                    q.Print("at least one row");
+                }
+
+                var queryActual = q.Build();
+                ;
+                const string queryExpected = @"
+IF( EXISTS(SELECT TOP(1)   * 
+    FROM users
+))
+BEGIN
+    print(N'at least one row')
+END
+";
+
+                SqlAssert.EqualQuery(queryActual, queryExpected);
+            }
+        }
+        [Fact]
         public void Test_Simple_If_Else_For_Max_Value()
         {
             using (var q = Query.New)

@@ -6,6 +6,7 @@ namespace SQLEngine.SqlServer
     {
         public string Escape(string name)
         {
+            if (name == null) return string.Empty;
             if (name.Contains(' ')) return $"[{name}]";
             if (!char.IsLetter(name[0]))
             {

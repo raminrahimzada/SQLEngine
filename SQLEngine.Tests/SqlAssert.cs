@@ -54,6 +54,8 @@ namespace SQLEngine.Tests
 
         public static void ValidateQueryInServer(string sqlQuery)
         {
+            //only run in my local machine
+            if (!Environment.UserName.Equals("ramin", StringComparison.InvariantCultureIgnoreCase)) return;
             if (string.IsNullOrWhiteSpace(sqlQuery)) return;
             using (var b = Query.New)
             {

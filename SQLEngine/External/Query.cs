@@ -20,6 +20,7 @@ namespace SQLEngine
             public static IEscapeStrategy EscapeStrategy;
             public static ITypeConvertor TypeConvertor;
             public static IUniqueVariableNameGenerator UniqueVariableNameGenerator;
+            [Obsolete("Warning: Experimental feature, Do not use")]
             public static IExpressionCompiler ExpressionCompiler { get; set; }
         }
 

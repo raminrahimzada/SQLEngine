@@ -725,7 +725,7 @@ namespace SQLEngine.SqlServer
                     break;
                 case ExpressionType.Call:
                     if(expression is MethodCallExpression callExpression)
-                    return Compile(callExpression);
+                    { return Compile(callExpression); }
                     break;
                 case ExpressionType.Coalesce:
                     break;
@@ -915,29 +915,22 @@ namespace SQLEngine.SqlServer
             if (expression.NodeType == ExpressionType.MemberAccess)
             {
                 var memberExpression = (MemberExpression) expression;
-                if (memberExpression != null)
+                if(memberExpression.Member is PropertyInfo propertyInfo)
                 {
-                    if(memberExpression.Member is PropertyInfo propertyInfo)
+                    if (propertyInfo.PropertyType == type)
                     {
-                        if (propertyInfo.PropertyType == type)
-                        {
-                            return Compile(memberExpression);
-                        }
-                        else
-                        {
-                            ;
-                        }
+                        return Compile(memberExpression);
                     }
-                    else if (memberExpression.Member is FieldInfo fieldInfo)
+                    else
                     {
-                        if (fieldInfo.FieldType == type)
-                        {
-                            return Compile(memberExpression);
-                        }
-                        else
-                        {
-                            ;
-                        }
+                        ;
+                    }
+                }
+                else if (memberExpression.Member is FieldInfo fieldInfo)
+                {
+                    if (fieldInfo.FieldType == type)
+                    {
+                        return Compile(memberExpression);
                     }
                     else
                     {

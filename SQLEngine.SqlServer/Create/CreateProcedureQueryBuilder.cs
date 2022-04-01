@@ -11,7 +11,7 @@ internal class CreateProcedureQueryBuilder : AbstractQueryBuilder
     , ICreateProcedureNoNameQueryBuilder
     , ICreateProcedureNoHeaderQueryBuilder
 {
-    private class ArgumentModel
+    private sealed class ArgumentModel
     {
         public string Name { get; set; }
         public string Type { get; set; }

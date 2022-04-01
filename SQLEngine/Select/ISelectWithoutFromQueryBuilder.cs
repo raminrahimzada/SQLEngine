@@ -19,8 +19,7 @@ public interface ISelectWithoutFromQueryBuilder : ISelectOrderBuilder, IJoinedQu
     ISelectWithoutFromQueryBuilder Schema(string schema);
 }
 
-public interface ISelectWithoutFromQueryBuilder<TTable> : ISelectWithoutFromQueryBuilder, ISelectOrderBuilder,
-    IJoinedQueryBuilder
+public interface ISelectWithoutFromQueryBuilder<TTable> : ISelectWithoutFromQueryBuilder
 {
     ISelectWithoutWhereQueryBuilder Where(Expression<Func<TTable, bool>> expression);
 }

@@ -48,7 +48,6 @@ internal class ColumnQueryBuilder : AbstractQueryBuilder, IColumnQueryBuilder
         Model.ForeignKeyColumnName = columnName;
         Model.ForeignKeySchemaName = schemaName;
         return this;
-        //return Check(Model.Name + ">0");
     }
 
     public IColumnQueryBuilder MaxLength(int? maxLen)
@@ -59,10 +58,7 @@ internal class ColumnQueryBuilder : AbstractQueryBuilder, IColumnQueryBuilder
 
     public IColumnQueryBuilder Unique(string keyName = null, bool descending = false)
     {
-        if(keyName == null)
-        {
-            keyName = string.Empty;
-        }
+        keyName ??= string.Empty;
 
         Model.IsUniqueKey = true;
         Model.IsUniqueKeyOrderDescending = descending;
@@ -103,8 +99,6 @@ internal class ColumnQueryBuilder : AbstractQueryBuilder, IColumnQueryBuilder
         Model.PrimaryKeyName = keyName;
         return this;
     }
-
-
 
     public override void Build(ISqlWriter writer)
     {

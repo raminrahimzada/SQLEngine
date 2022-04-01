@@ -6,17 +6,13 @@ internal sealed class JoinModel
 {
     private string JoinTypeString()
     {
-        switch(JoinType)
+        return JoinType switch
         {
-            case SqlServerJoinTypes.InnerJoin:
-                return "INNER JOIN";
-            case SqlServerJoinTypes.LeftJoin:
-                return "LEFT JOIN";
-            case SqlServerJoinTypes.RightJoin:
-                return "RIGHT JOIN";
-            default:
-                throw new ArgumentOutOfRangeException(nameof(JoinType), JoinType, null);
-        }
+            SqlServerJoinTypes.InnerJoin => "INNER JOIN",
+            SqlServerJoinTypes.LeftJoin => "LEFT JOIN",
+            SqlServerJoinTypes.RightJoin => "RIGHT JOIN",
+            _ => throw new Exception("Invalid JoinType : " + JoinType)
+        };
     }
     public string TableName { get; set; }
     public string TableAlias { get; set; }

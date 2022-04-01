@@ -106,12 +106,9 @@ public class SqlServerVariable : AbstractSqlVariable
         sb.Append(C.SPACE);
         sb.Append(C.IN);
         sb.Append(C.BEGIN_SCOPE);
-        for(var i = 0; i < expressions.Length; i++)
+        for (var i = 0; i < expressions.Length; i++)
         {
-            if(i != 0)
-            {
-                sb.Append(C.COMMA);
-            }
+            if (i != 0) sb.Append(C.COMMA);
 
             sb.Append(expressions[i].ToSqlString());
         }
@@ -127,12 +124,9 @@ public class SqlServerVariable : AbstractSqlVariable
         sb.Append(C.SPACE);
         sb.Append(C.IN);
         sb.Append(C.BEGIN_SCOPE);
-        for(var i = 0; i < expressions.Length; i++)
+        for (var i = 0; i < expressions.Length; i++)
         {
-            if(i != 0)
-            {
-                sb.Append(C.COMMA);
-            }
+            if (i != 0) sb.Append(C.COMMA);
 
             sb.Append(expressions[i].ToSqlString());
         }
@@ -206,19 +200,21 @@ public class SqlServerVariable : AbstractSqlVariable
         var expression = $"({ToSqlString()} * {variable.ToSqlString()})";
         return new SqlServerRawExpression(expression);
     }
+
     public override AbstractSqlExpression Multiply(ISqlExpression expression)
     {
         return new SqlServerRawExpression($"({ToSqlString()} * {expression.ToSqlString()})");
-    }
-    public override AbstractSqlExpression MultiplyReverse(ISqlExpression expression)
-    {
-        return new SqlServerRawExpression($"({expression.ToSqlString()} * {ToSqlString()})");
     }
 
     public override AbstractSqlExpression Multiply(AbstractSqlLiteral variable)
     {
         var expression = "(" + ToSqlString() + " * " + variable.ToSqlString() + ")";
         return new SqlServerRawExpression(expression);
+    }
+
+    public override AbstractSqlExpression MultiplyReverse(ISqlExpression expression)
+    {
+        return new SqlServerRawExpression($"({expression.ToSqlString()} * {ToSqlString()})");
     }
 
     protected override AbstractSqlCondition NotEqualsTo(AbstractSqlColumn column)
@@ -248,12 +244,9 @@ public class SqlServerVariable : AbstractSqlVariable
         sb.Append(C.SPACE);
         sb.Append(C.IN);
         sb.Append(C.BEGIN_SCOPE);
-        for(var i = 0; i < expressions.Length; i++)
+        for (var i = 0; i < expressions.Length; i++)
         {
-            if(i != 0)
-            {
-                sb.Append(C.COMMA);
-            }
+            if (i != 0) sb.Append(C.COMMA);
 
             sb.Append(expressions[i].ToSqlString());
         }
@@ -271,12 +264,9 @@ public class SqlServerVariable : AbstractSqlVariable
         sb.Append(C.SPACE);
         sb.Append(C.IN);
         sb.Append(C.BEGIN_SCOPE);
-        for(var i = 0; i < expressions.Length; i++)
+        for (var i = 0; i < expressions.Length; i++)
         {
-            if(i != 0)
-            {
-                sb.Append(C.COMMA);
-            }
+            if (i != 0) sb.Append(C.COMMA);
 
             sb.Append(expressions[i].ToSqlString());
         }

@@ -6,6 +6,7 @@ public interface IEscapeStrategy
 {
     string Escape(string name);
 }
+
 public interface IEnumSqlStringConvertor
 {
     string ToSqlString(Enum @enum);

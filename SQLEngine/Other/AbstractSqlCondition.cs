@@ -6,12 +6,9 @@ public abstract class AbstractSqlCondition : ISqlExpression
 {
     private static Func<AbstractSqlCondition> _createEmpty;
 
-    protected static void SetCreateEmpty(Func<AbstractSqlCondition> func)
-    {
-        _createEmpty = func;
-    }
-
     public abstract string ToSqlString();
+
+    public abstract AbstractSqlCondition And(AbstractSqlCondition condition);
 
 
     public static AbstractSqlCondition operator &(AbstractSqlCondition condition1,
@@ -19,12 +16,6 @@ public abstract class AbstractSqlCondition : ISqlExpression
     {
         return condition1.And(condition2);
     }
-
-    protected abstract void SetRaw(bool rawValue);
-    protected abstract void SetRaw(bool? rawValue);
-
-    public abstract AbstractSqlCondition And(AbstractSqlCondition condition);
-    public abstract AbstractSqlCondition Or(AbstractSqlCondition condition);
 
     public static AbstractSqlCondition operator |(AbstractSqlCondition condition1,
         AbstractSqlCondition condition2)
@@ -45,4 +36,14 @@ public abstract class AbstractSqlCondition : ISqlExpression
         empty.SetRaw(x);
         return empty;
     }
+
+    public abstract AbstractSqlCondition Or(AbstractSqlCondition condition);
+
+    protected static void SetCreateEmpty(Func<AbstractSqlCondition> func)
+    {
+        _createEmpty = func;
+    }
+
+    protected abstract void SetRaw(bool rawValue);
+    protected abstract void SetRaw(bool? rawValue);
 }

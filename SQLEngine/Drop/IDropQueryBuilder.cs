@@ -2,12 +2,12 @@
 
 public interface IDropQueryBuilder
 {
-    IDropTableNoNameQueryBuilder Table(string tableName);
-    IDropTableNoNameQueryBuilder Table<TTable>() where TTable : ITable, new();
+    IDropDatabaseNoNameQueryBuilder Database(string databaseName);
 
     IDropFunctionQueryBuilder Function(string funcName);
-    IDropViewNoNameQueryBuilder View(string viewName);
-    IDropDatabaseNoNameQueryBuilder Database(string databaseName);
-    IDropTriggerNoNameQueryBuilder Trigger(string triggerName);
     IDropProcedureNoNameQueryBuilder Procedure(string procedureName);
+    IDropTableNoNameQueryBuilder Table(string tableName);
+    IDropTableNoNameQueryBuilder Table<TTable>() where TTable : ITable, new();
+    IDropTriggerNoNameQueryBuilder Trigger(string triggerName);
+    IDropViewNoNameQueryBuilder View(string viewName);
 }

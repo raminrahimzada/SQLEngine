@@ -2,5 +2,4 @@
 
 public interface IAbstractCreateFunctionQueryBuilder : IAbstractQueryBuilder
 {
-
 }

@@ -4,11 +4,11 @@ namespace SQLEngine;
 
 public interface ICreateTriggerNoNameQueryBuilder : IAbstractQueryBuilder
 {
+    ICreateTriggerNoNameQueryBuilder AfterUpdate();
     ICreateTriggerNoNameQueryBuilder Body(Action<ITriggerBodyQueryBuilder> body);
-    ICreateTriggerNoNameQueryBuilder On(string tableName);
-    ICreateTriggerNoNameQueryBuilder On(string tableName, string tableSchema);
     ICreateTriggerNoNameQueryBuilder ForDelete();
     ICreateTriggerNoNameQueryBuilder ForInsert();
-    ICreateTriggerNoNameQueryBuilder AfterUpdate();
+    ICreateTriggerNoNameQueryBuilder On(string tableName);
+    ICreateTriggerNoNameQueryBuilder On(string tableName, string tableSchema);
     ICreateTriggerNoNameQueryBuilder Schema(string triggerSchemaName);
 }

@@ -7,10 +7,9 @@ public static class AbstractSqlColumnExtensions
 {
     public static AbstractSqlCondition In(this AbstractSqlColumn column, params string[] stringArray)
     {
-        AbstractSqlLiteral[] expressions = stringArray.Select(x => (AbstractSqlLiteral)x).ToArray();
+        var expressions = stringArray.Select(x => (AbstractSqlLiteral) x).ToArray();
         return column.In(expressions);
     }
-
 }
 #pragma warning disable 660, 661
 public abstract class AbstractSqlColumn : ISqlExpression
@@ -19,35 +18,35 @@ public abstract class AbstractSqlColumn : ISqlExpression
     public string Name { get; set; }
     public abstract string ToSqlString();
 
-    public abstract AbstractSqlCondition Like(string expression, bool isUnicode = true);
-
-    public abstract AbstractSqlCondition IsNull();
-    public abstract AbstractSqlCondition IsNotNull();
+    protected abstract AbstractSqlExpression Add(AbstractSqlExpression right);
+    protected abstract AbstractSqlExpression Add(AbstractSqlColumn right);
+    protected abstract AbstractSqlExpression Add(AbstractSqlLiteral right);
 
     public abstract AbstractSqlCondition Between(AbstractSqlLiteral from, AbstractSqlLiteral to);
     public abstract AbstractSqlCondition Between(ISqlExpression from, ISqlExpression to);
 
+    protected abstract AbstractSqlExpression Divide(AbstractSqlLiteral right);
+    protected abstract AbstractSqlExpression Divide(AbstractSqlExpression right);
+    protected abstract AbstractSqlExpression Divide(AbstractSqlColumn right);
+
     public abstract AbstractSqlCondition In(Action<ISelectQueryBuilder> builderFunc);
     public abstract AbstractSqlCondition In(params AbstractSqlLiteral[] expressions);
+    public abstract AbstractSqlCondition IsNotNull();
+
+    public abstract AbstractSqlCondition IsNull();
+
+    public abstract AbstractSqlCondition Like(string expression, bool isUnicode = true);
+
+
+    protected abstract AbstractSqlExpression Multiply(AbstractSqlColumn right);
+    protected abstract AbstractSqlExpression Multiply(AbstractSqlExpression right);
+    protected abstract AbstractSqlExpression Multiply(AbstractSqlLiteral right);
     public abstract AbstractSqlCondition NotIn(params AbstractSqlLiteral[] expressions);
     public abstract AbstractSqlCondition NotIn(Action<ISelectQueryBuilder> builderFunc);
 
     protected abstract AbstractSqlExpression Subtract(AbstractSqlLiteral right);
     protected abstract AbstractSqlExpression Subtract(AbstractSqlExpression right);
     protected abstract AbstractSqlExpression Subtract(AbstractSqlColumn right);
-
-    protected abstract AbstractSqlExpression Divide(AbstractSqlLiteral right);
-    protected abstract AbstractSqlExpression Divide(AbstractSqlExpression right);
-    protected abstract AbstractSqlExpression Divide(AbstractSqlColumn right);
-
-    protected abstract AbstractSqlExpression Add(AbstractSqlExpression right);
-    protected abstract AbstractSqlExpression Add(AbstractSqlColumn right);
-    protected abstract AbstractSqlExpression Add(AbstractSqlLiteral right);
-
-
-    protected abstract AbstractSqlExpression Multiply(AbstractSqlColumn right);
-    protected abstract AbstractSqlExpression Multiply(AbstractSqlExpression right);
-    protected abstract AbstractSqlExpression Multiply(AbstractSqlLiteral right);
 
     #region EqualTo
 

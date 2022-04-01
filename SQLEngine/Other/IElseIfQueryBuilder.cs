@@ -2,5 +2,4 @@
 
 public interface IElseIfQueryBuilder : IAbstractQueryBuilder
 {
-
 }

@@ -15,5 +15,4 @@ public interface IUpdateNoTableSingleValueQueryBuilder : IAbstractUpdateQueryBui
     IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlVariable variable);
     IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlLiteral literal);
     IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnLike(string columnName, string right);
-
 }

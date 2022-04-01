@@ -2,6 +2,6 @@
 
 public interface ISelectQueryBuilder : ISelectWithSelectorQueryBuilder
 {
-    ISelectNoTopQueryBuilder Top(int count);
     ISelectQueryBuilder Distinct();
+    ISelectNoTopQueryBuilder Top(int count);
 }

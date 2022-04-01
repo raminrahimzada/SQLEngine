@@ -8,7 +8,7 @@
 | | |
 | --- | --- |
 | **Build** | [![Build status](https://ci.appveyor.com/api/projects/status/r75p0yn5uo6colgk?svg=true&branch=master)](https://ci.appveyor.com/project/raminrahimzada/SQLEngine) |
-| **Quality** | [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=raminrahimzada_SQLEngine&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=raminrahimzada_SQLEngine) [![GitHub issues](https://img.shields.io/github/issues-raw/raminrahimzada/SQLEngine.svg)](https://github.com/raminrahimzada/SQLEngine/issues) | 
+| **Quality** | [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SQLEngine&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=SQLEngine) [![GitHub issues](https://img.shields.io/github/issues-raw/raminrahimzada/SQLEngine.svg)](https://github.com/raminrahimzada/SQLEngine/issues) | 
 | **Nuget** | [![Nuget](https://buildstats.info/nuget/SQLEngine)](http://nuget.org/packages/SQLEngine) |
 
 # Database Providers:

@@ -1,6 +1,5 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface IExceptDefaultValueNameDeclarationQueryBuilder : IAbstractQueryBuilder
 {
-    public interface IExceptDefaultValueNameDeclarationQueryBuilder : IAbstractQueryBuilder
-    {
-    }
 }

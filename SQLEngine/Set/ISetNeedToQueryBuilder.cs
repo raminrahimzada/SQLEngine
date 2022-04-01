@@ -1,6 +1,5 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface ISetNeedToQueryBuilder : ISetQueryBuilder
 {
-    public interface ISetNeedToQueryBuilder : ISetQueryBuilder
-    {
-    }
 }

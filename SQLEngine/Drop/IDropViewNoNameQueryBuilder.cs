@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface IDropViewNoNameQueryBuilder : IAbstractQueryBuilder
 {
-    public interface IDropViewNoNameQueryBuilder : IAbstractQueryBuilder
-    {
-        IDropViewNoSchemaQueryBuilder FromSchema(string schema);
-    }
+    IDropViewNoSchemaQueryBuilder FromSchema(string schema);
 }

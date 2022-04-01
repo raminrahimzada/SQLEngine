@@ -1,6 +1,5 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface ITruncateNoTableQueryBuilder : IAbstractQueryBuilder
 {
-    public interface ITruncateNoTableQueryBuilder : IAbstractQueryBuilder
-    {
-    }
 }

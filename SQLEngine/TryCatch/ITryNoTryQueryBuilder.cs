@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace SQLEngine
+namespace SQLEngine;
+
+public interface ITryNoTryQueryBuilder : IAbstractQueryBuilder
 {
-    public interface ITryNoTryQueryBuilder : IAbstractQueryBuilder
-    {
-        ITryNoCatchQueryBuilder Catch(Action<ICatchFunctionQueryBuilder> builder);
-    }
+    ITryNoCatchQueryBuilder Catch(Action<ICatchFunctionQueryBuilder> builder);
 }

@@ -1,8 +1,7 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface IUpdateNoTopQueryBuilder : IAbstractUpdateQueryBuilder
 {
-    public interface IUpdateNoTopQueryBuilder : IAbstractUpdateQueryBuilder
-    {
-        IUpdateNoTableQueryBuilder Table(string tableName, string schema = null);
-        IUpdateNoTableQueryBuilder Table<TTable>() where TTable : ITable, new();
-    }
+    IUpdateNoTableQueryBuilder Table(string tableName, string schema = null);
+    IUpdateNoTableQueryBuilder Table<TTable>() where TTable : ITable, new();
 }

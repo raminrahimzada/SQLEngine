@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface ICustomFunctionCallExpressionBuilder : IAbstractQueryBuilder
 {
-    public interface ICustomFunctionCallExpressionBuilder : IAbstractQueryBuilder
-    {
-        ICustomFunctionCallNopBuilder Call(string functionName, params ISqlExpression[] parameters);
-    }
+    ICustomFunctionCallNopBuilder Call(string functionName, params ISqlExpression[] parameters);
 }

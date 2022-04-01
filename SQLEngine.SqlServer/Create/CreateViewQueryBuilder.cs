@@ -1,51 +1,50 @@
 ﻿using System;
 
-namespace SQLEngine.SqlServer
+namespace SQLEngine.SqlServer;
+
+internal class CreateViewQueryBuilder : AbstractQueryBuilder, ICreateViewNoNameQueryBuilder,
+    ICreateViewNoNameNoBodyQueryBuilder
 {
-    internal class CreateViewQueryBuilder : AbstractQueryBuilder, ICreateViewNoNameQueryBuilder,
-        ICreateViewNoNameNoBodyQueryBuilder
+    private string _viewName;
+    private string _schema;
+
+    private Action<ISelectQueryBuilder> _selectionBuilder;
+    public ICreateViewNoNameNoBodyQueryBuilder As(Action<ISelectQueryBuilder> selectionBuilder)
     {
-        private string _viewName;
-        private string _schema;
+        _selectionBuilder = selectionBuilder;
+        return this;
+    }
 
-        private Action<ISelectQueryBuilder> _selectionBuilder;
-        public ICreateViewNoNameNoBodyQueryBuilder As(Action<ISelectQueryBuilder> selectionBuilder)
-        {
-            _selectionBuilder = selectionBuilder;
-            return this;
-        }
+    public ICreateViewNoNameQueryBuilder Name(string viewName)
+    {
+        _viewName = viewName;
+        return this;
+    }
+    public ICreateViewNoNameQueryBuilder Schema(string schema)
+    {
+        _schema = schema;
+        return this;
+    }
 
-        public ICreateViewNoNameQueryBuilder Name(string viewName)
+    public override void Build(ISqlWriter writer)
+    {
+        writer.Write(C.CREATE);
+        writer.Write(C.SPACE);
+        writer.Write(C.VIEW);
+        writer.Write(C.SPACE);
+        if (!string.IsNullOrWhiteSpace(_schema))
         {
-            _viewName = viewName;
-            return this;
+            writer.Write(_schema);
+            writer.Write(C.DOT);
         }
-        public ICreateViewNoNameQueryBuilder Schema(string schema)
+        writer.Write(_viewName);
+        writer.Write(C.SPACE);
+        writer.Write(C.AS);
+        writer.Write(C.SPACE);
+        using (var sb=new SelectQueryBuilder())
         {
-            _schema = schema;
-            return this;
-        }
-
-        public override void Build(ISqlWriter writer)
-        {
-            writer.Write(C.CREATE);
-            writer.Write(C.SPACE);
-            writer.Write(C.VIEW);
-            writer.Write(C.SPACE);
-            if (!string.IsNullOrWhiteSpace(_schema))
-            {
-                writer.Write(_schema);
-                writer.Write(C.DOT);
-            }
-            writer.Write(_viewName);
-            writer.Write(C.SPACE);
-            writer.Write(C.AS);
-            writer.Write(C.SPACE);
-            using (var sb=new SelectQueryBuilder())
-            {
-                _selectionBuilder(sb);
-                sb.Build(writer);
-            }
+            _selectionBuilder(sb);
+            sb.Build(writer);
         }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace SQLEngine
+namespace SQLEngine;
+
+public interface IAbstractQueryBuilder : IDisposable
 {
-    public interface IAbstractQueryBuilder : IDisposable
-    {
-        void Build(ISqlWriter writer);
-        string Build();
-    }
+    void Build(ISqlWriter writer);
+    string Build();
 }

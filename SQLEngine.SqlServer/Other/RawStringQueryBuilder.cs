@@ -1,19 +1,18 @@
 ﻿using System;
 
-namespace SQLEngine.SqlServer
+namespace SQLEngine.SqlServer;
+
+internal class RawStringQueryBuilder : AbstractQueryBuilder, IElseIfQueryBuilder
 {
-    internal class RawStringQueryBuilder : AbstractQueryBuilder, IElseIfQueryBuilder
+    private readonly Action<ISqlWriter> _func;
+
+    public RawStringQueryBuilder(Action<ISqlWriter> func)
     {
-        private readonly Action<ISqlWriter> _func;
+        _func = func;
+    }
 
-        public RawStringQueryBuilder(Action<ISqlWriter> func)
-        {
-            _func = func;
-        }
-
-        public override void Build(ISqlWriter writer)
-        {
-            _func(writer);
-        }
+    public override void Build(ISqlWriter writer)
+    {
+        _func(writer);
     }
 }

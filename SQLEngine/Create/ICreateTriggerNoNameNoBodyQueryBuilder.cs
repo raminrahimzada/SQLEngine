@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
-{
-    public interface ICreateTriggerNoNameNoBodyQueryBuilder : IAbstractQueryBuilder
-    {
+﻿namespace SQLEngine;
 
-    }
+public interface ICreateTriggerNoNameNoBodyQueryBuilder : IAbstractQueryBuilder
+{
+
 }

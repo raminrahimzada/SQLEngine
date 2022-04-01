@@ -1,8 +1,7 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface IDropTableQueryBuilder
 {
-    public interface IDropTableQueryBuilder
-    {
-        IDropTableNoNameQueryBuilder Table(string tableName);
-        IDropTableNoNameQueryBuilder Table<TTable>() where TTable : ITable, new();
-    }
+    IDropTableNoNameQueryBuilder Table(string tableName);
+    IDropTableNoNameQueryBuilder Table<TTable>() where TTable : ITable, new();
 }

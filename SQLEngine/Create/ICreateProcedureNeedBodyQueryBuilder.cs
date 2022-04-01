@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
-{
-    public interface ICreateProcedureNeedBodyQueryBuilder : IAbstractQueryBuilder
-    {
+﻿namespace SQLEngine;
 
-    }
+public interface ICreateProcedureNeedBodyQueryBuilder : IAbstractQueryBuilder
+{
+
 }

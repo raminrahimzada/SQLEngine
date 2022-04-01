@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
-{
-    public interface IIfQueryBuilder : IAbstractQueryBuilder
-    {
+﻿namespace SQLEngine;
 
-    }
+public interface IIfQueryBuilder : IAbstractQueryBuilder
+{
+
 }

@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface IDropTriggerNoNameNoSchemaIfExistsQueryBuilder : IAbstractQueryBuilder
 {
-    public interface IDropTriggerNoNameNoSchemaIfExistsQueryBuilder : IAbstractQueryBuilder
-    {
-        IDropTriggerNoNameIfExistsQueryBuilder IfExists();
-    }
+    IDropTriggerNoNameIfExistsQueryBuilder IfExists();
 }

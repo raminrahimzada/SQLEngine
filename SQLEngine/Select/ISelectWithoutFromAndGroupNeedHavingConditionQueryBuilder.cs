@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace SQLEngine
+namespace SQLEngine;
+
+public interface ISelectWithoutFromAndGroupNeedHavingConditionQueryBuilder : IAbstractQueryBuilder
 {
-    public interface ISelectWithoutFromAndGroupNeedHavingConditionQueryBuilder : IAbstractQueryBuilder
-    {
-        ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder OrderBy(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate); 
-        ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder OrderByDesc(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate);
-    }
+    ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder OrderBy(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate); 
+    ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder OrderByDesc(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate);
 }

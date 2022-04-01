@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface ISqlExpression
 {
-    public interface ISqlExpression
-    {
-        string ToSqlString();
-    }
+    string ToSqlString();
 }

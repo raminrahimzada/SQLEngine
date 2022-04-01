@@ -1,8 +1,7 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface ICreateFunctionNoNameAndParametersQueryBuilder : IAbstractQueryBuilder
 {
-    public interface ICreateFunctionNoNameAndParametersQueryBuilder : IAbstractQueryBuilder
-    {
-        ICreateFunctionNoNameAndParametersAndReturnTypeQueryBuilder Returns(string returnType);
-        ICreateFunctionNoNameAndParametersAndReturnTypeQueryBuilder Returns<T>();
-    }
+    ICreateFunctionNoNameAndParametersAndReturnTypeQueryBuilder Returns(string returnType);
+    ICreateFunctionNoNameAndParametersAndReturnTypeQueryBuilder Returns<T>();
 }

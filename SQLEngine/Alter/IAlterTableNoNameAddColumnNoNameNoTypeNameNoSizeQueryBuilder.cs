@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface IAlterTableNoNameAddColumnNoNameNoTypeNameNoSizeQueryBuilder : IAbstractQueryBuilder
 {
-    public interface IAlterTableNoNameAddColumnNoNameNoTypeNameNoSizeQueryBuilder : IAbstractQueryBuilder
-    {
-        IAlterTableNoNameAddColumnNoNameNoTypeNameNoSizeNoDefaultValueQueryBuilder DefaultValue(AbstractSqlLiteral literal);
-    }
+    IAlterTableNoNameAddColumnNoNameNoTypeNameNoSizeNoDefaultValueQueryBuilder DefaultValue(AbstractSqlLiteral literal);
 }

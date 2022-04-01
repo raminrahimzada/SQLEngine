@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface ICreateIndexNoTableNameNoColumnNamesQueryBuilder : IAbstractQueryBuilder
 {
-    public interface ICreateIndexNoTableNameNoColumnNamesQueryBuilder : IAbstractQueryBuilder
-    {
-        ICreateIndexNoTableNameNoColumnNamesNoUniqueQueryBuilder Unique(bool isUnique=true);
-    }
+    ICreateIndexNoTableNameNoColumnNamesNoUniqueQueryBuilder Unique(bool isUnique=true);
 }

@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
-{
-    public interface IDeleteExceptWhereQueryBuilder : IAbstractQueryBuilder
-    {
+﻿namespace SQLEngine;
 
-    }
+public interface IDeleteExceptWhereQueryBuilder : IAbstractQueryBuilder
+{
+
 }

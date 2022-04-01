@@ -1,6 +1,5 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface ITriggerBodyQueryBuilder : IQueryBuilder
 {
-    public interface ITriggerBodyQueryBuilder : IQueryBuilder
-    {
-    }
 }

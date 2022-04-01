@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
-{
-    public interface IExecuteFunctionNeedNameAndSchemaQueryBuilder : IExecuteFunctionNeedNameQueryBuilder
-    {
+﻿namespace SQLEngine;
 
-    }
+public interface IExecuteFunctionNeedNameAndSchemaQueryBuilder : IExecuteFunctionNeedNameQueryBuilder
+{
+
 }

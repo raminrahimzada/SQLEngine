@@ -1,13 +1,12 @@
 ﻿
 using SQLEngine.SqlServer;
 
-namespace SQLEngine.Tests.SqlServer
+namespace SQLEngine.Tests.SqlServer;
+
+public partial class AllTests
 {
-    public partial class AllTests
+    public AllTests()
     {
-        public AllTests()
-        {
-            Query.Setup<SqlServerQueryBuilder>();
-        }
+        Query.Setup<SqlServerQueryBuilder>();
     }
 }

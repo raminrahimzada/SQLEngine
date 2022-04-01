@@ -1,6 +1,5 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface ISetNoSetNoToQueryBuilder : ISetQueryBuilder
 {
-    public interface ISetNoSetNoToQueryBuilder : ISetQueryBuilder
-    {
-    }
 }

@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace SQLEngine
+namespace SQLEngine;
+
+public interface ICreateFunctionNoNameAndParametersAndReturnTypeQueryBuilder : IAbstractQueryBuilder
 {
-    public interface ICreateFunctionNoNameAndParametersAndReturnTypeQueryBuilder : IAbstractQueryBuilder
-    {
-        IAbstractCreateFunctionQueryBuilder Body(Action<IFunctionBodyQueryBuilder> body);
-    }
+    IAbstractCreateFunctionQueryBuilder Body(Action<IFunctionBodyQueryBuilder> body);
 }

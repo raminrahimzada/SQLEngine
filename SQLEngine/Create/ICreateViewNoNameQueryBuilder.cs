@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace SQLEngine
+namespace SQLEngine;
+
+public interface ICreateViewNoNameQueryBuilder : IAbstractQueryBuilder
 {
-    public interface ICreateViewNoNameQueryBuilder : IAbstractQueryBuilder
-    {
-        ICreateViewNoNameNoBodyQueryBuilder As(Action<ISelectQueryBuilder> selectionBuilder);
-        ICreateViewNoNameQueryBuilder Schema(string schema);
-    }
+    ICreateViewNoNameNoBodyQueryBuilder As(Action<ISelectQueryBuilder> selectionBuilder);
+    ICreateViewNoNameQueryBuilder Schema(string schema);
 }

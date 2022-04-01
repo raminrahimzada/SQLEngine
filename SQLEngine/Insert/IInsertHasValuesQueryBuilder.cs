@@ -1,7 +1,5 @@
-﻿namespace SQLEngine
-{
-    public interface IInsertHasValuesQueryBuilder : IAbstractInsertQueryBuilder, IInsertWithValuesQueryBuilder
-    {
+﻿namespace SQLEngine;
 
-    }
+public interface IInsertHasValuesQueryBuilder : IInsertWithValuesQueryBuilder
+{
 }

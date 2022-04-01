@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace SQLEngine
+namespace SQLEngine;
+
+public interface IExpressionCompiler
 {
-    public interface IExpressionCompiler
-    {
-        string Compile<T>(Expression<Func<T, bool>> expression);
-    }
+    string Compile<T>(Expression<Func<T, bool>> expression);
 }

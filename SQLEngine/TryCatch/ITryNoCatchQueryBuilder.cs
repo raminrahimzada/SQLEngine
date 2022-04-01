@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
-{
-    public interface ITryNoCatchQueryBuilder : IAbstractQueryBuilder
-    {
+﻿namespace SQLEngine;
 
-    }
+public interface ITryNoCatchQueryBuilder : IAbstractQueryBuilder
+{
+
 }

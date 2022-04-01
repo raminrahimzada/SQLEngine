@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface IFunctionBodyQueryBuilder : IQueryBuilder
 {
-    public interface IFunctionBodyQueryBuilder : IQueryBuilder
-    {
-        AbstractSqlVariable Param(string name);
-    }
+    AbstractSqlVariable Param(string name);
 }

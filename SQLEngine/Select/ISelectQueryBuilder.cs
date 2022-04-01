@@ -1,8 +1,7 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface ISelectQueryBuilder : ISelectWithSelectorQueryBuilder
 {
-    public interface ISelectQueryBuilder : ISelectWithSelectorQueryBuilder
-    {
-        ISelectNoTopQueryBuilder Top(int count);
-        ISelectQueryBuilder Distinct();
-    }
+    ISelectNoTopQueryBuilder Top(int count);
+    ISelectQueryBuilder Distinct();
 }

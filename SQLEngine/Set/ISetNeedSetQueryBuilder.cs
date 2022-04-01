@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface ISetNeedSetQueryBuilder : ISetQueryBuilder
 {
-    public interface ISetNeedSetQueryBuilder : ISetQueryBuilder
-    {
-        ISetNeedToQueryBuilder Set(AbstractSqlVariable variable);
-    }
+    ISetNeedToQueryBuilder Set(AbstractSqlVariable variable);
 }

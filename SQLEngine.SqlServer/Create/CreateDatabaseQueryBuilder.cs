@@ -1,20 +1,19 @@
-﻿namespace SQLEngine.SqlServer
+﻿namespace SQLEngine.SqlServer;
+
+internal class CreateDatabaseQueryBuilder : AbstractQueryBuilder, ICreateDatabaseNoNameQueryBuilder
 {
-    internal class CreateDatabaseQueryBuilder : AbstractQueryBuilder, ICreateDatabaseNoNameQueryBuilder
+    private string _databaseName;
+
+    public ICreateDatabaseNoNameQueryBuilder Name(string databaseName)
     {
-        private string _databaseName;
+        _databaseName = databaseName;
+        return this;
+    }
 
-        public ICreateDatabaseNoNameQueryBuilder Name(string databaseName)
-        {
-            _databaseName = databaseName;
-            return this;
-        }
-
-        public override void Build(ISqlWriter writer)
-        {
-            writer.Write(C.CREATE);
-            writer.Write2(C.DATABASE);
-            writer.Write(_databaseName);
-        }
+    public override void Build(ISqlWriter writer)
+    {
+        writer.Write(C.CREATE);
+        writer.Write2(C.DATABASE);
+        writer.Write(_databaseName);
     }
 }

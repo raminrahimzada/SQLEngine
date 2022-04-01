@@ -1,8 +1,7 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface ICastExpectCastQueryBuilder : ICastQueryBuilder
 {
-    public interface ICastExpectCastQueryBuilder : ICastQueryBuilder
-    {
-        ICastExpectCastAndToQueryBuilder ToType(string type);
-        ICastExpectCastAndToQueryBuilder ToType<T>();
-    }
+    ICastExpectCastAndToQueryBuilder ToType(string type);
+    ICastExpectCastAndToQueryBuilder ToType<T>();
 }

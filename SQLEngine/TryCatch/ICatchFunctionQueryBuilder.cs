@@ -1,8 +1,7 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface ICatchFunctionQueryBuilder : IQueryBuilder
 {
-    public interface ICatchFunctionQueryBuilder : IQueryBuilder
-    {
-        ISqlExpression ErrorNumber();
-        ISqlExpression ErrorMessage();
-    }
+    ISqlExpression ErrorNumber();
+    ISqlExpression ErrorMessage();
 }

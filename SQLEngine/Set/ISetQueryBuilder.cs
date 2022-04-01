@@ -1,8 +1,7 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface ISetQueryBuilder : IAbstractQueryBuilder
 {
-    public interface ISetQueryBuilder : IAbstractQueryBuilder
-    {
-        ISetNoSetNoToQueryBuilder To(ISqlExpression value);
-        ISetNoSetNoToQueryBuilder To(AbstractSqlLiteral value);
-    }
+    ISetNoSetNoToQueryBuilder To(ISqlExpression value);
+    ISetNoSetNoToQueryBuilder To(AbstractSqlLiteral value);
 }

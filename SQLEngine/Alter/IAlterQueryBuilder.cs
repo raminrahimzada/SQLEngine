@@ -1,8 +1,7 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface IAlterQueryBuilder : IAbstractQueryBuilder
 {
-    public interface IAlterQueryBuilder : IAbstractQueryBuilder
-    {
-        IAlterTableNoNameQueryBuilder Table(string tableName, string schemaName = null);
-        IAlterTableNoNameQueryBuilder Table<TTable>() where TTable:ITable,new();
-    }
+    IAlterTableNoNameQueryBuilder Table(string tableName, string schemaName = null);
+    IAlterTableNoNameQueryBuilder Table<TTable>() where TTable:ITable,new();
 }

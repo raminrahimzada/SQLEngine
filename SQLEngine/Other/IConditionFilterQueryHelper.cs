@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace SQLEngine
+namespace SQLEngine;
+
+public interface IConditionFilterQueryHelper
 {
-    public interface IConditionFilterQueryHelper
-    {
-        AbstractSqlExpression Null { get; }
-        AbstractSqlExpression Now { get; }
+    AbstractSqlExpression Null { get; }
+    AbstractSqlExpression Now { get; }
         
-        AbstractSqlCondition Exists(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> func);
-        AbstractSqlCondition NotExists(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> func);
-    }
+    AbstractSqlCondition Exists(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> func);
+    AbstractSqlCondition NotExists(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> func);
 }

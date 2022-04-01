@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface ICreateProcedureNoNameQueryBuilder : IAbstractQueryBuilder
 {
-    public interface ICreateProcedureNoNameQueryBuilder : IAbstractQueryBuilder
-    {
-        ICreateProcedureQueryBuilder Schema(string schemaName);
-    }
+    ICreateProcedureQueryBuilder Schema(string schemaName);
 }

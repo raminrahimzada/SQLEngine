@@ -1,15 +1,14 @@
-﻿namespace SQLEngine.SqlServer
+﻿namespace SQLEngine.SqlServer;
+
+internal static class ExtensionMethods
 {
-    internal static class ExtensionMethods
+    internal static AbstractSqlLiteral ToSQL(this string str, bool isUnicode = true)
     {
-        internal static AbstractSqlLiteral ToSQL(this string str, bool isUnicode = true)
-        {
-            return AbstractSqlLiteral.From(str, isUnicode);
-        }
+        return AbstractSqlLiteral.From(str, isUnicode);
+    }
         
-        internal static string AsSQLVariable(this string variableName)
-        {            
-            return $"@{variableName}";
-        }
+    internal static string AsSQLVariable(this string variableName)
+    {            
+        return $"@{variableName}";
     }
 }

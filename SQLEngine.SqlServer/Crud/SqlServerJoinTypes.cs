@@ -1,9 +1,8 @@
-﻿namespace SQLEngine.SqlServer
+﻿namespace SQLEngine.SqlServer;
+
+internal enum SqlServerJoinTypes
 {
-    internal enum SqlServerJoinTypes
-    {
-        InnerJoin = 1,
-        LeftJoin = 2,
-        RightJoin = 3,
-    }
+    InnerJoin = 1,
+    LeftJoin = 2,
+    RightJoin = 3,
 }

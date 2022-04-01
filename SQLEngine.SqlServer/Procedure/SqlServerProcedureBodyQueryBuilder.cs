@@ -1,10 +1,9 @@
-﻿namespace SQLEngine.SqlServer
+﻿namespace SQLEngine.SqlServer;
+
+internal class SqlServerProcedureBodyQueryBuilder : SqlServerQueryBuilder, IProcedureBodyQueryBuilder
 {
-    internal class SqlServerProcedureBodyQueryBuilder : SqlServerQueryBuilder, IProcedureBodyQueryBuilder
+    public AbstractSqlVariable Parameter(string name)
     {
-        public AbstractSqlVariable Parameter(string name)
-        {
-            return new SqlServerVariable(name);
-        }
+        return new SqlServerVariable(name);
     }
 }

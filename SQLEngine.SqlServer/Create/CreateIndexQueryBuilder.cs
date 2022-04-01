@@ -1,78 +1,77 @@
-﻿namespace SQLEngine.SqlServer
+﻿namespace SQLEngine.SqlServer;
+
+internal class CreateIndexQueryBuilder :
+    AbstractQueryBuilder 
+    ,ICreateIndexNoNameQueryBuilder
+    , ICreateIndexNoTableNameQueryBuilder
+    , ICreateIndexNoTableNameNoColumnNamesQueryBuilder
+    , ICreateIndexNoTableNameNoColumnNamesNoUniqueQueryBuilder
 {
-    internal class CreateIndexQueryBuilder :
-        AbstractQueryBuilder 
-        ,ICreateIndexNoNameQueryBuilder
-        , ICreateIndexNoTableNameQueryBuilder
-        , ICreateIndexNoTableNameNoColumnNamesQueryBuilder
-        , ICreateIndexNoTableNameNoColumnNamesNoUniqueQueryBuilder
+    private string _tableName;
+    private bool? _isUnique;
+    private string[] _columnNames;
+    private string _indexName;
+
+    public ICreateIndexNoTableNameQueryBuilder OnTable(string tableName)
     {
-        private string _tableName;
-        private bool? _isUnique;
-        private string[] _columnNames;
-        private string _indexName;
+        _tableName = tableName;
+        return this;
+    }
 
-        public ICreateIndexNoTableNameQueryBuilder OnTable(string tableName)
+    public ICreateIndexNoTableNameQueryBuilder OnTable<TTable>() where TTable : ITable, new()
+    {
+        using (var table=new TTable())
         {
-            _tableName = tableName;
-            return this;
+            _tableName = table.Name;
         }
+        return this;
+    }
 
-        public ICreateIndexNoTableNameQueryBuilder OnTable<TTable>() where TTable : ITable, new()
+    public ICreateIndexNoTableNameNoColumnNamesQueryBuilder Columns(params string[] columnNames)
+    {
+        if (columnNames.Length == 0)
         {
-            using (var table=new TTable())
-            {
-                _tableName = table.Name;
-            }
-            return this;
+            throw Bomb("At Least one column should be given");
         }
+        _columnNames = columnNames;
+        return this;
+    }
 
-        public ICreateIndexNoTableNameNoColumnNamesQueryBuilder Columns(params string[] columnNames)
+    public ICreateIndexNoTableNameNoColumnNamesNoUniqueQueryBuilder Unique(bool isUnique = true)
+    {
+        _isUnique = isUnique;
+        return this;
+    }
+    public ICreateIndexNoNameQueryBuilder Name(string indexName)
+    {
+        _indexName = indexName;
+        return this;
+    }
+    public override void Build(ISqlWriter writer)
+    {
+        writer.Write(C.CREATE);
+        if (_isUnique ?? false)
         {
-            if (columnNames.Length == 0)
+            writer.Write2(C.UNIQUE);
+        }
+        writer.Write2(C.INDEX);
+        writer.Write(_indexName);
+        writer.Write2(C.ON);
+        writer.Write(_tableName);
+        writer.Write2(C.BEGIN_SCOPE);
+        bool first = true;
+        foreach (var columnName in _columnNames)
+        {
+            if (first)
             {
-                throw Bomb("At Least one column should be given");
+                first = false;
             }
-            _columnNames = columnNames;
-            return this;
-        }
-
-        public ICreateIndexNoTableNameNoColumnNamesNoUniqueQueryBuilder Unique(bool isUnique = true)
-        {
-            _isUnique = isUnique;
-            return this;
-        }
-        public ICreateIndexNoNameQueryBuilder Name(string indexName)
-        {
-            _indexName = indexName;
-            return this;
-        }
-        public override void Build(ISqlWriter writer)
-        {
-            writer.Write(C.CREATE);
-            if (_isUnique ?? false)
+            else
             {
-                writer.Write2(C.UNIQUE);
+                writer.Write(C.COMMA);
             }
-            writer.Write2(C.INDEX);
-            writer.Write(_indexName);
-            writer.Write2(C.ON);
-            writer.Write(_tableName);
-            writer.Write2(C.BEGIN_SCOPE);
-            bool first = true;
-            foreach (var columnName in _columnNames)
-            {
-                if (first)
-                {
-                    first = false;
-                }
-                else
-                {
-                    writer.Write(C.COMMA);
-                }
-                writer.Write(columnName);
-            }
-            writer.Write2(C.END_SCOPE);
+            writer.Write(columnName);
         }
+        writer.Write2(C.END_SCOPE);
     }
 }

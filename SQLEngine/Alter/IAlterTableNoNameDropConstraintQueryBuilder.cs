@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
-{
-    public interface IAlterTableNoNameDropConstraintQueryBuilder : IAbstractQueryBuilder
-    {
+﻿namespace SQLEngine;
 
-    }
+public interface IAlterTableNoNameDropConstraintQueryBuilder : IAbstractQueryBuilder
+{
+
 }

@@ -6,739 +6,738 @@ using System.Linq;
 
 #pragma warning disable IDE1006 // Naming Styles
 
-namespace SQLEngine.SqlServer
+namespace SQLEngine.SqlServer;
+
+public partial class SqlServerQueryBuilder
 {
-    public partial class SqlServerQueryBuilder
+    private readonly List<IAbstractQueryBuilder> _list = new();
+
+    static SqlServerQueryBuilder()
     {
-        private readonly List<IAbstractQueryBuilder> _list = new();
+        Setup();
+    }
 
-        static SqlServerQueryBuilder()
+    public void AddExpression(string rawExpression)
+    {
+        _list.Add(new RawStringQueryBuilder(w => { w.WriteLine(rawExpression); }));
+    }
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public IAlterQueryBuilder Alter => _Add(new AlterQueryBuilder());
+
+    public void Begin()
+    {
+        _list.Add(new RawStringQueryBuilder(w =>
         {
-            Setup();
-        }
+            w.WriteLine(C.BEGIN);
+            w.Indent++;
+        }));
+    }
 
-        public void AddExpression(string rawExpression)
+    public void BeginTransaction(string transactionName = null)
+    {
+        _list.Add(new RawStringQueryBuilder(w =>
         {
-            _list.Add(new RawStringQueryBuilder(w => { w.WriteLine(rawExpression); }));
-        }
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public IAlterQueryBuilder Alter => _Add(new AlterQueryBuilder());
-
-        public void Begin()
-        {
-            _list.Add(new RawStringQueryBuilder(w =>
+            w.Write(C.BEGIN);
+            w.Write(C.SPACE);
+            w.Write(C.TRANSACTION);
+            if (!string.IsNullOrWhiteSpace(transactionName))
             {
-                w.WriteLine(C.BEGIN);
-                w.Indent++;
-            }));
-        }
-
-        public void BeginTransaction(string transactionName = null)
-        {
-            _list.Add(new RawStringQueryBuilder(w =>
-            {
-                w.Write(C.BEGIN);
                 w.Write(C.SPACE);
-                w.Write(C.TRANSACTION);
-                if (!string.IsNullOrWhiteSpace(transactionName))
-                {
-                    w.Write(C.SPACE);
-                    w.Write(transactionName);
-                }
-
-                w.WriteLine();
-            }));
-        }
-
-        public void Clear()
-        {
-            _list.Clear();
-        }
-
-        public void Comment(string comment)
-        {
-            if (!string.IsNullOrEmpty(comment)) comment = comment.Replace("*/", "*\\/");
-            _list.Add(new RawStringQueryBuilder(writer =>
-            {
-                writer.Write("/*");
-                writer.WriteEx(comment);
-                writer.Write("*/ ");
-                writer.WriteLine("");
-            }));
-        }
-
-        public void CommitTransaction(string transactionName = null)
-        {
-            _list.Add(new RawStringQueryBuilder(w =>
-            {
-                w.Write(C.COMMIT);
-                w.Write(C.SPACE);
-                w.Write(C.TRANSACTION);
-                if (!string.IsNullOrWhiteSpace(transactionName))
-                {
-                    w.Write(C.SPACE);
-                    w.Write(transactionName);
-                }
-
-                w.WriteLine();
-            }));
-        }
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ICreateQueryBuilder Create => _Add(new CreateQueryBuilder());
-
-        public void Cursor(
-            string cursorName,
-            Action<ISelectQueryBuilder> selection,
-            AbstractSqlVariable[] intoVariables,
-            Action<IQueryBuilder> body)
-        {
-            _list.Add(new RawStringQueryBuilder(writer =>
-            {
-                var variableName = cursorName;
-                writer.Write(C.DECLARE);
-                writer.Write(C.SPACE);
-                writer.Write(cursorName);
-                writer.Write(C.SPACE);
-                writer.Write(C.CURSOR);
-                writer.Write(C.SPACE);
-                writer.Write(C.FOR);
-                writer.Write(C.SPACE);
-                using (var s = new SelectQueryBuilder())
-                {
-                    selection(s);
-                    s.Build(writer);
-                }
-
-                writer.WriteLine();
-
-                writer.Write(C.OPEN);
-                writer.Write(C.SPACE);
-                writer.Write(variableName);
-
-                writer.WriteLine();
-                writer.Write(C.FETCH);
-                writer.Write(C.SPACE);
-                writer.Write(C.NEXT);
-                writer.Write(C.SPACE);
-                writer.Write(C.FROM);
-                writer.Write(C.SPACE);
-                writer.Write(variableName);
-                writer.Write(C.SPACE);
-                writer.Write(C.INTO);
-                writer.Write(C.SPACE);
-                writer.Write(intoVariables.JoinWith());
-
-                writer.WriteLine();
-                writer.Write(C.WHILE);
-                writer.Write(C.SPACE);
-                writer.Write(C.FETCH_STATUS);
-                writer.Write(C.EQUALS);
-                writer.Write(0L.ToString());
-
-                writer.WriteLine();
-
-                writer.Write(C.BEGIN);
-                writer.WriteLine();
-                writer.Indent++;
-
-                using (var s = new FunctionBodyQueryBuilder())
-                {
-                    body(s);
-                    writer.Write(s.Build());
-                }
-
-                writer.WriteLine();
-                writer.Write(C.FETCH);
-                writer.Write(C.SPACE);
-                writer.Write(C.NEXT);
-                writer.Write(C.SPACE);
-                writer.Write(C.FROM);
-                writer.Write(C.SPACE);
-                writer.Write(variableName);
-                writer.Write(C.SPACE);
-                writer.Write(C.INTO);
-                writer.Write(C.SPACE);
-                writer.Write(intoVariables.JoinWith());
-
-                writer.WriteLine();
-
-                writer.Indent--;
-                writer.Write(C.END);
-                writer.WriteLine();
-
-                writer.Write(C.CLOSE);
-                writer.Write(C.SPACE);
-                writer.Write(variableName);
-                writer.WriteLine();
-
-                writer.Write(C.DEALLOCATE);
-                writer.Write(C.SPACE);
-                writer.Write(variableName);
-                writer.WriteLine();
-            }));
-        }
-
-
-        public AbstractSqlVariable Declare(string variableName, string type, Action<IQueryBuilder> builder)
-        {
-            using (var q = Query.New)
-            {
-                builder(q);
-                using (var t = new DeclarationQueryBuilder())
-                {
-                    var defaultValue = q.Build();
-                    var expression = t.Declare(variableName).OfType(type).Default(q.RawInternal(defaultValue));
-                    _list.Add(expression);
-                    return new SqlServerVariable(variableName);
-                }
+                w.Write(transactionName);
             }
-        }
 
-        public AbstractSqlVariable Declare<T>(string variableName, Action<IQueryBuilder> builder)
+            w.WriteLine();
+        }));
+    }
+
+    public void Clear()
+    {
+        _list.Clear();
+    }
+
+    public void Comment(string comment)
+    {
+        if (!string.IsNullOrEmpty(comment)) comment = comment.Replace("*/", "*\\/");
+        _list.Add(new RawStringQueryBuilder(writer =>
         {
-            var type = Query.Settings.TypeConvertor.ToSqlType<T>();
-            return Declare(variableName, type, builder);
-        }
+            writer.Write("/*");
+            writer.WriteEx(comment);
+            writer.Write("*/ ");
+            writer.WriteLine("");
+        }));
+    }
 
-        public AbstractSqlVariable Declare(string variableName, string type)
+    public void CommitTransaction(string transactionName = null)
+    {
+        _list.Add(new RawStringQueryBuilder(w =>
         {
-            var t = new DeclarationQueryBuilder();
-            var expression = t.Declare(variableName).OfType(type);
-            _list.Add(expression);
-            return new SqlServerVariable(variableName);
-        }
-
-        public AbstractSqlVariable Declare(string variableName, string type, AbstractSqlLiteral defaultValue)
-        {
-            var t = new DeclarationQueryBuilder();
-            var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
-            _list.Add(expression);
-            return new SqlServerVariable(variableName);
-        }
-
-        public AbstractSqlVariable Declare<T>(string variableName, AbstractSqlLiteral defaultValue)
-        {
-            var t = new DeclarationQueryBuilder();
-            var type = Query.Settings.TypeConvertor.ToSqlType<T>();
-            var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
-            _list.Add(expression);
-            return new SqlServerVariable(variableName);
-        }
-
-        public AbstractSqlVariable Declare<T>(string variableName)
-        {
-            var t = new DeclarationQueryBuilder();
-            var type = Query.Settings.TypeConvertor.ToSqlType<T>();
-            var expression = t.Declare(variableName).OfType(type);
-            _list.Add(expression);
-            return new SqlServerVariable(variableName);
-        }
-
-        public AbstractSqlVariable Declare(string variableName, string type, ISqlExpression defaultValue)
-        {
-            var t = new DeclarationQueryBuilder();
-            var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
-            _list.Add(expression);
-            return new SqlServerVariable(variableName);
-        }
-
-        public AbstractSqlVariable Declare<T>(string variableName, ISqlExpression defaultValue)
-        {
-            var t = new DeclarationQueryBuilder();
-            var type = Query.Settings.TypeConvertor.ToSqlType<T>();
-            var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
-            _list.Add(expression);
-            return new SqlServerVariable(variableName);
-        }
-
-        public AbstractSqlVariable DeclareNew<T>(AbstractSqlLiteral defaultValue)
-        {
-            var type = Query.Settings.TypeConvertor.ToSqlType<T>();
-            return DeclareNew(type, defaultValue);
-        }
-
-        public AbstractSqlVariable DeclareNew<T>()
-        {
-            var type = Query.Settings.TypeConvertor.ToSqlType<T>();
-            return DeclareNew(type);
-        }
-
-        public AbstractSqlVariable DeclareNew(string type)
-        {
-            var variableName = Query.Settings.UniqueVariableNameGenerator.New();
-            return Declare(variableName, type);
-        }
-
-        public AbstractSqlVariable DeclareNew(string type, AbstractSqlLiteral defaultValue)
-        {
-            var variableName = Query.Settings.UniqueVariableNameGenerator.New();
-            return Declare(variableName, type, defaultValue);
-        }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public IDeleteQueryBuilder Delete => _Add(new DeleteQueryBuilder());
-
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public IDropQueryBuilder Drop => _Add(new DropQueryBuilder());
-
-        public void Else()
-        {
-            _list.Add(new RawStringQueryBuilder(w => w.Write(C.ELSE, C.SPACE + string.Empty)));
-        }
-
-        public IDisposable Else2()
-        {
-            return new ElseDisposable(this);
-        }
-
-        public IElseIfQueryBuilder ElseIf(AbstractSqlCondition condition)
-        {
-            return _Add(new ElseIfQueryBuilder(condition));
-        }
-
-        [Obsolete("Do not use",true)]
-        public void End()
-        {
-            _list.Add(new RawStringQueryBuilder(w =>
+            w.Write(C.COMMIT);
+            w.Write(C.SPACE);
+            w.Write(C.TRANSACTION);
+            if (!string.IsNullOrWhiteSpace(transactionName))
             {
-                w.WriteLine(C.END);
-                w.Indent--;
-            }));
-        }
+                w.Write(C.SPACE);
+                w.Write(transactionName);
+            }
 
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public IExecuteQueryBuilder Execute => _Add(new ExecuteQueryBuilder());
+            w.WriteLine();
+        }));
+    }
 
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public IConditionFilterQueryHelper Helper { get; } = new SqlServerConditionFilterQueryHelper();
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public ICreateQueryBuilder Create => _Add(new CreateQueryBuilder());
 
-        [Obsolete("Do not use",true)]
-        public IIfQueryBuilder IfOld(AbstractSqlCondition condition)
+    public void Cursor(
+        string cursorName,
+        Action<ISelectQueryBuilder> selection,
+        AbstractSqlVariable[] intoVariables,
+        Action<IQueryBuilder> body)
+    {
+        _list.Add(new RawStringQueryBuilder(writer =>
         {
-            return _Add(new IfQueryBuilder(condition));
-        }
-
-        public IDisposable If(AbstractSqlCondition condition)
-        {
-            return new IfDisposable(this, condition);
-        }
-
-        public IDisposable IfExists(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
-        {
+            var variableName = cursorName;
+            writer.Write(C.DECLARE);
+            writer.Write(C.SPACE);
+            writer.Write(cursorName);
+            writer.Write(C.SPACE);
+            writer.Write(C.CURSOR);
+            writer.Write(C.SPACE);
+            writer.Write(C.FOR);
+            writer.Write(C.SPACE);
             using (var s = new SelectQueryBuilder())
             {
-                selector(s);
-                return If(new SqlServerCondition(C.EXISTS, C.BEGIN_SCOPE + string.Empty, s.Build(),
-                    C.END_SCOPE + string.Empty));
+                selection(s);
+                s.Build(writer);
             }
-        }
 
-        //public IDisposable IfExists(IAbstractSelectQueryBuilder selection)
-        //{
-        //    return If(new SqlServerCondition(C.SPACE + string.Empty, C.EXISTS, C.BEGIN_SCOPE + string.Empty,
-        //        selection.Build(), C.END_SCOPE + string.Empty));
-        //}
+            writer.WriteLine();
 
-        //public IIfQueryBuilder IfNot(AbstractSqlCondition condition)
-        //{
-        //    return _Add(new IfNotQueryBuilder(condition));
-        //}
+            writer.Write(C.OPEN);
+            writer.Write(C.SPACE);
+            writer.Write(variableName);
 
-        public IDisposable IfNotExists(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
-        {
-            using (var s = new SelectQueryBuilder())
+            writer.WriteLine();
+            writer.Write(C.FETCH);
+            writer.Write(C.SPACE);
+            writer.Write(C.NEXT);
+            writer.Write(C.SPACE);
+            writer.Write(C.FROM);
+            writer.Write(C.SPACE);
+            writer.Write(variableName);
+            writer.Write(C.SPACE);
+            writer.Write(C.INTO);
+            writer.Write(C.SPACE);
+            writer.Write(intoVariables.JoinWith());
+
+            writer.WriteLine();
+            writer.Write(C.WHILE);
+            writer.Write(C.SPACE);
+            writer.Write(C.FETCH_STATUS);
+            writer.Write(C.EQUALS);
+            writer.Write(0L.ToString());
+
+            writer.WriteLine();
+
+            writer.Write(C.BEGIN);
+            writer.WriteLine();
+            writer.Indent++;
+
+            using (var s = new FunctionBodyQueryBuilder())
             {
-                selector(s);
-                return If(new SqlServerCondition(C.NOT, C.SPACE + string.Empty, C.EXISTS, C.BEGIN_SCOPE + string.Empty,
-                    s.Build(), C.END_SCOPE + string.Empty));
+                body(s);
+                writer.Write(s.Build());
             }
-        }
 
-        public IDisposable IfNotExists(IAbstractSelectQueryBuilder selection)
+            writer.WriteLine();
+            writer.Write(C.FETCH);
+            writer.Write(C.SPACE);
+            writer.Write(C.NEXT);
+            writer.Write(C.SPACE);
+            writer.Write(C.FROM);
+            writer.Write(C.SPACE);
+            writer.Write(variableName);
+            writer.Write(C.SPACE);
+            writer.Write(C.INTO);
+            writer.Write(C.SPACE);
+            writer.Write(intoVariables.JoinWith());
+
+            writer.WriteLine();
+
+            writer.Indent--;
+            writer.Write(C.END);
+            writer.WriteLine();
+
+            writer.Write(C.CLOSE);
+            writer.Write(C.SPACE);
+            writer.Write(variableName);
+            writer.WriteLine();
+
+            writer.Write(C.DEALLOCATE);
+            writer.Write(C.SPACE);
+            writer.Write(variableName);
+            writer.WriteLine();
+        }));
+    }
+
+
+    public AbstractSqlVariable Declare(string variableName, string type, Action<IQueryBuilder> builder)
+    {
+        using (var q = Query.New)
         {
-            return If(new SqlServerCondition(C.NOT, C.SPACE + string.Empty, C.EXISTS, C.BEGIN_SCOPE + string.Empty,
-                selection.Build(), C.END_SCOPE + string.Empty));
-        }
-
-        //public IIfQueryBuilder IfOr(params AbstractSqlCondition[] conditions)
-        //{
-        //    var str = conditions.Select(x => x.ToSqlString()).ToArray();
-        //    var xx = string.Join(C.OR, str);
-        //    var condition = SqlServerCondition.Raw(xx);
-        //    return IfOld(condition);
-        //}
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public IInsertQueryBuilder Insert => _Add(new InsertQueryBuilder());
-
-       
-        public void Print(ISqlExpression expression)
-        {
-            _list.Add(new RawStringQueryBuilder(writer =>
+            builder(q);
+            using (var t = new DeclarationQueryBuilder())
             {
-                writer.Write("print");
-                writer.Write(C.BEGIN_SCOPE);
-                writer.Write(expression.ToSqlString());
-                writer.Write(C.END_SCOPE);
-                writer.WriteLine();
-            }));
-        }
-
-        public void Print(AbstractSqlLiteral literal)
-        {
-            _list.Add(new RawStringQueryBuilder(writer =>
-            {
-                writer.Write("print");
-                writer.Write(C.BEGIN_SCOPE);
-                writer.Write(literal.ToSqlString());
-                writer.Write(C.END_SCOPE);
-                writer.WriteLine();
-            }));
-        }
-
-       
-
-        public void Return()
-        {
-            _list.Add(new RawStringQueryBuilder(writer =>
-            {
-                writer.Write(C.RETURN);
-                writer.WriteLine(C.SEMICOLON);
-            }));
-        }
-
-        public void Return(string sql)
-        {
-            _list.Add(new RawStringQueryBuilder(writer =>
-            {
-                writer.Write(C.RETURN);
-                writer.WriteWithScoped(sql);
-                writer.WriteLine();
-            }));
-        }
-
-        public void Return(ISqlExpression expression)
-        {
-            _list.Add(new RawStringQueryBuilder(writer =>
-            {
-                writer.Write(C.RETURN);
-                writer.Write(C.SPACE);
-                writer.Write(expression.ToSqlString());
-                writer.WriteLine(C.SPACE);
-            }));
-        }
-
-        public void Goto(string labelName)
-        {
-            _list.Add(new RawStringQueryBuilder(writer =>
-            {
-                writer.Write(C.GOTO);
-                writer.Write(C.SPACE);
-                writer.Write(labelName);
-                writer.WriteLine(C.SEMICOLON);
-            }));
-        }
-
-        public IDisposable Label(string labelName)
-        {
-            return new LabelDisposable(this, labelName);
-        }
-        public IDisposable While(AbstractSqlCondition condition)
-        {
-            return new WhileDisposable(this, condition);
-        }
-
-        public void Return(AbstractSqlLiteral literal)
-        {
-            _list.Add(new RawStringQueryBuilder(writer =>
-            {
-                writer.Write(C.RETURN);
-                writer.Write(C.SPACE);
-                writer.Write(literal.ToSqlString());
-                writer.WriteLine(C.SPACE);
-            }));
-        }
-
-        public void RollbackTransaction(string transactionName = null)
-        {
-            _list.Add(new RawStringQueryBuilder(w =>
-            {
-                w.Write(C.ROLLBACK);
-                w.Write(C.SPACE);
-                w.Write(C.TRANSACTION);
-                if (!string.IsNullOrWhiteSpace(transactionName))
-                {
-                    w.Write(C.SPACE);
-                    w.Write(transactionName);
-                }
-            }));
-        }
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ISelectQueryBuilder Select => _Add(new SelectQueryBuilder());
-
-        public void Set(AbstractSqlVariable variable,
-            Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallNopBuilder> right)
-        {
-            var t = new SetQueryBuilder();
-            var functionCallExpressionBuilder = new CustomFunctionCallExpressionBuilder();
-            right(functionCallExpressionBuilder);
-            using (var writer = SqlWriter.New)
-            {
-                functionCallExpressionBuilder.Build(writer);
-                var expression = t.Set(variable).To(RawInternal(writer.Build()));
+                var defaultValue = q.Build();
+                var expression = t.Declare(variableName).OfType(type).Default(q.RawInternal(defaultValue));
                 _list.Add(expression);
+                return new SqlServerVariable(variableName);
             }
         }
+    }
 
-        public void Set(AbstractSqlVariable variable, AbstractSqlExpression value)
-        {
-            var t = new SetQueryBuilder();
-            var expression = t.Set(variable).To(value);
-            _list.Add(expression);
-        }
+    public AbstractSqlVariable Declare<T>(string variableName, Action<IQueryBuilder> builder)
+    {
+        var type = Query.Settings.TypeConvertor.ToSqlType<T>();
+        return Declare(variableName, type, builder);
+    }
 
-        public void Set(AbstractSqlVariable variable, ISqlExpression value)
-        {
-            var t = new SetQueryBuilder();
-            var expression = t.Set(variable).To(value);
-            _list.Add(expression);
-        }
+    public AbstractSqlVariable Declare(string variableName, string type)
+    {
+        var t = new DeclarationQueryBuilder();
+        var expression = t.Declare(variableName).OfType(type);
+        _list.Add(expression);
+        return new SqlServerVariable(variableName);
+    }
 
-        public void Set(AbstractSqlVariable variable, AbstractSqlVariable value)
-        {
-            var t = new SetQueryBuilder();
-            var expression = t.Set(variable).To(value);
-            _list.Add(expression);
-        }
+    public AbstractSqlVariable Declare(string variableName, string type, AbstractSqlLiteral defaultValue)
+    {
+        var t = new DeclarationQueryBuilder();
+        var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
+        _list.Add(expression);
+        return new SqlServerVariable(variableName);
+    }
 
-        public void Set(AbstractSqlVariable variable, AbstractSqlLiteral value)
-        {
-            var t = new SetQueryBuilder();
-            var expression = t.Set(variable).To(value);
-            _list.Add(expression);
-        }
+    public AbstractSqlVariable Declare<T>(string variableName, AbstractSqlLiteral defaultValue)
+    {
+        var t = new DeclarationQueryBuilder();
+        var type = Query.Settings.TypeConvertor.ToSqlType<T>();
+        var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
+        _list.Add(expression);
+        return new SqlServerVariable(variableName);
+    }
 
-        public void SetToScopeIdentity(AbstractSqlVariable variable)
-        {
-            Set(variable, x => x.ScopeIdentity());
-        }
+    public AbstractSqlVariable Declare<T>(string variableName)
+    {
+        var t = new DeclarationQueryBuilder();
+        var type = Query.Settings.TypeConvertor.ToSqlType<T>();
+        var expression = t.Declare(variableName).OfType(type);
+        _list.Add(expression);
+        return new SqlServerVariable(variableName);
+    }
 
-        public void Truncate(string tableName)
-        {
-            var t = new TruncateQueryBuilder();
-            var expression = t.Table(tableName);
-            _list.Add(expression);
-        }
+    public AbstractSqlVariable Declare(string variableName, string type, ISqlExpression defaultValue)
+    {
+        var t = new DeclarationQueryBuilder();
+        var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
+        _list.Add(expression);
+        return new SqlServerVariable(variableName);
+    }
 
-        public void Truncate<TTable>() where TTable : ITable, new()
-        {
-            using (var table = new TTable())
-            {
-                Truncate(table.Name);
-            }
-        }
+    public AbstractSqlVariable Declare<T>(string variableName, ISqlExpression defaultValue)
+    {
+        var t = new DeclarationQueryBuilder();
+        var type = Query.Settings.TypeConvertor.ToSqlType<T>();
+        var expression = t.Declare(variableName).OfType(type).Default(defaultValue);
+        _list.Add(expression);
+        return new SqlServerVariable(variableName);
+    }
 
-        public ITryNoTryQueryBuilder Try(Action<IQueryBuilder> builder)
-        {
-            var t = new TryCatchQueryBuilder();
-            var expression = t.Try(builder);
-            _list.Add(expression);
-            return expression;
-        }
+    public AbstractSqlVariable DeclareNew<T>(AbstractSqlLiteral defaultValue)
+    {
+        var type = Query.Settings.TypeConvertor.ToSqlType<T>();
+        return DeclareNew(type, defaultValue);
+    }
+
+    public AbstractSqlVariable DeclareNew<T>()
+    {
+        var type = Query.Settings.TypeConvertor.ToSqlType<T>();
+        return DeclareNew(type);
+    }
+
+    public AbstractSqlVariable DeclareNew(string type)
+    {
+        var variableName = Query.Settings.UniqueVariableNameGenerator.New();
+        return Declare(variableName, type);
+    }
+
+    public AbstractSqlVariable DeclareNew(string type, AbstractSqlLiteral defaultValue)
+    {
+        var variableName = Query.Settings.UniqueVariableNameGenerator.New();
+        return Declare(variableName, type, defaultValue);
+    }
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public IUpdateQueryBuilder Update => _Add(new UpdateQueryBuilder());
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public IDeleteQueryBuilder Delete => _Add(new DeleteQueryBuilder());
 
-        private static void SetupDefaults()
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public IDropQueryBuilder Drop => _Add(new DropQueryBuilder());
+
+    public void Else()
+    {
+        _list.Add(new RawStringQueryBuilder(w => w.Write(C.ELSE, C.SPACE + string.Empty)));
+    }
+
+    public IDisposable Else2()
+    {
+        return new ElseDisposable(this);
+    }
+
+    public IElseIfQueryBuilder ElseIf(AbstractSqlCondition condition)
+    {
+        return _Add(new ElseIfQueryBuilder(condition));
+    }
+
+    [Obsolete("Do not use",true)]
+    public void End()
+    {
+        _list.Add(new RawStringQueryBuilder(w =>
         {
-            //default settings
-            Query.Settings.EnumSqlStringConvertor = new IntegerEnumSqlStringConvertor();
-            Query.Settings.TypeConvertor = new DefaultTypeConvertor();
-            Query.Settings.UniqueVariableNameGenerator = new DefaultUniqueVariableNameGenerator();
-            Query.Settings.EscapeStrategy = new SqlEscapeStrategy();
-            Query.Settings.ExpressionCompiler = new SqlExpressionCompiler();
-            Query.Settings.DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
-            Query.Settings.DateFormat = "yyyy-MM-dd";
-            Query.Settings.DefaultPrecision = 18;
-            Query.Settings.DefaultScale = 4;
-            Query.Settings.SQLErrorState = 47;
-        }
+            w.WriteLine(C.END);
+            w.Indent--;
+        }));
+    }
 
-        public static void Setup()
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public IExecuteQueryBuilder Execute => _Add(new ExecuteQueryBuilder());
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public IConditionFilterQueryHelper Helper { get; } = new SqlServerConditionFilterQueryHelper();
+
+    [Obsolete("Do not use",true)]
+    public IIfQueryBuilder IfOld(AbstractSqlCondition condition)
+    {
+        return _Add(new IfQueryBuilder(condition));
+    }
+
+    public IDisposable If(AbstractSqlCondition condition)
+    {
+        return new IfDisposable(this, condition);
+    }
+
+    public IDisposable IfExists(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
+    {
+        using (var s = new SelectQueryBuilder())
         {
-            SetupDefaults();
-
-            SqlServerLiteral.Setup();
-            SqlServerRawExpression.Setup();
-            SqlServerCondition.Setup();
+            selector(s);
+            return If(new SqlServerCondition(C.EXISTS, C.BEGIN_SCOPE + string.Empty, s.Build(),
+                C.END_SCOPE + string.Empty));
         }
+    }
 
-        public override string ToString()
+    //public IDisposable IfExists(IAbstractSelectQueryBuilder selection)
+    //{
+    //    return If(new SqlServerCondition(C.SPACE + string.Empty, C.EXISTS, C.BEGIN_SCOPE + string.Empty,
+    //        selection.Build(), C.END_SCOPE + string.Empty));
+    //}
+
+    //public IIfQueryBuilder IfNot(AbstractSqlCondition condition)
+    //{
+    //    return _Add(new IfNotQueryBuilder(condition));
+    //}
+
+    public IDisposable IfNotExists(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
+    {
+        using (var s = new SelectQueryBuilder())
         {
-            return Build();
+            selector(s);
+            return If(new SqlServerCondition(C.NOT, C.SPACE + string.Empty, C.EXISTS, C.BEGIN_SCOPE + string.Empty,
+                s.Build(), C.END_SCOPE + string.Empty));
         }
+    }
 
-        public void Build(ISqlWriter writer)
+    public IDisposable IfNotExists(IAbstractSelectQueryBuilder selection)
+    {
+        return If(new SqlServerCondition(C.NOT, C.SPACE + string.Empty, C.EXISTS, C.BEGIN_SCOPE + string.Empty,
+            selection.Build(), C.END_SCOPE + string.Empty));
+    }
+
+    //public IIfQueryBuilder IfOr(params AbstractSqlCondition[] conditions)
+    //{
+    //    var str = conditions.Select(x => x.ToSqlString()).ToArray();
+    //    var xx = string.Join(C.OR, str);
+    //    var condition = SqlServerCondition.Raw(xx);
+    //    return IfOld(condition);
+    //}
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public IInsertQueryBuilder Insert => _Add(new InsertQueryBuilder());
+
+       
+    public void Print(ISqlExpression expression)
+    {
+        _list.Add(new RawStringQueryBuilder(writer =>
+        {
+            writer.Write("print");
+            writer.Write(C.BEGIN_SCOPE);
+            writer.Write(expression.ToSqlString());
+            writer.Write(C.END_SCOPE);
+            writer.WriteLine();
+        }));
+    }
+
+    public void Print(AbstractSqlLiteral literal)
+    {
+        _list.Add(new RawStringQueryBuilder(writer =>
+        {
+            writer.Write("print");
+            writer.Write(C.BEGIN_SCOPE);
+            writer.Write(literal.ToSqlString());
+            writer.Write(C.END_SCOPE);
+            writer.WriteLine();
+        }));
+    }
+
+       
+
+    public void Return()
+    {
+        _list.Add(new RawStringQueryBuilder(writer =>
+        {
+            writer.Write(C.RETURN);
+            writer.WriteLine(C.SEMICOLON);
+        }));
+    }
+
+    public void Return(string sql)
+    {
+        _list.Add(new RawStringQueryBuilder(writer =>
+        {
+            writer.Write(C.RETURN);
+            writer.WriteWithScoped(sql);
+            writer.WriteLine();
+        }));
+    }
+
+    public void Return(ISqlExpression expression)
+    {
+        _list.Add(new RawStringQueryBuilder(writer =>
+        {
+            writer.Write(C.RETURN);
+            writer.Write(C.SPACE);
+            writer.Write(expression.ToSqlString());
+            writer.WriteLine(C.SPACE);
+        }));
+    }
+
+    public void Goto(string labelName)
+    {
+        _list.Add(new RawStringQueryBuilder(writer =>
+        {
+            writer.Write(C.GOTO);
+            writer.Write(C.SPACE);
+            writer.Write(labelName);
+            writer.WriteLine(C.SEMICOLON);
+        }));
+    }
+
+    public IDisposable Label(string labelName)
+    {
+        return new LabelDisposable(this, labelName);
+    }
+    public IDisposable While(AbstractSqlCondition condition)
+    {
+        return new WhileDisposable(this, condition);
+    }
+
+    public void Return(AbstractSqlLiteral literal)
+    {
+        _list.Add(new RawStringQueryBuilder(writer =>
+        {
+            writer.Write(C.RETURN);
+            writer.Write(C.SPACE);
+            writer.Write(literal.ToSqlString());
+            writer.WriteLine(C.SPACE);
+        }));
+    }
+
+    public void RollbackTransaction(string transactionName = null)
+    {
+        _list.Add(new RawStringQueryBuilder(w =>
+        {
+            w.Write(C.ROLLBACK);
+            w.Write(C.SPACE);
+            w.Write(C.TRANSACTION);
+            if (!string.IsNullOrWhiteSpace(transactionName))
+            {
+                w.Write(C.SPACE);
+                w.Write(transactionName);
+            }
+        }));
+    }
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public ISelectQueryBuilder Select => _Add(new SelectQueryBuilder());
+
+    public void Set(AbstractSqlVariable variable,
+        Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallNopBuilder> right)
+    {
+        var t = new SetQueryBuilder();
+        var functionCallExpressionBuilder = new CustomFunctionCallExpressionBuilder();
+        right(functionCallExpressionBuilder);
+        using (var writer = SqlWriter.New)
+        {
+            functionCallExpressionBuilder.Build(writer);
+            var expression = t.Set(variable).To(RawInternal(writer.Build()));
+            _list.Add(expression);
+        }
+    }
+
+    public void Set(AbstractSqlVariable variable, AbstractSqlExpression value)
+    {
+        var t = new SetQueryBuilder();
+        var expression = t.Set(variable).To(value);
+        _list.Add(expression);
+    }
+
+    public void Set(AbstractSqlVariable variable, ISqlExpression value)
+    {
+        var t = new SetQueryBuilder();
+        var expression = t.Set(variable).To(value);
+        _list.Add(expression);
+    }
+
+    public void Set(AbstractSqlVariable variable, AbstractSqlVariable value)
+    {
+        var t = new SetQueryBuilder();
+        var expression = t.Set(variable).To(value);
+        _list.Add(expression);
+    }
+
+    public void Set(AbstractSqlVariable variable, AbstractSqlLiteral value)
+    {
+        var t = new SetQueryBuilder();
+        var expression = t.Set(variable).To(value);
+        _list.Add(expression);
+    }
+
+    public void SetToScopeIdentity(AbstractSqlVariable variable)
+    {
+        Set(variable, x => x.ScopeIdentity());
+    }
+
+    public void Truncate(string tableName)
+    {
+        var t = new TruncateQueryBuilder();
+        var expression = t.Table(tableName);
+        _list.Add(expression);
+    }
+
+    public void Truncate<TTable>() where TTable : ITable, new()
+    {
+        using (var table = new TTable())
+        {
+            Truncate(table.Name);
+        }
+    }
+
+    public ITryNoTryQueryBuilder Try(Action<IQueryBuilder> builder)
+    {
+        var t = new TryCatchQueryBuilder();
+        var expression = t.Try(builder);
+        _list.Add(expression);
+        return expression;
+    }
+        
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public IUpdateQueryBuilder Update => _Add(new UpdateQueryBuilder());
+
+    private static void SetupDefaults()
+    {
+        //default settings
+        Query.Settings.EnumSqlStringConvertor = new IntegerEnumSqlStringConvertor();
+        Query.Settings.TypeConvertor = new DefaultTypeConvertor();
+        Query.Settings.UniqueVariableNameGenerator = new DefaultUniqueVariableNameGenerator();
+        Query.Settings.EscapeStrategy = new SqlEscapeStrategy();
+        Query.Settings.ExpressionCompiler = new SqlExpressionCompiler();
+        Query.Settings.DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
+        Query.Settings.DateFormat = "yyyy-MM-dd";
+        Query.Settings.DefaultPrecision = 18;
+        Query.Settings.DefaultScale = 4;
+        Query.Settings.SqlErrorState = 47;
+    }
+
+    public static void Setup()
+    {
+        SetupDefaults();
+
+        SqlServerLiteral.Setup();
+        SqlServerRawExpression.Setup();
+        SqlServerCondition.Setup();
+    }
+
+    public override string ToString()
+    {
+        return Build();
+    }
+
+    public void Build(ISqlWriter writer)
+    {
+        foreach (var builder in _list) builder.Build(writer);
+    }
+    public string Build()
+    {
+        using (var writer = SqlWriter.New)
         {
             foreach (var builder in _list) builder.Build(writer);
+
+            return writer.Build();
         }
-        public string Build()
+    }
+
+
+    private T _Add<T>(T item) where T : IAbstractQueryBuilder
+    {
+        _list.Add(item);
+        return item;
+    }
+
+    public void Union()
+    {
+        _list.Add(new RawStringQueryBuilder(writer => { writer.WriteLineEx(C.UNION); }));
+    }
+
+    public void UnionAll()
+    {
+        _list.Add(new RawStringQueryBuilder(writer =>
         {
-            using (var writer = SqlWriter.New)
-            {
-                foreach (var builder in _list) builder.Build(writer);
-
-                return writer.Build();
-            }
-        }
-
-
-        private T _Add<T>(T item) where T : IAbstractQueryBuilder
-        {
-            _list.Add(item);
-            return item;
-        }
-
-        public void Union()
-        {
-            _list.Add(new RawStringQueryBuilder(writer => { writer.WriteLineEx(C.UNION); }));
-        }
-
-        public void UnionAll()
-        {
-            _list.Add(new RawStringQueryBuilder(writer =>
-            {
-                writer.WriteLine(C.UNION);
-                writer.WriteLine(C.SPACE);
-                writer.WriteLine(C.ALL);
-            }));
-        }
+            writer.WriteLine(C.UNION);
+            writer.WriteLine(C.SPACE);
+            writer.WriteLine(C.ALL);
+        }));
+    }
 
      
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+    public virtual void Dispose(bool b)
+    {
+        foreach (var builder in _list) builder.Dispose();
+        _list.Clear();
+    }
+
+    private class ElseDisposable : IDisposable
+    {
+        private readonly SqlServerQueryBuilder _sqlServerQueryBuilder;
+
+        public ElseDisposable(SqlServerQueryBuilder sqlServerQueryBuilder)
+        {
+            _sqlServerQueryBuilder = sqlServerQueryBuilder;
+            _sqlServerQueryBuilder.Else();
+            _sqlServerQueryBuilder.AddExpression(Environment.NewLine);
+            _sqlServerQueryBuilder.Begin();
+        }
+
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            _sqlServerQueryBuilder.AddRaw(writer =>
+            {
+                writer.Indent--;
+                writer.WriteLine(C.END);
+            });
         }
-        public virtual void Dispose(bool b)
+    }
+
+    private class IfDisposable : IDisposable
+    {
+        private readonly SqlServerQueryBuilder _sqlServerQueryBuilder;
+
+        public IfDisposable(SqlServerQueryBuilder sqlServerQueryBuilder, AbstractSqlCondition condition)
         {
-            foreach (var builder in _list) builder.Dispose();
-            _list.Clear();
+            _sqlServerQueryBuilder = sqlServerQueryBuilder;
+            _sqlServerQueryBuilder.AddRaw(writer =>
+            {
+                writer.Write(C.IF);
+                writer.Write(C.BEGIN_SCOPE);
+                writer.Write(condition.ToSqlString());
+                writer.WriteLine(C.END_SCOPE);
+                writer.WriteLine(C.BEGIN);
+                writer.Indent++;
+            });
         }
 
-        private class ElseDisposable : IDisposable
+        public void Dispose()
         {
-            private readonly SqlServerQueryBuilder _sqlServerQueryBuilder;
-
-            public ElseDisposable(SqlServerQueryBuilder sqlServerQueryBuilder)
+            _sqlServerQueryBuilder.AddRaw(writer =>
             {
-                _sqlServerQueryBuilder = sqlServerQueryBuilder;
-                _sqlServerQueryBuilder.Else();
-                _sqlServerQueryBuilder.AddExpression(Environment.NewLine);
-                _sqlServerQueryBuilder.Begin();
-            }
-
-            public void Dispose()
-            {
-                _sqlServerQueryBuilder.AddRaw(writer =>
-                {
-                    writer.Indent--;
-                    writer.WriteLine(C.END);
-                });
-            }
+                writer.Indent--;
+                writer.WriteLine(C.END);
+            });
         }
+    }
+    private class WhileDisposable : IDisposable
+    {
+        private readonly SqlServerQueryBuilder _sqlServerQueryBuilder;
 
-        private class IfDisposable : IDisposable
+        public WhileDisposable(SqlServerQueryBuilder sqlServerQueryBuilder, AbstractSqlCondition condition)
         {
-            private readonly SqlServerQueryBuilder _sqlServerQueryBuilder;
-
-            public IfDisposable(SqlServerQueryBuilder sqlServerQueryBuilder, AbstractSqlCondition condition)
+            _sqlServerQueryBuilder = sqlServerQueryBuilder;
+            _sqlServerQueryBuilder.AddRaw(writer =>
             {
-                _sqlServerQueryBuilder = sqlServerQueryBuilder;
-                _sqlServerQueryBuilder.AddRaw(writer =>
-                {
-                    writer.Write(C.IF);
-                    writer.Write(C.BEGIN_SCOPE);
-                    writer.Write(condition.ToSqlString());
-                    writer.WriteLine(C.END_SCOPE);
-                    writer.WriteLine(C.BEGIN);
-                    writer.Indent++;
-                });
-            }
-
-            public void Dispose()
-            {
-                _sqlServerQueryBuilder.AddRaw(writer =>
-                {
-                    writer.Indent--;
-                    writer.WriteLine(C.END);
-                });
-            }
+                writer.Write(C.WHILE);
+                writer.Write(C.BEGIN_SCOPE);
+                writer.Write(condition.ToSqlString());
+                writer.WriteLine(C.END_SCOPE);
+                writer.WriteLine(C.BEGIN);
+                writer.Indent++;
+            });
         }
-        private class WhileDisposable : IDisposable
+
+        public void Dispose()
         {
-            private readonly SqlServerQueryBuilder _sqlServerQueryBuilder;
-
-            public WhileDisposable(SqlServerQueryBuilder sqlServerQueryBuilder, AbstractSqlCondition condition)
+            _sqlServerQueryBuilder.AddRaw(writer =>
             {
-                _sqlServerQueryBuilder = sqlServerQueryBuilder;
-                _sqlServerQueryBuilder.AddRaw(writer =>
-                {
-                    writer.Write(C.WHILE);
-                    writer.Write(C.BEGIN_SCOPE);
-                    writer.Write(condition.ToSqlString());
-                    writer.WriteLine(C.END_SCOPE);
-                    writer.WriteLine(C.BEGIN);
-                    writer.Indent++;
-                });
-            }
-
-            public void Dispose()
-            {
-                _sqlServerQueryBuilder.AddRaw(writer =>
-                {
-                    writer.Indent--;
-                    writer.WriteLine(C.END);
-                });
-            }
+                writer.Indent--;
+                writer.WriteLine(C.END);
+            });
         }
-        private class LabelDisposable : IDisposable
+    }
+    private class LabelDisposable : IDisposable
+    {
+        private readonly SqlServerQueryBuilder _sqlServerQueryBuilder;
+
+        public LabelDisposable(SqlServerQueryBuilder sqlServerQueryBuilder, string labelName)
         {
-            private readonly SqlServerQueryBuilder _sqlServerQueryBuilder;
+            Contract.Assert(!string.IsNullOrWhiteSpace(labelName));
+            Contract.Assert(!labelName.Contains(' '));
 
-            public LabelDisposable(SqlServerQueryBuilder sqlServerQueryBuilder, string labelName)
+            _sqlServerQueryBuilder = sqlServerQueryBuilder;
+
+            _sqlServerQueryBuilder.AddRaw(writer =>
             {
-                Contract.Assert(!string.IsNullOrWhiteSpace(labelName));
-                Contract.Assert(!labelName.Contains(' '));
-
-                _sqlServerQueryBuilder = sqlServerQueryBuilder;
-
-                _sqlServerQueryBuilder.AddRaw(writer =>
-                {
-                    writer.Write(labelName);
-                    writer.WriteLine(C.COLON);
-                    writer.WriteLine(C.BEGIN);
-                    writer.Indent++;
-                });
-            }
-
-            public void Dispose()
-            {
-                _sqlServerQueryBuilder.AddRaw(writer =>
-                {
-                    writer.Indent--;
-                    writer.WriteLine(C.END);
-                });
-            }
+                writer.Write(labelName);
+                writer.WriteLine(C.COLON);
+                writer.WriteLine(C.BEGIN);
+                writer.Indent++;
+            });
         }
 
-        private void AddRaw(Action<ISqlWriter> func)
+        public void Dispose()
         {
-            _list.Add(new RawStringQueryBuilder(func));
+            _sqlServerQueryBuilder.AddRaw(writer =>
+            {
+                writer.Indent--;
+                writer.WriteLine(C.END);
+            });
         }
+    }
+
+    private void AddRaw(Action<ISqlWriter> func)
+    {
+        _list.Add(new RawStringQueryBuilder(func));
     }
 }
 #pragma warning restore IDE1006 // Naming Styles

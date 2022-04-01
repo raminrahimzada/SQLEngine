@@ -1,6 +1,5 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface ICaseWhenQueryBuilder : IAbstractQueryBuilder
 {
-    public interface ICaseWhenQueryBuilder : IAbstractQueryBuilder
-    {
-    }
 }

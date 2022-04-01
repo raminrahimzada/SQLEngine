@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
-{
-    public interface IDropFunctionNoSchemaQueryBuilder : IAbstractQueryBuilder
-    {
+﻿namespace SQLEngine;
 
-    }
+public interface IDropFunctionNoSchemaQueryBuilder : IAbstractQueryBuilder
+{
+
 }

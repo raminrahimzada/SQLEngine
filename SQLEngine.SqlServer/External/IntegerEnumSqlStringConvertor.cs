@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace SQLEngine.SqlServer
+namespace SQLEngine.SqlServer;
+
+public class IntegerEnumSqlStringConvertor : IEnumSqlStringConvertor
 {
-    public class IntegerEnumSqlStringConvertor : IEnumSqlStringConvertor
+    public string ToSqlString(Enum @enum)
     {
-        public string ToSqlString(Enum @enum)
-        {
-            if (@enum == null) return "NULL";
-            return ((int)(object)@enum).ToString();
-        }
+        if (@enum == null) return "NULL";
+        return ((int)(object)@enum).ToString();
     }
 }

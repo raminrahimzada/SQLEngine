@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface IExecuteProcedureNeedNameQueryBuilder : IExecuteProcedureQueryBuilder
 {
-    public interface IExecuteProcedureNeedNameQueryBuilder : IExecuteProcedureQueryBuilder
-    {
-        IExecuteProcedureNeedArgQueryBuilder Name(string procedureName);
-    }
+    IExecuteProcedureNeedArgQueryBuilder Name(string procedureName);
 }

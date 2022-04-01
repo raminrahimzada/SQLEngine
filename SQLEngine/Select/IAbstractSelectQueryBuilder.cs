@@ -1,6 +1,5 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface IAbstractSelectQueryBuilder : IAbstractQueryBuilder
 {
-    public interface IAbstractSelectQueryBuilder : IAbstractQueryBuilder
-    {
-    }
 }

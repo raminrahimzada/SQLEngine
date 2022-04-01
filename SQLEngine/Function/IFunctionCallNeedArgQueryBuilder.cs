@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface IFunctionCallNeedArgQueryBuilder : IFunctionCallQueryBuilder
 {
-    public interface IFunctionCallNeedArgQueryBuilder : IFunctionCallQueryBuilder
-    {
-        IFunctionCallNeedArgQueryBuilder Arg(string argument);
-    }
+    IFunctionCallNeedArgQueryBuilder Arg(string argument);
 }

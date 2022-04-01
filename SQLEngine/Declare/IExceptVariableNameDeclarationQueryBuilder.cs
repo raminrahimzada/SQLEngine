@@ -1,8 +1,7 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface IExceptVariableNameDeclarationQueryBuilder : IAbstractQueryBuilder
 {
-    public interface IExceptVariableNameDeclarationQueryBuilder : IAbstractQueryBuilder
-    {
-        IExceptVariableTypeNameDeclarationQueryBuilder OfType(string type);
-        IExceptVariableTypeNameDeclarationQueryBuilder OfType<T>();
-    }
+    IExceptVariableTypeNameDeclarationQueryBuilder OfType(string type);
+    IExceptVariableTypeNameDeclarationQueryBuilder OfType<T>();
 }

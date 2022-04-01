@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface ITypeConvertor
 {
-    public interface ITypeConvertor
-    {
-        string ToSqlType<T>();
-    }
+    string ToSqlType<T>();
 }

@@ -1,53 +1,52 @@
-﻿namespace SQLEngine.SqlServer
+﻿namespace SQLEngine.SqlServer;
+
+internal class DropTableQueryBuilder : AbstractQueryBuilder, 
+    IDropTableQueryBuilder, IDropTableNoNameQueryBuilder,
+    IDropTableNoNameNoSchemaQueryBuilder
 {
-    internal class DropTableQueryBuilder : AbstractQueryBuilder, 
-        IDropTableQueryBuilder, IDropTableNoNameQueryBuilder,
-        IDropTableNoNameNoSchemaQueryBuilder
+    private string _tableName;
+    private string _schemaName;
+
+    public IDropTableNoNameQueryBuilder Table(string tableName)
     {
-        private string _tableName;
-        private string _schemaName;
+        _tableName = tableName;
+        return this;
+    }
 
-        public IDropTableNoNameQueryBuilder Table(string tableName)
+    public IDropTableNoNameQueryBuilder Table<TTable>() where TTable : ITable, new()
+    {
+        using (var table=new TTable())
         {
-            _tableName = tableName;
-            return this;
+            return Table(table.Name);
         }
+    }
 
-        public IDropTableNoNameQueryBuilder Table<TTable>() where TTable : ITable, new()
-        {
-            using (var table=new TTable())
-            {
-                return Table(table.Name);
-            }
-        }
-
-        public IDropTableNoNameNoSchemaQueryBuilder FromSchema(string schemaName)
-        {
-            _schemaName = schemaName;
-            return this;
-        }
+    public IDropTableNoNameNoSchemaQueryBuilder FromSchema(string schemaName)
+    {
+        _schemaName = schemaName;
+        return this;
+    }
        
-        protected override void ValidateAndThrow()
+    protected override void ValidateAndThrow()
+    {
+        if (string.IsNullOrEmpty(_tableName))
         {
-            if (string.IsNullOrEmpty(_tableName))
-            {
-                Bomb();
-            }
-            base.ValidateAndThrow();
+            Bomb();
         }
+        base.ValidateAndThrow();
+    }
 
-        public override void Build(ISqlWriter writer)
-        {
-            writer.Write(C.DROP);
-            writer.Write2(C.TABLE);
+    public override void Build(ISqlWriter writer)
+    {
+        writer.Write(C.DROP);
+        writer.Write2(C.TABLE);
             
-            if (!string.IsNullOrEmpty(_schemaName))
-            {
-                writer.Write(I(_schemaName));
-                writer.Write(C.DOT);
-            }
-            writer.Write(I(_tableName));
-            writer.Write(C.SEMICOLON);
+        if (!string.IsNullOrEmpty(_schemaName))
+        {
+            writer.Write(I(_schemaName));
+            writer.Write(C.DOT);
         }
+        writer.Write(I(_tableName));
+        writer.Write(C.SEMICOLON);
     }
 }

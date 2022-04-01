@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace SQLEngine
+namespace SQLEngine;
+
+public interface IEscapeStrategy
 {
-    public interface IEscapeStrategy
-    {
-        string Escape(string name);
-    }
-    public interface IEnumSqlStringConvertor
-    {
-        string ToSqlString(Enum @enum);
-    }
+    string Escape(string name);
+}
+public interface IEnumSqlStringConvertor
+{
+    string ToSqlString(Enum @enum);
 }

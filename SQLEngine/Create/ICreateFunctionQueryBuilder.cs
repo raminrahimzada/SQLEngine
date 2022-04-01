@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface ICreateFunctionQueryBuilder : IAbstractQueryBuilder
 {
-    public interface ICreateFunctionQueryBuilder : IAbstractQueryBuilder
-    {
-        ICreateFunctionNoNameQueryBuilder Name(string funcName);
-    }
+    ICreateFunctionNoNameQueryBuilder Name(string funcName);
 }

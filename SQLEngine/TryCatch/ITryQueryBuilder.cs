@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace SQLEngine
+namespace SQLEngine;
+
+public interface ITryQueryBuilder : IAbstractQueryBuilder
 {
-    public interface ITryQueryBuilder : IAbstractQueryBuilder
-    {
-        ITryNoTryQueryBuilder Try(Action<IQueryBuilder> builder);
-    }
+    ITryNoTryQueryBuilder Try(Action<IQueryBuilder> builder);
 }

@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
-{
-    public interface ICreateViewNoNameNoBodyQueryBuilder:IAbstractQueryBuilder
-    {
+﻿namespace SQLEngine;
 
-    }
+public interface ICreateViewNoNameNoBodyQueryBuilder:IAbstractQueryBuilder
+{
+
 }

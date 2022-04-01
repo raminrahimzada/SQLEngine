@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
-{
-    public interface IAbstractCreateFunctionQueryBuilder : IAbstractQueryBuilder
-    {
+﻿namespace SQLEngine;
 
-    }
+public interface IAbstractCreateFunctionQueryBuilder : IAbstractQueryBuilder
+{
+
 }

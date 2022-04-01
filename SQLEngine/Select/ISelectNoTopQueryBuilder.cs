@@ -1,7 +1,6 @@
-﻿namespace SQLEngine
-{
-    public interface ISelectNoTopQueryBuilder : ISelectWithSelectorQueryBuilder
-    {
+﻿namespace SQLEngine;
 
-    }
+public interface ISelectNoTopQueryBuilder : ISelectWithSelectorQueryBuilder
+{
+
 }

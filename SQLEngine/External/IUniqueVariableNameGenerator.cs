@@ -1,8 +1,7 @@
-﻿namespace SQLEngine
+﻿namespace SQLEngine;
+
+public interface IUniqueVariableNameGenerator
 {
-    public interface IUniqueVariableNameGenerator
-    {
-        string New();
-        void Reset();
-    }
+    string New();
+    void Reset();
 }

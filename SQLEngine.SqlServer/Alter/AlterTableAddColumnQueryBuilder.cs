@@ -51,13 +51,17 @@ internal sealed class AlterTableAddColumnQueryBuilder : AbstractQueryBuilder
     public override void Build(ISqlWriter writer)
     {
         writer.Write(C.ALTER);
-        writer.Write2(C.TABLE);
+        writer.Write(C.SPACE);
+        writer.Write(C.TABLE);
+        writer.Write(C.SPACE);
         writer.Write(_tableName);
         writer.Write(C.SPACE);
         writer.Write(C.ADD);
         writer.Write(C.SPACE);
-        writer.Write2(_columnName);
-        writer.Write2(_type);
+        writer.Write(_columnName);
+        writer.Write(C.SPACE);
+        writer.Write(_type);
+        writer.Write(C.SPACE);
         if(_size != null)
         {
             writer.Write(C.BEGIN_SCOPE);
@@ -74,9 +78,11 @@ internal sealed class AlterTableAddColumnQueryBuilder : AbstractQueryBuilder
         {
             if(!_canBeNull.Value)
             {
-                writer.Write2(C.NOT);
+                writer.Write(C.SPACE);
+                writer.Write(C.NOT);
             }
-            writer.Write2(C.NULL);
+            writer.Write(C.SPACE);
+            writer.Write(C.NULL);
         }
 
         if(_defaultValue != null)

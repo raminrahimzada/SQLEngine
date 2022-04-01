@@ -69,7 +69,8 @@ internal sealed class CreateTableQueryBuilder : AbstractQueryBuilder, ICreateTab
         writer.Write(I(_tableName));
 
         writer.Write(C.SPACE);
-        writer.Write2(C.BEGIN_SCOPE);
+        writer.Write(C.BEGIN_SCOPE);
+        writer.Write(C.SPACE);
         writer.Indent++;
         writer.WriteLine();
 

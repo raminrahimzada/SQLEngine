@@ -183,11 +183,11 @@ internal sealed class UpdateQueryBuilder : AbstractQueryBuilder,
                 var key = keys[i];
                 var value = _columnsAndValuesDictionary[key];
                 writer.Write(I(key));
-                writer.Write2(C.EQUALS);
+                writer.Write(C.EQUALS);
                 writer.Write(value);
                 if(i != _columnsAndValuesDictionary.Count - 1)
                 {
-                    writer.Write2(C.COMMA);
+                    writer.Write(C.COMMA);
                 }
             }
         }

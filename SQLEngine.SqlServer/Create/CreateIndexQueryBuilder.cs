@@ -58,7 +58,7 @@ internal sealed class CreateIndexQueryBuilder :
         writer.Write(_indexName);
         writer.Write2(C.ON);
         writer.Write(_tableName);
-        writer.Write2(C.BEGIN_SCOPE);
+        writer.Write(C.BEGIN_SCOPE);
         bool first = true;
         foreach(var columnName in _columnNames)
         {
@@ -72,6 +72,6 @@ internal sealed class CreateIndexQueryBuilder :
             }
             writer.Write(columnName);
         }
-        writer.Write2(C.END_SCOPE);
+        writer.Write(C.END_SCOPE);
     }
 }

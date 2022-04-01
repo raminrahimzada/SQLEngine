@@ -65,7 +65,7 @@ internal sealed class DeleteQueryBuilder : AbstractQueryBuilder,
         {
             writer.Write(C.TOP);
             writer.WriteScoped(_topClause.Value.ToString());
-            writer.Write2();
+            writer.Write(C.SPACE);
         }
 
         writer.Write2(C.FROM);

@@ -53,7 +53,7 @@ internal sealed class ExecuteProcedureQueryBuilder : AbstractQueryBuilder, IExec
 
         writer.Write(_procedureName);
 
-        writer.Write2();
+        writer.Write(C.SPACE);
 
         if(_parametersDictionary is { Count: > 0 })
         {
@@ -66,7 +66,9 @@ internal sealed class ExecuteProcedureQueryBuilder : AbstractQueryBuilder, IExec
                 writer.Write(value);
                 if(direction == ProcedureArgumentDirectionTypes.OUT)
                 {
-                    writer.Write2(C.OUTPUT);
+                    writer.Write(C.SPACE);
+                    writer.Write(C.OUTPUT);
+                    writer.Write(C.SPACE);
                 }
 
                 if(i != _parametersDictionary.Count - 1)

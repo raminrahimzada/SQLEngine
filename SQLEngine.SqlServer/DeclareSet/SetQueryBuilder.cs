@@ -21,10 +21,11 @@ internal sealed class SetQueryBuilder : AbstractQueryBuilder, ISetNeedSetQueryBu
     public override void Build(ISqlWriter writer)
     {
         writer.Write(C.SET);
-        writer.Write2();
+        writer.Write(C.SPACE);
         writer.Write(_variable.ToSqlString());
         writer.Write(C.SPACE);
-        writer.Write2(C.EQUALS);
+        writer.Write(C.EQUALS);
+        writer.Write(C.SPACE);
         writer.Write(_value.ToSqlString());
         writer.Write(C.SEMICOLON);
         writer.WriteLine();

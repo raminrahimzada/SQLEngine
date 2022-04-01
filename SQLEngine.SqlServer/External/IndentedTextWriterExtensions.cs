@@ -102,12 +102,9 @@ internal static class SqlWriterExtensions
             writer.Write(expression[^1]);
         }
     }
-    public static void Write2(this ISqlWriter writer, string expression = "")
+
+    public static void Write2(this ISqlWriter writer, string expression)
     {
         writer.WriteScoped(expression, C.SPACE.ToString(), C.SPACE.ToString());
-    }
-    public static void Write2(this ISqlWriter writer, char expression)
-    {
-        writer.WriteScoped(expression, C.SPACE, C.SPACE);
     }
 }

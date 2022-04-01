@@ -49,7 +49,7 @@ internal sealed class DeclarationQueryBuilder : AbstractQueryBuilder,
         writer.Write(_type);
         if(!string.IsNullOrEmpty(_defaultValueSql))
         {
-            writer.Write2(C.EQUALS);
+            writer.Write(C.EQUALS);
             writer.Write(C.BEGIN_SCOPE);
             writer.Write(_defaultValueSql);
             writer.Write(C.END_SCOPE);

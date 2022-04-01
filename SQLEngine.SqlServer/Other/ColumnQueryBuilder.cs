@@ -158,10 +158,14 @@ internal sealed class ColumnQueryBuilder : AbstractQueryBuilder, IColumnQueryBui
 
         if(!string.IsNullOrEmpty(Model.CheckExpression))
         {
-            writer.Write2(C.CHECK);
-            writer.Write2(C.BEGIN_SCOPE);
+            writer.Write(C.SPACE);
+            writer.Write(C.CHECK);
+            writer.Write(C.SPACE);
+            writer.Write(C.BEGIN_SCOPE);
+            writer.Write(C.SPACE);
             writer.Write(Model.CheckExpression);
-            writer.Write2(C.END_SCOPE);
+            writer.Write(C.SPACE);
+            writer.Write(C.END_SCOPE);
             writer.Write(C.SPACE);
         }
     }

@@ -445,20 +445,22 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
         if(_hasDistinct != null)
         {
             writer.Write(C.DISTINCT);
-            writer.Write2();
+            writer.Write(C.SPACE);
         }
         if(_topClause != null)
         {
             writer.Write(C.TOP);
             writer.WriteScoped(_topClause.Value.ToString());
-            writer.Write2();
+            writer.Write(C.SPACE);
         }
 
         var hasSelector = _selectors != null && _selectors.Count > 0;
         if(!hasSelector)
         {
             //no selector then select *
-            writer.Write2(C.WILCARD);
+            writer.Write(C.SPACE);
+            writer.Write(C.WILCARD);
+            writer.Write(C.SPACE);
         }
         else
         {

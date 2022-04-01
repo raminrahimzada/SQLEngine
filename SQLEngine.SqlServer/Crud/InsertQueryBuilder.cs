@@ -93,7 +93,7 @@ internal sealed class InsertQueryBuilder : AbstractQueryBuilder,
             writer.Write(C.DOT);
         }
         writer.Write(I(_tableName));
-        writer.Write2(C.SPACE);
+        writer.Write(C.SPACE);
 
         var columnNamesSafe = _columnNames?.Select(I).ToArray();
         var isColumnsAndValues1 = _columnNames is { Length: > 0 } && _valuesList.Count > 0 && _valuesList[0].Length > 0;

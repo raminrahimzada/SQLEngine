@@ -9,7 +9,7 @@ internal sealed class DeleteQueryBuilder : AbstractQueryBuilder,
     private string _schema;
     private int? _topClause;
     private string _whereCondition;
-    public IDeleteExceptTableNameQueryBuilder Table(string tableName, string schemaName=null)
+    public IDeleteExceptTableNameQueryBuilder Table(string tableName, string schemaName = null)
     {
         _tableName = tableName;
         _schema = schemaName;
@@ -18,9 +18,9 @@ internal sealed class DeleteQueryBuilder : AbstractQueryBuilder,
 
     public IDeleteExceptTableNameQueryBuilder Table<TTable>() where TTable : ITable, new()
     {
-        using (var table=new TTable())
+        using(var table = new TTable())
         {
-            return Table(table.Name,table.Schema);
+            return Table(table.Name, table.Schema);
         }
     }
 
@@ -61,7 +61,7 @@ internal sealed class DeleteQueryBuilder : AbstractQueryBuilder,
         ValidateAndThrow();
         writer.Write(C.DELETE);
         writer.Write(C.SPACE);
-        if (_topClause != null)
+        if(_topClause != null)
         {
             writer.Write(C.TOP);
             writer.WriteScoped(_topClause.Value.ToString());
@@ -69,14 +69,14 @@ internal sealed class DeleteQueryBuilder : AbstractQueryBuilder,
         }
 
         writer.Write2(C.FROM);
-        if (!string.IsNullOrWhiteSpace(_schema))
+        if(!string.IsNullOrWhiteSpace(_schema))
         {
             writer.Write(_schema);
             writer.Write(C.DOT);
         }
         writer.Write(I(_tableName));
 
-        if (!string.IsNullOrEmpty(_whereCondition))
+        if(!string.IsNullOrEmpty(_whereCondition))
         {
             writer.Write2(C.WHERE);
             writer.WriteScoped(_whereCondition);

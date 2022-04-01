@@ -6,9 +6,17 @@ public class SqlEscapeStrategy : IEscapeStrategy
 {
     public string Escape(string name)
     {
-        if (name == null) return string.Empty;
-        if (name.Contains(' ')) return $"[{name}]";
-        if (!char.IsLetter(name[0]))
+        if(name == null)
+        {
+            return string.Empty;
+        }
+
+        if(name.Contains(' '))
+        {
+            return $"[{name}]";
+        }
+
+        if(!char.IsLetter(name[0]))
         {
             return $"[{name}]";
         }

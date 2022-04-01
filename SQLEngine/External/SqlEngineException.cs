@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace SQLEngine;
 
 [Serializable]
-public class SqlEngineException : Exception
+public class SqlEngineException : Exception, ISerializable
 {
     public SqlEngineException(string message) : base(message)
     {

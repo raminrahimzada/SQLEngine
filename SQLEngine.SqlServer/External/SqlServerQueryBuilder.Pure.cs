@@ -71,7 +71,7 @@ public partial class SqlServerQueryBuilder : IQueryBuilder
     {
         return new SqlServerColumn(columnName);
     }
-        
+
     [Pure]
     public AbstractSqlColumn Column(string columnName, string tableAlias)
     {
@@ -137,7 +137,7 @@ public partial class SqlServerQueryBuilder : IQueryBuilder
     public AbstractSqlExpression CallFunc(string functionName, string schema = null)
     {
         var sb = new StringBuilder();
-        if (!string.IsNullOrWhiteSpace(schema))
+        if(!string.IsNullOrWhiteSpace(schema))
         {
             sb.Append(schema);
             sb.Append(C.DOT);
@@ -150,27 +150,10 @@ public partial class SqlServerQueryBuilder : IQueryBuilder
     }
 
     [Pure]
-    public AbstractSqlExpression CallFunc(string functionName,string schema=null,params ISqlExpression[] expressions)
+    public AbstractSqlExpression CallFunc(string functionName, string schema = null, params ISqlExpression[] expressions)
     {
         var sb = new StringBuilder();
-        if (!string.IsNullOrWhiteSpace(schema))
-        {
-            sb.Append(schema);
-            sb.Append(C.DOT);
-        }
-
-        sb.Append(functionName);
-        sb.Append(C.BEGIN_SCOPE);
-        sb.AppendJoin(C.COMMA, expressions.Select(x => x.ToSqlString()).ToArray());
-        sb.Append(C.END_SCOPE);
-        return RawInternal(sb.ToString());
-    }
-
-    [Pure]
-    public AbstractSqlExpression CallFunc(string functionName,string schema=null,params AbstractSqlLiteral[] expressions)
-    {
-        var sb = new StringBuilder();
-        if (!string.IsNullOrWhiteSpace(schema))
+        if(!string.IsNullOrWhiteSpace(schema))
         {
             sb.Append(schema);
             sb.Append(C.DOT);
@@ -184,10 +167,27 @@ public partial class SqlServerQueryBuilder : IQueryBuilder
     }
 
     [Pure]
-    public AbstractSqlExpression CallFunc(string functionName,string schema=null,params AbstractSqlExpression[] expressions)
+    public AbstractSqlExpression CallFunc(string functionName, string schema = null, params AbstractSqlLiteral[] expressions)
     {
         var sb = new StringBuilder();
-        if (!string.IsNullOrWhiteSpace(schema))
+        if(!string.IsNullOrWhiteSpace(schema))
+        {
+            sb.Append(schema);
+            sb.Append(C.DOT);
+        }
+
+        sb.Append(functionName);
+        sb.Append(C.BEGIN_SCOPE);
+        sb.AppendJoin(C.COMMA, expressions.Select(x => x.ToSqlString()).ToArray());
+        sb.Append(C.END_SCOPE);
+        return RawInternal(sb.ToString());
+    }
+
+    [Pure]
+    public AbstractSqlExpression CallFunc(string functionName, string schema = null, params AbstractSqlExpression[] expressions)
+    {
+        var sb = new StringBuilder();
+        if(!string.IsNullOrWhiteSpace(schema))
         {
             sb.Append(schema);
             sb.Append(C.DOT);

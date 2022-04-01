@@ -3,7 +3,7 @@
 namespace SQLEngine.SqlServer;
 
 internal class CaseWhenQueryBuilder : AbstractQueryBuilder,
-    ICaseWhenNeedWhenQueryBuilder, 
+    ICaseWhenNeedWhenQueryBuilder,
     ICaseWhenNeedThenQueryBuilder
 {
     private readonly List<string> _casesList = new();
@@ -11,7 +11,7 @@ internal class CaseWhenQueryBuilder : AbstractQueryBuilder,
     private string _currentThen = string.Empty;
     private string _elseCase;
 
-        
+
     public ICaseWhenNeedThenQueryBuilder When(AbstractSqlCondition condition)
     {
         _currentWhen = condition.ToSqlString();
@@ -100,12 +100,12 @@ internal class CaseWhenQueryBuilder : AbstractQueryBuilder,
         writer.Write(C.BEGIN_SCOPE);
         writer.Write(C.CASE);
         writer.Write(C.SPACE);
-        foreach (string @case in _casesList)
+        foreach(string @case in _casesList)
         {
             writer.WriteLine(@case);
         }
 
-        if (!string.IsNullOrWhiteSpace(_elseCase))
+        if(!string.IsNullOrWhiteSpace(_elseCase))
         {
             writer.Write(C.SPACE);
             writer.Write(C.ELSE);

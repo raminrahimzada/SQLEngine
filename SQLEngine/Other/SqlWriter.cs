@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SQLEngine;
 
-public sealed class SqlWriter:ISqlWriter
+public sealed class SqlWriter : ISqlWriter
 {
     private readonly StringBuilder _stringBuilder;
     private readonly IndentedTextWriter _indentedTextWriter;
@@ -14,11 +14,11 @@ public sealed class SqlWriter:ISqlWriter
 
     internal SqlWriter()
     {
-        _stringBuilder=new StringBuilder();
+        _stringBuilder = new StringBuilder();
         _indentedTextWriter = new IndentedTextWriter(new StringWriter(_stringBuilder));
     }
 
-    [Obsolete("Do not use",true)]
+    [Obsolete("Do not use", true)]
 #pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
     public override string ToString()
 #pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
@@ -34,7 +34,7 @@ public sealed class SqlWriter:ISqlWriter
 
     public void Write(params string[] expressions)
     {
-        foreach (var expression in expressions)
+        foreach(var expression in expressions)
         {
             _indentedTextWriter.Write(expression);
         }
@@ -76,15 +76,19 @@ public sealed class SqlWriter:ISqlWriter
 
     public void WriteLine(string expression)
     {
-        if (!string.IsNullOrWhiteSpace(expression))
+        if(!string.IsNullOrWhiteSpace(expression))
+        {
             _indentedTextWriter.WriteLine(expression);
+        }
         else
+        {
             _indentedTextWriter.WriteLine();
+        }
     }
 
     public void WriteLine(char? expression = null)
     {
-        if (expression != null)
+        if(expression != null)
         {
             _indentedTextWriter.Write(expression.Value);
         }

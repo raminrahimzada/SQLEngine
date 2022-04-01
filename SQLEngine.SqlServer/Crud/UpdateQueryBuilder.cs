@@ -3,46 +3,46 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer;
 
-internal class UpdateQueryBuilder : AbstractQueryBuilder, 
-    IUpdateNoTopQueryBuilder, 
-    IUpdateNoTableAndTopQueryBuilder, 
+internal class UpdateQueryBuilder : AbstractQueryBuilder,
+    IUpdateNoTopQueryBuilder,
+    IUpdateNoTableAndTopQueryBuilder,
     IUpdateNoTableAndValuesAndWhereQueryBuilder,
-    IUpdateQueryBuilder, 
-    IUpdateNoTableSingleValueQueryBuilder, 
-    IUpdateNoTableQueryBuilder, 
+    IUpdateQueryBuilder,
+    IUpdateNoTableSingleValueQueryBuilder,
+    IUpdateNoTableQueryBuilder,
     IUpdateNoTableAndValuesQueryBuilder
 {
     private string _tableName;
     private string _tableSchema;
-    private Dictionary<string, string> _columnsAndValuesDictionary=new();
+    private Dictionary<string, string> _columnsAndValuesDictionary = new();
     private string _whereCondition;
     private int? _topClause;
 
 
     private void Validate()
     {
-        if (_columnsAndValuesDictionary.Count == 0)
+        if(_columnsAndValuesDictionary.Count == 0)
         {
             Bomb();
         }
-        if (_topClause <= 0)
+        if(_topClause <= 0)
         {
             Bomb();
         }
     }
 
-    public IUpdateNoTableQueryBuilder Table(string tableName,string schema=null)
+    public IUpdateNoTableQueryBuilder Table(string tableName, string schema = null)
     {
         _tableName = tableName;
         _tableSchema = schema;
         return this;
     }
 
-    public IUpdateNoTableQueryBuilder Table<TTable>() where TTable:ITable, new()
+    public IUpdateNoTableQueryBuilder Table<TTable>() where TTable : ITable, new()
     {
-        using (var table=new TTable())
+        using(var table = new TTable())
         {
-            return Table(table.Name,table.Schema);
+            return Table(table.Name, table.Schema);
         }
     }
 
@@ -54,7 +54,7 @@ internal class UpdateQueryBuilder : AbstractQueryBuilder,
     }
 
 
-      
+
     IUpdateNoTableAndValuesQueryBuilder IUpdateNoTableQueryBuilder.Values(Dictionary<string, ISqlExpression> updateDict)
     {
         _columnsAndValuesDictionary = updateDict.ToDictionary(x => x.Key, x => x.Value.ToSqlString());
@@ -63,7 +63,7 @@ internal class UpdateQueryBuilder : AbstractQueryBuilder,
 
     public IUpdateNoTableAndValuesQueryBuilder Values(Dictionary<string, AbstractSqlLiteral> updateDict)
     {
-        _columnsAndValuesDictionary = updateDict.ToDictionary(x => x.Key, x =>  x.Value.ToSqlString());
+        _columnsAndValuesDictionary = updateDict.ToDictionary(x => x.Key, x => x.Value.ToSqlString());
         return this;
     }
 
@@ -110,17 +110,21 @@ internal class UpdateQueryBuilder : AbstractQueryBuilder,
 
     public IUpdateNoTableSingleValueQueryBuilder Value(string columnName, AbstractSqlExpression expression)
     {
-        if (_columnsAndValuesDictionary == null) _columnsAndValuesDictionary = new Dictionary<string, string>();
+        if(_columnsAndValuesDictionary == null)
+        {
+            _columnsAndValuesDictionary = new Dictionary<string, string>();
+        }
+
         _columnsAndValuesDictionary.Add(columnName, expression.ToSqlString());
         return this;
     }
-         
+
     public IUpdateNoTopQueryBuilder Top(int? count)
     {
         _topClause = count;
         return this;
     }
-       
+
     public IUpdateNoTableAndValuesAndWhereQueryBuilder Where(AbstractSqlCondition condition)
     {
         _whereCondition = condition.ToSqlString();
@@ -145,7 +149,7 @@ internal class UpdateQueryBuilder : AbstractQueryBuilder,
 
     public IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnLike(string columnName, string right)
     {
-        _whereCondition = columnName + C.SPACE + C.LIKE + C.SPACE + ((AbstractSqlLiteral) right).ToSqlString();
+        _whereCondition = columnName + C.SPACE + C.LIKE + C.SPACE + ((AbstractSqlLiteral)right).ToSqlString();
         return this;
     }
 
@@ -154,14 +158,14 @@ internal class UpdateQueryBuilder : AbstractQueryBuilder,
         Validate();
 
         writer.Write2(C.UPDATE);
-        if (_topClause != null)
+        if(_topClause != null)
         {
             writer.Write(C.TOP);
             writer.WriteScoped(_topClause.Value.ToString());
             writer.Write(C.SPACE);
         }
 
-        if (!string.IsNullOrWhiteSpace(_tableSchema))
+        if(!string.IsNullOrWhiteSpace(_tableSchema))
         {
             writer.Write(_tableSchema);
             writer.Write(C.DOT);
@@ -171,22 +175,24 @@ internal class UpdateQueryBuilder : AbstractQueryBuilder,
         writer.WriteLine();
         writer.Indent++;
         writer.Write2(C.SET);
-        if (_columnsAndValuesDictionary != null)
+        if(_columnsAndValuesDictionary != null)
         {
             var keys = _columnsAndValuesDictionary.Keys.ToArray();
-            for (var i = 0; i < _columnsAndValuesDictionary.Count; i++)
+            for(var i = 0; i < _columnsAndValuesDictionary.Count; i++)
             {
                 var key = keys[i];
                 var value = _columnsAndValuesDictionary[key];
                 writer.Write(I(key));
                 writer.Write2(C.EQUALS);
                 writer.Write(value);
-                if (i != _columnsAndValuesDictionary.Count - 1)
+                if(i != _columnsAndValuesDictionary.Count - 1)
+                {
                     writer.Write2(C.COMMA);
+                }
             }
         }
 
-        if (!string.IsNullOrEmpty(_whereCondition))
+        if(!string.IsNullOrEmpty(_whereCondition))
         {
             writer.WriteLine();
             writer.Write2(C.WHERE);

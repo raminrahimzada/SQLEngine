@@ -13,11 +13,11 @@ internal sealed class DeclarationQueryBuilder : AbstractQueryBuilder,
     protected override void ValidateAndThrow()
     {
         base.ValidateAndThrow();
-        if (string.IsNullOrEmpty(_variableName))
+        if(string.IsNullOrEmpty(_variableName))
         {
             Bomb();
         }
-        if (string.IsNullOrEmpty(_type))
+        if(string.IsNullOrEmpty(_type))
         {
             Bomb();
         }
@@ -47,7 +47,7 @@ internal sealed class DeclarationQueryBuilder : AbstractQueryBuilder,
         writer.Write(_variableName);
         writer.Write(C.SPACE);
         writer.Write(_type);
-        if (!string.IsNullOrEmpty(_defaultValueSql))
+        if(!string.IsNullOrEmpty(_defaultValueSql))
         {
             writer.Write2(C.EQUALS);
             writer.Write(C.BEGIN_SCOPE);

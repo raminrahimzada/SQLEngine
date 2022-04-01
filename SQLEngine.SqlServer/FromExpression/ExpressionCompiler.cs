@@ -7,11 +7,11 @@ using System.Reflection;
 
 namespace SQLEngine.SqlServer;
 
-public class SqlExpressionCompiler: IExpressionCompiler
+public class SqlExpressionCompiler : IExpressionCompiler
 {
     public string Compile<T>(Expression<Func<T, bool>> expression)
     {
-        switch (expression.NodeType)
+        switch(expression.NodeType)
         {
             case ExpressionType.Add:
                 break;
@@ -50,15 +50,15 @@ public class SqlExpressionCompiler: IExpressionCompiler
             case ExpressionType.Invoke:
                 break;
             case ExpressionType.Lambda:
-                if (expression.Body is MethodCallExpression body)
+                if(expression.Body is MethodCallExpression body)
                 {
                     return Compile(body);
                 }
-                if (expression.Body is UnaryExpression unaryExpression)
+                if(expression.Body is UnaryExpression unaryExpression)
                 {
                     return Compile(unaryExpression);
                 }
-                if (expression.Body is BinaryExpression binaryExpression)
+                if(expression.Body is BinaryExpression binaryExpression)
                 {
                     return Compile(binaryExpression);
                 }
@@ -203,7 +203,7 @@ public class SqlExpressionCompiler: IExpressionCompiler
     }
     private static string Compile(UnaryExpression expression)
     {
-        switch (expression.NodeType)
+        switch(expression.NodeType)
         {
             case ExpressionType.Add:
                 break;
@@ -395,15 +395,15 @@ public class SqlExpressionCompiler: IExpressionCompiler
             "Boolean Contains[Int64](System.Collections.Generic.IEnumerable`1[System.Int64], Int64)",
             "Boolean Contains[Decimal](System.Collections.Generic.IEnumerable`1[System.Decimal], System.Decimal)",
         };
-       
+
         const string sqrtMethod = "Double Sqrt(Double)";
-            
+
         var methodStr = expression.Method.ToString();
-        if (containsMethods.Contains(methodStr))
+        if(containsMethods.Contains(methodStr))
         {
             return Compile(expression.Arguments[1]) + " IN (" + Compile(expression.Arguments[0]) + ")";
         }
-        if (methodStr == sqrtMethod)
+        if(methodStr == sqrtMethod)
         {
             return " SQRT(" + Compile(expression.Arguments[0]) + ")";
         }
@@ -413,7 +413,7 @@ public class SqlExpressionCompiler: IExpressionCompiler
 
     private static string Compile(BinaryExpression expression)
     {
-        switch (expression.NodeType)
+        switch(expression.NodeType)
         {
             case ExpressionType.Add:
                 return Compile(expression.Left) + "+" + Compile(expression.Right);
@@ -442,11 +442,11 @@ public class SqlExpressionCompiler: IExpressionCompiler
             case ExpressionType.Divide:
                 return Compile(expression.Left) + " / " + Compile(expression.Right);
             case ExpressionType.Equal:
-                return CompileBinary(expression.Left, expression.Right,"=");
+                return CompileBinary(expression.Left, expression.Right, "=");
             case ExpressionType.ExclusiveOr:
                 break;
             case ExpressionType.GreaterThan:
-                return CompileBinary(expression.Left, expression.Right,">");
+                return CompileBinary(expression.Left, expression.Right, ">");
             case ExpressionType.GreaterThanOrEqual:
                 return CompileBinary(expression.Left, expression.Right, ">=");
             case ExpressionType.Invoke:
@@ -591,27 +591,27 @@ public class SqlExpressionCompiler: IExpressionCompiler
         throw new NotImplementedException();
     }
 
-    private static string CompileBinary(Expression left, Expression right,string @operator)
+    private static string CompileBinary(Expression left, Expression right, string @operator)
     {
         @operator = $" {@operator} ";
-        if (left.NodeType == ExpressionType.Convert && right.NodeType==ExpressionType.Constant)
+        if(left.NodeType == ExpressionType.Convert && right.NodeType == ExpressionType.Constant)
         {
-            var memberExpression = ((MemberExpression) ((UnaryExpression) left)?.Operand);
-            var leftPropertyType = ((PropertyInfo) memberExpression?.Member)
+            var memberExpression = ((MemberExpression)((UnaryExpression)left)?.Operand);
+            var leftPropertyType = ((PropertyInfo)memberExpression?.Member)
                 ?.PropertyType;
-            var constantExpression = ((ConstantExpression) right);
+            var constantExpression = ((ConstantExpression)right);
             var rightType = constantExpression.Type;
             //
-            if (leftPropertyType == typeof(long))
+            if(leftPropertyType == typeof(long))
             {
                 return Compile(memberExpression) + @operator + Compile(right);
             }
-            if (leftPropertyType == typeof(int))
+            if(leftPropertyType == typeof(int))
             {
-                if (rightType == typeof(long))
+                if(rightType == typeof(long))
                 {
                     var rightValue = (long)constantExpression.Value;
-                    if (rightValue is < int.MaxValue and > int.MinValue)
+                    if(rightValue is < int.MaxValue and > int.MinValue)
                     {
                         return Compile(memberExpression) + @operator + Compile(right);
                     }
@@ -623,12 +623,12 @@ public class SqlExpressionCompiler: IExpressionCompiler
                 return Compile(memberExpression) + @operator + Compile(right);
             }
 
-            if (leftPropertyType == typeof(short))
+            if(leftPropertyType == typeof(short))
             {
-                if (rightType == typeof(int))
+                if(rightType == typeof(int))
                 {
                     var rightValue = (int)constantExpression.Value;
-                    if (rightValue is < short.MaxValue and > short.MinValue)
+                    if(rightValue is < short.MaxValue and > short.MinValue)
                     {
                         return Compile(memberExpression) + @operator + Compile(right);
                     }
@@ -637,10 +637,10 @@ public class SqlExpressionCompiler: IExpressionCompiler
                         throw new ArgumentOutOfRangeException();
                     }
                 }
-                if (rightType == typeof(long))
+                if(rightType == typeof(long))
                 {
                     var rightValue = (long)constantExpression.Value;
-                    if (rightValue is < short.MaxValue and > short.MinValue)
+                    if(rightValue is < short.MaxValue and > short.MinValue)
                     {
                         return Compile(memberExpression) + @operator + Compile(right);
                     }
@@ -653,12 +653,12 @@ public class SqlExpressionCompiler: IExpressionCompiler
             }
 
 
-            if (leftPropertyType == typeof(byte))
+            if(leftPropertyType == typeof(byte))
             {
-                if (rightType == typeof(short))
+                if(rightType == typeof(short))
                 {
                     var rightValue = (short)constantExpression.Value;
-                    if (rightValue is < byte.MaxValue and > byte.MinValue)
+                    if(rightValue is < byte.MaxValue and > byte.MinValue)
                     {
                         return Compile(memberExpression) + @operator + Compile(right);
                     }
@@ -667,10 +667,10 @@ public class SqlExpressionCompiler: IExpressionCompiler
                         throw new ArgumentOutOfRangeException();
                     }
                 }
-                if (rightType == typeof(int))
+                if(rightType == typeof(int))
                 {
                     var rightValue = (int)constantExpression.Value;
-                    if (rightValue is < byte.MaxValue and > byte.MinValue)
+                    if(rightValue is < byte.MaxValue and > byte.MinValue)
                     {
                         return Compile(memberExpression) + @operator + Compile(right);
                     }
@@ -679,10 +679,10 @@ public class SqlExpressionCompiler: IExpressionCompiler
                         throw new ArgumentOutOfRangeException();
                     }
                 }
-                if (rightType == typeof(long))
+                if(rightType == typeof(long))
                 {
                     var rightValue = (long)constantExpression.Value;
-                    if (rightValue is < byte.MaxValue and > byte.MinValue)
+                    if(rightValue is < byte.MaxValue and > byte.MinValue)
                     {
                         return Compile(memberExpression) + @operator + Compile(right);
                     }
@@ -696,7 +696,7 @@ public class SqlExpressionCompiler: IExpressionCompiler
             ;
         }
 
-        if (left.NodeType == ExpressionType.Convert && right.NodeType == ExpressionType.Convert)
+        if(left.NodeType == ExpressionType.Convert && right.NodeType == ExpressionType.Convert)
         {
             var leftMemberExpression = ((UnaryExpression)left)?.Operand;
             var rightMemberExpression = ((UnaryExpression)right)?.Operand;
@@ -710,7 +710,7 @@ public class SqlExpressionCompiler: IExpressionCompiler
 
     private static string Compile(Expression expression)
     {
-        switch (expression.NodeType)
+        switch(expression.NodeType)
         {
             case ExpressionType.Add:
                 break;
@@ -736,14 +736,20 @@ public class SqlExpressionCompiler: IExpressionCompiler
                 var constantExpression = (expression as ConstantExpression);
                 return ToSqlString(constantExpression?.Value);
             case ExpressionType.Convert:
-                if (expression is UnaryExpression unaryExpression)
+                if(expression is UnaryExpression unaryExpression)
+                {
                     return CompileCast(unaryExpression.Operand, unaryExpression.Type);
+                }
+
                 break;
             case ExpressionType.ConvertChecked:
                 break;
             case ExpressionType.Divide:
-                if (expression is BinaryExpression binaryExpressionDivide)
+                if(expression is BinaryExpression binaryExpressionDivide)
+                {
                     return "(" + Compile(binaryExpressionDivide.Left) + ") / (" + Compile(binaryExpressionDivide.Right) + ")";
+                }
+
                 break;
             case ExpressionType.Equal:
                 break;
@@ -766,7 +772,7 @@ public class SqlExpressionCompiler: IExpressionCompiler
             case ExpressionType.ListInit:
                 break;
             case ExpressionType.MemberAccess:
-                if (expression is MemberExpression memberExpression)
+                if(expression is MemberExpression memberExpression)
                 {
                     try
                     {
@@ -785,8 +791,11 @@ public class SqlExpressionCompiler: IExpressionCompiler
             case ExpressionType.Modulo:
                 break;
             case ExpressionType.Multiply:
-                if (expression is BinaryExpression binaryExpression)
+                if(expression is BinaryExpression binaryExpression)
+                {
                     return "(" + Compile(binaryExpression.Left) + ") * (" + Compile(binaryExpression.Right) + ")";
+                }
+
                 break;
             case ExpressionType.MultiplyChecked:
                 break;
@@ -907,18 +916,18 @@ public class SqlExpressionCompiler: IExpressionCompiler
             default:
                 throw new ArgumentOutOfRangeException();
         }
-            
+
         throw new NotImplementedException();
     }
 
     private static string CompileCast(Expression expression, Type type)
     {
-        if (expression.NodeType == ExpressionType.MemberAccess)
+        if(expression.NodeType == ExpressionType.MemberAccess)
         {
-            var memberExpression = (MemberExpression) expression;
+            var memberExpression = (MemberExpression)expression;
             if(memberExpression.Member is PropertyInfo propertyInfo)
             {
-                if (propertyInfo.PropertyType == type)
+                if(propertyInfo.PropertyType == type)
                 {
                     return Compile(memberExpression);
                 }
@@ -927,9 +936,9 @@ public class SqlExpressionCompiler: IExpressionCompiler
                     ;
                 }
             }
-            else if (memberExpression.Member is FieldInfo fieldInfo)
+            else if(memberExpression.Member is FieldInfo fieldInfo)
             {
-                if (fieldInfo.FieldType == type)
+                if(fieldInfo.FieldType == type)
                 {
                     return Compile(memberExpression);
                 }
@@ -949,20 +958,63 @@ public class SqlExpressionCompiler: IExpressionCompiler
 
     private static string ToSqlString(object value)
     {
-        if (value == null) return "NULL";
-        AbstractSqlLiteral literal = null;
-        if (value is int x1) literal = AbstractSqlLiteral.From(x1);
-        if (value is long x2) literal = AbstractSqlLiteral.From(x2);
-        if (value is short x3) literal = AbstractSqlLiteral.From(x3);
-        if (value is double x4) literal = AbstractSqlLiteral.From(x4);
-        if (value is decimal x5) literal = AbstractSqlLiteral.From(x5);
-        if (value is float x6) literal = AbstractSqlLiteral.From(x6);
-        if (value is char x7) literal = AbstractSqlLiteral.From(x7);
-        if (value is string x8) literal = AbstractSqlLiteral.From(x8);
-        if (value is byte x9) literal = AbstractSqlLiteral.From(x9);
-        if (value is Guid x10) literal = AbstractSqlLiteral.From(x10);
+        if(value == null)
+        {
+            return "NULL";
+        }
 
-        if (literal == null)
+        AbstractSqlLiteral literal = null;
+        if(value is int x1)
+        {
+            literal = AbstractSqlLiteral.From(x1);
+        }
+
+        if(value is long x2)
+        {
+            literal = AbstractSqlLiteral.From(x2);
+        }
+
+        if(value is short x3)
+        {
+            literal = AbstractSqlLiteral.From(x3);
+        }
+
+        if(value is double x4)
+        {
+            literal = AbstractSqlLiteral.From(x4);
+        }
+
+        if(value is decimal x5)
+        {
+            literal = AbstractSqlLiteral.From(x5);
+        }
+
+        if(value is float x6)
+        {
+            literal = AbstractSqlLiteral.From(x6);
+        }
+
+        if(value is char x7)
+        {
+            literal = AbstractSqlLiteral.From(x7);
+        }
+
+        if(value is string x8)
+        {
+            literal = AbstractSqlLiteral.From(x8);
+        }
+
+        if(value is byte x9)
+        {
+            literal = AbstractSqlLiteral.From(x9);
+        }
+
+        if(value is Guid x10)
+        {
+            literal = AbstractSqlLiteral.From(x10);
+        }
+
+        if(literal == null)
         {
             throw null;
         }
@@ -972,31 +1024,31 @@ public class SqlExpressionCompiler: IExpressionCompiler
 
     private static string Compile(Type value)
     {
-        if (value.ToString() == "System.Double")
+        if(value.ToString() == "System.Double")
         {
             return "double";
         }
-        if (value.ToString() == "System.Int64")
+        if(value.ToString() == "System.Int64")
         {
             return "bigint";
         }
-        if (value.ToString() == "System.Int32")
+        if(value.ToString() == "System.Int32")
         {
             return "int";
         }
-        if (value.ToString() == "System.Int16")
+        if(value.ToString() == "System.Int16")
         {
             return "smallint";
         }
-        if (value.ToString() == "System.Single")
+        if(value.ToString() == "System.Single")
         {
             return "float";
         }
-        if (value.ToString() == "System.Byte")
+        if(value.ToString() == "System.Byte")
         {
             return "tinyint";
         }
-        if (value.ToString() == "System.Decimal")
+        if(value.ToString() == "System.Decimal")
         {
             return "decimal(19,4)";
         }
@@ -1005,43 +1057,43 @@ public class SqlExpressionCompiler: IExpressionCompiler
     }
     private static string Compile(object value)
     {
-        if (value is int[] intArr)
+        if(value is int[] intArr)
         {
             return string.Join(",", intArr);
         }
-        if (value is long[] longArr)
+        if(value is long[] longArr)
         {
             return string.Join(",", longArr);
         }
-        if (value is short[] shortArr)
+        if(value is short[] shortArr)
         {
             return string.Join(",", shortArr);
         }
-        if (value is byte[] byteArr)
+        if(value is byte[] byteArr)
         {
             return string.Join(",", byteArr);
         }
-        if (value is double[] doubleArr)
+        if(value is double[] doubleArr)
         {
             return string.Join(",", doubleArr);
         }
-        if (value is decimal[] decimalArr)
+        if(value is decimal[] decimalArr)
         {
             return string.Join(",", decimalArr);
         }
-        if (value is float[] floatArr)
+        if(value is float[] floatArr)
         {
             return string.Join(",", floatArr);
         }
-        if (value is string[] stringArr)
+        if(value is string[] stringArr)
         {
-            return string.Join(",", stringArr.Select(x=>$"N'{x.Replace("'","''")}'"));
+            return string.Join(",", stringArr.Select(x => $"N'{x.Replace("'", "''")}'"));
         }
-        if (value is Guid g)
+        if(value is Guid g)
         {
             return $"'{g}'";
         }
-        if (value is byte b)
+        if(value is byte b)
         {
             return $"{b}";
         }

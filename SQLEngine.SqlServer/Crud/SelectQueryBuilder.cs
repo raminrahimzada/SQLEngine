@@ -30,8 +30,8 @@ internal class SelectQueryBuilder<TTable> : SelectQueryBuilder,
         return this;
     }
 }
-internal class SelectQueryBuilder : AbstractQueryBuilder, 
-    ISelectQueryBuilder, 
+internal class SelectQueryBuilder : AbstractQueryBuilder,
+    ISelectQueryBuilder,
     ISelectNoTopQueryBuilder,
     ISelectWithoutFromQueryBuilder,
     ISelectWithoutWhereQueryBuilder,
@@ -45,12 +45,12 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
     {
         private readonly IAbstractQueryBuilder _internalBuilder;
         private readonly bool? _isDesc;
-        public OrderByQueryModel(AggregateFunctionBuilder aggregateFunction,bool? isDesc)
+        public OrderByQueryModel(AggregateFunctionBuilder aggregateFunction, bool? isDesc)
         {
             _internalBuilder = aggregateFunction;
             _isDesc = isDesc;
         }
-        public OrderByQueryModel(CustomFunctionCallExpressionBuilder customFunctionCallExpressionBuilder,bool? isDesc=false)
+        public OrderByQueryModel(CustomFunctionCallExpressionBuilder customFunctionCallExpressionBuilder, bool? isDesc = false)
         {
             _internalBuilder = customFunctionCallExpressionBuilder;
             _isDesc = isDesc;
@@ -66,20 +66,20 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
         public void Build(ISqlWriter writer)
         {
             _internalBuilder.Build(writer);
-            if (_isDesc??false)
+            if(_isDesc ?? false)
             {
                 writer.Write(C.SPACE);
                 writer.Write(C.DESC);
             }
         }
     }
-        
+
     internal class SelectorCollection
     {
         private readonly List<string> _rawSqlQueryList = new();
 
         public void Add(IAbstractQueryBuilder abstractQueryBuilder)
-        {                
+        {
             var writer = SqlWriter.New;
             abstractQueryBuilder.Build(writer);
             _rawSqlQueryList.Add(writer.Build());
@@ -104,7 +104,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
             _rawSqlQueryList.Add(rawExpression);
         }
 
-            
+
         public void Add(AbstractSqlColumn column)
         {
             _rawSqlQueryList.Add(column.ToSqlString());
@@ -131,34 +131,49 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
     internal bool? _hasDistinct;
     internal string _having;
 
-    internal JoinModel _currentJoinModel=new();
+    internal JoinModel _currentJoinModel = new();
 
     internal List<JoinModel> _joinsList = new();
     internal List<OrderByQueryModel> _orderByClauses = new();
-    internal List<string> _groupByClauses=new();
+    internal List<string> _groupByClauses = new();
     private SelectQueryBuilder _actualBuilder;
 
     private static void MutateAliasName(ref string alias)
     {
-        if (string.IsNullOrEmpty(alias)) return;
-        if (string.IsNullOrWhiteSpace(alias)) return;
-        if (alias.All(char.IsLetterOrDigit)) return;
-        if (
+        if(string.IsNullOrEmpty(alias))
+        {
+            return;
+        }
+
+        if(string.IsNullOrWhiteSpace(alias))
+        {
+            return;
+        }
+
+        if(alias.All(char.IsLetterOrDigit))
+        {
+            return;
+        }
+
+        if(
             alias.StartsWith(C.BEGIN_SQUARE) &&
             alias.EndsWith(C.END_SQUARE)
         )
+        {
             return;
+        }
+
         alias = alias.Replace(C.BEGIN_SQUARE.ToString(), "\\" + C.BEGIN_SQUARE);
         alias = alias.Replace(C.END_SQUARE.ToString(), "\\" + C.END_SQUARE);
         alias = string.Concat(C.BEGIN_SQUARE, alias, C.END_SQUARE);
     }
-    public ISelectWithoutFromQueryBuilder<TTable> From<TTable>(string tableName,string schema, string alias)
+    public ISelectWithoutFromQueryBuilder<TTable> From<TTable>(string tableName, string schema, string alias)
     {
         MutateAliasName(ref alias);
         _mainTableName = tableName;
         _mainTableSchema = schema;
         _mainTableAlias = alias;
-        var newBuilder= new SelectQueryBuilder<TTable>(this);
+        var newBuilder = new SelectQueryBuilder<TTable>(this);
         _actualBuilder = newBuilder;
         return newBuilder;
     }
@@ -179,9 +194,9 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
         _mainTableSchema = schema;
         return this;
     }
-    public ISelectWithoutFromQueryBuilder<TTable> From<TTable>() where TTable : ITable,new()
+    public ISelectWithoutFromQueryBuilder<TTable> From<TTable>() where TTable : ITable, new()
     {
-        using (var table=new TTable())
+        using(var table = new TTable())
         {
             _mainTableName = table.Name;
             _mainTableSchema = table.Schema;
@@ -193,7 +208,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
 
     public ISelectWithoutFromQueryBuilder<TView> FromView<TView>() where TView : IView, new()
     {
-        using (var table=new TView())
+        using(var table = new TView())
         {
             _mainTableName = table.Name;
             _mainTableSchema = table.Schema;
@@ -204,7 +219,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
     }
     public ISelectWithoutFromQueryBuilder<TView> FromView<TView>(string alias) where TView : IView, new()
     {
-        using (var table = new TView())
+        using(var table = new TView())
         {
             _mainTableName = table.Name;
             _mainTableSchema = table.Schema;
@@ -214,15 +229,15 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
             return builder;
         }
     }
-    public ISelectWithoutFromQueryBuilder<TTable> From<TTable>(string alias) where TTable : ITable,new()
+    public ISelectWithoutFromQueryBuilder<TTable> From<TTable>(string alias) where TTable : ITable, new()
     {
-        using (var table = new TTable())
+        using(var table = new TTable())
         {
             return From<TTable>(table.Name, table.Schema, alias);
         }
     }
 
-        
+
     public ISelectWithSelectorQueryBuilder SelectAssign(AbstractSqlVariable left, ISqlExpression right)
     {
         _selectors.Add(new CustomFunctionCallExpressionBuilder().Assign(left, right));
@@ -238,7 +253,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
         _selectors.Add(new CustomFunctionCallExpressionBuilder().Assign(left, column));
         return this;
     }
-        
+
 
     public ISelectWithSelectorQueryBuilder Select(ISqlExpression expression)
     {
@@ -255,7 +270,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
         _selectors.Add(new SqlServerColumn(columnName));
         return this;
     }
-    public ISelectWithSelectorQueryBuilder Select(string columnName,string tableAlias)
+    public ISelectWithSelectorQueryBuilder Select(string columnName, string tableAlias)
     {
         _selectors.Add(new SqlServerColumn(columnName, tableAlias));
         return this;
@@ -269,7 +284,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
     }
     public ISelectWithSelectorQueryBuilder Select(Func<ICaseWhenNeedWhenQueryBuilder, ICaseWhenQueryBuilder> caseWhen)
     {
-        using (var t=new CaseWhenQueryBuilder())
+        using(var t = new CaseWhenQueryBuilder())
         {
             caseWhen(t);
             _selectors.Add(t.Build());
@@ -278,7 +293,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
     }
     public ISelectWithSelectorQueryBuilder Select(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFunctionCallExpression)
     {
-        using (var t=new CustomFunctionCallExpressionBuilder())
+        using(var t = new CustomFunctionCallExpressionBuilder())
         {
             customFunctionCallExpression(t);
             _selectors.Add(t.Build());
@@ -287,7 +302,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
     }
     public ISelectWithSelectorQueryBuilder Select(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate)
     {
-        using (var b = new AggregateFunctionBuilder())
+        using(var b = new AggregateFunctionBuilder())
         {
             aggregate(b);
             _selectors.Add(new OrderByQueryModel(b, false));
@@ -297,7 +312,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
 
     public ISelectWithSelectorQueryBuilder Select(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallNopBuilder> aggregate)
     {
-        using (var b = new CustomFunctionCallExpressionBuilder())
+        using(var b = new CustomFunctionCallExpressionBuilder())
         {
             aggregate(b);
             _selectors.Add(new OrderByQueryModel(b));
@@ -309,10 +324,10 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
 
     public ISelectWithSelectorQueryBuilder SelectAs(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFunctionCallExpression, string alias)
     {
-        using (var t=new CustomFunctionCallExpressionBuilder())
+        using(var t = new CustomFunctionCallExpressionBuilder())
         {
             customFunctionCallExpression(t);
-            _selectors.Add(C.BEGIN_SCOPE+t.Build()+C.END_SCOPE + C.SPACE + C.AS + C.SPACE + alias);
+            _selectors.Add(C.BEGIN_SCOPE + t.Build() + C.END_SCOPE + C.SPACE + C.AS + C.SPACE + alias);
             return this;
         }
     }
@@ -326,14 +341,14 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
     public ISelectWithSelectorQueryBuilder SelectAs(Func<ICaseWhenNeedWhenQueryBuilder, ICaseWhenQueryBuilder> caseWhen, string alias)
     {
         MutateAliasName(ref alias);
-        using (var t = new CaseWhenQueryBuilder())
+        using(var t = new CaseWhenQueryBuilder())
         {
             caseWhen(t);
             _selectors.Add($"({t.Build()}) {C.AS} {alias}");
             return this;
         }
     }
-        
+
 
 
     public ISelectWithSelectorQueryBuilder SelectLiteral(AbstractSqlLiteral literal)
@@ -419,7 +434,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
 
     public override void Build(ISqlWriter writer)
     {
-        if (_actualBuilder != null)
+        if(_actualBuilder != null)
         {
             _actualBuilder.Build(writer);
             return;
@@ -427,12 +442,12 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
         ValidateAndThrow();
         writer.Write(C.SELECT);
         writer.Write(C.SPACE);
-        if (_hasDistinct != null)
+        if(_hasDistinct != null)
         {
             writer.Write(C.DISTINCT);
             writer.Write2();
         }
-        if (_topClause != null)
+        if(_topClause != null)
         {
             writer.Write(C.TOP);
             writer.WriteScoped(_topClause.Value.ToString());
@@ -440,7 +455,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
         }
 
         var hasSelector = _selectors != null && _selectors.Count > 0;
-        if (!hasSelector)
+        if(!hasSelector)
         {
             //no selector then select *
             writer.Write2(C.WILCARD);
@@ -451,7 +466,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
         }
 
         //simple select -> select 1 as A 'test' as B
-        if (string.IsNullOrWhiteSpace(_mainTableName))
+        if(string.IsNullOrWhiteSpace(_mainTableName))
         {
             writer.WriteLine();
             return;
@@ -461,9 +476,9 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
         writer.Indent++;
         writer.Write(C.FROM);
         writer.Write(C.SPACE);
-        if (!string.IsNullOrWhiteSpace(_mainTableName))
+        if(!string.IsNullOrWhiteSpace(_mainTableName))
         {
-            if (!string.IsNullOrWhiteSpace(_mainTableSchema))
+            if(!string.IsNullOrWhiteSpace(_mainTableSchema))
             {
                 writer.Write(_mainTableSchema);
                 writer.Write(C.DOT);
@@ -471,15 +486,15 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
             writer.Write(Query.Settings.EscapeStrategy.Escape(_mainTableName));
         }
         writer.Indent--;
-        if (!string.IsNullOrEmpty(_mainTableAlias))
+        if(!string.IsNullOrEmpty(_mainTableAlias))
         {
             writer.Write2(C.AS);
             writer.Write(_mainTableAlias);
         }
 
-        if (_joinsList != null)
+        if(_joinsList != null)
         {
-            foreach (var joinModel in _joinsList)
+            foreach(var joinModel in _joinsList)
             {
                 writer.WriteNewLine();
                 writer.Write(joinModel.JoinQuery());
@@ -495,12 +510,12 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
 
     #region helper methods
 
-        
+
 
     private void WhereClause(ISqlWriter writer)
     {
 
-        if (!string.IsNullOrEmpty(_whereClause))
+        if(!string.IsNullOrEmpty(_whereClause))
         {
             writer.WriteLine();
             writer.Indent++;
@@ -514,7 +529,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
 
     private void HavingClause(ISqlWriter writer)
     {
-        if (!string.IsNullOrEmpty(_having))
+        if(!string.IsNullOrEmpty(_having))
         {
             writer.WriteLine();
             writer.Indent++;
@@ -527,7 +542,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
 
     private void GroupByClause(ISqlWriter writer)
     {
-        if (_groupByClauses.Any())
+        if(_groupByClauses.Any())
         {
             writer.WriteLine();
             writer.Indent++;
@@ -536,9 +551,9 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
             writer.Write(C.BY);
             writer.Write(C.SPACE);
             bool first = true;
-            foreach (var groupByClause in _groupByClauses)
+            foreach(var groupByClause in _groupByClauses)
             {
-                if (first)
+                if(first)
                 {
                     first = false;
                 }
@@ -556,7 +571,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
 
     private void OrderByClause(ISqlWriter writer)
     {
-        if (_orderByClauses != null && _orderByClauses.Any())
+        if(_orderByClauses != null && _orderByClauses.Any())
         {
             writer.WriteLine();
             writer.Indent++;
@@ -564,9 +579,9 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
             writer.Write2(C.BY);
             bool first = true;
 
-            foreach (var orderByClause in _orderByClauses)
+            foreach(var orderByClause in _orderByClauses)
             {
-                if (first)
+                if(first)
                 {
                     first = false;
                 }
@@ -611,16 +626,16 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
         _orderByClauses.Add(new OrderByQueryModel(column, true));
         return this;
     }
-        
+
 
     public ISelectWithoutFromAndGroupQueryBuilder GroupBy(params ISqlExpression[] expressions)
     {
         _groupByClauses.AddRange(expressions.Select(x => x.ToSqlString()));
         return this;
     }
-       
-      
-      
+
+
+
     public ISelectWithoutFromAndGroupQueryBuilder GroupBy(params AbstractSqlColumn[] columns)
     {
         _groupByClauses.AddRange(columns.Select(x => x.ToSqlString()));
@@ -633,7 +648,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
     }
     public ISelectWithoutFromAndGroupQueryBuilder GroupBy(params string[] columnNames)
     {
-        var columns= columnNames.Select(columnName => new SqlServerColumn(columnName)).ToArray();
+        var columns = columnNames.Select(columnName => new SqlServerColumn(columnName)).ToArray();
         return GroupBy(columns);
     }
 
@@ -645,8 +660,8 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
 
 
 
-        
-    public ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder 
+
+    public ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder
         OrderBy(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate)
     {
         var b = new AggregateFunctionBuilder();
@@ -657,7 +672,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
 
     public ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder OrderByDesc(Func<IAggregateFunctionBuilder, IAggregateFunctionBuilder> aggregate)
     {
-        using (var b = new AggregateFunctionBuilder())
+        using(var b = new AggregateFunctionBuilder())
         {
             aggregate(b);
             _orderByClauses.Add(new OrderByQueryModel(b, false));
@@ -665,7 +680,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
         }
     }
 
-    public IJoinedNeedsOnQueryBuilder InnerJoin(string targetTableName,string schema, string targetTableAlias)
+    public IJoinedNeedsOnQueryBuilder InnerJoin(string targetTableName, string schema, string targetTableAlias)
     {
         _currentJoinModel.TableName = targetTableName;
         _currentJoinModel.TableAlias = targetTableAlias;
@@ -676,11 +691,11 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
 
     public IJoinedNeedsOnQueryBuilder InnerJoin<TTable>(string targetTableAlias) where TTable : ITable, new()
     {
-        using (var table=new TTable())
+        using(var table = new TTable())
         {
-            return InnerJoin(table.Name,table.Schema, targetTableAlias);
+            return InnerJoin(table.Name, table.Schema, targetTableAlias);
         }
-    } 
+    }
     public IJoinedNeedsOnQueryBuilder RightJoin(string targetTableName, string schema, string targetTableAlias)
     {
         _currentJoinModel.TableName = targetTableName;
@@ -692,14 +707,14 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
 
     public IJoinedNeedsOnQueryBuilder RightJoin<TTable>(string targetTableAlias) where TTable : ITable, new()
     {
-        using (var table=new TTable())
+        using(var table = new TTable())
         {
-            return RightJoin(table.Name,table.Schema, targetTableAlias);
+            return RightJoin(table.Name, table.Schema, targetTableAlias);
         }
-    } 
-        
-        
-    public IJoinedNeedsOnQueryBuilder LeftJoin(string targetTableName,string targetTableSchema, string targetTableAlias)
+    }
+
+
+    public IJoinedNeedsOnQueryBuilder LeftJoin(string targetTableName, string targetTableSchema, string targetTableAlias)
     {
         _currentJoinModel.TableName = targetTableName;
         _currentJoinModel.TableAlias = targetTableAlias;
@@ -710,9 +725,9 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
 
     public IJoinedNeedsOnQueryBuilder LeftJoin<TTable>(string targetTableAlias) where TTable : ITable, new()
     {
-        using (var table=new TTable())
+        using(var table = new TTable())
         {
-            return LeftJoin(table.Name,table.Schema, targetTableAlias);
+            return LeftJoin(table.Name, table.Schema, targetTableAlias);
         }
     }
 
@@ -746,7 +761,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
     }
     public IJoinedQueryBuilder IsEqualsTo(string sourceTableColumnName, string sourceTableAlias)
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var colTarget = q.Column(_targetTableColumn, _targetTableAlias);
             var colSource = q.Column(sourceTableColumnName, sourceTableAlias);

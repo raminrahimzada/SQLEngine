@@ -6,9 +6,9 @@ internal static class ExtensionMethods
     {
         return AbstractSqlLiteral.From(str, isUnicode);
     }
-        
+
     internal static string AsSQLVariable(this string variableName)
-    {            
+    {
         return $"@{variableName}";
     }
 }

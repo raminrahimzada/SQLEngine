@@ -4,7 +4,7 @@ using System.Diagnostics.Contracts;
 
 namespace SQLEngine;
 
-public interface IQueryBuilder: IDisposable
+public interface IQueryBuilder : IDisposable
 {
     IConditionFilterQueryHelper Helper { get; }
     void Clear();
@@ -32,11 +32,11 @@ public interface IQueryBuilder: IDisposable
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     IExecuteQueryBuilder Execute { get; }
-        
+
     void Truncate(string tableName);
     void Truncate<TTable>() where TTable : ITable, new();
-        
-        
+
+
     IDisposable If(AbstractSqlCondition condition);
     IDisposable Else2();
 
@@ -46,16 +46,16 @@ public interface IQueryBuilder: IDisposable
 
     IElseIfQueryBuilder ElseIf(AbstractSqlCondition condition);
     void Else();
-        
-        
-        
+
+
+
     void Begin();
     void End();
 
     AbstractSqlVariable DeclareNew(string type);
     AbstractSqlVariable DeclareNew(string type, AbstractSqlLiteral defaultValue);
     AbstractSqlVariable DeclareNew<T>(AbstractSqlLiteral defaultValue);
-        
+
     /// <summary>
     /// Declares a new variable with unique name and returns it
     /// </summary>
@@ -67,17 +67,15 @@ public interface IQueryBuilder: IDisposable
     AbstractSqlVariable Declare(string variableName, string type, AbstractSqlLiteral defaultValue);
     AbstractSqlVariable Declare(string variableName, string type, ISqlExpression defaultValue);
     AbstractSqlVariable Declare<T>(string variableName);
-    AbstractSqlVariable Declare<T>(string variableName,  AbstractSqlLiteral defaultValue);
-        
-        
+    AbstractSqlVariable Declare<T>(string variableName, AbstractSqlLiteral defaultValue);
+
+
 
     //default values usually become literals
-    //AbstractSqlVariable Declare(string variableName, string type, ISqlExpression defaultValue);
-    //AbstractSqlVariable DeclareRandom(string variableName, string type, ISqlExpression defaultValue);
     AbstractSqlVariable Declare(string variableName, string type, Action<IQueryBuilder> builder);
     AbstractSqlVariable Declare<T>(string variableName, Action<IQueryBuilder> builder);
 
-    AbstractSqlVariable Declare<T>(string variableName,  ISqlExpression defaultValue);
+    AbstractSqlVariable Declare<T>(string variableName, ISqlExpression defaultValue);
 
 
 
@@ -87,14 +85,14 @@ public interface IQueryBuilder: IDisposable
     void Set(AbstractSqlVariable variable, ISqlExpression value);
     void Set(AbstractSqlVariable variable, AbstractSqlVariable value);
     void Set(AbstractSqlVariable variable, AbstractSqlLiteral value);
-        
+
 
 
     void Return();
     void Return(ISqlExpression expression);
     void Return(AbstractSqlLiteral literal);
     void Comment(string comment);
-        
+
     void Cursor(
         string cursorName,
         Action<ISelectQueryBuilder> selection,
@@ -104,7 +102,7 @@ public interface IQueryBuilder: IDisposable
 
     void Print(ISqlExpression expression);
     void Print(AbstractSqlLiteral literal);
-        
+
     [Pure]
     AbstractSqlExpression Now();
 
@@ -114,12 +112,12 @@ public interface IQueryBuilder: IDisposable
     [Pure]
     ISqlExpression Len(ISqlExpression expression);
     [Pure]
-    ISqlExpression Cast(ISqlExpression expression,string asType);
+    ISqlExpression Cast(ISqlExpression expression, string asType);
 
     AbstractSqlExpression CallFunc(string functionName, string schema = null);
-    AbstractSqlExpression CallFunc(string functionName, string schema = null,params AbstractSqlLiteral[] expressions);
-    AbstractSqlExpression CallFunc(string functionName, string schema = null,params ISqlExpression[] expressions);
-    AbstractSqlExpression CallFunc(string functionName, string schema = null,params AbstractSqlExpression[] expressions);
+    AbstractSqlExpression CallFunc(string functionName, string schema = null, params AbstractSqlLiteral[] expressions);
+    AbstractSqlExpression CallFunc(string functionName, string schema = null, params ISqlExpression[] expressions);
+    AbstractSqlExpression CallFunc(string functionName, string schema = null, params AbstractSqlExpression[] expressions);
 
     void Goto(string labelName);
     IDisposable Label(string labelName);
@@ -131,8 +129,8 @@ public interface IQueryBuilder: IDisposable
     AbstractSqlExpression SubString(ISqlExpression expression, AbstractSqlLiteral start, AbstractSqlLiteral length);
     AbstractSqlExpression SubString(ISqlExpression expression, AbstractSqlLiteral start, ISqlExpression length);
     AbstractSqlExpression SubString(ISqlExpression expression, ISqlExpression start, AbstractSqlLiteral length);
-        
-        
+
+
     AbstractSqlExpression SubString(AbstractSqlLiteral expression, ISqlExpression start, ISqlExpression length);
     AbstractSqlExpression SubString(AbstractSqlLiteral expression, AbstractSqlLiteral start, AbstractSqlLiteral length);
     AbstractSqlExpression SubString(AbstractSqlLiteral expression, AbstractSqlLiteral start, ISqlExpression length);
@@ -140,21 +138,19 @@ public interface IQueryBuilder: IDisposable
 
 
     AbstractSqlColumn Column(string columnName);
-    AbstractSqlColumn Column(string columnName,string tableAlias);
+    AbstractSqlColumn Column(string columnName, string tableAlias);
 
     [Pure]
     AbstractSqlLiteral Literal(AbstractSqlLiteral literal);
 
-    //AbstractSqlLiteral Literal(string x);
-    AbstractSqlLiteral Literal(string x, bool isUniCode );
-    //AbstractSqlLiteral Literal(DateTime x);
-    AbstractSqlLiteral Literal(DateTime x, bool includeTime );
+    AbstractSqlLiteral Literal(string x, bool isUniCode);
+    AbstractSqlLiteral Literal(DateTime x, bool includeTime);
 
 
     ITryNoTryQueryBuilder Try(Action<IQueryBuilder> builder);
-        
 
-    void BeginTransaction(string transactionName=null);
+
+    void BeginTransaction(string transactionName = null);
     void CommitTransaction(string transactionName = null);
     void RollbackTransaction(string transactionName = null);
 

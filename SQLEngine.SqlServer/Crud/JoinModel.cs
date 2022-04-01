@@ -6,7 +6,7 @@ internal sealed class JoinModel
 {
     private string JoinTypeString()
     {
-        switch (JoinType)
+        switch(JoinType)
         {
             case SqlServerJoinTypes.InnerJoin:
                 return "INNER JOIN";
@@ -30,7 +30,7 @@ internal sealed class JoinModel
             C.SPACE,
             JoinTypeString(),
             C.SPACE,
-            string.IsNullOrWhiteSpace(TableSchema)?string.Empty: TableSchema+C.DOT,
+            string.IsNullOrWhiteSpace(TableSchema) ? string.Empty : TableSchema + C.DOT,
             TableName,
             C.SPACE,
             C.AS,

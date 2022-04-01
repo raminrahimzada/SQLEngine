@@ -10,7 +10,7 @@ internal class SqlServerRawExpression : AbstractSqlExpression
 
     public SqlServerRawExpression()
     {
-            
+
     }
 
     public SqlServerRawExpression(string expression)
@@ -22,7 +22,7 @@ internal class SqlServerRawExpression : AbstractSqlExpression
         Expression = string.Concat(expressions);
     }
 
-    public  override string ToSqlString()
+    public override string ToSqlString()
     {
         return Expression;
     }

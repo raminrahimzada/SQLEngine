@@ -43,17 +43,22 @@ internal class ColumnsCreateQueryBuilder : AbstractQueryBuilder, IColumnsCreateQ
     public IColumnQueryBuilder String(string columnName, bool isUniCode = true, bool isVariable = true)
     {
         string type;
-        if (isVariable)
+        if(isVariable)
+        {
             type = isUniCode ? C.NVARCHAR : C.VARCHAR;
+        }
         else
+        {
             type = isUniCode ? C.NCHAR : C.CHAR;
+        }
+
         return New<ColumnQueryBuilder>().Name(columnName).Type(type);
     }
     public IColumnQueryBuilder Decimal(string columnName)
     {
         return New<ColumnQueryBuilder>().Name(columnName).Type(C.DECIMAL).Precision(DefaultPrecision).Scale(DefaultScale);
     }
-    public IColumnQueryBuilder Decimal(string columnName, byte precision , byte scale )
+    public IColumnQueryBuilder Decimal(string columnName, byte precision, byte scale)
     {
         return New<ColumnQueryBuilder>().Name(columnName).Type(C.DECIMAL).Precision(precision).Scale(scale);
     }

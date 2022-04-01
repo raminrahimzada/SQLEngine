@@ -4,22 +4,22 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer;
 
-internal class InsertQueryBuilder : AbstractQueryBuilder, 
-    IInsertNoIntoWithColumns, 
-    IInsertHasValuesQueryBuilder, 
+internal class InsertQueryBuilder : AbstractQueryBuilder,
+    IInsertNoIntoWithColumns,
+    IInsertHasValuesQueryBuilder,
     IInsertNeedValueQueryBuilder,
-    IInsertQueryBuilder, 
+    IInsertQueryBuilder,
     IInsertNoIntoQueryBuilder
 {
     private string _tableName;
     private string _schemaName;
-    private Dictionary<string, ISqlExpression> _columnsAndValuesDictionary=new();
+    private Dictionary<string, ISqlExpression> _columnsAndValuesDictionary = new();
 
     private readonly List<ISqlExpression[]> _valuesList = new();
     private string[] _columnNames;
     private string _selection;
 
-    public IInsertNoIntoQueryBuilder Into(string tableName,string schemaName=null)
+    public IInsertNoIntoQueryBuilder Into(string tableName, string schemaName = null)
     {
         _tableName = tableName;
         _schemaName = schemaName;
@@ -28,9 +28,9 @@ internal class InsertQueryBuilder : AbstractQueryBuilder,
 
     public IInsertNoIntoQueryBuilder Into<TTable>() where TTable : ITable, new()
     {
-        using (var table=new TTable())
+        using(var table = new TTable())
         {
-            return Into(table.Name,table.Schema);
+            return Into(table.Name, table.Schema);
         }
     }
 
@@ -50,20 +50,20 @@ internal class InsertQueryBuilder : AbstractQueryBuilder,
         _columnsAndValuesDictionary = colsAndValues;
         return this;
     }
- 
+
 
     public IInsertHasValuesQueryBuilder Values(Dictionary<string, AbstractSqlLiteral> colsAndValuesAsLiterals)
     {
         _columnsAndValuesDictionary =
-            colsAndValuesAsLiterals.ToDictionary(x => x.Key, x => (ISqlExpression) x.Value);
+            colsAndValuesAsLiterals.ToDictionary(x => x.Key, x => (ISqlExpression)x.Value);
         return this;
     }
-        
+
 
     public IInsertHasValuesQueryBuilder Values(Action<ISelectQueryBuilder> builder)
     {
-        using (var writer=CreateNewWriter())
-        using (var select=new SelectQueryBuilder())
+        using(var writer = CreateNewWriter())
+        using(var select = new SelectQueryBuilder())
         {
             builder(select);
             select.Build(writer);
@@ -74,20 +74,20 @@ internal class InsertQueryBuilder : AbstractQueryBuilder,
     }
 
 
-         
+
     public IInsertNoIntoWithColumns Columns(params string[] columnNames)
     {
         _columnNames = columnNames;
         return this;
     }
-        
+
     public override void Build(ISqlWriter writer)
     {
         ValidateAndThrow();
 
         writer.Write(C.INSERT);
         writer.Write2(C.INTO);
-        if (!string.IsNullOrWhiteSpace(_schemaName))
+        if(!string.IsNullOrWhiteSpace(_schemaName))
         {
             writer.Write(_schemaName);
             writer.Write(C.DOT);
@@ -96,16 +96,16 @@ internal class InsertQueryBuilder : AbstractQueryBuilder,
         writer.Write2(C.SPACE);
 
         var columnNamesSafe = _columnNames?.Select(I).ToArray();
-        var isColumnsAndValues1 = _columnNames is {Length: > 0} && _valuesList.Count > 0 && _valuesList[0].Length > 0;
+        var isColumnsAndValues1 = _columnNames is { Length: > 0 } && _valuesList.Count > 0 && _valuesList[0].Length > 0;
 
-        var isColumnsAndValues2 = _columnsAndValuesDictionary is {Count: > 0};
-        if (isColumnsAndValues1|| isColumnsAndValues2)
+        var isColumnsAndValues2 = _columnsAndValuesDictionary is { Count: > 0 };
+        if(isColumnsAndValues1 || isColumnsAndValues2)
         {
             ColumnMode(writer);
         }
-        else if (!string.IsNullOrEmpty(_selection))//selection mode
+        else if(!string.IsNullOrEmpty(_selection))//selection mode
         {
-            if (_columnNames != null)
+            if(_columnNames != null)
             {
                 writer.BeginScope();
                 writer.WriteJoined(columnNamesSafe);
@@ -114,7 +114,7 @@ internal class InsertQueryBuilder : AbstractQueryBuilder,
             writer.Write(C.SPACE);
             writer.Write(_selection);
         }
-        else if(  _valuesList is {Count: > 0}) //normal model 
+        else if(_valuesList is { Count: > 0 }) //normal model 
         {
             NormalMode(writer, columnNamesSafe);
         }
@@ -129,7 +129,7 @@ internal class InsertQueryBuilder : AbstractQueryBuilder,
 
     private void NormalMode(ISqlWriter writer, string[] columnNamesSafe)
     {
-        if (_columnNames != null)
+        if(_columnNames != null)
         {
             writer.WriteLine();
             writer.Indent++;
@@ -146,9 +146,9 @@ internal class InsertQueryBuilder : AbstractQueryBuilder,
         writer.Indent++;
 
         bool first = true;
-        foreach (var values in _valuesList)
+        foreach(var values in _valuesList)
         {
-            if (first)
+            if(first)
             {
                 first = false;
             }
@@ -158,9 +158,9 @@ internal class InsertQueryBuilder : AbstractQueryBuilder,
             }
 
             writer.BeginScope();
-            for (int i = 0; i < values.Length; i++)
+            for(int i = 0; i < values.Length; i++)
             {
-                if (i != 0)
+                if(i != 0)
                 {
                     writer.Write(C.COMMA);
                 }
@@ -175,14 +175,22 @@ internal class InsertQueryBuilder : AbstractQueryBuilder,
     private void ColumnMode(ISqlWriter writer)
     {
         var columnNames = _columnNames;
-        if (columnNames == null)
+        if(columnNames == null)
         {
-            if (_columnsAndValuesDictionary == null) throw Bomb();
+            if(_columnsAndValuesDictionary == null)
+            {
+                throw Bomb();
+            }
+
             columnNames = _columnsAndValuesDictionary.Keys.ToArray();
         }
-        if (_valuesList.Count == 0)
+        if(_valuesList.Count == 0)
         {
-            if (_columnsAndValuesDictionary == null) throw Bomb();
+            if(_columnsAndValuesDictionary == null)
+            {
+                throw Bomb();
+            }
+
             var values = _columnsAndValuesDictionary.Values.ToArray();
             _valuesList.Add(values);
         }
@@ -199,9 +207,9 @@ internal class InsertQueryBuilder : AbstractQueryBuilder,
         writer.Indent++;
 
         bool first = true;
-        foreach (var values in _valuesList)
+        foreach(var values in _valuesList)
         {
-            if (first)
+            if(first)
             {
                 first = false;
             }
@@ -227,7 +235,7 @@ internal class InsertQueryBuilder : AbstractQueryBuilder,
 
     public IInsertHasValuesQueryBuilder Values(params AbstractSqlLiteral[] values)
     {
-        var arr = values.Select(x => (ISqlExpression) x).ToArray();
+        var arr = values.Select(x => (ISqlExpression)x).ToArray();
         _valuesList.Add(arr);
         return this;
     }

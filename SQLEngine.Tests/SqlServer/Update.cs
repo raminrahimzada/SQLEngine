@@ -9,7 +9,7 @@ public partial class AllTests
     [Fact]
     public void Test_Update_1()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Update
@@ -30,7 +30,7 @@ public partial class AllTests
     [Fact]
     public void Test_Update_Filter_1()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var id = q.Column("Id");
 
@@ -54,7 +54,7 @@ public partial class AllTests
     [Fact]
     public void Test_Update_Filter_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var age = q.Column("Age");
 
@@ -79,7 +79,7 @@ public partial class AllTests
     [Fact]
     public void Test_Update_Filter_3()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var lastLogin = q.Column("LastLoginDate");
 
@@ -105,7 +105,7 @@ public partial class AllTests
     [Fact]
     public void Test_Update_Filter_4()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var id = q.Column("Id");
 

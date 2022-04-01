@@ -11,13 +11,13 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     private static IEnumSqlStringConvertor EnumSqlStringConvertor => Query.Settings.EnumSqlStringConvertor;
     private string _rawSqlString;
- 
 
-    public static SqlServerLiteral From(DateTime? dt,bool includeTime=true)
+
+    public static SqlServerLiteral From(DateTime? dt, bool includeTime = true)
     {
         var result = new SqlServerLiteral();
 
-        if (dt == null)
+        if(dt == null)
         {
             result._rawSqlString = C.NULL;
             return result;
@@ -28,10 +28,9 @@ public class SqlServerLiteral : AbstractSqlLiteral
         return result;
     }
 
-
     public override void SetFrom(byte[] data)
     {
-        if (data == null)
+        if(data == null)
         {
             _rawSqlString = C.NULL;
             return;
@@ -52,7 +51,7 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     public override void SetFrom(DateTimeOffset? dto)
     {
-        if (dto == null)
+        if(dto == null)
         {
             _rawSqlString = C.NULL;
             return;
@@ -73,7 +72,7 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     public override void SetFrom(byte? b)
     {
-        if (b == null)
+        if(b == null)
         {
             _rawSqlString = C.NULL;
             return;
@@ -83,7 +82,7 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     public override void SetFrom(sbyte? sb)
     {
-        if (sb == null)
+        if(sb == null)
         {
             _rawSqlString = C.NULL;
             return;
@@ -118,7 +117,7 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     public override void SetFrom(DateTime? dt)
     {
-        if (dt == null)
+        if(dt == null)
         {
             _rawSqlString = C.NULL;
         }
@@ -145,7 +144,10 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     public override void SetFrom(string s, bool isUnicode = true)
     {
-        if (s == null) _rawSqlString = C.NULL;
+        if(s == null)
+        {
+            _rawSqlString = C.NULL;
+        }
         else
         {
             s = s.Replace("'", "''");
@@ -186,7 +188,7 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     public override void SetFrom(int? i)
     {
-        if (i == null)
+        if(i == null)
         {
             _rawSqlString = C.NULL;
             return;
@@ -196,7 +198,7 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     public override void SetFrom(ushort? us)
     {
-        if (us == null)
+        if(us == null)
         {
             _rawSqlString = C.NULL;
             return;
@@ -206,7 +208,7 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     public override void SetFrom(long? l)
     {
-        if (l == null)
+        if(l == null)
         {
             _rawSqlString = C.NULL;
             return;
@@ -216,7 +218,7 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     public override void SetFrom(bool? b)
     {
-        if (b == null)
+        if(b == null)
         {
             _rawSqlString = C.NULL;
             return;
@@ -226,7 +228,7 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     public override void SetFrom(double? d)
     {
-        if (d != null)
+        if(d != null)
         {
             _rawSqlString = (d + string.Empty).Replace(',', '.');
         }
@@ -238,7 +240,7 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     public override void SetFrom(ulong? ul)
     {
-        if (ul == null)
+        if(ul == null)
         {
             _rawSqlString = C.NULL;
             return;
@@ -248,7 +250,7 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     public override void SetFrom(uint? ui)
     {
-        if (ui == null)
+        if(ui == null)
         {
             _rawSqlString = C.NULL;
             return;
@@ -258,7 +260,7 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     public override void SetFrom(decimal? d)
     {
-        if (d == null)
+        if(d == null)
         {
             _rawSqlString = C.NULL;
             return;
@@ -268,7 +270,7 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     public override void SetFrom(float? f)
     {
-        if (f == null)
+        if(f == null)
         {
             _rawSqlString = C.NULL;
             return;
@@ -278,7 +280,7 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     public override void SetFrom(short? sh)
     {
-        if (sh == null)
+        if(sh == null)
         {
             _rawSqlString = C.NULL;
             return;
@@ -288,7 +290,7 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     public override void SetFrom(char? ch)
     {
-        if (ch == null)
+        if(ch == null)
         {
             _rawSqlString = C.NULL;
             return;
@@ -305,19 +307,19 @@ public class SqlServerLiteral : AbstractSqlLiteral
 
     private SqlServerLiteral()
     {
-            
+
     }
     public static AbstractSqlLiteral Raw(string rawSqlString)
     {
-        return new SqlServerLiteral {_rawSqlString = rawSqlString};
+        return new SqlServerLiteral { _rawSqlString = rawSqlString };
     }
     public static AbstractSqlLiteral Raw(char ch)
     {
-        return new SqlServerLiteral {_rawSqlString = ch.ToString()};
+        return new SqlServerLiteral { _rawSqlString = ch.ToString() };
     }
     public static AbstractSqlLiteral Raw(char? ch)
     {
-        return new SqlServerLiteral {_rawSqlString = ch?.ToString()};
+        return new SqlServerLiteral { _rawSqlString = ch?.ToString() };
     }
 
     public static implicit operator string(SqlServerLiteral x)

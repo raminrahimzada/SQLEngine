@@ -42,10 +42,10 @@ public static class Query
     /// Query.Setup&gt;SqlServerQueryBuilder&lt;()
     /// </example>
     /// </summary>
-    public static void Setup<T>() where T : IQueryBuilder,new()
+    public static void Setup<T>() where T : IQueryBuilder, new()
     {
         _builderFunction = () => Activator.CreateInstance<T>();
-        using (_builderFunction())
+        using(_builderFunction())
         {
             //Creating an Empty class for setting initialization
         }
@@ -65,7 +65,7 @@ public static class Query
     {
         get
         {
-            if (_builderFunction == null)
+            if(_builderFunction == null)
             {
                 throw new SqlEngineException("Please use Query.Setup to setup");
             }

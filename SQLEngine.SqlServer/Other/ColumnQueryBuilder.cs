@@ -40,7 +40,7 @@ internal class ColumnQueryBuilder : AbstractQueryBuilder, IColumnQueryBuilder
         Model.Type = type;
         return this;
     }
-    public IColumnQueryBuilder ForeignKey(string tableName,string schemaName, string columnName, string fkName = null)
+    public IColumnQueryBuilder ForeignKey(string tableName, string schemaName, string columnName, string fkName = null)
     {
         Model.IsForeignKey = true;
         Model.ForeignKeyConstraintName = fkName;
@@ -59,7 +59,11 @@ internal class ColumnQueryBuilder : AbstractQueryBuilder, IColumnQueryBuilder
 
     public IColumnQueryBuilder Unique(string keyName = null, bool descending = false)
     {
-        if (keyName == null) keyName = string.Empty;
+        if(keyName == null)
+        {
+            keyName = string.Empty;
+        }
+
         Model.IsUniqueKey = true;
         Model.IsUniqueKeyOrderDescending = descending;
         Model.UniqueKeyName = keyName;
@@ -105,23 +109,27 @@ internal class ColumnQueryBuilder : AbstractQueryBuilder, IColumnQueryBuilder
     public override void Build(ISqlWriter writer)
     {
         writer.Write(I(Model.Name));
-        if (!string.IsNullOrEmpty(Model.CalculatedColumnExpression))
+        if(!string.IsNullOrEmpty(Model.CalculatedColumnExpression))
         {
             writer.Write2(C.AS);
             writer.WriteScoped(Model.CalculatedColumnExpression);
-            if (Model.IsPersisted ?? false) writer.Write2(C.PERSISTED);
+            if(Model.IsPersisted ?? false)
+            {
+                writer.Write2(C.PERSISTED);
+            }
+
             return;
         }
         writer.Write2(Model.Type);
 
-        if (Model.MaxLength != null)
+        if(Model.MaxLength != null)
         {
             writer.WriteScoped(Model.MaxLength);
             writer.Write(C.SPACE);
         }
         else
         {
-            if (((IList)new[] { C.NVARCHAR, C.VARCHAR, C.NCHAR, C.CHAR }).Contains(Model.Type))
+            if(((IList)new[] { C.NVARCHAR, C.VARCHAR, C.NCHAR, C.CHAR }).Contains(Model.Type))
             {
                 writer.Write(C.BEGIN_SCOPE);
                 writer.Write(C.MAX);
@@ -129,16 +137,16 @@ internal class ColumnQueryBuilder : AbstractQueryBuilder, IColumnQueryBuilder
                 writer.Write(C.SPACE);
             }
         }
-        if (Model.Type == C.DECIMAL)
+        if(Model.Type == C.DECIMAL)
         {
             writer.Write(C.BEGIN_SCOPE);
-            writer.Write(Model.Precision??Query.Settings.DefaultPrecision);
+            writer.Write(Model.Precision ?? Query.Settings.DefaultPrecision);
             writer.Write(C.COMMA);
-            writer.Write(Model.Scale??Query.Settings.DefaultScale);
+            writer.Write(Model.Scale ?? Query.Settings.DefaultScale);
             writer.Write(C.END_SCOPE);
             writer.Write(C.SPACE);
         }
-        if (Model.IsIdentity ?? false)
+        if(Model.IsIdentity ?? false)
         {
             writer.Write(C.IDENTITY);
             writer.Write(C.BEGIN_SCOPE);
@@ -148,13 +156,13 @@ internal class ColumnQueryBuilder : AbstractQueryBuilder, IColumnQueryBuilder
             writer.Write(C.END_SCOPE);
         }
 
-        if (Model.NotNull ?? false)
+        if(Model.NotNull ?? false)
         {
             writer.Write2(C.NOT);
         }
         writer.Write(C.NULL);
 
-        if (!string.IsNullOrEmpty(Model.CheckExpression))
+        if(!string.IsNullOrEmpty(Model.CheckExpression))
         {
             writer.Write2(C.CHECK);
             writer.Write2(C.BEGIN_SCOPE);
@@ -167,11 +175,11 @@ internal class ColumnQueryBuilder : AbstractQueryBuilder, IColumnQueryBuilder
     protected override void ValidateAndThrow()
     {
         base.ValidateAndThrow();
-        if (string.IsNullOrEmpty(Model.Name))
+        if(string.IsNullOrEmpty(Model.Name))
         {
             Bomb();
         }
-        if (string.IsNullOrEmpty(Model.Type) && string.IsNullOrEmpty(Model.CalculatedColumnExpression))
+        if(string.IsNullOrEmpty(Model.Type) && string.IsNullOrEmpty(Model.CalculatedColumnExpression))
         {
             Bomb();
         }
@@ -187,7 +195,7 @@ internal class ColumnQueryBuilder : AbstractQueryBuilder, IColumnQueryBuilder
     }
     public IColumnQueryBuilder Check(string checkExpression)
     {
-        if (!string.IsNullOrEmpty(Model.CheckExpression))
+        if(!string.IsNullOrEmpty(Model.CheckExpression))
         {
             Model.CheckExpression = "(" + Model.CheckExpression + ")AND(" + checkExpression + ")";
         }

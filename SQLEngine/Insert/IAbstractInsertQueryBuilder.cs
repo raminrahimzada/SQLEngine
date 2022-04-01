@@ -1,5 +1,5 @@
 ﻿namespace SQLEngine;
 
-public interface IAbstractInsertQueryBuilder:IAbstractQueryBuilder
+public interface IAbstractInsertQueryBuilder : IAbstractQueryBuilder
 {
 }

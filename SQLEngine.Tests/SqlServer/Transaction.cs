@@ -8,10 +8,10 @@ public partial class AllTests
     [Fact]
     public void Test_Transaction()
     {
-        using (var q=Query.New)
+        using(var q = Query.New)
         {
             q.BeginTransaction();
-                
+
             q.Delete.Table<UserTable>();
 
             q.CommitTransaction();
@@ -31,13 +31,13 @@ COMMIT TRANSACTION
     [Fact]
     public void Test_Transaction_With_Names()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q.BeginTransaction("outerTran");
             q.BeginTransaction("innerTran");
 
             q.Delete.Table<UserTable>();
-                
+
             q.CommitTransaction("innerTran");
             q.CommitTransaction("outerTran");
 
@@ -57,7 +57,7 @@ COMMIT TRANSACTION outerTran
     [Fact]
     public void Test_Transaction_With_Try()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q.Try(t =>
             {
@@ -66,9 +66,9 @@ COMMIT TRANSACTION outerTran
                 t.Execute
                     .Procedure("SendMoney")
                     .Schema("dbo")//this is optional
-                    .Arg("from","Alice")
-                    .Arg("to","Bob")
-                    .Arg("amount",25.0M)
+                    .Arg("from", "Alice")
+                    .Arg("to", "Bob")
+                    .Arg("amount", 25.0M)
                     ;
                 t.CommitTransaction();
             }).Catch(c =>

@@ -11,7 +11,7 @@ internal class TruncateQueryBuilder : AbstractQueryBuilder, ITruncateQueryBuilde
 
     public ITruncateNoTableQueryBuilder Table<TTable>() where TTable : ITable, new()
     {
-        using (var table = new TTable())
+        using(var table = new TTable())
         {
             return Table(table.Name);
         }

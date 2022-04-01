@@ -10,7 +10,7 @@ public partial class AllTests
     public void Test_Create_Table()
     {
         //demonstration of create-table query
-        using (var b = Query.New)
+        using(var b = Query.New)
         {
             var now = b.Helper.Now;
             var age = b.Column("Age");
@@ -41,7 +41,7 @@ public partial class AllTests
                     //calculated column
                     c.Column("SumAmount").CalculatedColumn(amount1 + amount2),
                 });
-                
+
             var queryForSqlServer = @"
 CREATE TABLE Employees  ( 
     ID BIGINT IDENTITY(1,1) NOT NULL,
@@ -69,14 +69,14 @@ ALTER TABLE Employees ADD CONSTRAINT DF_EmployeesBirthDate DEFAULT(GETDATE()) FO
             ;
             Query.Setup<SqlServerQueryBuilder>();
             var actual = b.Build();
-            SqlAssert.EqualQuery(actual,queryForSqlServer);
+            SqlAssert.EqualQuery(actual, queryForSqlServer);
         }
     }
 
     [Fact]
     public void Test_Create_View()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var isBlocked = q.Column("IsBlocked");
             q
@@ -100,7 +100,7 @@ CREATE VIEW View_Active_Users AS SELECT  *
     [Fact]
     public void Test_Create_View_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var isBlocked = q.Column("IsBlocked");
             q
@@ -126,7 +126,7 @@ CREATE VIEW View_Active_Users AS SELECT  *
     [Fact]
     public void Test_Create_Function()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Create
@@ -138,8 +138,8 @@ CREATE VIEW View_Active_Users AS SELECT  *
                 {
                     var x = f.Param("x");
                     var y = f.Param("y");
-                        
-                    using (f.If(x > y))
+
+                    using(f.If(x > y))
                     {
                         f.Return(x);
                     }
@@ -176,7 +176,7 @@ END
     [Fact]
     public void Test_Create_Function_Sum()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Create
@@ -188,7 +188,7 @@ END
                 {
                     var x = f.Param("x");
                     var y = f.Param("y");
-                        
+
                     f.Comment("Adding numbers here");
 
                     f.Return(x + y);
@@ -212,7 +212,7 @@ END
     [Fact]
     public void Test_Create_Procedure()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q.Create
                 .Procedure("getUserInfo")
@@ -254,7 +254,7 @@ END
     [Fact]
     public void Test_Create_Index()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Create
@@ -271,11 +271,11 @@ END
             SqlAssert.EqualQuery(q.ToString(), query);
         }
     }
-        
+
     [Fact]
     public void Test_Create_Database()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Create
@@ -289,11 +289,11 @@ END
             SqlAssert.EqualQuery(q.ToString(), query);
         }
     }
-        
+
     [Fact]
     public void Test_Create_Trigger()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q.Create
                 .Trigger("Trigger_Test")

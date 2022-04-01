@@ -1,11 +1,11 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class SetQueryBuilder : AbstractQueryBuilder, ISetNeedSetQueryBuilder, ISetNeedToQueryBuilder, 
+internal class SetQueryBuilder : AbstractQueryBuilder, ISetNeedSetQueryBuilder, ISetNeedToQueryBuilder,
     ISetNoSetNoToQueryBuilder
 {
     private AbstractSqlVariable _variable;
     private ISqlExpression _value;
-       
+
     public ISetNeedToQueryBuilder Set(AbstractSqlVariable variable)
     {
         _variable = variable;

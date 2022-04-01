@@ -2,5 +2,5 @@
 
 public interface ICreateIndexNoTableNameNoColumnNamesQueryBuilder : IAbstractQueryBuilder
 {
-    ICreateIndexNoTableNameNoColumnNamesNoUniqueQueryBuilder Unique(bool isUnique=true);
+    ICreateIndexNoTableNameNoColumnNamesNoUniqueQueryBuilder Unique(bool isUnique = true);
 }

@@ -2,7 +2,7 @@
 
 namespace SQLEngine;
 
-public interface ISqlWriter:IDisposable
+public interface ISqlWriter : IDisposable
 {
     int Indent { get; set; }
     void Write(string expression);

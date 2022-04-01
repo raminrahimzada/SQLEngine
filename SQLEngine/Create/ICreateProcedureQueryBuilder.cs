@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine;
 
-public interface ICreateProcedureQueryBuilder:IAbstractQueryBuilder
+public interface ICreateProcedureQueryBuilder : IAbstractQueryBuilder
 {
     ICreateProcedureNoNameQueryBuilder Name(string procedureName);
     ICreateProcedureWithArgumentQueryBuilder Parameter(string argName, string argType);

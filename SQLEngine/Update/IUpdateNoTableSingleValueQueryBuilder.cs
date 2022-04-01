@@ -10,7 +10,7 @@ public interface IUpdateNoTableSingleValueQueryBuilder : IAbstractUpdateQueryBui
     IUpdateNoTableSingleValueQueryBuilder Value(AbstractSqlColumn column, AbstractSqlVariable expression);
 
     IUpdateNoTableAndValuesAndWhereQueryBuilder Where(AbstractSqlCondition condition);
-        
+
     IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, ISqlExpression rightExpression);
     IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlVariable variable);
     IUpdateNoTableAndValuesAndWhereQueryBuilder WhereColumnEquals(string columnName, AbstractSqlLiteral literal);

@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class DropTableQueryBuilder : AbstractQueryBuilder, 
+internal class DropTableQueryBuilder : AbstractQueryBuilder,
     IDropTableQueryBuilder, IDropTableNoNameQueryBuilder,
     IDropTableNoNameNoSchemaQueryBuilder
 {
@@ -15,7 +15,7 @@ internal class DropTableQueryBuilder : AbstractQueryBuilder,
 
     public IDropTableNoNameQueryBuilder Table<TTable>() where TTable : ITable, new()
     {
-        using (var table=new TTable())
+        using(var table = new TTable())
         {
             return Table(table.Name);
         }
@@ -26,10 +26,10 @@ internal class DropTableQueryBuilder : AbstractQueryBuilder,
         _schemaName = schemaName;
         return this;
     }
-       
+
     protected override void ValidateAndThrow()
     {
-        if (string.IsNullOrEmpty(_tableName))
+        if(string.IsNullOrEmpty(_tableName))
         {
             Bomb();
         }
@@ -40,8 +40,8 @@ internal class DropTableQueryBuilder : AbstractQueryBuilder,
     {
         writer.Write(C.DROP);
         writer.Write2(C.TABLE);
-            
-        if (!string.IsNullOrEmpty(_schemaName))
+
+        if(!string.IsNullOrEmpty(_schemaName))
         {
             writer.Write(I(_schemaName));
             writer.Write(C.DOT);

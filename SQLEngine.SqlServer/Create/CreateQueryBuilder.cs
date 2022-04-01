@@ -6,7 +6,7 @@ internal class CreateQueryBuilder : AbstractQueryBuilder, ICreateQueryBuilder
 
     public CreateQueryBuilder()
     {
-            
+
     }
     public override void Build(ISqlWriter writer)
     {
@@ -15,7 +15,7 @@ internal class CreateQueryBuilder : AbstractQueryBuilder, ICreateQueryBuilder
 
     public override string ToString()
     {
-        using (var writer=CreateNewWriter())
+        using(var writer = CreateNewWriter())
         {
             Build(writer);
             return writer.Build();
@@ -28,9 +28,9 @@ internal class CreateQueryBuilder : AbstractQueryBuilder, ICreateQueryBuilder
         _innerBuilder = x;
         return x;
     }
-    public ICreateTableQueryBuilder Table<TTable>() where TTable:ITable,new()
+    public ICreateTableQueryBuilder Table<TTable>() where TTable : ITable, new()
     {
-        using (var table=new TTable())
+        using(var table = new TTable())
         {
             return Table(table.Name).Schema(table.Schema);
         }
@@ -55,15 +55,15 @@ internal class CreateQueryBuilder : AbstractQueryBuilder, ICreateQueryBuilder
         _innerBuilder = x;
         return x;
     }
-    public ICreateViewNoNameQueryBuilder View<TView>() where TView:IView,new()
+    public ICreateViewNoNameQueryBuilder View<TView>() where TView : IView, new()
     {
-        using (var view=new TView())
+        using(var view = new TView())
         {
             var x = New<CreateViewQueryBuilder>().Name(view.Name).Schema(view.Schema);
             _innerBuilder = x;
             return x;
         }
-           
+
     }
 
     public ICreateIndexNoNameQueryBuilder Index(string indexName)
@@ -75,7 +75,7 @@ internal class CreateQueryBuilder : AbstractQueryBuilder, ICreateQueryBuilder
 
     public ICreateDatabaseNoNameQueryBuilder Database(string databaseName)
     {
-        var x=New<CreateDatabaseQueryBuilder>().Name(databaseName);
+        var x = New<CreateDatabaseQueryBuilder>().Name(databaseName);
         _innerBuilder = x;
         return x;
     }

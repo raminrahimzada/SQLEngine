@@ -28,7 +28,7 @@ namespace SQLEngine.Tests
         }
 
         private const string SPLITTER = " \r\n\t;(),.=";
-        
+
         [DebuggerNonUserCode]
         public static void EqualQuery(string queryActual, string queryExpected)
         {
@@ -38,9 +38,9 @@ namespace SQLEngine.Tests
 #endif
             var arrActual = FormatQuery(queryActual);
             var arrExpected = FormatQuery(queryExpected);
-            foreach (var (first, second) in arrExpected.Zip(arrActual))
+            foreach(var (first, second) in arrExpected.Zip(arrActual))
             {
-                if (!string.Equals(first, second, StringComparison.InvariantCultureIgnoreCase))
+                if(!string.Equals(first, second, StringComparison.InvariantCultureIgnoreCase))
                 {
                     Assert.True(false, $"SQL Query should be :\r\n{queryExpected} but got :\r\n{queryActual}");
                 }
@@ -48,18 +48,26 @@ namespace SQLEngine.Tests
         }
 
 #if CHECK_QUERY_COMPILATION
-        
+
         //Write Your Sql Server connection string here to test the actual queries in server
         private static string _connectionString;
 
         public static void ValidateQueryInServer(string sqlQuery)
         {
             //only run in my local machine
-            if (!Environment.UserName.Equals("ramin", StringComparison.InvariantCultureIgnoreCase)) return;
-            if (string.IsNullOrWhiteSpace(sqlQuery)) return;
-            using (var b = Query.New)
+            if(!Environment.UserName.Equals("ramin", StringComparison.InvariantCultureIgnoreCase))
             {
-                switch (b)
+                return;
+            }
+
+            if(string.IsNullOrWhiteSpace(sqlQuery))
+            {
+                return;
+            }
+
+            using(var b = Query.New)
+            {
+                switch(b)
                 {
                     case SqlServerQueryBuilder _:
                         _connectionString = "Server=MATRIX\\SERVER19;Database=master;Trusted_Connection=True;";
@@ -72,11 +80,11 @@ namespace SQLEngine.Tests
         {
             try
             {
-                using (var connection = new SqlConnection(_connectionString))
+                using(var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
                     var cmd = connection.CreateCommand();
-                    
+
                     //https://docs.microsoft.com/en-us/sql/t-sql/statements/set-noexec-transact-sql?redirectedfrom=MSDN&view=sql-server-ver15
                     //https://docs.microsoft.com/en-us/sql/t-sql/statements/set-parseonly-transact-sql?view=sql-server-ver15
                     cmd.CommandText = "SET NOEXEC ON;SET PARSEONLY ON;";
@@ -86,13 +94,13 @@ namespace SQLEngine.Tests
                     cmd.Dispose();
                 }
             }
-            catch (SqlException e)
+            catch(SqlException e)
             {
                 //Invalid object name
                 //if (e.Class == 16) return;
                 //duplicate thing
                 //if (e.Class == 11) return;
-                Assert.True(false,e.Message);
+                Assert.True(false, e.Message);
             }
         }
 #endif

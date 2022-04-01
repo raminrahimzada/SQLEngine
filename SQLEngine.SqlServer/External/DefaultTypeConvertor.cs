@@ -7,62 +7,62 @@ public class DefaultTypeConvertor : ITypeConvertor
     public string ToSqlType<T>()
     {
         var type = typeof(T);
-        if (type == typeof(int))
+        if(type == typeof(int))
         {
             return (C.INT);
         }
 
-        if (type == typeof(uint))
+        if(type == typeof(uint))
         {
             return (C.INT);
         }
 
-        if (type == typeof(long))
+        if(type == typeof(long))
         {
             return (C.BIGINT);
         }
 
-        if (type == typeof(ulong))
+        if(type == typeof(ulong))
         {
             return (C.BIGINT);
         }
 
-        if (type == typeof(byte))
+        if(type == typeof(byte))
         {
             return (C.TINYINT);
         }
 
-        if (type == typeof(Guid))
+        if(type == typeof(Guid))
         {
             return (C.UNIQUEIDENTIFIER);
         }
 
-        if (type == typeof(DateTime))
+        if(type == typeof(DateTime))
         {
             return (C.DATETIME);
         }
 
-        if (type == typeof(string))
+        if(type == typeof(string))
         {
             return (C.NVARCHARMAX);
         }
 
-        if (type == typeof(char))
+        if(type == typeof(char))
         {
             return (C.NCHAR1);
         }
 
-        if (type == typeof(decimal))
+        if(type == typeof(decimal))
         {
             return (C.DECIMAL);
         }
 
-        if (type == typeof(float))
+        if(type == typeof(float))
         {
             return ("FLOAT");
         }
 
-        if (type == typeof(bool))
+        if(type == typeof(bool))
         {
             return (C.BIT);
         }

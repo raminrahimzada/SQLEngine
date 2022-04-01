@@ -8,13 +8,13 @@ public partial class AllTests
     [Fact]
     public void Test_Complex_Query_1()
     {
-        using (var q=Query.New)
+        using(var q = Query.New)
         {
             q.Comment("Declaring variables");
 
             var x = q.Declare<int>("x");
             var y = q.Declare<int>("y");
-                
+
             var add = q.Declare<int>("add");
             var subtract = q.Declare<int>("subtract");
             var multiply = q.Declare<int>("multiply");
@@ -24,8 +24,8 @@ public partial class AllTests
             q.Comment("Setting values");
             q.Set(x, 17);
             q.Set(y, 13);
-                
-                
+
+
             q.Comment("doing some calculations");
             q.Set(add, x + y);
             q.Set(subtract, x - y);
@@ -38,7 +38,7 @@ public partial class AllTests
             q.Print(subtract);
             q.Print(multiply);
             q.Print(divide);
-                
+
 
             var query = @"
 

@@ -6,18 +6,18 @@ namespace SQLEngine.Tests.SqlServer;
 
 public partial class AllTests
 {
-        
+
     [Fact]
     public void Test_Simple_Select_1()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
                 .Top(1)
                 .From("Users")
                 .WhereColumnEquals("Id", 17);
-                
+
 
             const string queryThat = @"
 SELECT TOP(1)  * 
@@ -28,11 +28,11 @@ SELECT TOP(1)  *
 
         }
     }
-        
+
     [Fact]
     public void Test_Simple_Select_1_1()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q.Select
                 .Select("PROVIDER_ID")
@@ -56,7 +56,7 @@ SELECT [PROVIDER_ID] , [PROVIDER_TYPE] , NAME , SECRET
     [Fact]
     public void Test_Simple_Select_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var userName = q.Column("UserName");
             q
@@ -78,7 +78,7 @@ SELECT TOP(1)  *
     [Fact]
     public void Test_Simple_Select_3()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var age = q.Column("Age");
             q
@@ -100,14 +100,14 @@ SELECT TOP(1)  *
     [Fact]
     public void Test_Simple_Select_Order()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var age = q.Column("Age");
             q
                 .Select
                 .Top(1)
                 .From("Users")
-                .Where(age==17)
+                .Where(age == 17)
                 .OrderBy("Id");
 
 
@@ -125,7 +125,7 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Simple_Select_With_function()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var name = q.Column("Name");
             q
@@ -134,7 +134,7 @@ SELECT TOP(1)   *
                 .Select(name)
                 .Select(x => x.Len(name))
                 .Select(x => x.Trim(name))
-                    
+
                 .From("Users")
                 ;
 
@@ -151,11 +151,11 @@ SELECT TOP(1)  Name, LEN(Name), TRIM(Name)
     [Fact]
     public void Test_Simple_Select_Assign()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             //variables
             var myCreatedDate = q.Declare<DateTime>("myCreatedDate");
-                
+
             //columns
             var createdDate = q.Column("CreatedDate");
             var id = q.Column("Id");
@@ -183,7 +183,7 @@ SELECT TOP(1)  @myCreatedDate=CreatedDate
     [Fact]
     public void Test_Simple_Select_Between()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var age = q.Column("Age");
             q
@@ -205,7 +205,7 @@ SELECT TOP(1) *
     [Fact]
     public void Test_Simple_Select_Between_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var now = DateTime.Parse("2020-07-22");
 
@@ -236,7 +236,7 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Simple_Select_In()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var age = q.Column("Age");
 
@@ -260,7 +260,7 @@ SELECT TOP(1) *
     [Fact]
     public void Test_Simple_Select_Like()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var name = q.Column("Name");
             var surname = q.Column("Surname");
@@ -285,7 +285,7 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Simple_Select_In_With_Select()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var age = q.Column("Age");
 
@@ -321,7 +321,7 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Simple_Select_With_Alias_1()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var userName = q.Column("UserName", "U");
             q
@@ -343,7 +343,7 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Simple_Select_Simple_Filter()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var age = q.Column("Age");
             q
@@ -368,7 +368,7 @@ SELECT TOP(1)  Name , Surname
     [Fact]
     public void Test_Simple_Select_Complex_Filter_1()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var age = q.Column("Age");
             var height = q.Column("Height");
@@ -399,7 +399,7 @@ SELECT TOP(1)  Name , Surname
     [Fact]
     public void Test_Simple_Select_Complex_Filter_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var age = q.Column("Age");
             var height = q.Column("Height");
@@ -425,11 +425,11 @@ SELECT TOP(1)  Name , Surname
 
         }
     }
-       
+
     [Fact]
     public void Test_Select_Group_1()
     {
-        using (var q=Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
@@ -443,7 +443,7 @@ SELECT TOP(1)  Name , Surname
                 .GroupBy("Age")
                 ;
 
-            string query= @"
+            string query = @"
 SELECT Age , COUNT(Id) , SUM(Weight) , COUNT(DISTINCT Name)
     FROM Users
     GROUP BY Age
@@ -456,7 +456,7 @@ SELECT Age , COUNT(Id) , SUM(Weight) , COUNT(DISTINCT Name)
     [Fact]
     public void Test_Select_Group_2()
     {
-        using (var q=Query.New)
+        using(var q = Query.New)
         {
             var all = q.Column("*");
             q
@@ -468,7 +468,7 @@ SELECT Age , COUNT(Id) , SUM(Weight) , COUNT(DISTINCT Name)
                 .GroupBy("Age")
                 ;
 
-            string query= @"
+            string query = @"
 SELECT TOP(1)  Age , COUNT(*)
     FROM dbo.Users AS U
     GROUP BY Age
@@ -480,10 +480,10 @@ SELECT TOP(1)  Age , COUNT(*)
     [Fact]
     public void Test_Select_Group_3()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var all = q.Column("*");
-                
+
             //TODO this should be refactored
             //lack of api 
             var condition = q.RawCondition("count(Age) > 5");
@@ -510,12 +510,12 @@ SELECT TOP(1)  Age , COUNT(*)
 
         }
     }
-        
-        
+
+
     [Fact]
     public void Test_Select_Group_4()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var id1 = q.Column("ID1");
             var id2 = q.Column("ID2");
@@ -528,9 +528,9 @@ SELECT TOP(1)  Age , COUNT(*)
             q
                 .Select
                 .Top(1)
-                .SelectAssign(okVar,true)
+                .SelectAssign(okVar, true)
                 .From<UserTable>("U")
-                .GroupBy(id1,id2)
+                .GroupBy(id1, id2)
                 .Having(condition)
                 ;
             var actual = q.Build();
@@ -551,7 +551,7 @@ SELECT TOP(1)  @v1=1
     [Fact]
     public void Test_Simple_Select_Case_When()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var age = q.Column("Age");
 
@@ -582,7 +582,7 @@ SELECT TOP(1)
     [Fact]
     public void Test_Simple_Select_Case_When_End()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var gender = q.Column("Gender");
 
@@ -617,7 +617,7 @@ SELECT TOP(1)
     [Fact]
     public void Test_Simple_Select_Variable()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var id = q.Declare<int>("id");
 
@@ -636,7 +636,7 @@ SELECT @id
     [Fact]
     public void Test_Select_Keywords_Order()
     {
-        using (var q=Query.New)
+        using(var q = Query.New)
         {
             var id = q.Column("ID");
             var age = q.Column("Age");

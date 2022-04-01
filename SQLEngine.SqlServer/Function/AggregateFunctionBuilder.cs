@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class AggregateFunctionBuilder :AbstractQueryBuilder, IAggregateFunctionBuilder
+internal class AggregateFunctionBuilder : AbstractQueryBuilder, IAggregateFunctionBuilder
 {
     private ISqlExpression _expression;
     private bool? _isDistinct;
@@ -119,7 +119,7 @@ internal class AggregateFunctionBuilder :AbstractQueryBuilder, IAggregateFunctio
     {
         writer.Write(_functionName);
         writer.Write(C.BEGIN_SCOPE);
-        if (_isDistinct.HasValue)
+        if(_isDistinct.HasValue)
         {
             writer.Write(_isDistinct.Value ? C.DISTINCT : C.ALL);
             writer.Write(C.SPACE);

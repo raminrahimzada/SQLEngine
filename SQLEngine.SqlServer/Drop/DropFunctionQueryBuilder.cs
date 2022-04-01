@@ -21,7 +21,7 @@ internal class DropFunctionQueryBuilder : AbstractQueryBuilder,
     {
         writer.Write(C.DROP);
         writer.Write2(C.FUNCTION);
-        if (!string.IsNullOrWhiteSpace(_schemaName))
+        if(!string.IsNullOrWhiteSpace(_schemaName))
         {
             writer.Write(_schemaName);
             writer.Write(C.DOT);

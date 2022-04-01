@@ -2,7 +2,7 @@
 
 namespace SQLEngine;
 
-public abstract class AbstractSqlExpression: ISqlExpression
+public abstract class AbstractSqlExpression : ISqlExpression
 {
     private static Func<AbstractSqlExpression> _createEmpty;
 
@@ -28,7 +28,7 @@ public abstract class AbstractSqlExpression: ISqlExpression
         expression.SetFrom(literal);
         return expression;
     }
-       
+
 
     public static implicit operator AbstractSqlExpression(int x)
     {
@@ -62,7 +62,7 @@ public abstract class AbstractSqlExpression: ISqlExpression
     {
         return (AbstractSqlLiteral)x;
     }
-        
+
     public static implicit operator AbstractSqlExpression(decimal x)
     {
         return (AbstractSqlLiteral)x;

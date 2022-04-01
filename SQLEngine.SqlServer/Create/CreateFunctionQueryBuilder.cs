@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace SQLEngine.SqlServer;
 
-internal class CreateFunctionQueryBuilder : AbstractQueryBuilder, 
-    IAbstractCreateFunctionQueryBuilder, 
+internal class CreateFunctionQueryBuilder : AbstractQueryBuilder,
+    IAbstractCreateFunctionQueryBuilder,
     ICreateFunctionQueryBuilder,
     ICreateFunctionNoNameQueryBuilder,
     ICreateFunctionNoNameAndParametersQueryBuilder,
@@ -18,7 +18,7 @@ internal class CreateFunctionQueryBuilder : AbstractQueryBuilder,
 
     public CreateFunctionQueryBuilder()
     {
-        _parameters=new List<string>();
+        _parameters = new List<string>();
     }
 
     public ICreateFunctionNoNameQueryBuilder Name(string funcName)
@@ -71,7 +71,7 @@ internal class CreateFunctionQueryBuilder : AbstractQueryBuilder,
         writer.Write(C.SPACE);
         writer.Write(C.FUNCTION);
         writer.Write(C.SPACE);
-        if (!string.IsNullOrEmpty(_schemaName))
+        if(!string.IsNullOrEmpty(_schemaName))
         {
             writer.Write(_schemaName);
             writer.Write(C.DOT);

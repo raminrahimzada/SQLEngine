@@ -8,12 +8,12 @@ public partial class AllTests
     [Fact]
     public void Test_Cursor_1()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var id = q.Declare<int>("id");
             var name = q.Declare<int>("name");
 
-            var variables = new[] {id,name};
+            var variables = new[] { id, name };
 
             q.Cursor(
                 //name of the cursor

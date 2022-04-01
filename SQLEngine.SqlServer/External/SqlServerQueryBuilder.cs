@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
-using System.Linq;
 
 #pragma warning disable IDE1006 // Naming Styles
 
@@ -41,7 +40,7 @@ public partial class SqlServerQueryBuilder
             w.Write(C.BEGIN);
             w.Write(C.SPACE);
             w.Write(C.TRANSACTION);
-            if (!string.IsNullOrWhiteSpace(transactionName))
+            if(!string.IsNullOrWhiteSpace(transactionName))
             {
                 w.Write(C.SPACE);
                 w.Write(transactionName);
@@ -58,7 +57,11 @@ public partial class SqlServerQueryBuilder
 
     public void Comment(string comment)
     {
-        if (!string.IsNullOrEmpty(comment)) comment = comment.Replace("*/", "*\\/");
+        if(!string.IsNullOrEmpty(comment))
+        {
+            comment = comment.Replace("*/", "*\\/");
+        }
+
         _list.Add(new RawStringQueryBuilder(writer =>
         {
             writer.Write("/*");
@@ -75,7 +78,7 @@ public partial class SqlServerQueryBuilder
             w.Write(C.COMMIT);
             w.Write(C.SPACE);
             w.Write(C.TRANSACTION);
-            if (!string.IsNullOrWhiteSpace(transactionName))
+            if(!string.IsNullOrWhiteSpace(transactionName))
             {
                 w.Write(C.SPACE);
                 w.Write(transactionName);
@@ -105,7 +108,7 @@ public partial class SqlServerQueryBuilder
             writer.Write(C.SPACE);
             writer.Write(C.FOR);
             writer.Write(C.SPACE);
-            using (var s = new SelectQueryBuilder())
+            using(var s = new SelectQueryBuilder())
             {
                 selection(s);
                 s.Build(writer);
@@ -143,7 +146,7 @@ public partial class SqlServerQueryBuilder
             writer.WriteLine();
             writer.Indent++;
 
-            using (var s = new FunctionBodyQueryBuilder())
+            using(var s = new FunctionBodyQueryBuilder())
             {
                 body(s);
                 writer.Write(s.Build());
@@ -183,10 +186,10 @@ public partial class SqlServerQueryBuilder
 
     public AbstractSqlVariable Declare(string variableName, string type, Action<IQueryBuilder> builder)
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             builder(q);
-            using (var t = new DeclarationQueryBuilder())
+            using(var t = new DeclarationQueryBuilder())
             {
                 var defaultValue = q.Build();
                 var expression = t.Declare(variableName).OfType(type).Default(q.RawInternal(defaultValue));
@@ -276,7 +279,7 @@ public partial class SqlServerQueryBuilder
         var variableName = Query.Settings.UniqueVariableNameGenerator.New();
         return Declare(variableName, type, defaultValue);
     }
-        
+
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public IDeleteQueryBuilder Delete => _Add(new DeleteQueryBuilder());
 
@@ -299,7 +302,7 @@ public partial class SqlServerQueryBuilder
         return _Add(new ElseIfQueryBuilder(condition));
     }
 
-    [Obsolete("Do not use",true)]
+    [Obsolete("Do not use", true)]
     public void End()
     {
         _list.Add(new RawStringQueryBuilder(w =>
@@ -315,7 +318,7 @@ public partial class SqlServerQueryBuilder
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public IConditionFilterQueryHelper Helper { get; } = new SqlServerConditionFilterQueryHelper();
 
-    [Obsolete("Do not use",true)]
+    [Obsolete("Do not use", true)]
     public IIfQueryBuilder IfOld(AbstractSqlCondition condition)
     {
         return _Add(new IfQueryBuilder(condition));
@@ -328,7 +331,7 @@ public partial class SqlServerQueryBuilder
 
     public IDisposable IfExists(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
     {
-        using (var s = new SelectQueryBuilder())
+        using(var s = new SelectQueryBuilder())
         {
             selector(s);
             return If(new SqlServerCondition(C.EXISTS, C.BEGIN_SCOPE + string.Empty, s.Build(),
@@ -349,7 +352,7 @@ public partial class SqlServerQueryBuilder
 
     public IDisposable IfNotExists(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
     {
-        using (var s = new SelectQueryBuilder())
+        using(var s = new SelectQueryBuilder())
         {
             selector(s);
             return If(new SqlServerCondition(C.NOT, C.SPACE + string.Empty, C.EXISTS, C.BEGIN_SCOPE + string.Empty,
@@ -373,7 +376,7 @@ public partial class SqlServerQueryBuilder
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public IInsertQueryBuilder Insert => _Add(new InsertQueryBuilder());
 
-       
+
     public void Print(ISqlExpression expression)
     {
         _list.Add(new RawStringQueryBuilder(writer =>
@@ -398,7 +401,7 @@ public partial class SqlServerQueryBuilder
         }));
     }
 
-       
+
 
     public void Return()
     {
@@ -468,7 +471,7 @@ public partial class SqlServerQueryBuilder
             w.Write(C.ROLLBACK);
             w.Write(C.SPACE);
             w.Write(C.TRANSACTION);
-            if (!string.IsNullOrWhiteSpace(transactionName))
+            if(!string.IsNullOrWhiteSpace(transactionName))
             {
                 w.Write(C.SPACE);
                 w.Write(transactionName);
@@ -485,7 +488,7 @@ public partial class SqlServerQueryBuilder
         var t = new SetQueryBuilder();
         var functionCallExpressionBuilder = new CustomFunctionCallExpressionBuilder();
         right(functionCallExpressionBuilder);
-        using (var writer = SqlWriter.New)
+        using(var writer = SqlWriter.New)
         {
             functionCallExpressionBuilder.Build(writer);
             var expression = t.Set(variable).To(RawInternal(writer.Build()));
@@ -535,7 +538,7 @@ public partial class SqlServerQueryBuilder
 
     public void Truncate<TTable>() where TTable : ITable, new()
     {
-        using (var table = new TTable())
+        using(var table = new TTable())
         {
             Truncate(table.Name);
         }
@@ -548,7 +551,7 @@ public partial class SqlServerQueryBuilder
         _list.Add(expression);
         return expression;
     }
-        
+
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public IUpdateQueryBuilder Update => _Add(new UpdateQueryBuilder());
 
@@ -583,13 +586,19 @@ public partial class SqlServerQueryBuilder
 
     public void Build(ISqlWriter writer)
     {
-        foreach (var builder in _list) builder.Build(writer);
+        foreach(var builder in _list)
+        {
+            builder.Build(writer);
+        }
     }
     public string Build()
     {
-        using (var writer = SqlWriter.New)
+        using(var writer = SqlWriter.New)
         {
-            foreach (var builder in _list) builder.Build(writer);
+            foreach(var builder in _list)
+            {
+                builder.Build(writer);
+            }
 
             return writer.Build();
         }
@@ -617,7 +626,7 @@ public partial class SqlServerQueryBuilder
         }));
     }
 
-     
+
     public void Dispose()
     {
         Dispose(true);
@@ -625,7 +634,11 @@ public partial class SqlServerQueryBuilder
     }
     public virtual void Dispose(bool b)
     {
-        foreach (var builder in _list) builder.Dispose();
+        foreach(var builder in _list)
+        {
+            builder.Dispose();
+        }
+
         _list.Clear();
     }
 

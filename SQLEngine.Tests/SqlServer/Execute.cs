@@ -8,7 +8,7 @@ public partial class AllTests
     [Fact]
     public void Test_Execute_Procedure_1()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Execute
@@ -19,7 +19,7 @@ public partial class AllTests
                 .Arg("Surname", 87)
                 .Arg("IsReallyFamousInventor", true)
                 ;
-                    
+
 
             const string query = @"
 EXECUTE dbo.addUser  @Name=N'Nikola'
@@ -34,7 +34,7 @@ EXECUTE dbo.addUser  @Name=N'Nikola'
     [Fact]
     public void Test_Execute_Procedure_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Execute
@@ -61,11 +61,11 @@ EXECUTE addUser  @Name=N'Nikola'
     [Fact]
     public void Test_Execute_Function_1()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var execution =
                     Query.New
-                            
+
                         .Build() //Surname
 
                 ;
@@ -75,7 +75,7 @@ EXECUTE addUser  @Name=N'Nikola'
                 .Arg("Nikola") //Name
                 .Arg("Tesla")
             );
-                
+
             const string query = @"
 
 DECLARE @b BIT = dbo.UserExists (N'Nikola', N'Tesla')

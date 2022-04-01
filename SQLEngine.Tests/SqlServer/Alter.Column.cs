@@ -8,7 +8,7 @@ public partial class AllTests
     [Fact]
     public void Test_Alter_Table_AddColumn()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter
@@ -31,7 +31,7 @@ ALTER TABLE Users ADD  Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
     [Fact]
     public void Test_Alter_Table_AddColumn_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter
@@ -54,7 +54,7 @@ ALTER TABLE Users ADD  Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
     [Fact]
     public void Test_Alter_Table_AddColumn_OfType_Strong_Typed()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter
@@ -77,7 +77,7 @@ ALTER TABLE Users ADD  Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
     [Fact]
     public void Test_Alter_Table_AddColumn_OfType_Strong_Typed_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter
@@ -99,7 +99,7 @@ ALTER TABLE Users ADD Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
     [Fact]
     public void Test_Alter_Table_AddColumn_OfType_Strong_Typed_3()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter
@@ -120,7 +120,7 @@ ALTER TABLE Users ADD Age  DECIMAL (18,4) NOT  NULL  DEFAULT 18
     [Fact]
     public void Test_Alter_Table_DropColumn()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter
@@ -138,7 +138,7 @@ ALTER TABLE  Users  DROP  COLUMN  Age
     [Fact]
     public void Test_Alter_Table_RenameColumn()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter
@@ -159,7 +159,7 @@ EXECUTE sys.sp_rename  @objtype=N'COLUMN'
     [Fact]
     public void Test_Alter_Table_AlterColumn()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter
@@ -183,7 +183,7 @@ ALTER TABLE Users ADD CONSTRAINT DF_Users_Name  DEFAULT N'Anonymous' FOR Name
     [Fact]
     public void Test_Alter_Table_AlterColumn_3()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter
@@ -192,7 +192,7 @@ ALTER TABLE Users ADD CONSTRAINT DF_Users_Name  DEFAULT N'Anonymous' FOR Name
                 .Type("VARCHAR")
                 .NotNull()
                 .Size(15)
-                .DefaultValue("Anonymous","DF_my_awesome_constraint")
+                .DefaultValue("Anonymous", "DF_my_awesome_constraint")
                 ;
             const string query =
                 @"
@@ -207,7 +207,7 @@ ALTER TABLE Users ADD CONSTRAINT DF_my_awesome_constraint  DEFAULT N'Anonymous' 
     [Fact]
     public void Test_Alter_Table_AlterColumn_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter
@@ -228,11 +228,11 @@ ALTER TABLE Users ADD CONSTRAINT DF_Users_Name DEFAULT N'Anonymous' FOR Name
             SqlAssert.EqualQuery(q.ToString(), query);
         }
     }
-        
+
     [Fact]
     public void Test_Alter_Table_AlterColumn_Decimal()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter
@@ -254,7 +254,7 @@ ALTER TABLE Users ALTER COLUMN Weight decimal(18,4) NOT NULL
     [Fact]
     public void Test_Alter_Table_AlterColumn_Decimal_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter
@@ -276,7 +276,7 @@ ALTER TABLE Users ALTER COLUMN Weight decimal(18,4) NOT NULL
     [Fact]
     public void Test_Alter_Table_AlterColumn_Decimal_3()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter

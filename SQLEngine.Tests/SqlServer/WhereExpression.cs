@@ -9,14 +9,14 @@ public partial class AllTests
     [Fact]
     public void Test_Simple_Select_1_Expression_1()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
                 .Top(1)
                 .From<UserTable>()
                 .Where(x => x.IdInteger == 17);
-                
+
 
             const string queryThat = @"
 SELECT TOP(1)  * 
@@ -31,13 +31,13 @@ SELECT TOP(1)  *
     [Fact]
     public void Test_Simple_Select_Expression_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
                 .Top(1)
                 .From<UserTable>()
-                .Where(x=>x.Name == "admin")
+                .Where(x => x.Name == "admin")
                 ;
 
             var queryThat = @"
@@ -52,13 +52,13 @@ SELECT TOP(1)  *
     [Fact]
     public void Test_Simple_Select_3_Expression()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
                 .Top(1)
                 .From<UserTable>()
-                .Where(x=>x.Age > 18)
+                .Where(x => x.Age > 18)
                 ;
 
             var queryThat = @"
@@ -73,13 +73,13 @@ SELECT TOP(1)  *
     [Fact]
     public void Test_Simple_Select_Order_Expression()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
                 .Top(1)
                 .From<UserTable>()
-                .Where(x=>x.Age == 17)
+                .Where(x => x.Age == 17)
                 .OrderBy("Id");
 
 
@@ -122,7 +122,7 @@ SELECT TOP(1)  *
     [Fact]
     public void Test_Simple_Select_With_function_Expression()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var name = q.Column("Name");
             q
@@ -148,7 +148,7 @@ SELECT TOP(1)  *
     [Fact]
     public void Test_Simple_Select_Assign_Expression()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             //variables
             var myCreatedDate = q.Declare<DateTime>("myCreatedDate");
@@ -162,7 +162,7 @@ SELECT TOP(1)  *
                 .Top(1)
                 .SelectAssign(myCreatedDate, createdDate)
                 .From<UserTable>()
-                .Where(x=>x.IdInteger == 17)
+                .Where(x => x.IdInteger == 17)
                 .OrderBy(id);
 
             const string queryThat = @"

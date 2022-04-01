@@ -10,7 +10,7 @@ public abstract class AbstractQueryBuilder : IAbstractQueryBuilder
     }
     protected ISqlWriter Writer { get; }
 
- 
+
     public int Indent
     {
         get => Writer.Indent;
@@ -35,7 +35,7 @@ public abstract class AbstractQueryBuilder : IAbstractQueryBuilder
 
     public string Build()
     {
-        using (var writer=SqlWriter.New)
+        using(var writer = SqlWriter.New)
         {
             Build(writer);
             return writer.Build();
@@ -44,7 +44,11 @@ public abstract class AbstractQueryBuilder : IAbstractQueryBuilder
 
     protected SqlEngineException Bomb(string message = "")
     {
-        if (string.IsNullOrEmpty(message)) message = "Invalid Usage of QueryBuilder: " + GetType().Name;
+        if(string.IsNullOrEmpty(message))
+        {
+            message = "Invalid Usage of QueryBuilder: " + GetType().Name;
+        }
+
         throw new SqlEngineException(message);
     }
 
@@ -55,7 +59,7 @@ public abstract class AbstractQueryBuilder : IAbstractQueryBuilder
 
     protected virtual void Dispose(bool disposing)
     {
-        if (disposing)
+        if(disposing)
         {
             Writer?.Dispose();
         }

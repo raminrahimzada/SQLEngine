@@ -11,7 +11,7 @@ public partial class AllTests
     [Fact]
     public void Test_Declare_And_Init()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             //C is constants class
             q.Declare("i", C.INT, 1);
@@ -21,14 +21,14 @@ DECLARE  @i INT  = 1;
 ";
 
             SqlAssert.EqualQuery(q.ToString(), query);
-              
+
         }
     }
-        
+
     [Fact]
     public void Test_Declare_And_Init_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q.Declare<int>("i", 1);
             const string query = @"
@@ -41,20 +41,20 @@ DECLARE  @i INT  = 1;
     [Fact]
     public void Test_Declare_Only()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
-            q.Declare("i","INT");
+            q.Declare("i", "INT");
             const string query = @"
 DECLARE  @i INT;
 ";
             SqlAssert.EqualQuery(q.ToString(), query);
         }
     }
-        
+
     [Fact]
     public void Test_Declare_Only_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q.Declare<int>("i");
             const string query = @"
@@ -67,7 +67,7 @@ DECLARE  @i INT;
     [Fact]
     public void Test_Declare_And_Set()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var x = q.Declare<int>("x", 47);
 
@@ -83,7 +83,7 @@ SET @x = 48
     [Fact]
     public void Test_Declare_And_Set_Guid()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var x = q.Declare<Guid>("x");
 
@@ -100,18 +100,18 @@ SET  @x  = '00000000-0000-0000-0000-000000000000';
     [Fact]
     public void Test_Declare_And_Set_With_Function()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var tableName = q.Declare<string>("tableName");
-                
-            q.Set(tableName,"Users");
-                
+
+            q.Set(tableName, "Users");
+
             var objId = q.Declare<int>("objId");
 
             //Here OBJECT_ID is extension method on SqlEngine.SqlServer 
             //You can write your own custom functions as extensions to use it like that
             //see ICustomFunctionCallExpressionBuilder extensions
-                
+
             q.Set(objId, x => CustomFunctionCallExpressionBuilderExtensions.ObjectId(x, tableName));
 
             q.Print(objId);
@@ -135,12 +135,12 @@ print(@objId)
     [Fact]
     public void Test_Declare_And_Set_With_Cast()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var today = q.Declare<DateTime>("today");
 
             q.Set(today, DateTime.Parse("01/01/2020"));
-                
+
             q.Set(today, x => CustomFunctionCallExpressionBuilderExtensions.Cast(x, today, C.DATE));
 
             q.Print(today);

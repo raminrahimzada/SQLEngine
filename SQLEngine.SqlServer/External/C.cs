@@ -25,13 +25,13 @@ public static class C
     public const char BEGIN_SCOPE = '(';
     public const char END_SCOPE = ')';
 
-    public const string AND="AND";
+    public const string AND = "AND";
     public const string TRIGGER = "TRIGGER";
     public const string MIN = "MIN";
     public const string AVG = "AVG";
     public const string SUM = "SUM";
     public const string COUNT = "COUNT";
-        
+
     public const string AFTER = "AFTER";
     public const string ROLLBACK = "ROLLBACK";
     public const string TRANSACTION = "TRANSACTION";
@@ -89,7 +89,7 @@ public static class C
     public const string UNIQUE = "UNIQUE";
     public const string CHECK = "CHECK";
     public const string ADD = "ADD";
-        
+
     public const string DESC = "DESC";
     public const string ASC = "ASC";
     public const string KEY = "KEY";
@@ -116,7 +116,7 @@ public static class C
     public const string DISTINCT = "DISTINCT";
     public const string CLOSE = "CLOSE";
     public const string DEALLOCATE = "DEALLOCATE";
-   
+
     public const string RETURNS = "RETURNS";
     public const string DECLARE = "DECLARE";
     public const string OPEN = "OPEN";
@@ -141,7 +141,7 @@ public static class C
     public const string TOP = "TOP";
     public const string FROM = "FROM";
     public const string SELECT = "SELECT";
-        
+
     public const string WHERE = "WHERE";
     public const string EXECUTE = "EXECUTE";
     public const string ORDER = "ORDER";

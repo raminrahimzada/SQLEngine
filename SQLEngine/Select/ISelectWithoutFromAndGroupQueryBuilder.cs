@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SQLEngine;
+﻿namespace SQLEngine;
 
 public interface ISelectWithoutFromAndGroupQueryBuilder : IAbstractQueryBuilder
 {

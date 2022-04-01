@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class AlterTableQueryBuilder :AbstractQueryBuilder,
+internal class AlterTableQueryBuilder : AbstractQueryBuilder,
     IAlterTableQueryBuilder
     , IAlterTableNoNameQueryBuilder
     , IAlterTableNoNameDropColumnQueryBuilder
@@ -14,7 +14,7 @@ internal class AlterTableQueryBuilder :AbstractQueryBuilder,
         _schema = schema;
         return this;
     }
-      
+
     public IAlterTableNoNameAddColumnNoNameQueryBuilder AddColumn(string columnName)
     {
         var b = new AlterTableAddColumnQueryBuilder();
@@ -30,7 +30,7 @@ internal class AlterTableQueryBuilder :AbstractQueryBuilder,
     public IAlterTableNoNameDropColumnQueryBuilder DropColumn(string columnName)
     {
         var b = new AlterTableDropColumnQueryBuilder();
-        _internalBuilder= b.Table(_tableName).Column(columnName);
+        _internalBuilder = b.Table(_tableName).Column(columnName);
         return b;
     }
 
@@ -63,13 +63,13 @@ internal class AlterTableQueryBuilder :AbstractQueryBuilder,
     public IAlterTableAddConstraintQueryBuilder AddConstraint(string constraintName)
     {
         var b = new AlterTableAddConstraintQueryBuilder();
-        _internalBuilder = b.Table(_tableName,_schema).ConstraintName(constraintName);
+        _internalBuilder = b.Table(_tableName, _schema).ConstraintName(constraintName);
         return b;
     }
 
     protected override void Dispose(bool disposing)
     {
-        if (disposing)
+        if(disposing)
         {
             _internalBuilder?.Dispose();
         }

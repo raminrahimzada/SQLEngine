@@ -11,7 +11,7 @@ public partial class AllTests
     [Fact]
     public void Test_Insert_By_Value()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q.Insert
                 .Into("Users")
@@ -22,7 +22,7 @@ public partial class AllTests
                 ;
             const string query =
                 "INSERT INTO Users (Name,Surname,Age,Height) VALUES (N'Ramin' , N'Rahimzada' , 26, 1.84)";
-                
+
             SqlAssert.EqualQuery(q.ToString(), query);
         }
     }
@@ -30,9 +30,9 @@ public partial class AllTests
     [Fact]
     public void Test_Insert_By_Dictionary()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
-            var dict = new Dictionary<string,AbstractSqlLiteral>
+            var dict = new Dictionary<string, AbstractSqlLiteral>
             {
                 {"Name", "Ramin"},
                 {"Surname", "Rahimzada"},
@@ -51,7 +51,7 @@ public partial class AllTests
     [Fact]
     public void Test_Insert_By_Columns_And_Values()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q.Insert
                 .Into("Users")
@@ -70,11 +70,11 @@ public partial class AllTests
         var datetime = DateTime.MinValue;
         var date = SqlServerLiteral.From(datetime, includeTime: false);
 
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q.Insert
                 .Into("People")
-                .Values("Satoshi", "Nakamoto", 1024, datetime,date)
+                .Values("Satoshi", "Nakamoto", 1024, datetime, date)
                 ;
             const string query =
                 "INSERT INTO People VALUES (N'Satoshi',N'Nakamoto',1024,'0001-01-01 00:00:00.000','0001-01-01')";
@@ -86,7 +86,7 @@ public partial class AllTests
     [Fact]
     public void Test_Insert_MultipleValues_1()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q.Insert
                 .Into("GOT")
@@ -94,7 +94,7 @@ public partial class AllTests
                 .Values("John", "Snow")
                 .Values("Illyrio", "Mopatis")
                 ;
-                
+
             const string query =
                 @"INSERT INTO GOT VALUES (N'Daenerys',N'Targaryen'),(N'John',N'Snow'),(N'Illyrio',N'Mopatis')";
             SqlAssert.EqualQuery(q.Build(), query);
@@ -104,11 +104,11 @@ public partial class AllTests
     [Fact]
     public void Test_Insert_MultipleValues_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q.Insert
                 .Into("GOT")
-                .Columns("Name","Surname")
+                .Columns("Name", "Surname")
                 .Values("Daenerys", "Targaryen")
                 .Values("John", "Snow")
                 .Values("Illyrio", "Mopatis")
@@ -123,7 +123,7 @@ public partial class AllTests
     [Fact]
     public void Test_Insert_By_Select()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Insert
@@ -140,7 +140,7 @@ public partial class AllTests
     [Fact]
     public void Test_Insert_By_Select_Strong_Typed()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q.Insert
                 .Into<UserTable>()
@@ -157,7 +157,7 @@ public partial class AllTests
     [Fact]
     public void Test_Insert_With_No_Values()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             //no values 
             //see https://stackoverflow.com/questions/2148091/syntax-for-inserting-into-a-table-with-no-values

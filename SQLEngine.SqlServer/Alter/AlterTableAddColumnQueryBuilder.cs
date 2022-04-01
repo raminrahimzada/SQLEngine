@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class AlterTableAddColumnQueryBuilder:AbstractQueryBuilder
+internal class AlterTableAddColumnQueryBuilder : AbstractQueryBuilder
     , IAlterTableNoNameAddColumnNoNameQueryBuilder
     , IAlterTableNoNameAddColumnNoNameNoTypeNameQueryBuilder
     , IAlterTableNoNameAddColumnNoNameNoNullableQueryBuilder
@@ -14,7 +14,7 @@ internal class AlterTableAddColumnQueryBuilder:AbstractQueryBuilder
     private string _type;
     private bool? _canBeNull;
     private string _defaultValue;
-        
+
     private int? _size;
     private byte? _scale;
 
@@ -29,7 +29,7 @@ internal class AlterTableAddColumnQueryBuilder:AbstractQueryBuilder
         return OfType(Query.Settings.TypeConvertor.ToSqlType<T>());
     }
 
-    public IAlterTableNoNameAddColumnNoNameNoNullableQueryBuilder NotNull(bool notNull=true)
+    public IAlterTableNoNameAddColumnNoNameNoNullableQueryBuilder NotNull(bool notNull = true)
     {
         _canBeNull = !notNull;
         return this;
@@ -58,11 +58,11 @@ internal class AlterTableAddColumnQueryBuilder:AbstractQueryBuilder
         writer.Write(C.SPACE);
         writer.Write2(_columnName);
         writer.Write2(_type);
-        if (_size != null)
+        if(_size != null)
         {
             writer.Write(C.BEGIN_SCOPE);
             writer.Write(_size);
-            if (_scale != null)
+            if(_scale != null)
             {
                 writer.Write(C.COMMA);
                 writer.Write(_scale);
@@ -70,16 +70,16 @@ internal class AlterTableAddColumnQueryBuilder:AbstractQueryBuilder
             writer.Write(C.END_SCOPE);
         }
 
-        if (_canBeNull != null)
+        if(_canBeNull != null)
         {
-            if (!_canBeNull.Value)
+            if(!_canBeNull.Value)
             {
                 writer.Write2(C.NOT);
             }
             writer.Write2(C.NULL);
         }
 
-        if (_defaultValue != null)
+        if(_defaultValue != null)
         {
             writer.Write2(C.DEFAULT);
             writer.Write(_defaultValue);

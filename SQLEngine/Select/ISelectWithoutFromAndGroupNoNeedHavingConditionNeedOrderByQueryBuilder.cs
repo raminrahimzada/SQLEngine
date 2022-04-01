@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine;
 
-public interface ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder:IAbstractQueryBuilder
+public interface ISelectWithoutFromAndGroupNoNeedHavingConditionNeedOrderByQueryBuilder : IAbstractQueryBuilder
 {
 
 }

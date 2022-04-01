@@ -10,7 +10,7 @@ internal class SqlServerColumn : AbstractSqlColumn
     {
         Name = name;
     }
-    public SqlServerColumn(string name,string tableAlias)
+    public SqlServerColumn(string name, string tableAlias)
     {
         Name = name;
         TableAlias = tableAlias;
@@ -25,15 +25,35 @@ internal class SqlServerColumn : AbstractSqlColumn
     {
         string ToSqlStringNoAlias()
         {
-            if (Name == C.WILCARD + string.Empty) return Name;
-            if (!Name.All(char.IsLetterOrDigit)) return "[" + Name + "]";
-            if (Name.Equals("key", StringComparison.InvariantCultureIgnoreCase)) return "[" + Name + "]";
-            if (Name.Equals("value", StringComparison.InvariantCultureIgnoreCase)) return "[" + Name + "]";
-            if (!char.IsLetter(Name.First())) return "[" + Name + "]";
+            if(Name == C.WILCARD + string.Empty)
+            {
+                return Name;
+            }
+
+            if(!Name.All(char.IsLetterOrDigit))
+            {
+                return "[" + Name + "]";
+            }
+
+            if(Name.Equals("key", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return "[" + Name + "]";
+            }
+
+            if(Name.Equals("value", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return "[" + Name + "]";
+            }
+
+            if(!char.IsLetter(Name.First()))
+            {
+                return "[" + Name + "]";
+            }
+
             return Name;
         }
 
-        if (!string.IsNullOrWhiteSpace(TableAlias))
+        if(!string.IsNullOrWhiteSpace(TableAlias))
         {
             return TableAlias + C.DOT + ToSqlStringNoAlias();
         }
@@ -103,7 +123,7 @@ internal class SqlServerColumn : AbstractSqlColumn
         writer.Write(C.IN);
         writer.Write(C.SPACE);
         writer.Write(C.BEGIN_SCOPE);
-        using (var builder = new SelectQueryBuilder())
+        using(var builder = new SelectQueryBuilder())
         {
             builderFunc(builder);
             builder.Build(writer);
@@ -116,8 +136,11 @@ internal class SqlServerColumn : AbstractSqlColumn
 
     public override AbstractSqlCondition In(params AbstractSqlLiteral[] expressions)
     {
-        if (expressions.Length == 0)
+        if(expressions.Length == 0)
+        {
             throw new SqlEngineException("At least one element needed in -IN query needed");
+        }
+
         var expression = ToSqlString() + " IN (" +
                          string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
 
@@ -126,8 +149,11 @@ internal class SqlServerColumn : AbstractSqlColumn
 
     public override AbstractSqlCondition NotIn(params AbstractSqlLiteral[] expressions)
     {
-        if (expressions.Length == 0)
+        if(expressions.Length == 0)
+        {
             throw new SqlEngineException("At least one element needed in -NOT IN query needed");
+        }
+
         var expression = ToSqlString() + " NOT IN (" +
                          string.Join(",", expressions.Select(x => x.ToSqlString())) + ")";
 
@@ -144,7 +170,7 @@ internal class SqlServerColumn : AbstractSqlColumn
         writer.Write(C.IN);
         writer.Write(C.SPACE);
         writer.Write(C.BEGIN_SCOPE);
-        using (var builder = new SelectQueryBuilder())
+        using(var builder = new SelectQueryBuilder())
         {
             builderFunc(builder);
             builder.Build(writer);
@@ -155,7 +181,7 @@ internal class SqlServerColumn : AbstractSqlColumn
         return SqlServerCondition.Raw(writer.Build());
     }
 
-        
+
     #region Add
     protected override AbstractSqlExpression Add(AbstractSqlExpression right)
     {
@@ -258,57 +284,57 @@ internal class SqlServerColumn : AbstractSqlColumn
 
     protected override AbstractSqlCondition EqualTo(int value)
     {
-        return EqualTo((AbstractSqlLiteral) value);
+        return EqualTo((AbstractSqlLiteral)value);
     }
 
     protected override AbstractSqlCondition EqualTo(bool value)
     {
-        return EqualTo((AbstractSqlLiteral) value);
+        return EqualTo((AbstractSqlLiteral)value);
     }
 
     protected override AbstractSqlCondition EqualTo(byte value)
     {
-        return EqualTo((AbstractSqlLiteral) value);
+        return EqualTo((AbstractSqlLiteral)value);
     }
 
     protected override AbstractSqlCondition EqualTo(byte[] value)
     {
-        return EqualTo((AbstractSqlLiteral) value);
+        return EqualTo((AbstractSqlLiteral)value);
     }
 
     protected override AbstractSqlCondition EqualTo(DateTime value)
     {
-        return EqualTo((AbstractSqlLiteral) value);
+        return EqualTo((AbstractSqlLiteral)value);
     }
 
     protected override AbstractSqlCondition EqualTo(string value)
     {
-        return EqualTo((AbstractSqlLiteral) value);
+        return EqualTo((AbstractSqlLiteral)value);
     }
 
     protected override AbstractSqlCondition EqualTo(Guid value)
     {
-        return EqualTo((AbstractSqlLiteral) value);
+        return EqualTo((AbstractSqlLiteral)value);
     }
 
     protected override AbstractSqlCondition EqualTo(long value)
     {
-        return EqualTo((AbstractSqlLiteral) value);
+        return EqualTo((AbstractSqlLiteral)value);
     }
 
     protected override AbstractSqlCondition EqualTo(decimal value)
     {
-        return EqualTo((AbstractSqlLiteral) value);
+        return EqualTo((AbstractSqlLiteral)value);
     }
 
     protected override AbstractSqlCondition EqualTo(double value)
     {
-        return EqualTo((AbstractSqlLiteral) value);
+        return EqualTo((AbstractSqlLiteral)value);
     }
 
     protected override AbstractSqlCondition EqualTo(float value)
     {
-        return EqualTo((AbstractSqlLiteral) value);
+        return EqualTo((AbstractSqlLiteral)value);
     }
 
     #endregion
@@ -411,27 +437,27 @@ internal class SqlServerColumn : AbstractSqlColumn
 
     protected override AbstractSqlCondition Greater(int value)
     {
-        return Greater((SqlServerLiteral) value);
+        return Greater((SqlServerLiteral)value);
     }
 
     protected override AbstractSqlCondition Greater(long value)
     {
-        return Greater((SqlServerLiteral) value);
+        return Greater((SqlServerLiteral)value);
     }
 
     protected override AbstractSqlCondition Greater(double value)
     {
-        return Greater((SqlServerLiteral) value);
+        return Greater((SqlServerLiteral)value);
     }
 
     protected override AbstractSqlCondition Greater(DateTime value)
     {
-        return Greater((SqlServerLiteral) value);
+        return Greater((SqlServerLiteral)value);
     }
 
     protected override AbstractSqlCondition Greater(byte value)
     {
-        return Greater((SqlServerLiteral) value);
+        return Greater((SqlServerLiteral)value);
     }
 
     protected override AbstractSqlCondition Greater(AbstractSqlVariable variable)
@@ -459,27 +485,27 @@ internal class SqlServerColumn : AbstractSqlColumn
 
     protected override AbstractSqlCondition GreaterEqual(int value)
     {
-        return GreaterEqual((SqlServerLiteral) value);
+        return GreaterEqual((SqlServerLiteral)value);
     }
 
     protected override AbstractSqlCondition GreaterEqual(long value)
     {
-        return GreaterEqual((SqlServerLiteral) value);
+        return GreaterEqual((SqlServerLiteral)value);
     }
 
     protected override AbstractSqlCondition GreaterEqual(double value)
     {
-        return GreaterEqual((SqlServerLiteral) value);
+        return GreaterEqual((SqlServerLiteral)value);
     }
 
     protected override AbstractSqlCondition GreaterEqual(DateTime value)
     {
-        return GreaterEqual((SqlServerLiteral) value);
+        return GreaterEqual((SqlServerLiteral)value);
     }
 
     protected override AbstractSqlCondition GreaterEqual(byte value)
     {
-        return GreaterEqual((SqlServerLiteral) value);
+        return GreaterEqual((SqlServerLiteral)value);
     }
 
     protected override AbstractSqlCondition GreaterEqual(AbstractSqlVariable variable)
@@ -507,29 +533,29 @@ internal class SqlServerColumn : AbstractSqlColumn
 
     protected override AbstractSqlCondition Less(int value)
     {
-        return Less((SqlServerLiteral) value);
+        return Less((SqlServerLiteral)value);
     }
 
     protected override AbstractSqlCondition Less(long value)
     {
-        return Less((SqlServerLiteral) value);
+        return Less((SqlServerLiteral)value);
     }
 
 
     protected override AbstractSqlCondition Less(double value)
     {
-        return Less((SqlServerLiteral) value);
+        return Less((SqlServerLiteral)value);
     }
 
 
     protected override AbstractSqlCondition Less(DateTime value)
     {
-        return Less((SqlServerLiteral) value);
+        return Less((SqlServerLiteral)value);
     }
 
     protected override AbstractSqlCondition Less(byte value)
     {
-        return Less((SqlServerLiteral) value);
+        return Less((SqlServerLiteral)value);
     }
 
     protected override AbstractSqlCondition Less(AbstractSqlVariable variable)
@@ -578,30 +604,30 @@ internal class SqlServerColumn : AbstractSqlColumn
 
     protected override AbstractSqlCondition LessEqual(byte value)
     {
-        return LessEqual((SqlServerLiteral) value);
+        return LessEqual((SqlServerLiteral)value);
     }
 
     protected override AbstractSqlCondition LessEqual(DateTime value)
     {
-        return LessEqual((SqlServerLiteral) value);
+        return LessEqual((SqlServerLiteral)value);
     }
 
 
     protected override AbstractSqlCondition LessEqual(double value)
     {
-        return LessEqual((SqlServerLiteral) value);
+        return LessEqual((SqlServerLiteral)value);
     }
 
 
     protected override AbstractSqlCondition LessEqual(long value)
     {
-        return LessEqual((SqlServerLiteral) value);
+        return LessEqual((SqlServerLiteral)value);
     }
 
 
     protected override AbstractSqlCondition LessEqual(int value)
     {
-        return LessEqual((SqlServerLiteral) value);
+        return LessEqual((SqlServerLiteral)value);
     }
 
     #endregion

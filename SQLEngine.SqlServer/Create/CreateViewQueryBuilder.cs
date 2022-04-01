@@ -32,7 +32,7 @@ internal class CreateViewQueryBuilder : AbstractQueryBuilder, ICreateViewNoNameQ
         writer.Write(C.SPACE);
         writer.Write(C.VIEW);
         writer.Write(C.SPACE);
-        if (!string.IsNullOrWhiteSpace(_schema))
+        if(!string.IsNullOrWhiteSpace(_schema))
         {
             writer.Write(_schema);
             writer.Write(C.DOT);
@@ -41,7 +41,7 @@ internal class CreateViewQueryBuilder : AbstractQueryBuilder, ICreateViewNoNameQ
         writer.Write(C.SPACE);
         writer.Write(C.AS);
         writer.Write(C.SPACE);
-        using (var sb=new SelectQueryBuilder())
+        using(var sb = new SelectQueryBuilder())
         {
             _selectionBuilder(sb);
             sb.Build(writer);

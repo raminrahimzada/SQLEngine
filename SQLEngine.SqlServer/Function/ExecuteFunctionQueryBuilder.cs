@@ -2,8 +2,8 @@
 
 namespace SQLEngine.SqlServer;
 
-internal class ExecuteFunctionQueryBuilder : 
-    AbstractQueryBuilder, 
+internal class ExecuteFunctionQueryBuilder :
+    AbstractQueryBuilder,
     IExecuteFunctionNeedNameAndSchemaQueryBuilder
 {
     private string _functionName;
@@ -15,7 +15,7 @@ internal class ExecuteFunctionQueryBuilder :
 
     public override void Build(ISqlWriter writer)
     {
-        if (!string.IsNullOrWhiteSpace(_schemaName))
+        if(!string.IsNullOrWhiteSpace(_schemaName))
         {
             writer.Write(_schemaName);
             writer.Write(C.DOT);
@@ -23,9 +23,9 @@ internal class ExecuteFunctionQueryBuilder :
         writer.Write(_functionName);
         writer.Write(C.SPACE);
         writer.Write(C.BEGIN_SCOPE);
-        for (int i = 0; i < _parametersList.Count; i++)
+        for(int i = 0; i < _parametersList.Count; i++)
         {
-            if (i != 0)
+            if(i != 0)
             {
                 writer.Write(C.COMMA);
             }

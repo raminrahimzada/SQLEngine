@@ -36,7 +36,7 @@ internal class SqlServerCondition : AbstractSqlCondition
 
     protected override void SetRaw(bool? rawValue)
     {
-        if (rawValue == null)
+        if(rawValue == null)
         {
             _rawSqlString = C.NULL;
         }
@@ -57,7 +57,7 @@ internal class SqlServerCondition : AbstractSqlCondition
         var result = "(" + ToSqlString() + ") OR (" + condition.ToSqlString() + ")";
         return Raw(result);
     }
-        
+
     [Pure]
     public static SqlServerCondition Raw(string rawSqlString)
     {

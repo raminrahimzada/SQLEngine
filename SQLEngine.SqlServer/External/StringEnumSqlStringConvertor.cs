@@ -6,7 +6,11 @@ public class StringEnumSqlStringConvertor : IEnumSqlStringConvertor
 {
     public string ToSqlString(Enum @enum)
     {
-        if (@enum == null) return "NULL";
+        if(@enum == null)
+        {
+            return "NULL";
+        }
+
         return @enum.ToString();
     }
 }

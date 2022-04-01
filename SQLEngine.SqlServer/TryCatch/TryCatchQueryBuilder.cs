@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-internal class TryCatchQueryBuilder :AbstractQueryBuilder
+internal class TryCatchQueryBuilder : AbstractQueryBuilder
     , ITryQueryBuilder
     , ITryNoTryQueryBuilder
     , ITryNoCatchQueryBuilder
@@ -15,10 +15,10 @@ internal class TryCatchQueryBuilder :AbstractQueryBuilder
         writer.Write(C.SPACE);
         writer.Write(C.TRY);
         writer.WriteLine();
-            
-        if (_tryBody!=null)
+
+        if(_tryBody != null)
         {
-            using (var q = new SqlServerQueryBuilder())
+            using(var q = new SqlServerQueryBuilder())
             {
                 _tryBody.Invoke(q);
                 q.Build(writer);
@@ -29,23 +29,23 @@ internal class TryCatchQueryBuilder :AbstractQueryBuilder
         writer.Write(C.END);
         writer.Write(C.SPACE);
         writer.Write(C.TRY);
-            
+
         writer.WriteLine();
-            
+
         writer.Write(C.BEGIN);
         writer.Write(C.SPACE);
         writer.Write(C.CATCH);
         writer.WriteLine();
 
-        if (_catchBody != null)
+        if(_catchBody != null)
         {
-            using (var q = new CatchFunctionQueryBuilder())
+            using(var q = new CatchFunctionQueryBuilder())
             {
                 _catchBody.Invoke(q);
                 q.Build(writer);
             }
         }
-            
+
         writer.WriteLine();
         writer.Write(C.END);
         writer.Write(C.SPACE);

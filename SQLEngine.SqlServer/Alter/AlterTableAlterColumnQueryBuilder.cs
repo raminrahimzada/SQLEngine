@@ -36,14 +36,14 @@ internal class AlterTableAlterColumnQueryBuilder : AbstractQueryBuilder
         writer.Write2(C.ALTER);
         writer.Write(C.COLUMN);
         writer.Write2(_columnName);
-            
 
-        if (_size != null)
+
+        if(_size != null)
         {
             writer.Write(_newType.Replace(C.BEGIN_SCOPE + C.MAX + C.END_SCOPE, string.Empty));
             writer.Write(C.BEGIN_SCOPE);
             writer.Write(_size);
-            if (_scale != null)
+            if(_scale != null)
             {
                 writer.Write(C.COMMA);
                 writer.Write(_scale);
@@ -55,23 +55,23 @@ internal class AlterTableAlterColumnQueryBuilder : AbstractQueryBuilder
             writer.Write(_newType);
         }
 
-        if (_canBeNull != null)
+        if(_canBeNull != null)
         {
-            if (!_canBeNull.Value)
+            if(!_canBeNull.Value)
             {
                 writer.Write2(C.NOT);
             }
             writer.Write2(C.NULL);
         }
 
-        if (_defaultValue != null)
+        if(_defaultValue != null)
         {
-            if (string.IsNullOrWhiteSpace(_defaultValueConstraintName))
+            if(string.IsNullOrWhiteSpace(_defaultValueConstraintName))
             {
                 _defaultValueConstraintName =
                     "DF_" + _tableName + "_" + _columnName;
             }
-                
+
             writer.Write(C.SPACE);
             writer.WriteLine();
             writer.Write(C.ALTER);
@@ -88,7 +88,7 @@ internal class AlterTableAlterColumnQueryBuilder : AbstractQueryBuilder
             writer.Write(C.SPACE);
             writer.Write(C.DEFAULT);
             writer.Write(C.SPACE);
-                
+
             writer.Write(_defaultValue.ToSqlString());
             writer.Write(C.SPACE);
             writer.Write(C.FOR);
@@ -119,7 +119,7 @@ internal class AlterTableAlterColumnQueryBuilder : AbstractQueryBuilder
         _size = size;
         _scale = scale;
         return this;
-    }        
+    }
     public IAlterTableNoNameAlterColumnNoNewTypeNoNullableNoSizeNoDefaultValueQueryBuilder DefaultValue(AbstractSqlLiteral literal, string defaultValueConstraintName = null)
     {
         _defaultValue = literal;

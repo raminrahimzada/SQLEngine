@@ -4,5 +4,5 @@ public interface IAlterTableNoNameAddColumnNoNameQueryBuilder : IAbstractQueryBu
 {
     IAlterTableNoNameAddColumnNoNameNoTypeNameQueryBuilder OfType(string type);
     IAlterTableNoNameAddColumnNoNameNoTypeNameQueryBuilder OfType<T>();
-    IAlterTableNoNameAddColumnNoNameNoNullableQueryBuilder NotNull(bool notNull=true);
+    IAlterTableNoNameAddColumnNoNameNoNullableQueryBuilder NotNull(bool notNull = true);
 }

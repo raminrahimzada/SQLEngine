@@ -9,7 +9,7 @@ public abstract class BaseTable : ITable
 
     protected virtual void Dispose(bool disposing)
     {
-        if (disposing)
+        if(disposing)
         {
         }
     }
@@ -22,7 +22,7 @@ public abstract class BaseTable : ITable
 }
 public class OrderTable : BaseTable
 {
-    public  override string Name => "Orders";
+    public override string Name => "Orders";
 }
 public class CustomerTable : BaseTable
 {
@@ -35,16 +35,16 @@ public class UserTable : BaseTable
     public byte IdByte { get; set; }
     public int IdInteger { get; set; }
     public long IdLong { get; set; }
-    public Guid IdGuid{ get; set; }
-    public double Weight{ get; set; }
-    public float Height{ get; set; }
+    public Guid IdGuid { get; set; }
+    public double Weight { get; set; }
+    public float Height { get; set; }
     public byte Age { get; set; }
     public bool IsFemale { get; set; }
     public short IdShort { get; set; }
     public DateTime DateOfBirth { get; set; }
     public string Surname { get; set; }
 }
-public  class AttachmentsTable : BaseTable
+public class AttachmentsTable : BaseTable
 {
     public override string Name => "Attachments";
 }

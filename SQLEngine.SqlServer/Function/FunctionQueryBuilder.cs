@@ -69,7 +69,7 @@ internal class FunctionQueryBuilder : AbstractQueryBuilder
     {
         writer.Write(C.CREATE);
         writer.Write2(C.FUNCTION);
-        if (!string.IsNullOrEmpty(_schemaName))
+        if(!string.IsNullOrEmpty(_schemaName))
         {
             writer.Write(I(_schemaName));
             writer.Write(C.DOT);
@@ -83,7 +83,7 @@ internal class FunctionQueryBuilder : AbstractQueryBuilder
         writer.WriteLine(C.END_SCOPE);
         writer.Write(C.RETURNS);
         writer.Write(C.SPACE);
-        if (_schemaBuilding)
+        if(_schemaBuilding)
         {
             writer.Write2(C.WITH);
             writer.Write2(C.SCHEMABINDING);
@@ -93,7 +93,7 @@ internal class FunctionQueryBuilder : AbstractQueryBuilder
         writer.WriteLine(C.BEGIN);
         writer.Indent++;
 
-        using (var o = Query.New)
+        using(var o = Query.New)
         {
             writer.Indent--;
             _bodyBuilder(o);

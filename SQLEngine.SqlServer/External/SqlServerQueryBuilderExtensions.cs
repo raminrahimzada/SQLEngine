@@ -7,7 +7,7 @@ public static class SqlServerQueryBuilderExtensions
 {
     public static SqlServerQueryBuilder AsSqlServer(this IQueryBuilder builder)
     {
-        if (builder is not SqlServerQueryBuilder sqlServerBuilder)
+        if(builder is not SqlServerQueryBuilder sqlServerBuilder)
         {
             throw new SqlEngineException("Builder is not Sql-Server Builder");
         }
@@ -28,9 +28,9 @@ public static class SqlServerQueryBuilderExtensions
         params ISqlExpression[] args)
     {
         var sqlErrorState = Query.Settings.SqlErrorState;
-        var list = new List<string>(args.Length + 1) {exceptionMessage.ToSQL().ToSqlString()};
+        var list = new List<string>(args.Length + 1) { exceptionMessage.ToSQL().ToSqlString() };
         list.AddRange(args.Select(x => x.ToSqlString()));
-        var errorMessageVar = builder.DeclareNew( C.NVARCHARMAX);
+        var errorMessageVar = builder.DeclareNew(C.NVARCHARMAX);
         var to = SqlServerLiteral.Raw($"{C.FORMATMESSAGE}({list.JoinWith(", ")})");
         builder.Set(errorMessageVar, to);
         builder.Execute.Function(C.RAISERROR)

@@ -2,7 +2,7 @@
 
 namespace SQLEngine;
 
-public abstract class AbstractSqlLiteral:ISqlExpression
+public abstract class AbstractSqlLiteral : ISqlExpression
 {
     public abstract string ToSqlString();
 
@@ -12,7 +12,6 @@ public abstract class AbstractSqlLiteral:ISqlExpression
     {
         _createEmpty = func;
     }
-
     public abstract void SetFrom(byte[] data);
 
     public abstract void SetFrom(int i);
@@ -149,7 +148,7 @@ public abstract class AbstractSqlLiteral:ISqlExpression
     {
         return From(x);
     }
-      
+
     public static implicit operator AbstractSqlLiteral(long x)
     {
         return From(x);
@@ -185,7 +184,7 @@ public abstract class AbstractSqlLiteral:ISqlExpression
     {
         return From(x);
     }
-        
+
     public static implicit operator AbstractSqlLiteral(byte x)
     {
         return From(x);
@@ -347,7 +346,7 @@ public abstract class AbstractSqlLiteral:ISqlExpression
         literal.SetFrom(i);
         return literal;
     }
-    public static AbstractSqlLiteral From(DateTime i,bool includeTime=true)
+    public static AbstractSqlLiteral From(DateTime i, bool includeTime = true)
     {
         var literal = _createEmpty();
         literal.SetFrom(i, includeTime);

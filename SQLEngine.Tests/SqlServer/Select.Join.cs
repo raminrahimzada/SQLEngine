@@ -9,7 +9,7 @@ public partial class AllTests
     [Fact]
     public void Test_Select_Simple_Join_With_Raw_Condition()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var col1 = q.Column("CustomerId", "O");
             var col2 = q.Column("Id", "C");
@@ -18,7 +18,7 @@ public partial class AllTests
                 .Select
                 .Top(1)
                 .From("Customers", "C")
-                .InnerJoin("Orders", "dbo","O")
+                .InnerJoin("Orders", "dbo", "O")
                 .On(col1 == col2)
                 ;
 
@@ -37,15 +37,15 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Select_Simple_Join_1()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
                 .Top(1)
                 .From("Customers", "C")
-                .InnerJoin("Orders","dbo", "O")
-                .OnColumn("CustomerId","O")
-                .IsEqualsTo("Id","C")
+                .InnerJoin("Orders", "dbo", "O")
+                .OnColumn("CustomerId", "O")
+                .IsEqualsTo("Id", "C")
                 ;
 
             const string query = @" 
@@ -62,13 +62,13 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Select_Simple_Join_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
                 .Top(1)
                 .From<CustomerTable>("C")
-                .InnerJoin("Orders","dbo", "O")
+                .InnerJoin("Orders", "dbo", "O")
                 .OnColumn("CustomerId", "O")
                 .IsEqualsTo("Id", "C")
                 ;
@@ -87,15 +87,15 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Select_Simple_Join_3()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
                 .Top(1)
                 .From<CustomerTable>("C")
                 .InnerJoin<OrderTable>("O")
-                .OnColumn("CustomerId","O")
-                .IsEqualsTo("Id","C")
+                .OnColumn("CustomerId", "O")
+                .IsEqualsTo("Id", "C")
                 ;
 
             const string query = @" 
@@ -112,7 +112,7 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Select_Simple_Join_4()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
@@ -137,7 +137,7 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Select_Simple_Join_5()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
@@ -161,15 +161,15 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Select_Multiple_Join_1()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
                 .Top(1)
                 .From("Customers", "C")
-                .InnerJoin("Orders","dbo", "O")
-                .OnColumn("PartnerId","O")
-                .IsEqualsTo("PartnerId","C")
+                .InnerJoin("Orders", "dbo", "O")
+                .OnColumn("PartnerId", "O")
+                .IsEqualsTo("PartnerId", "C")
                 ;
 
             const string query = @" 
@@ -185,13 +185,13 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Select_Multiple_Join_11()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
                 .Top(1)
                 .From("Customers", "C")
-                .InnerJoin("Orders","dbo", "O")
+                .InnerJoin("Orders", "dbo", "O")
                 .OnColumn("PartnerId")
                 .IsEqualsTo("PartnerId", "C")
                 ;
@@ -209,7 +209,7 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Select_Multiple_Join_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
@@ -238,7 +238,7 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Select_Multiple_Join_3()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
@@ -267,7 +267,7 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Select_Multiple_Join_4()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
@@ -295,7 +295,7 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Left_Select_Simple_Join_With_Raw_Condition()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var col1 = q.Column("CustomerId", "O");
             var col2 = q.Column("Id", "C");
@@ -304,7 +304,7 @@ SELECT TOP(1)   *
                 .Select
                 .Top(1)
                 .From("Customers", "C")
-                .LeftJoin("Orders","dbo", "O")
+                .LeftJoin("Orders", "dbo", "O")
                 .On(col1 == col2)
                 ;
 
@@ -323,15 +323,15 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Left_Select_Simple_Join_1()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
                 .Top(1)
                 .From("Customers", "C")
-                .LeftJoin("Orders","dbo", "O")
-                .OnColumn("CustomerId","O")
-                .IsEqualsTo("Id","C")
+                .LeftJoin("Orders", "dbo", "O")
+                .OnColumn("CustomerId", "O")
+                .IsEqualsTo("Id", "C")
                 ;
 
             const string query = @" 
@@ -348,13 +348,13 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Left_Select_Simple_Join_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
                 .Top(1)
                 .From<CustomerTable>("C")
-                .LeftJoin("Orders","dbo", "O")
+                .LeftJoin("Orders", "dbo", "O")
                 .OnColumn("CustomerId", "O")
                 .IsEqualsTo("Id", "C")
                 ;
@@ -372,15 +372,15 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Left_Select_Simple_Join_3()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
                 .Top(1)
                 .From<CustomerTable>("C")
                 .LeftJoin<OrderTable>("O")
-                .OnColumn("CustomerId","O")
-                .IsEqualsTo("Id","C")
+                .OnColumn("CustomerId", "O")
+                .IsEqualsTo("Id", "C")
                 ;
 
             const string query = @" 
@@ -394,12 +394,12 @@ SELECT TOP(1)   *
         }
     }
 
-       
+
 
     [Fact]
     public void Test_Left_Select_Simple_Join_4()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
@@ -424,7 +424,7 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Left_Select_Simple_Join_5()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
@@ -449,7 +449,7 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Left_Select_Simple_Join_6()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
@@ -473,15 +473,15 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Left_Select_Multiple_Join_1()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
                 .Top(1)
                 .From("Customers", "C")
-                .LeftJoin("Orders","dbo", "O")
-                .OnColumn("PartnerId","O")
-                .IsEqualsTo("PartnerId","C")
+                .LeftJoin("Orders", "dbo", "O")
+                .OnColumn("PartnerId", "O")
+                .IsEqualsTo("PartnerId", "C")
                 ;
 
             const string query = @" 
@@ -497,13 +497,13 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Left_Select_Multiple_Join_11()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
                 .Top(1)
                 .From("Customers", "C")
-                .LeftJoin("Orders","dbo", "O")
+                .LeftJoin("Orders", "dbo", "O")
                 .OnColumn("PartnerId")
                 .IsEqualsTo("PartnerId", "C")
                 ;
@@ -521,7 +521,7 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Left_Select_Multiple_Join_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
@@ -550,7 +550,7 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Left_Select_Multiple_Join_3()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
@@ -578,7 +578,7 @@ SELECT TOP(1)   *
     [Fact]
     public void Test_Left_Select_Multiple_Join_4()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Select
@@ -605,5 +605,5 @@ SELECT TOP(1)   *
     }
 
 
-       
+
 }

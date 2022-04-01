@@ -3,7 +3,7 @@
 public interface IDropQueryBuilder
 {
     IDropTableNoNameQueryBuilder Table(string tableName);
-    IDropTableNoNameQueryBuilder Table<TTable>() where TTable : ITable,new();
+    IDropTableNoNameQueryBuilder Table<TTable>() where TTable : ITable, new();
 
     IDropFunctionQueryBuilder Function(string funcName);
     IDropViewNoNameQueryBuilder View(string viewName);

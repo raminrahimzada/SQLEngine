@@ -47,7 +47,7 @@ internal class CreateTableQueryBuilder : AbstractQueryBuilder, ICreateTableQuery
         base.ValidateAndThrow();
         //only one identity is allowed in table
         var count = _columns.Count(c => c.Model.IsIdentity ?? false);
-        if (count > 1)
+        if(count > 1)
         {
             Bomb();
         }
@@ -60,12 +60,12 @@ internal class CreateTableQueryBuilder : AbstractQueryBuilder, ICreateTableQuery
         var cols = _columns.Select(c => c.Model).ToArray();
         writer.Write(C.CREATE);
         writer.Write2(C.TABLE);
-        if (!string.IsNullOrEmpty(_schemaName))
+        if(!string.IsNullOrEmpty(_schemaName))
         {
             writer.Write(I(_schemaName));
             writer.Write(C.DOT);
         }
-            
+
         writer.Write(I(_tableName));
 
         writer.Write(C.SPACE);
@@ -73,7 +73,7 @@ internal class CreateTableQueryBuilder : AbstractQueryBuilder, ICreateTableQuery
         writer.Indent++;
         writer.WriteLine();
 
-        foreach (var columnQueryBuilder in _columns)
+        foreach(var columnQueryBuilder in _columns)
         {
             columnQueryBuilder.Build(writer);
             writer.WriteLine(C.COMMA);
@@ -103,13 +103,13 @@ internal class CreateTableQueryBuilder : AbstractQueryBuilder, ICreateTableQuery
 
     private void Versioning(ISqlWriter writer)
     {
-        if (_systemVersioning)
+        if(_systemVersioning)
         {
-            if (string.IsNullOrEmpty(_schemaName))
+            if(string.IsNullOrEmpty(_schemaName))
             {
                 _schemaName = "dbo";
             }
-            if (string.IsNullOrEmpty(_logFileName))
+            if(string.IsNullOrEmpty(_logFileName))
             {
                 _logFileName = _tableName + "__LOG";
             }
@@ -129,15 +129,18 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
     private void Descriptions(ISqlWriter writer, ColumnModel[] cols)
     {
         var descriptions = cols.Where(c => !string.IsNullOrEmpty(c.Description)).ToArray();
-        if (descriptions.Any())
+        if(descriptions.Any())
         {
-            foreach (var model in descriptions)
+            foreach(var model in descriptions)
             {
                 var t = new ExecuteQueryBuilder();
                 // https://stackoverflow.com/a/3754214/7901692
 
                 var schemaName = _schemaName;
-                if (string.IsNullOrEmpty(schemaName)) schemaName = "dbo";
+                if(string.IsNullOrEmpty(schemaName))
+                {
+                    schemaName = "dbo";
+                }
 
                 t.Procedure("sp_addextendedproperty")
                     .Arg("name", "MS_Description".ToSQL())
@@ -160,21 +163,21 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
     {
         var defaultValues = cols.Where(c => c.DefaultValue != null).ToArray();
 
-        if (defaultValues.Any())
+        if(defaultValues.Any())
         {
             writer.WriteLine();
 
-            foreach (var df in defaultValues)
+            foreach(var df in defaultValues)
             {
                 var defaultConstraintName = df.DefaultConstraintName;
-                if (string.IsNullOrEmpty(defaultConstraintName))
+                if(string.IsNullOrEmpty(defaultConstraintName))
                 {
                     defaultConstraintName = "DF_" + _tableName + df.Name;
                 }
 
                 writer.Write(C.ALTER);
                 writer.Write2(C.TABLE);
-                if (!string.IsNullOrEmpty(_schemaName))
+                if(!string.IsNullOrEmpty(_schemaName))
                 {
                     writer.Write(I(_schemaName));
                     writer.Write(C.DOT);
@@ -195,14 +198,14 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
     private void ForeignKeyList(ISqlWriter writer, ColumnModel[] cols)
     {
         var fkList = cols.Where(c => c.IsForeignKey ?? false).ToArray();
-        if (fkList.Any())
+        if(fkList.Any())
         {
             writer.WriteLine();
 
-            foreach (var fk in fkList)
+            foreach(var fk in fkList)
             {
                 var fkName = fk.ForeignKeyConstraintName;
-                if (string.IsNullOrEmpty(fkName))
+                if(string.IsNullOrEmpty(fkName))
                 {
                     fkName = "FK_" + I(_tableName) + "_" + fk.Name + "__" + I(fk.ForeignKeyTableName) + "_" +
                              fk.ForeignKeyColumnName;
@@ -215,7 +218,7 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
                     ;
                 writer.Write(C.ALTER);
                 writer.Write2(C.TABLE);
-                if (!string.IsNullOrEmpty(_schemaName))
+                if(!string.IsNullOrEmpty(_schemaName))
                 {
                     writer.Write(I(_schemaName));
                     writer.Write(C.DOT);
@@ -230,7 +233,7 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
                 writer.Write2(C.KEY);
                 writer.WriteScoped(I(fk.Name));
                 writer.Write2(C.REFERENCES);
-                if (!string.IsNullOrEmpty(fk.ForeignKeySchemaName))
+                if(!string.IsNullOrEmpty(fk.ForeignKeySchemaName))
                 {
                     writer.Write(I(fk.ForeignKeySchemaName));
                     writer.Write(C.DOT);
@@ -248,7 +251,7 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
 
                 writer.Write(C.ALTER);
                 writer.Write2(C.TABLE);
-                if (!string.IsNullOrEmpty(_schemaName))
+                if(!string.IsNullOrEmpty(_schemaName))
                 {
                     writer.Write(I(_schemaName));
                     writer.Write(C.DOT);
@@ -264,9 +267,9 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
 
     private void UniqueIndexList(ISqlWriter writer, ColumnModel[] cols)
     {
-        foreach (var t in cols.Where(c => c.IsUniqueKey ?? false))
+        foreach(var t in cols.Where(c => c.IsUniqueKey ?? false))
         {
-            if (string.IsNullOrEmpty(t.UniqueKeyName))
+            if(string.IsNullOrEmpty(t.UniqueKeyName))
             {
                 t.UniqueKeyName = "IX_" + _tableName + "_" + t.Name;
             }
@@ -276,14 +279,17 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
             .Distinct()
             .ToArray();
 
-        if (!ukList.Any()) return;
+        if(!ukList.Any())
+        {
+            return;
+        }
 
-        foreach (var ukName in ukList)
+        foreach(var ukName in ukList)
         {
             var ukGroup = cols.Where(c => c.UniqueKeyName == ukName).ToArray();
             writer.Write(C.ALTER);
             writer.Write2(C.TABLE);
-            if (!string.IsNullOrEmpty(_schemaName))
+            if(!string.IsNullOrEmpty(_schemaName))
             {
                 writer.Write(I(_schemaName));
                 writer.Write(C.DOT);
@@ -309,18 +315,18 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
     private void PrimaryKeyList(ISqlWriter writer, ColumnModel[] cols)
     {
         var pkList = cols.Where(c => c.IsPrimary ?? false).ToArray();
-        if (pkList.Any())
+        if(pkList.Any())
         {
             var pkGroups = pkList.GroupBy(pk => pk.PrimaryKeyName).ToArray();
-            if (pkGroups.Any())
+            if(pkGroups.Any())
             {
                 writer.WriteLine();
             }
 
-            foreach (var pkGroup in pkGroups)
+            foreach(var pkGroup in pkGroups)
             {
                 var pkName = pkGroup.Key;
-                if (string.IsNullOrEmpty(pkName))
+                if(string.IsNullOrEmpty(pkName))
                 {
                     pkName = "PK_" + _tableName + "_" +
                              pkList.FirstOrDefault(x => x.PrimaryKeyName == pkGroup.Key)?.Name;
@@ -328,7 +334,7 @@ PERIOD FOR SYSTEM_TIME (_START_TIME, _END_TIME);");
 
                 writer.Write(C.ALTER);
                 writer.Write2(C.TABLE);
-                if (!string.IsNullOrEmpty(_schemaName))
+                if(!string.IsNullOrEmpty(_schemaName))
                 {
                     writer.Write(I(_schemaName));
                     writer.Write(C.DOT);

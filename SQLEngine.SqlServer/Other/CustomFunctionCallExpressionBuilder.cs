@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-internal class CustomFunctionCallExpressionBuilder :AbstractQueryBuilder, ICustomFunctionCallNopBuilder, ICustomFunctionCallExpressionBuilder
+internal class CustomFunctionCallExpressionBuilder : AbstractQueryBuilder, ICustomFunctionCallNopBuilder, ICustomFunctionCallExpressionBuilder
 {
     private Action<ISqlWriter> _internalBuilder;
 
@@ -12,10 +12,10 @@ internal class CustomFunctionCallExpressionBuilder :AbstractQueryBuilder, ICusto
         {
             writer.Write(functionName);
             writer.Write(C.BEGIN_SCOPE);
-            for (var index = 0; index < parameters.Length; index++)
+            for(var index = 0; index < parameters.Length; index++)
             {
                 var parameter = parameters[index];
-                if (index != 0)
+                if(index != 0)
                 {
                     writer.Write(C.COMMA);
                 }
@@ -27,7 +27,7 @@ internal class CustomFunctionCallExpressionBuilder :AbstractQueryBuilder, ICusto
         };
         return this;
     }
- 
+
     public override void Build(ISqlWriter writer)
     {
         _internalBuilder(writer);

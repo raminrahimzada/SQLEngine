@@ -8,7 +8,7 @@ public partial class AllTests
     [Fact]
     public void Test_Clear()
     {
-        using (var b = Query.New)
+        using(var b = Query.New)
         {
             b.Insert.Into("Users");
             b.Clear();
@@ -19,31 +19,31 @@ public partial class AllTests
     [Fact]
     public void Test_Truncate_1()
     {
-        using (var b = Query.New)
+        using(var b = Query.New)
         {
             b.Truncate("Users");
             SqlAssert.EqualQuery(b.Build(), "truncate table Users");
         }
     }
-        
+
     [Fact]
     public void Test_Truncate_2()
     {
-        using (var b = Query.New)
+        using(var b = Query.New)
         {
             b.Truncate<UserTable>();
             SqlAssert.EqualQuery(b.Build(), "truncate table Users");
         }
     }
-        
+
     [Fact]
     public void Test_Declare_Unique()
     {
         Query.Settings.UniqueVariableNameGenerator.Reset();
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             int counter = 0;
-            for (int i = 0; i < 1000; i++)
+            for(int i = 0; i < 1000; i++)
             {
                 {
                     var id = q.DeclareNew<int>();
@@ -59,7 +59,7 @@ public partial class AllTests
                     SqlAssert.EqualQuery(q.Build(), $"declare {id} int={i};");
                     q.Clear();
                 }
-                    
+
             }
         }
     }

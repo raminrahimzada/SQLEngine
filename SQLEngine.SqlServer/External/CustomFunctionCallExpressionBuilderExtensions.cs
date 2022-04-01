@@ -6,20 +6,20 @@ public static class CustomFunctionCallExpressionBuilderExtensions
 {
     public static ICustomFunctionCallNopBuilder IsNull(
         this ICustomFunctionCallExpressionBuilder builder,
-        ISqlExpression expression,ISqlExpression fallback)
+        ISqlExpression expression, ISqlExpression fallback)
     {
         return builder.Call("ISNULL", expression, fallback);
     }
     public static ICustomFunctionCallNopBuilder IsNull(
         this ICustomFunctionCallExpressionBuilder builder,
-        ISqlExpression expression,AbstractSqlLiteral fallback)
+        ISqlExpression expression, AbstractSqlLiteral fallback)
     {
         return builder.Call("ISNULL", expression, fallback);
     }
 
     public static ICustomFunctionCallNopBuilder Cast(
         this ICustomFunctionCallExpressionBuilder builder,
-        ISqlExpression expression,string asType)
+        ISqlExpression expression, string asType)
     {
         var p1 = new SqlServerRawExpression(expression.ToSqlString() + C.SPACE + C.AS + C.SPACE + asType);
         return builder.Call("CAST", p1);
@@ -55,7 +55,7 @@ public static class CustomFunctionCallExpressionBuilderExtensions
     /// <returns></returns>
     public static ICustomFunctionCallNopBuilder Ascii(this ICustomFunctionCallExpressionBuilder builder, ISqlExpression expression)
     {
-        return builder.Call("ASCII",expression);
+        return builder.Call("ASCII", expression);
     }
     /// <summary>
     /// The CHAR() function returns the character based on the ASCII code.
@@ -81,7 +81,7 @@ public static class CustomFunctionCallExpressionBuilderExtensions
         ISqlExpression start
     )
     {
-        return builder.Call("CHARINDEX", substring,@string,start);
+        return builder.Call("CHARINDEX", substring, @string, start);
     }
 
     /// <summary>
@@ -96,7 +96,7 @@ public static class CustomFunctionCallExpressionBuilderExtensions
         ISqlExpression @string
     )
     {
-        return builder.Call("CHARINDEX", substring,@string);
+        return builder.Call("CHARINDEX", substring, @string);
     }
 
     /// <summary>
@@ -118,7 +118,7 @@ public static class CustomFunctionCallExpressionBuilderExtensions
             ISqlExpression[] strings
     )
     {
-        var list = new List<ISqlExpression>(1 + strings.Length) {SqlServerLiteral.Raw(separator)};
+        var list = new List<ISqlExpression>(1 + strings.Length) { SqlServerLiteral.Raw(separator) };
         list.AddRange(strings);
         return builder.Call("CONCAT_WS", list.ToArray());
     }

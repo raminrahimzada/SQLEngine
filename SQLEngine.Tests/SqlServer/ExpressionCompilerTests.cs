@@ -7,7 +7,7 @@ namespace SQLEngine.Tests.SqlServer;
 
 public partial class AllTests
 {
-    private readonly IExpressionCompiler _compiler=new SqlExpressionCompiler();
+    private readonly IExpressionCompiler _compiler = new SqlExpressionCompiler();
 
     #region Equals
 
@@ -36,14 +36,14 @@ public partial class AllTests
     public void Test_Expression_Compiler_Simple_Equal_Long_1()
     {
         var expected = $"{nameof(UserTable.IdLong)} = 3";
-        var actual = _compiler.Compile<UserTable>(x => x.IdLong == (int)3);
+        var actual = _compiler.Compile<UserTable>(x => x.IdLong == 3);
         Assert.Equal(expected, actual);
     }
     [Fact]
     public void Test_Expression_Compiler_Simple_Equal_Short_1()
     {
         var expected = $"{nameof(UserTable.IdShort)} = 3";
-        var actual = _compiler.Compile<UserTable>(x => x.IdShort == (short)3);
+        var actual = _compiler.Compile<UserTable>(x => x.IdShort == 3);
         Assert.Equal(expected, actual);
     }
     [Fact]
@@ -91,7 +91,7 @@ public partial class AllTests
     public void Test_Expression_Compiler_Simple_NotEqual_Long_1()
     {
         var expected = $"{nameof(UserTable.IdLong)} <> 3";
-        var actual = _compiler.Compile<UserTable>(x => x.IdLong != (int)3);
+        var actual = _compiler.Compile<UserTable>(x => x.IdLong != 3);
         Assert.Equal(expected, actual);
     }
     [Fact]
@@ -132,7 +132,7 @@ public partial class AllTests
     public void Test_Expression_Compiler_Simple_Greater_Long_1()
     {
         var expected = $"{nameof(UserTable.IdLong)} > 3";
-        var actual = _compiler.Compile<UserTable>(x => x.IdLong > (int)3);
+        var actual = _compiler.Compile<UserTable>(x => x.IdLong > 3);
         Assert.Equal(expected, actual);
     }
     //[Fact]
@@ -173,7 +173,7 @@ public partial class AllTests
     public void Test_Expression_Compiler_Simple_GreaterEqual_Long_1()
     {
         var expected = $"{nameof(UserTable.IdLong)} >= 3";
-        var actual = _compiler.Compile<UserTable>(x => x.IdLong >= (int)3);
+        var actual = _compiler.Compile<UserTable>(x => x.IdLong >= 3);
         Assert.Equal(expected, actual);
     }
     //[Fact]
@@ -214,7 +214,7 @@ public partial class AllTests
     public void Test_Expression_Compiler_Simple_Less_Long_1()
     {
         var expected = $"{nameof(UserTable.IdLong)} < 3";
-        var actual = _compiler.Compile<UserTable>(x => x.IdLong < (int)3);
+        var actual = _compiler.Compile<UserTable>(x => x.IdLong < 3);
         Assert.Equal(expected, actual);
     }
     //[Fact]
@@ -255,7 +255,7 @@ public partial class AllTests
     public void Test_Expression_Compiler_Simple_LessEqual_Long_1()
     {
         var expected = $"{nameof(UserTable.IdLong)} <= 3";
-        var actual = _compiler.Compile<UserTable>(x => x.IdLong <= (int)3);
+        var actual = _compiler.Compile<UserTable>(x => x.IdLong <= 3);
         Assert.Equal(expected, actual);
     }
     //[Fact]
@@ -274,7 +274,7 @@ public partial class AllTests
     public void Test_Expression_Compiler_Simple_Contains_Integer_1()
     {
         var expected = $"{nameof(UserTable.IdInteger)} IN (1,2,3)";
-        var arr = new [] {1, 2, 3};
+        var arr = new[] { 1, 2, 3 };
         var actual = _compiler.Compile<UserTable>(x => arr.Contains(x.IdInteger));
         Assert.Equal(expected, actual);
     }
@@ -318,7 +318,7 @@ public partial class AllTests
     public void Test_Expression_Compiler_Simple_Contains_Short_1()
     {
         var expected = $"CAST({nameof(UserTable.IdShort)} AS int) IN (1,2,3)";
-        var arr = new [] {1, 2, 3};
+        var arr = new[] { 1, 2, 3 };
         var actual = _compiler.Compile<UserTable>(x => arr.Contains(x.IdShort));
         Assert.Equal(expected, actual);
     }
@@ -370,7 +370,7 @@ public partial class AllTests
     public void Test_Expression_Compiler_Simple_Contains_Byte_1()
     {
         var expected = $"CAST({nameof(UserTable.IdByte)} AS int) IN (1,2,3)";
-        var arr = new [] {1, 2, 3};
+        var arr = new[] { 1, 2, 3 };
         var actual = _compiler.Compile<UserTable>(x => arr.Contains(x.IdByte));
         Assert.Equal(expected, actual);
     }

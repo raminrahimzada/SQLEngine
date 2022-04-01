@@ -1,7 +1,7 @@
 ﻿namespace SQLEngine.SqlServer;
 
 internal class DropViewQueryBuilder : AbstractQueryBuilder
-    ,IDropViewNoNameQueryBuilder
+    , IDropViewNoNameQueryBuilder
     , IDropViewNoSchemaQueryBuilder
     , IDropViewQueryBuilder
 {
@@ -18,7 +18,7 @@ internal class DropViewQueryBuilder : AbstractQueryBuilder
         writer.Write(C.SPACE);
         writer.Write(C.VIEW);
         writer.Write(C.SPACE);
-        if (!string.IsNullOrWhiteSpace(_schemaName))
+        if(!string.IsNullOrWhiteSpace(_schemaName))
         {
             writer.Write(_schemaName);
             writer.Write(C.DOT);

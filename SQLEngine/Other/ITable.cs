@@ -2,10 +2,10 @@
 
 namespace SQLEngine;
 
-public interface ITable:IDisposable
+public interface ITable : IDisposable
 {
-    string Name { get;}
-    string Schema { get;}
+    string Name { get; }
+    string Schema { get; }
 }
 
 public interface IView : IDisposable

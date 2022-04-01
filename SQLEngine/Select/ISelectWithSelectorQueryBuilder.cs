@@ -14,9 +14,9 @@ public interface ISelectWithSelectorQueryBuilder : IAbstractSelectQueryBuilder, 
 
     ISelectWithSelectorQueryBuilder Select(AbstractSqlColumn column);
     ISelectWithSelectorQueryBuilder Select(string columnName);
-    ISelectWithSelectorQueryBuilder Select(string columnName,string tableAlias);
-        
-        
+    ISelectWithSelectorQueryBuilder Select(string columnName, string tableAlias);
+
+
 
     ISelectWithSelectorQueryBuilder Select(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFunctionCallExpression);
     ISelectWithSelectorQueryBuilder Select(ISqlExpression expression);
@@ -28,14 +28,14 @@ public interface ISelectWithSelectorQueryBuilder : IAbstractSelectQueryBuilder, 
 
 
     ISelectWithSelectorQueryBuilder SelectAs(Func<ICaseWhenNeedWhenQueryBuilder, ICaseWhenQueryBuilder> caseWhen, string alias);
-    ISelectWithSelectorQueryBuilder SelectAs(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFunctionCallExpression,string alias);
+    ISelectWithSelectorQueryBuilder SelectAs(Func<ICustomFunctionCallExpressionBuilder, ICustomFunctionCallExpressionBuilder> customFunctionCallExpression, string alias);
     ISelectWithSelectorQueryBuilder SelectAs(ISqlExpression selector, string alias);
 
 
 
 }
 
-     
+
 public interface ISelect_FromQueryBuilder
 {
     ISelectWithoutFromQueryBuilder From(string tableName, string alias);

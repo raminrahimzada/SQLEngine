@@ -45,7 +45,7 @@ internal class ExecuteProcedureQueryBuilder : AbstractQueryBuilder, IExecuteProc
         ValidateAndThrow();
         writer.Write(C.EXECUTE);
         writer.Write(C.SPACE);
-        if (!string.IsNullOrWhiteSpace(_schemaName))
+        if(!string.IsNullOrWhiteSpace(_schemaName))
         {
             writer.Write(_schemaName);
             writer.Write(C.DOT);
@@ -55,17 +55,21 @@ internal class ExecuteProcedureQueryBuilder : AbstractQueryBuilder, IExecuteProc
 
         writer.Write2();
 
-        if (_parametersDictionary is {Count: > 0})
+        if(_parametersDictionary is { Count: > 0 })
         {
             var i = 0;
-            foreach (var (key, value, direction) in _parametersDictionary)
+            foreach(var (key, value, direction) in _parametersDictionary)
             {
                 writer.Write(C.VARIABLE_HEADER);
                 writer.Write(key);
                 writer.Write(C.EQUALS);
                 writer.Write(value);
-                if (direction == ProcedureArgumentDirectionTypes.OUT) writer.Write2(C.OUTPUT);
-                if (i != _parametersDictionary.Count - 1)
+                if(direction == ProcedureArgumentDirectionTypes.OUT)
+                {
+                    writer.Write2(C.OUTPUT);
+                }
+
+                if(i != _parametersDictionary.Count - 1)
                 {
                     writer.WriteNewLine();
                     writer.Write(C.COMMA);

@@ -8,7 +8,7 @@ public partial class AllTests
     [Fact]
     public void Test_Simple_Try_Catch()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q.Try(f =>
                 {
@@ -31,7 +31,7 @@ END CATCH
 
 ";
             ;
-            SqlAssert.EqualQuery(q.ToString(),query);
+            SqlAssert.EqualQuery(q.ToString(), query);
         }
     }
 }

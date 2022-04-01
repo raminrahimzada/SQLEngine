@@ -5,7 +5,7 @@ namespace SQLEngine.SqlServer;
 internal class AlterTableAddConstraintQueryBuilder : AbstractQueryBuilder,
     IAlterTableAddConstraintQueryBuilder,
     IAlterTableAddConstraintPrimaryKeyQueryBuilder,
-    IAlterTableAddConstraintForeignKeyQueryBuilder, 
+    IAlterTableAddConstraintForeignKeyQueryBuilder,
     IAlterTableAddConstraintForeignKeyReferencesQueryBuilder,
     IAlterTableAddConstraintDefaultQueryBuilder,
     IAlterTableAddConstraintDefaultForColumnQueryBuilder,
@@ -14,7 +14,7 @@ internal class AlterTableAddConstraintQueryBuilder : AbstractQueryBuilder,
     private string _tableName;
     private string _schema;
     private string _constraintName;
-        
+
     private string[] _primaryKeyColumns;
 
     private string _foreignKeyColumn;
@@ -39,7 +39,7 @@ internal class AlterTableAddConstraintQueryBuilder : AbstractQueryBuilder,
         writer.Write(C.SPACE);
         writer.Write(C.TABLE);
         writer.Write(C.SPACE);
-        if (!string.IsNullOrWhiteSpace(_schema))
+        if(!string.IsNullOrWhiteSpace(_schema))
         {
             writer.Write(_schema);
             writer.Write(C.DOT);
@@ -54,16 +54,16 @@ internal class AlterTableAddConstraintQueryBuilder : AbstractQueryBuilder,
         writer.Write(C.SPACE);
 
 
-        if (_isPkQuery)
+        if(_isPkQuery)
         {
             writer.Write(C.PRIMARY);
             writer.Write(C.SPACE);
             writer.Write(C.KEY);
             writer.Write(C.SPACE);
             writer.Write(C.BEGIN_SCOPE);
-            for (var i = 0; i < _primaryKeyColumns.Length; i++)
+            for(var i = 0; i < _primaryKeyColumns.Length; i++)
             {
-                if (i != 0)
+                if(i != 0)
                 {
                     writer.Write(C.COMMA);
                 }
@@ -73,7 +73,7 @@ internal class AlterTableAddConstraintQueryBuilder : AbstractQueryBuilder,
             writer.Write(C.END_SCOPE);
             writer.Write(C.SEMICOLON);
         }
-        else if (_isFkQuery)
+        else if(_isFkQuery)
         {
             writer.Write(C.FOREIGN);
             writer.Write(C.SPACE);
@@ -85,7 +85,7 @@ internal class AlterTableAddConstraintQueryBuilder : AbstractQueryBuilder,
 
             writer.Write(C.REFERENCES);
             writer.Write(C.SPACE);
-            if (!string.IsNullOrWhiteSpace(_foreignKeyReferenceTableSchema))
+            if(!string.IsNullOrWhiteSpace(_foreignKeyReferenceTableSchema))
             {
                 writer.Write(_foreignKeyReferenceTableSchema);
                 writer.Write(C.DOT);
@@ -96,7 +96,7 @@ internal class AlterTableAddConstraintQueryBuilder : AbstractQueryBuilder,
             writer.Write(C.END_SCOPE);
             writer.Write(C.SEMICOLON);
         }
-        else if (_isDfQuery)
+        else if(_isDfQuery)
         {
             writer.Write(C.DEFAULT);
             writer.Write(C.SPACE);
@@ -121,7 +121,7 @@ internal class AlterTableAddConstraintQueryBuilder : AbstractQueryBuilder,
         }
     }
 
-    public AlterTableAddConstraintQueryBuilder Table(string tableName,string schema)
+    public AlterTableAddConstraintQueryBuilder Table(string tableName, string schema)
     {
         _tableName = tableName;
         _schema = schema;
@@ -143,7 +143,7 @@ internal class AlterTableAddConstraintQueryBuilder : AbstractQueryBuilder,
     {
         _primaryKeyColumns = columnNames;
         _isPkQuery = true;
-        return this;             
+        return this;
     }
 
     public IAlterTableAddConstraintForeignKeyQueryBuilder ForeignKey(AbstractSqlColumn column)
@@ -189,17 +189,17 @@ internal class AlterTableAddConstraintQueryBuilder : AbstractQueryBuilder,
         return this;
     }
 
-    public IAlterTableAddConstraintForeignKeyReferencesQueryBuilder References(string tableName,string schema, string columnName)
+    public IAlterTableAddConstraintForeignKeyReferencesQueryBuilder References(string tableName, string schema, string columnName)
     {
         _foreignKeyReferenceTableName = tableName;
-        _foreignKeyReferenceTableSchema= schema;
+        _foreignKeyReferenceTableSchema = schema;
         _foreignKeyReferenceColumnName = columnName;
         return this;
     }
 
     public IAlterTableAddConstraintForeignKeyReferencesQueryBuilder References<TTable>(string columnName) where TTable : ITable, new()
     {
-        using (var table=new TTable())
+        using(var table = new TTable())
         {
             _foreignKeyReferenceTableName = table.Name;
             _foreignKeyReferenceTableSchema = table.Schema;

@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class AlterTableRenameColumnQueryBuilder:AbstractQueryBuilder
+internal class AlterTableRenameColumnQueryBuilder : AbstractQueryBuilder
     , IAlterTableNoNameRenameColumnQueryBuilder
     , IAlterTableNoNameRenameColumnNoNewNameQueryBuilder
 {
@@ -28,7 +28,7 @@ internal class AlterTableRenameColumnQueryBuilder:AbstractQueryBuilder
 
     public override void Build(ISqlWriter writer)
     {
-        using (var t = new ExecuteQueryBuilder())
+        using(var t = new ExecuteQueryBuilder())
         {
             var fullColumnName = $"{I(_tableName)}.{I(_columnName)}";
             //https://stackoverflow.com/a/9355281/7901692

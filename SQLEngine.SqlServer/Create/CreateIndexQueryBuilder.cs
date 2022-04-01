@@ -1,8 +1,8 @@
 ﻿namespace SQLEngine.SqlServer;
 
 internal class CreateIndexQueryBuilder :
-    AbstractQueryBuilder 
-    ,ICreateIndexNoNameQueryBuilder
+    AbstractQueryBuilder
+    , ICreateIndexNoNameQueryBuilder
     , ICreateIndexNoTableNameQueryBuilder
     , ICreateIndexNoTableNameNoColumnNamesQueryBuilder
     , ICreateIndexNoTableNameNoColumnNamesNoUniqueQueryBuilder
@@ -20,7 +20,7 @@ internal class CreateIndexQueryBuilder :
 
     public ICreateIndexNoTableNameQueryBuilder OnTable<TTable>() where TTable : ITable, new()
     {
-        using (var table=new TTable())
+        using(var table = new TTable())
         {
             _tableName = table.Name;
         }
@@ -29,7 +29,7 @@ internal class CreateIndexQueryBuilder :
 
     public ICreateIndexNoTableNameNoColumnNamesQueryBuilder Columns(params string[] columnNames)
     {
-        if (columnNames.Length == 0)
+        if(columnNames.Length == 0)
         {
             throw Bomb("At Least one column should be given");
         }
@@ -50,7 +50,7 @@ internal class CreateIndexQueryBuilder :
     public override void Build(ISqlWriter writer)
     {
         writer.Write(C.CREATE);
-        if (_isUnique ?? false)
+        if(_isUnique ?? false)
         {
             writer.Write2(C.UNIQUE);
         }
@@ -60,9 +60,9 @@ internal class CreateIndexQueryBuilder :
         writer.Write(_tableName);
         writer.Write2(C.BEGIN_SCOPE);
         bool first = true;
-        foreach (var columnName in _columnNames)
+        foreach(var columnName in _columnNames)
         {
-            if (first)
+            if(first)
             {
                 first = false;
             }

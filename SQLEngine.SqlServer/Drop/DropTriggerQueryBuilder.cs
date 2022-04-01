@@ -22,8 +22,8 @@ internal class DropProcedureQueryBuilder : AbstractQueryBuilder, IDropProcedureN
         writer.Write(C.SPACE);
         writer.Write(C.PROCEDURE);
         writer.Write(C.SPACE);
-            
-        if (!string.IsNullOrWhiteSpace(_schemaName))
+
+        if(!string.IsNullOrWhiteSpace(_schemaName))
         {
             writer.Write(_schemaName);
             writer.Write(C.DOT);
@@ -52,7 +52,7 @@ internal class DropTriggerQueryBuilder : AbstractQueryBuilder,
         writer.Write(C.SPACE);
         writer.Write(C.TRIGGER);
         writer.Write(C.SPACE);
-        if (_checkIfExists)
+        if(_checkIfExists)
         {
             writer.Write(C.IF);
             writer.Write(C.SPACE);
@@ -60,7 +60,7 @@ internal class DropTriggerQueryBuilder : AbstractQueryBuilder,
             writer.Write(C.SPACE);
         }
 
-        if (!string.IsNullOrWhiteSpace(_schemaName))
+        if(!string.IsNullOrWhiteSpace(_schemaName))
         {
             writer.Write(_schemaName);
             writer.Write(C.DOT);

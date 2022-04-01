@@ -5,7 +5,7 @@ namespace SQLEngine;
 
 public static class AbstractSqlColumnExtensions
 {
-    public static AbstractSqlCondition In(this AbstractSqlColumn column,params string[] stringArray)
+    public static AbstractSqlCondition In(this AbstractSqlColumn column, params string[] stringArray)
     {
         AbstractSqlLiteral[] expressions = stringArray.Select(x => (AbstractSqlLiteral)x).ToArray();
         return column.In(expressions);
@@ -31,11 +31,11 @@ public abstract class AbstractSqlColumn : ISqlExpression
     public abstract AbstractSqlCondition In(params AbstractSqlLiteral[] expressions);
     public abstract AbstractSqlCondition NotIn(params AbstractSqlLiteral[] expressions);
     public abstract AbstractSqlCondition NotIn(Action<ISelectQueryBuilder> builderFunc);
-        
+
     protected abstract AbstractSqlExpression Subtract(AbstractSqlLiteral right);
     protected abstract AbstractSqlExpression Subtract(AbstractSqlExpression right);
     protected abstract AbstractSqlExpression Subtract(AbstractSqlColumn right);
-        
+
     protected abstract AbstractSqlExpression Divide(AbstractSqlLiteral right);
     protected abstract AbstractSqlExpression Divide(AbstractSqlExpression right);
     protected abstract AbstractSqlExpression Divide(AbstractSqlColumn right);

@@ -30,7 +30,7 @@ internal static class SqlWriterExtensions
         writer.Write("*/");
     }
     public static void WriteScoped(this ISqlWriter writer, string expression,
-        string beginScope="(", string endScope=")")
+        string beginScope = "(", string endScope = ")")
     {
         writer.Write(beginScope);
         writer.Write(expression);
@@ -46,12 +46,12 @@ internal static class SqlWriterExtensions
     public static void WriteJoined(this ISqlWriter writer, IEnumerable<string> expressionArray, string joiner = " , ", bool useNewLine = false)
     {
         var first = true;
-        foreach (var expression in expressionArray)
+        foreach(var expression in expressionArray)
         {
-            if (!first)
+            if(!first)
             {
                 writer.Write(joiner);
-                if (useNewLine)
+                if(useNewLine)
                 {
                     writer.WriteLine();
                 }
@@ -79,10 +79,14 @@ internal static class SqlWriterExtensions
     }
     public static void WriteEx(this ISqlWriter writer, string expression)
     {
-        if (string.IsNullOrEmpty(expression)) return;
-        for (var i = 0; i < expression.Length - 1; i++)
+        if(string.IsNullOrEmpty(expression))
         {
-            if (expression[i] == '\r' && expression[i + 1] == '\n')
+            return;
+        }
+
+        for(var i = 0; i < expression.Length - 1; i++)
+        {
+            if(expression[i] == '\r' && expression[i + 1] == '\n')
             {
                 writer.WriteLine();
                 i++;
@@ -93,8 +97,10 @@ internal static class SqlWriterExtensions
             }
         }
 
-        if (expression[^1] != '\n')
+        if(expression[^1] != '\n')
+        {
             writer.Write(expression[^1]);
+        }
     }
     public static void Write2(this ISqlWriter writer, string expression = "")
     {

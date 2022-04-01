@@ -8,9 +8,9 @@ public partial class AllTests
     [Fact]
     public void Test_Alter_Table_AddConstraint_Default_Value()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
-                
+
             q
                 .Alter
                 .Table("Users")
@@ -31,7 +31,7 @@ ALTER TABLE Users ADD CONSTRAINT DF_For_ProfilePicture DEFAULT N'defaultUser.jpg
     [Fact]
     public void Test_Alter_Table_AddConstraint_Primary_Key()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter
@@ -51,13 +51,13 @@ ALTER TABLE Users ADD CONSTRAINT PK_Id PRIMARY KEY (Id);
     [Fact]
     public void Test_Alter_Table_AddConstraint_Primary_Key_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter
                 .Table("Users")
                 .AddConstraint("PK_Name_And_Surname")
-                .PrimaryKey("Name","Surname")
+                .PrimaryKey("Name", "Surname")
                 ;
             const string query =
                 @"
@@ -71,16 +71,16 @@ ALTER TABLE Users ADD CONSTRAINT PK_Name_And_Surname PRIMARY KEY (Name,Surname);
     [Fact]
     public void Test_Alter_Table_AddConstraint_Foreign_Key()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter
                 .Table("Users")
                 .AddConstraint("FK_Referral_User")
                 .ForeignKey("ReferralUserId")
-                .References("Users", null,"Id")
+                .References("Users", null, "Id")
                 ;
-                 
+
 
             const string query =
                 @"
@@ -95,7 +95,7 @@ ALTER TABLE Users ADD CONSTRAINT FK_Referral_User FOREIGN KEY (ReferralUserId) R
     [Fact]
     public void Test_Alter_Table_AddConstraint_Foreign_Key_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter
@@ -118,7 +118,7 @@ ALTER TABLE Users ADD CONSTRAINT FK_Referral_User FOREIGN KEY (ReferralUserId) R
     [Fact]
     public void Test_Alter_Table_AddConstraint_Check()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var age = q.Column("Age");
             q
@@ -141,7 +141,7 @@ ALTER TABLE Users ADD CONSTRAINT CK_Age_18 CHECK (Age > 18)
     [Fact]
     public void Test_Alter_Table_AddConstraint_Check_2()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var age = q.Column("Age");
             q
@@ -164,7 +164,7 @@ ALTER TABLE Users ADD CONSTRAINT CK_Age_18_100 CHECK (Age > 18 and Age < 100)
     [Fact]
     public void Test_Alter_Table_DropConstraint()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             q
                 .Alter

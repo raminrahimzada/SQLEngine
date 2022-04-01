@@ -4,9 +4,9 @@ namespace SQLEngine.SqlServer;
 
 internal class CreateTriggerQueryBuilder : AbstractQueryBuilder, ICreateTriggerNoNameQueryBuilder
 {
-    private  string _triggerName;
-    private  string _specification;
-    private  Action<ITriggerBodyQueryBuilder> _body;
+    private string _triggerName;
+    private string _specification;
+    private Action<ITriggerBodyQueryBuilder> _body;
     private string _tableName;
     private string _tableSchema;
     private string _triggerSchemaName;
@@ -22,7 +22,7 @@ internal class CreateTriggerQueryBuilder : AbstractQueryBuilder, ICreateTriggerN
         _tableName = tableName;
         return this;
     }
-    public ICreateTriggerNoNameQueryBuilder On(string tableName,string tableSchema)
+    public ICreateTriggerNoNameQueryBuilder On(string tableName, string tableSchema)
     {
         _tableName = tableName;
         _tableSchema = tableSchema;
@@ -62,7 +62,7 @@ internal class CreateTriggerQueryBuilder : AbstractQueryBuilder, ICreateTriggerN
         writer.Write(C.SPACE);
         writer.Write(C.TRIGGER);
         writer.Write(C.SPACE);
-        if (!string.IsNullOrWhiteSpace(_triggerSchemaName))
+        if(!string.IsNullOrWhiteSpace(_triggerSchemaName))
         {
             writer.Write(I(_triggerSchemaName));
             writer.Write(C.DOT);
@@ -71,7 +71,7 @@ internal class CreateTriggerQueryBuilder : AbstractQueryBuilder, ICreateTriggerN
         writer.Write(C.SPACE);
         writer.Write(C.ON);
         writer.Write(C.SPACE);
-        if (!string.IsNullOrWhiteSpace(_tableSchema))
+        if(!string.IsNullOrWhiteSpace(_tableSchema))
         {
             writer.Write(I(_tableSchema));
             writer.Write(C.DOT);
@@ -83,7 +83,7 @@ internal class CreateTriggerQueryBuilder : AbstractQueryBuilder, ICreateTriggerN
         writer.Write(C.AS);
         writer.WriteLine(C.SPACE);
 
-        using (var x = new TriggerBodyQueryBuilder())
+        using(var x = new TriggerBodyQueryBuilder())
         {
             _body(x);
             x.Build(writer);

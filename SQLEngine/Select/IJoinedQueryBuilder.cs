@@ -6,7 +6,7 @@ public interface IJoinedQueryBuilder<TTable> : IJoinedQueryBuilder, ISelectWhere
 }
 public interface IJoinedQueryBuilder : ISelectWhereQueryBuilder
 {
-    IJoinedNeedsOnQueryBuilder InnerJoin(string targetTableName,string schema, string targetTableAlias);
+    IJoinedNeedsOnQueryBuilder InnerJoin(string targetTableName, string schema, string targetTableAlias);
     IJoinedNeedsOnQueryBuilder InnerJoin<TTable>(string targetTableAlias) where TTable : ITable, new();
 
     IJoinedNeedsOnQueryBuilder LeftJoin(string targetTableName, string targetTableSchema, string targetTableAlias);

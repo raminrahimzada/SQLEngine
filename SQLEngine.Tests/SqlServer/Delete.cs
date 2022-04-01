@@ -8,10 +8,10 @@ public partial class AllTests
     [Fact]
     public void Test_Delete_Table_1()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var id = q.Column("Id");
-                
+
             q
                 .Delete
                 .Table("Users")
@@ -27,7 +27,7 @@ DELETE from Users WHERE Id = 111
     [Fact]
     public void Test_Delete_Table_2()
     {
-        using (var b = Query.New)
+        using(var b = Query.New)
         {
             var id = b.Column("Id");
 
@@ -43,11 +43,11 @@ DELETE from dbo.Users WHERE Id = 111
             SqlAssert.EqualQuery(b.ToString(), query);
         }
     }
-        
+
     [Fact]
     public void Test_Delete_Table_3()
     {
-        using (var b = Query.New)
+        using(var b = Query.New)
         {
             var id = b.Column("Id");
 
@@ -67,7 +67,7 @@ DELETE TOP(10) from dbo.Users WHERE Id = 111
     [Fact]
     public void Test_Delete_Table_4()
     {
-        using (var q = Query.New)
+        using(var q = Query.New)
         {
             var id = q.Column("Id");
             var isBlocked = q.Column("IsBlocked");

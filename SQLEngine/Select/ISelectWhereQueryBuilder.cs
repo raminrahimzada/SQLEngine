@@ -13,5 +13,5 @@ public interface ISelectWhereQueryBuilder //: IAbstractSelectQueryBuilder
 
 public interface ISelectWhereQueryBuilder<TTable> : ISelectWhereQueryBuilder
 {
-    ISelectWithoutWhereQueryBuilder Where(Expression<Func<TTable,bool>> condition);
+    ISelectWithoutWhereQueryBuilder Where(Expression<Func<TTable, bool>> condition);
 }

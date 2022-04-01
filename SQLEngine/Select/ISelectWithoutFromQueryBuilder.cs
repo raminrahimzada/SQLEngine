@@ -9,12 +9,12 @@ public interface ISelectWithoutFromQueryBuilder : ISelectOrderBuilder, IJoinedQu
 
     ISelectOrderBuilder OrderBy(ISqlExpression expression);
     ISelectOrderBuilder OrderByDesc(ISqlExpression expression);
-        
+
     ISelectOrderBuilder OrderBy(AbstractSqlColumn column);
     ISelectOrderBuilder OrderByDesc(AbstractSqlColumn column);
     ISelectOrderBuilder OrderByDesc(string columnName);
     ISelectOrderBuilder OrderBy(string columnName);
-        
+
     ISelectWithoutFromAndGroupQueryBuilder GroupBy(params ISqlExpression[] expressions);
     ISelectWithoutFromAndGroupQueryBuilder GroupBy(params AbstractSqlColumn[] columns);
     ISelectWithoutFromAndGroupQueryBuilder GroupBy(params string[] columnNames);

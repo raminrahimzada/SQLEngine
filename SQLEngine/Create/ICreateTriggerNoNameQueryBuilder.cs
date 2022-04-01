@@ -2,7 +2,7 @@
 
 namespace SQLEngine;
 
-public interface ICreateTriggerNoNameQueryBuilder:IAbstractQueryBuilder
+public interface ICreateTriggerNoNameQueryBuilder : IAbstractQueryBuilder
 {
     ICreateTriggerNoNameQueryBuilder Body(Action<ITriggerBodyQueryBuilder> body);
     ICreateTriggerNoNameQueryBuilder On(string tableName);

@@ -6,7 +6,7 @@ namespace SQLEngine.SqlServer;
 
 internal class CreateProcedureQueryBuilder : AbstractQueryBuilder
     , ICreateProcedureQueryBuilder
-    ,ICreateProcedureWithArgumentQueryBuilder
+    , ICreateProcedureWithArgumentQueryBuilder
     , ICreateProcedureNeedBodyQueryBuilder
     , ICreateProcedureNoNameQueryBuilder
     , ICreateProcedureNoHeaderQueryBuilder
@@ -19,8 +19,11 @@ internal class CreateProcedureQueryBuilder : AbstractQueryBuilder
 
         public string Build()
         {
-            if (Direction == ProcedureArgumentDirectionTypes.OUT)
+            if(Direction == ProcedureArgumentDirectionTypes.OUT)
+            {
                 return $"{Name.AsSQLVariable()} {Type} {C.OUTPUT}";
+            }
+
             return $"{Name.AsSQLVariable()} {Type}";
         }
     }
@@ -38,7 +41,7 @@ internal class CreateProcedureQueryBuilder : AbstractQueryBuilder
 
     public ICreateProcedureWithArgumentQueryBuilder Parameter<T>(string argName)
     {
-        return Parameter(argName,Query.Settings.TypeConvertor.ToSqlType<T>());
+        return Parameter(argName, Query.Settings.TypeConvertor.ToSqlType<T>());
     }
 
     public ICreateProcedureWithArgumentQueryBuilder ParameterOut(string argName, string argType)
@@ -54,7 +57,7 @@ internal class CreateProcedureQueryBuilder : AbstractQueryBuilder
 
     public ICreateProcedureWithArgumentQueryBuilder ParameterOut<T>(string argName)
     {
-        return ParameterOut(argName,Query.Settings.TypeConvertor.ToSqlType<T>());
+        return ParameterOut(argName, Query.Settings.TypeConvertor.ToSqlType<T>());
     }
 
     public ICreateProcedureWithArgumentQueryBuilder Parameter(string argName, string argType)
@@ -80,7 +83,7 @@ internal class CreateProcedureQueryBuilder : AbstractQueryBuilder
 
     public ICreateProcedureNeedBodyQueryBuilder Body(Action<IProcedureBodyQueryBuilder> body)
     {
-        using (var t=new SqlServerProcedureBodyQueryBuilder())
+        using(var t = new SqlServerProcedureBodyQueryBuilder())
         {
             body(t);
             _body = t.Build();
@@ -89,11 +92,14 @@ internal class CreateProcedureQueryBuilder : AbstractQueryBuilder
     }
     public override void Build(ISqlWriter writer)
     {
-        if (!string.IsNullOrEmpty(_metaDataHeader))
+        if(!string.IsNullOrEmpty(_metaDataHeader))
+        {
             writer.WriteLine(_metaDataHeader);
+        }
+
         writer.Write(C.CREATE);
         writer.Write2(C.PROCEDURE);
-        if (!string.IsNullOrEmpty(_schemaName))
+        if(!string.IsNullOrEmpty(_schemaName))
         {
             writer.Write(I(_schemaName));
             writer.Write(C.DOT);
@@ -108,7 +114,7 @@ internal class CreateProcedureQueryBuilder : AbstractQueryBuilder
         writer.WriteLine(C.AS);
         writer.WriteLine(C.BEGIN);
         writer.Indent++;
-            
+
         writer.WriteLine(_body);
 
         writer.Indent--;

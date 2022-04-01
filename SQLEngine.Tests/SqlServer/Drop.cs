@@ -8,7 +8,7 @@ public partial class AllTests
     [Fact]
     public void Test_Drop_Function_1()
     {
-        using (var b = Query.New)
+        using(var b = Query.New)
         {
             b
                 .Drop
@@ -24,7 +24,7 @@ DROP FUNCTION dbo.fn_max;
     [Fact]
     public void Test_Drop_Table_1()
     {
-        using (var b = Query.New)
+        using(var b = Query.New)
         {
             b
                 .Drop
@@ -40,7 +40,7 @@ DROP TABLE dbo.Users
     [Fact]
     public void Test_Drop_Table_2()
     {
-        using (var b = Query.New)
+        using(var b = Query.New)
         {
             b
                 .Drop
@@ -56,7 +56,7 @@ DROP TABLE dbo.Users
     [Fact]
     public void Test_Drop_Table_3()
     {
-        using (var b = Query.New)
+        using(var b = Query.New)
         {
             b
                 .Drop
@@ -71,7 +71,7 @@ DROP TABLE Users
     [Fact]
     public void Test_Drop_Table_4()
     {
-        using (var b = Query.New)
+        using(var b = Query.New)
         {
             b
                 .Drop
@@ -83,12 +83,12 @@ DROP TABLE dbo.Users
 ";
             SqlAssert.EqualQuery(b.ToString(), query);
         }
-    }     
-        
+    }
+
     [Fact]
     public void Test_Drop_View_1()
     {
-        using (var b = Query.New)
+        using(var b = Query.New)
         {
             b
                 .Drop
@@ -104,7 +104,7 @@ DROP VIEW dbo.VW_Users
     [Fact]
     public void Test_Drop_View_2()
     {
-        using (var b = Query.New)
+        using(var b = Query.New)
         {
             b
                 .Drop
@@ -121,7 +121,7 @@ DROP VIEW dbo.VW_Users
     [Fact]
     public void Test_Drop_Database()
     {
-        using (var b = Query.New)
+        using(var b = Query.New)
         {
             b
                 .Drop
@@ -137,7 +137,7 @@ DROP DATABASE facebook
     [Fact]
     public void Test_Drop_Trigger()
     {
-        using (var b = Query.New)
+        using(var b = Query.New)
         {
             b
                 .Drop
@@ -154,7 +154,7 @@ DROP trigger AfterDELETETrigger
     [Fact]
     public void Test_Drop_Procedure()
     {
-        using (var b = Query.New)
+        using(var b = Query.New)
         {
             b
                 .Drop
@@ -170,7 +170,7 @@ DROP PROCEDURE my_proc_login
     [Fact]
     public void Test_Drop_Trigger_If_Exists()
     {
-        using (var b = Query.New)
+        using(var b = Query.New)
         {
             b
                 .Drop

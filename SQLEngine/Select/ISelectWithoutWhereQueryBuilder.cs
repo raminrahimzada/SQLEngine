@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine;
 
-public interface ISelectWithoutWhereQueryBuilder : 
+public interface ISelectWithoutWhereQueryBuilder :
     IAbstractSelectQueryBuilder
 {
     ISelectOrderBuilder OrderBy(ISqlExpression expression);

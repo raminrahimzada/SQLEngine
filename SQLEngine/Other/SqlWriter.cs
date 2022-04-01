@@ -36,7 +36,10 @@ public sealed class SqlWriter : ISqlWriter
 
     public void Write(params string[] expressions)
     {
-        foreach (var expression in expressions) _indentedTextWriter.Write(expression);
+        foreach(var expression in expressions)
+        {
+            _indentedTextWriter.Write(expression);
+        }
     }
 
     public void Write(string expression)
@@ -61,15 +64,22 @@ public sealed class SqlWriter : ISqlWriter
 
     public void WriteLine(string expression)
     {
-        if (!string.IsNullOrWhiteSpace(expression))
+        if(!string.IsNullOrWhiteSpace(expression))
+        {
             _indentedTextWriter.WriteLine(expression);
+        }
         else
+        {
             _indentedTextWriter.WriteLine();
+        }
     }
 
     public void WriteLine(char? expression = null)
     {
-        if (expression != null) _indentedTextWriter.Write(expression.Value);
+        if(expression != null)
+        {
+            _indentedTextWriter.Write(expression.Value);
+        }
 
         _indentedTextWriter.WriteLine();
     }

@@ -22,7 +22,7 @@ public abstract class AbstractQueryBuilder : IAbstractQueryBuilder
 
     public string Build()
     {
-        using (var writer = SqlWriter.New)
+        using(var writer = SqlWriter.New)
         {
             Build(writer);
             return writer.Build();
@@ -37,7 +37,10 @@ public abstract class AbstractQueryBuilder : IAbstractQueryBuilder
 
     protected SqlEngineException Bomb(string message = "")
     {
-        if (string.IsNullOrEmpty(message)) message = "Invalid Usage of QueryBuilder: " + GetType().Name;
+        if(string.IsNullOrEmpty(message))
+        {
+            message = "Invalid Usage of QueryBuilder: " + GetType().Name;
+        }
 
         throw new SqlEngineException(message);
     }
@@ -49,7 +52,10 @@ public abstract class AbstractQueryBuilder : IAbstractQueryBuilder
 
     protected virtual void Dispose(bool disposing)
     {
-        if (disposing) Writer?.Dispose();
+        if(disposing)
+        {
+            Writer?.Dispose();
+        }
     }
 
     protected static string I(string name)

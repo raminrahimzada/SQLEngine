@@ -7,7 +7,7 @@ public static class AbstractSqlColumnExtensions
 {
     public static AbstractSqlCondition In(this AbstractSqlColumn column, params string[] stringArray)
     {
-        var expressions = stringArray.Select(x => (AbstractSqlLiteral) x).ToArray();
+        var expressions = stringArray.Select(x => (AbstractSqlLiteral)x).ToArray();
         return column.In(expressions);
     }
 }

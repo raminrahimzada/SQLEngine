@@ -1,5 +1,5 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class TriggerBodyQueryBuilder : SqlServerQueryBuilder, ITriggerBodyQueryBuilder
+internal sealed class TriggerBodyQueryBuilder : SqlServerQueryBuilder, ITriggerBodyQueryBuilder
 {
 }

@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class CreateIndexQueryBuilder :
+internal sealed class CreateIndexQueryBuilder :
     AbstractQueryBuilder
     , ICreateIndexNoNameQueryBuilder
     , ICreateIndexNoTableNameQueryBuilder

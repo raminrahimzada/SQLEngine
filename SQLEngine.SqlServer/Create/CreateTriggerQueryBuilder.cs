@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-internal class CreateTriggerQueryBuilder : AbstractQueryBuilder, ICreateTriggerNoNameQueryBuilder
+internal sealed class CreateTriggerQueryBuilder : AbstractQueryBuilder, ICreateTriggerNoNameQueryBuilder
 {
     private string _triggerName;
     private string _specification;

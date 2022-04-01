@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class AlterTableRenameColumnQueryBuilder : AbstractQueryBuilder
+internal sealed class AlterTableRenameColumnQueryBuilder : AbstractQueryBuilder
     , IAlterTableNoNameRenameColumnQueryBuilder
     , IAlterTableNoNameRenameColumnNoNewNameQueryBuilder
 {

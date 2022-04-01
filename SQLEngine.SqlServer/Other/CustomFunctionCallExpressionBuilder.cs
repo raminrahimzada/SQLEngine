@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-internal class CustomFunctionCallExpressionBuilder : AbstractQueryBuilder, ICustomFunctionCallNopBuilder, ICustomFunctionCallExpressionBuilder
+internal sealed class CustomFunctionCallExpressionBuilder : AbstractQueryBuilder, ICustomFunctionCallNopBuilder, ICustomFunctionCallExpressionBuilder
 {
     private Action<ISqlWriter> _internalBuilder;
 

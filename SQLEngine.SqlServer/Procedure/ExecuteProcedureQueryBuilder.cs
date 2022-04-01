@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SQLEngine.SqlServer;
 
-internal class ExecuteProcedureQueryBuilder : AbstractQueryBuilder, IExecuteProcedureNeedNameQueryBuilder,
+internal sealed class ExecuteProcedureQueryBuilder : AbstractQueryBuilder, IExecuteProcedureNeedNameQueryBuilder,
     IExecuteProcedureNeedArgQueryBuilder
 {
     private readonly List<Tuple<string, string, ProcedureArgumentDirectionTypes>>

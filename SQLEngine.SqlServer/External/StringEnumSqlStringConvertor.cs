@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-public class StringEnumSqlStringConvertor : IEnumSqlStringConvertor
+public sealed class StringEnumSqlStringConvertor : IEnumSqlStringConvertor
 {
     public string ToSqlString(Enum @enum)
     {

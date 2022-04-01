@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer;
 
-internal class InsertQueryBuilder : AbstractQueryBuilder,
+internal sealed class InsertQueryBuilder : AbstractQueryBuilder,
     IInsertNoIntoWithColumns,
     IInsertHasValuesQueryBuilder,
     IInsertNeedValueQueryBuilder,

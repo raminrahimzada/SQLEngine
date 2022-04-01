@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-internal class TryCatchQueryBuilder : AbstractQueryBuilder
+internal sealed class TryCatchQueryBuilder : AbstractQueryBuilder
     , ITryQueryBuilder
     , ITryNoTryQueryBuilder
     , ITryNoCatchQueryBuilder

@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class DropViewQueryBuilder : AbstractQueryBuilder
+internal sealed class DropViewQueryBuilder : AbstractQueryBuilder
     , IDropViewNoNameQueryBuilder
     , IDropViewNoSchemaQueryBuilder
     , IDropViewQueryBuilder

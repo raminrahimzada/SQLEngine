@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-internal class RawStringQueryBuilder : AbstractQueryBuilder, IElseIfQueryBuilder
+internal sealed class RawStringQueryBuilder : AbstractQueryBuilder, IElseIfQueryBuilder
 {
     private readonly Action<ISqlWriter> _func;
 

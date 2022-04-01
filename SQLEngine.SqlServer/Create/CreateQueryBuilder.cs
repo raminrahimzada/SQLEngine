@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class CreateQueryBuilder : AbstractQueryBuilder, ICreateQueryBuilder
+internal sealed class CreateQueryBuilder : AbstractQueryBuilder, ICreateQueryBuilder
 {
     private IAbstractQueryBuilder _innerBuilder;
 

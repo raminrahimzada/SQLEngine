@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace SQLEngine.SqlServer;
 
-public class SqlExpressionCompiler : IExpressionCompiler
+public sealed class SqlExpressionCompiler : IExpressionCompiler
 {
     public string Compile<T>(Expression<Func<T, bool>> expression)
     {

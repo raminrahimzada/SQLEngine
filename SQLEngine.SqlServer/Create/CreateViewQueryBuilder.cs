@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-internal class CreateViewQueryBuilder : AbstractQueryBuilder, ICreateViewNoNameQueryBuilder,
+internal sealed class CreateViewQueryBuilder : AbstractQueryBuilder, ICreateViewNoNameQueryBuilder,
     ICreateViewNoNameNoBodyQueryBuilder
 {
     private string _viewName;

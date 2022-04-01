@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer;
 
-internal class CreateProcedureQueryBuilder : AbstractQueryBuilder
+internal sealed class CreateProcedureQueryBuilder : AbstractQueryBuilder
     , ICreateProcedureQueryBuilder
     , ICreateProcedureWithArgumentQueryBuilder
     , ICreateProcedureNeedBodyQueryBuilder

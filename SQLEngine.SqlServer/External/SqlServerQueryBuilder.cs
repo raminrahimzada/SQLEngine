@@ -625,7 +625,7 @@ public partial class SqlServerQueryBuilder
         }));
     }
 
-    private class ElseDisposable : IDisposable
+    private sealed class ElseDisposable : IDisposable
     {
         private readonly SqlServerQueryBuilder _sqlServerQueryBuilder;
 

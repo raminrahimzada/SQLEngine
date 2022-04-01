@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-internal class SqlServerCondition : AbstractSqlCondition
+internal sealed class SqlServerCondition : AbstractSqlCondition
 {
     public static SqlServerCondition CreateEmptyThis()
     {

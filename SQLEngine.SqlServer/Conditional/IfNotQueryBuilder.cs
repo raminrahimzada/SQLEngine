@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class IfNotQueryBuilder : AbstractQueryBuilder, IIfQueryBuilder
+internal sealed class IfNotQueryBuilder : AbstractQueryBuilder, IIfQueryBuilder
 {
     private readonly AbstractSqlCondition _condition;
 

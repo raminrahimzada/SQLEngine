@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class DropProcedureQueryBuilder : AbstractQueryBuilder, IDropProcedureNoNameQueryBuilder, IDropProcedureNoNameNoSchemaNameQueryBuilder
+internal sealed class DropProcedureQueryBuilder : AbstractQueryBuilder, IDropProcedureNoNameQueryBuilder, IDropProcedureNoNameNoSchemaNameQueryBuilder
 {
     private string _procedureName;
     private string _schemaName;
@@ -31,7 +31,7 @@ internal class DropProcedureQueryBuilder : AbstractQueryBuilder, IDropProcedureN
         writer.Write(_procedureName);
     }
 }
-internal class DropTriggerQueryBuilder : AbstractQueryBuilder,
+internal sealed class DropTriggerQueryBuilder : AbstractQueryBuilder,
     IDropTriggerNoNameQueryBuilder
     , IDropTriggerNoNameIfExistsQueryBuilder
     , IDropTriggerNoNameNoSchemaIfExistsQueryBuilder

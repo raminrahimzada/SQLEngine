@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace SQLEngine.SqlServer;
 
-internal class SelectQueryBuilder<TTable> : SelectQueryBuilder,
+internal sealed class SelectQueryBuilder<TTable> : SelectQueryBuilder,
     ISelectWithoutFromQueryBuilder<TTable>
 {
     public SelectQueryBuilder(SelectQueryBuilder builder)
@@ -74,7 +74,7 @@ internal class SelectQueryBuilder : AbstractQueryBuilder,
         }
     }
 
-    internal class SelectorCollection
+    internal sealed class SelectorCollection
     {
         private readonly List<string> _rawSqlQueryList = new();
 

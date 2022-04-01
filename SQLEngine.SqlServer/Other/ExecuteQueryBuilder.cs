@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class ExecuteQueryBuilder : AbstractQueryBuilder, IExecuteQueryBuilder
+internal sealed class ExecuteQueryBuilder : AbstractQueryBuilder, IExecuteQueryBuilder
 {
     private IAbstractQueryBuilder _internalBuilder;
     public IExecuteProcedureNeedArgQueryBuilder Procedure(string procedureName)

@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer;
 
-internal class FunctionQueryBuilder : AbstractQueryBuilder
+internal sealed class FunctionQueryBuilder : AbstractQueryBuilder
 {
-    class ArgumentModel
+    sealed class ArgumentModel
     {
         public string Name { get; set; }
         public string Type { get; set; }

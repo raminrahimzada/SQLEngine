@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-internal class ColumnQueryBuilder : AbstractQueryBuilder, IColumnQueryBuilder
+internal sealed class ColumnQueryBuilder : AbstractQueryBuilder, IColumnQueryBuilder
 {
     public ColumnModel Model { get; }
 

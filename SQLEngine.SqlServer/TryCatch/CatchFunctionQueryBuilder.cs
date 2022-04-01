@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-public class CatchFunctionQueryBuilder : SqlServerQueryBuilder, ICatchFunctionQueryBuilder
+public sealed class CatchFunctionQueryBuilder : SqlServerQueryBuilder, ICatchFunctionQueryBuilder
 {
     public ISqlExpression ErrorNumber()
     {

@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-internal class SqlServerConditionFilterQueryHelper : IConditionFilterQueryHelper
+internal sealed class SqlServerConditionFilterQueryHelper : IConditionFilterQueryHelper
 {
     public AbstractSqlCondition Exists(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> func)
     {

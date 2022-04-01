@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-public class SqlServerLiteral : AbstractSqlLiteral
+public sealed class SqlServerLiteral : AbstractSqlLiteral
 {
     internal static void Setup()
     {

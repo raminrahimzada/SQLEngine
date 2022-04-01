@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class CreateDatabaseQueryBuilder : AbstractQueryBuilder, ICreateDatabaseNoNameQueryBuilder
+internal sealed class CreateDatabaseQueryBuilder : AbstractQueryBuilder, ICreateDatabaseNoNameQueryBuilder
 {
     private string _databaseName;
 

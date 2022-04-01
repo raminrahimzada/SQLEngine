@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class AggregateFunctionBuilder : AbstractQueryBuilder, IAggregateFunctionBuilder
+internal sealed class AggregateFunctionBuilder : AbstractQueryBuilder, IAggregateFunctionBuilder
 {
     private ISqlExpression _expression;
     private bool? _isDistinct;

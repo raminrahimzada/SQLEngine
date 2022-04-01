@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-internal class CaseWhenQueryBuilder : AbstractQueryBuilder,
+internal sealed class CaseWhenQueryBuilder : AbstractQueryBuilder,
     ICaseWhenNeedWhenQueryBuilder,
     ICaseWhenNeedThenQueryBuilder
 {

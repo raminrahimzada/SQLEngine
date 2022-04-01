@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-public class SqlEscapeStrategy : IEscapeStrategy
+public sealed class SqlEscapeStrategy : IEscapeStrategy
 {
     public string Escape(string name)
     {
@@ -23,7 +23,7 @@ public class SqlEscapeStrategy : IEscapeStrategy
         return name;
     }
 }
-public class DefaultUniqueVariableNameGenerator : IUniqueVariableNameGenerator
+public sealed class DefaultUniqueVariableNameGenerator : IUniqueVariableNameGenerator
 {
     private int _last;
     public string New()

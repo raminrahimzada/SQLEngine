@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SQLEngine.SqlServer;
 
-internal class UpdateQueryBuilder : AbstractQueryBuilder,
+internal sealed class UpdateQueryBuilder : AbstractQueryBuilder,
     IUpdateNoTopQueryBuilder,
     IUpdateNoTableAndTopQueryBuilder,
     IUpdateNoTableAndValuesAndWhereQueryBuilder,

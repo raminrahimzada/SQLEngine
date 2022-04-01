@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class ElseIfQueryBuilder : AbstractQueryBuilder, IElseIfQueryBuilder
+internal sealed class ElseIfQueryBuilder : AbstractQueryBuilder, IElseIfQueryBuilder
 {
     private readonly AbstractSqlCondition _condition;
 

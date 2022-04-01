@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-internal class ExecuteFunctionQueryBuilder :
+internal sealed class ExecuteFunctionQueryBuilder :
     AbstractQueryBuilder,
     IExecuteFunctionNeedNameAndSchemaQueryBuilder
 {

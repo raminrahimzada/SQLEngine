@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-internal class AlterTableAddConstraintQueryBuilder : AbstractQueryBuilder,
+internal sealed class AlterTableAddConstraintQueryBuilder : AbstractQueryBuilder,
     IAlterTableAddConstraintQueryBuilder,
     IAlterTableAddConstraintPrimaryKeyQueryBuilder,
     IAlterTableAddConstraintForeignKeyQueryBuilder,

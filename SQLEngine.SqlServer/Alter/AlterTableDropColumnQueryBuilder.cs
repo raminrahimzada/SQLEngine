@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class AlterTableDropColumnQueryBuilder : AbstractQueryBuilder,
+internal sealed class AlterTableDropColumnQueryBuilder : AbstractQueryBuilder,
     IAlterTableNoNameDropColumnQueryBuilder
 {
     private string _tableName;

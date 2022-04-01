@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-public class DefaultTypeConvertor : ITypeConvertor
+public sealed class DefaultTypeConvertor : ITypeConvertor
 {
     public string ToSqlType<T>()
     {

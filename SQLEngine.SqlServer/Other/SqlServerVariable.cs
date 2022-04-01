@@ -2,7 +2,7 @@
 
 namespace SQLEngine.SqlServer;
 
-public class SqlServerVariable : AbstractSqlVariable
+public sealed class SqlServerVariable : AbstractSqlVariable
 {
     public SqlServerVariable(string name)
     {

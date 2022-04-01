@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class AlterQueryBuilder : AbstractQueryBuilder, IAlterQueryBuilder
+internal sealed class AlterQueryBuilder : AbstractQueryBuilder, IAlterQueryBuilder
 {
     private IAbstractQueryBuilder _internalBuilder;
     public IAlterTableNoNameQueryBuilder Table(string tableName, string schemaName = null)

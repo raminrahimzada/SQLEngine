@@ -1,6 +1,6 @@
 ﻿namespace SQLEngine.SqlServer;
 
-internal class SqlServerRawExpression : AbstractSqlExpression
+internal sealed class SqlServerRawExpression : AbstractSqlExpression
 {
     internal static void Setup()
     {

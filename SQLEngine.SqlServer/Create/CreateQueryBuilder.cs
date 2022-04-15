@@ -15,11 +15,9 @@ internal sealed class CreateQueryBuilder : AbstractQueryBuilder, ICreateQueryBui
 
     public override string ToString()
     {
-        using(var writer = CreateNewWriter())
-        {
-            Build(writer);
-            return writer.Build();
-        }
+        using var writer = CreateNewWriter();
+        Build(writer);
+        return writer.Build();
     }
 
     public ICreateTableQueryBuilder Table(string tableName)
@@ -30,10 +28,8 @@ internal sealed class CreateQueryBuilder : AbstractQueryBuilder, ICreateQueryBui
     }
     public ICreateTableQueryBuilder Table<TTable>() where TTable : ITable, new()
     {
-        using(var table = new TTable())
-        {
-            return Table(table.Name).Schema(table.Schema);
-        }
+        using var table = new TTable();
+        return Table(table.Name).Schema(table.Schema);
     }
     public ICreateFunctionNoNameQueryBuilder Function(string funcName)
     {
@@ -57,13 +53,10 @@ internal sealed class CreateQueryBuilder : AbstractQueryBuilder, ICreateQueryBui
     }
     public ICreateViewNoNameQueryBuilder View<TView>() where TView : IView, new()
     {
-        using(var view = new TView())
-        {
-            var x = New<CreateViewQueryBuilder>().Name(view.Name).Schema(view.Schema);
-            _innerBuilder = x;
-            return x;
-        }
-
+        using var view = new TView();
+        var x = New<CreateViewQueryBuilder>().Name(view.Name).Schema(view.Schema);
+        _innerBuilder = x;
+        return x;
     }
 
     public ICreateIndexNoNameQueryBuilder Index(string indexName)

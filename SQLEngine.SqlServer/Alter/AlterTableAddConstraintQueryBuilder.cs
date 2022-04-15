@@ -199,13 +199,11 @@ internal sealed class AlterTableAddConstraintQueryBuilder : AbstractQueryBuilder
 
     public IAlterTableAddConstraintForeignKeyReferencesQueryBuilder References<TTable>(string columnName) where TTable : ITable, new()
     {
-        using(var table = new TTable())
-        {
-            _foreignKeyReferenceTableName = table.Name;
-            _foreignKeyReferenceTableSchema = table.Schema;
-            _foreignKeyReferenceColumnName = columnName;
-            return this;
-        }
+        using var table = new TTable();
+        _foreignKeyReferenceTableName = table.Name;
+        _foreignKeyReferenceTableSchema = table.Schema;
+        _foreignKeyReferenceColumnName = columnName;
+        return this;
     }
 
     public IAlterTableAddConstraintDefaultForColumnQueryBuilder ForColumn(AbstractSqlColumn column)

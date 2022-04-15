@@ -9,90 +9,78 @@ public partial class AllTests
     [Fact]
     public void Test_Simple_Select_1_Expression_1()
     {
-        using(var q = Query.New)
-        {
-            q
-                .Select
-                .Top(1)
-                .From<UserTable>()
-                .Where(x => x.IdInteger == 17);
+        using var q = Query.New;
+        q
+            .Select
+            .Top(1)
+            .From<UserTable>()
+            .Where(x => x.IdInteger == 17);
 
 
-            const string queryThat = @"
+        const string queryThat = @"
 SELECT TOP(1)  * 
     FROM dbo.Users
     WHERE IdInteger = 17
 ";
-            SqlAssert.EqualQuery(q.ToString(), queryThat);
-
-        }
+        SqlAssert.EqualQuery(q.ToString(), queryThat);
     }
 
     [Fact]
     public void Test_Simple_Select_Expression_2()
     {
-        using(var q = Query.New)
-        {
-            q
-                .Select
-                .Top(1)
-                .From<UserTable>()
-                .Where(x => x.Name == "admin")
-                ;
+        using var q = Query.New;
+        q
+            .Select
+            .Top(1)
+            .From<UserTable>()
+            .Where(x => x.Name == "admin")
+            ;
 
-            var queryThat = @"
+        var queryThat = @"
 SELECT TOP(1)  * 
     FROM dbo.Users
     WHERE Name = N'admin'
 ";
-            SqlAssert.EqualQuery(q.ToString(), queryThat);
-
-        }
+        SqlAssert.EqualQuery(q.ToString(), queryThat);
     }
     [Fact]
     public void Test_Simple_Select_3_Expression()
     {
-        using(var q = Query.New)
-        {
-            q
-                .Select
-                .Top(1)
-                .From<UserTable>()
-                .Where(x => x.Age > 18)
-                ;
+        using var q = Query.New;
+        q
+            .Select
+            .Top(1)
+            .From<UserTable>()
+            .Where(x => x.Age > 18)
+            ;
 
-            var queryThat = @"
+        var queryThat = @"
         SELECT TOP(1)  * 
             FROM dbo.Users
             WHERE Age > 18
         ";
-            SqlAssert.EqualQuery(q.ToString(), queryThat);
-
-        }
+        SqlAssert.EqualQuery(q.ToString(), queryThat);
     }
     [Fact]
     public void Test_Simple_Select_Order_Expression()
     {
-        using(var q = Query.New)
-        {
-            q
-                .Select
-                .Top(1)
-                .From<UserTable>()
-                .Where(x => x.Age == 17)
-                .OrderBy("Id");
+        using var q = Query.New;
+        q
+            .Select
+            .Top(1)
+            .From<UserTable>()
+            .Where(x => x.Age == 17)
+            .OrderBy("Id");
 
 
-            const string queryThat = @"
+        const string queryThat = @"
         SELECT TOP(1)   * 
             FROM dbo.Users
             WHERE Age = 17
             ORDER BY Id
 
         ";
-            SqlAssert.EqualQuery(q.ToString(), queryThat);
-
-        }
+        SqlAssert.EqualQuery(q.ToString(), queryThat);
     }
 
     //[Fact]
@@ -122,59 +110,53 @@ SELECT TOP(1)  *
     [Fact]
     public void Test_Simple_Select_With_function_Expression()
     {
-        using(var q = Query.New)
-        {
-            var name = q.Column("Name");
-            q
-                .Select
-                .Top(1)
-                .Select(name)
-                .Select(x => x.Len(name))
-                .Select(x => x.Trim(name))
+        using var q = Query.New;
+        var name = q.Column("Name");
+        q
+            .Select
+            .Top(1)
+            .Select(name)
+            .Select(x => x.Len(name))
+            .Select(x => x.Trim(name))
 
-                .From<UserTable>()
-                ;
+            .From<UserTable>()
+            ;
 
 
-            const string queryThat = @"
+        const string queryThat = @"
         SELECT TOP(1)  Name, LEN(Name), TRIM(Name)
             FROM dbo.Users
 
         ";
-            SqlAssert.EqualQuery(q.ToString(), queryThat);
-
-        }
+        SqlAssert.EqualQuery(q.ToString(), queryThat);
     }
     [Fact]
     public void Test_Simple_Select_Assign_Expression()
     {
-        using(var q = Query.New)
-        {
-            //variables
-            var myCreatedDate = q.Declare<DateTime>("myCreatedDate");
+        using var q = Query.New;
+        //variables
+        var myCreatedDate = q.Declare<DateTime>("myCreatedDate");
 
-            //columns
-            var createdDate = q.Column("CreatedDate");
-            var id = q.Column("Id");
+        //columns
+        var createdDate = q.Column("CreatedDate");
+        var id = q.Column("Id");
 
-            q
-                .Select
-                .Top(1)
-                .SelectAssign(myCreatedDate, createdDate)
-                .From<UserTable>()
-                .Where(x => x.IdInteger == 17)
-                .OrderBy(id);
+        q
+            .Select
+            .Top(1)
+            .SelectAssign(myCreatedDate, createdDate)
+            .From<UserTable>()
+            .Where(x => x.IdInteger == 17)
+            .OrderBy(id);
 
-            const string queryThat = @"
+        const string queryThat = @"
         DECLARE  @myCreatedDate DATETIME ;
         SELECT TOP(1)  @myCreatedDate=CreatedDate
             FROM dbo.Users
             WHERE IdInteger = 17
             ORDER BY Id
         ";
-            SqlAssert.EqualQuery(q.ToString(), queryThat);
-
-        }
+        SqlAssert.EqualQuery(q.ToString(), queryThat);
     }
     //[Fact]
     //public void Test_Simple_Select_Between_Expression()

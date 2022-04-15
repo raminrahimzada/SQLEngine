@@ -18,10 +18,8 @@ internal sealed class DeleteQueryBuilder : AbstractQueryBuilder,
 
     public IDeleteExceptTableNameQueryBuilder Table<TTable>() where TTable : ITable, new()
     {
-        using(var table = new TTable())
-        {
-            return Table(table.Name, table.Schema);
-        }
+        using var table = new TTable();
+        return Table(table.Name, table.Schema);
     }
 
     public IDeleteExceptTopQueryBuilder Top(int? count)

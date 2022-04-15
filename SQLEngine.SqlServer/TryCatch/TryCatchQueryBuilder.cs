@@ -18,11 +18,9 @@ internal sealed class TryCatchQueryBuilder : AbstractQueryBuilder
 
         if(_tryBody != null)
         {
-            using(var q = new SqlServerQueryBuilder())
-            {
-                _tryBody.Invoke(q);
-                q.Build(writer);
-            }
+            using var q = new SqlServerQueryBuilder();
+            _tryBody.Invoke(q);
+            q.Build(writer);
         }
 
         writer.WriteLine();
@@ -39,11 +37,9 @@ internal sealed class TryCatchQueryBuilder : AbstractQueryBuilder
 
         if(_catchBody != null)
         {
-            using(var q = new CatchFunctionQueryBuilder())
-            {
-                _catchBody.Invoke(q);
-                q.Build(writer);
-            }
+            using var q = new CatchFunctionQueryBuilder();
+            _catchBody.Invoke(q);
+            q.Build(writer);
         }
 
         writer.WriteLine();

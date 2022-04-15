@@ -52,12 +52,10 @@ public partial class SqlServerQueryBuilder
 
     public string Build()
     {
-        using (var writer = SqlWriter.New)
-        {
-            foreach (var builder in _list) builder.Build(writer);
+        using var writer = SqlWriter.New;
+        foreach (var builder in _list) builder.Build(writer);
 
-            return writer.Build();
-        }
+        return writer.Build();
     }
 
     public void Clear()
@@ -193,17 +191,13 @@ public partial class SqlServerQueryBuilder
 
     public AbstractSqlVariable Declare(string variableName, string type, Action<IQueryBuilder> builder)
     {
-        using (var q = Query.New)
-        {
-            builder(q);
-            using (var t = new DeclarationQueryBuilder())
-            {
-                var defaultValue = q.Build();
-                var expression = t.Declare(variableName).OfType(type).Default(q.RawInternal(defaultValue));
-                _list.Add(expression);
-                return new SqlServerVariable(variableName);
-            }
-        }
+        using var q = Query.New;
+        builder(q);
+        using var t = new DeclarationQueryBuilder();
+        var defaultValue = q.Build();
+        var expression = t.Declare(variableName).OfType(type).Default(q.RawInternal(defaultValue));
+        _list.Add(expression);
+        return new SqlServerVariable(variableName);
     }
 
     public AbstractSqlVariable Declare<T>(string variableName, Action<IQueryBuilder> builder)
@@ -350,22 +344,18 @@ public partial class SqlServerQueryBuilder
 
     public IDisposable IfExists(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
     {
-        using (var s = new SelectQueryBuilder())
-        {
-            selector(s);
-            return If(new SqlServerCondition(C.EXISTS, C.BEGIN_SCOPE + string.Empty, s.Build(),
-                C.END_SCOPE + string.Empty));
-        }
+        using var s = new SelectQueryBuilder();
+        selector(s);
+        return If(new SqlServerCondition(C.EXISTS, C.BEGIN_SCOPE + string.Empty, s.Build(),
+            C.END_SCOPE + string.Empty));
     }
 
     public IDisposable IfNotExists(Func<ISelectQueryBuilder, IAbstractSelectQueryBuilder> selector)
     {
-        using (var s = new SelectQueryBuilder())
-        {
-            selector(s);
-            return If(new SqlServerCondition(C.NOT, C.SPACE + string.Empty, C.EXISTS, C.BEGIN_SCOPE + string.Empty,
-                s.Build(), C.END_SCOPE + string.Empty));
-        }
+        using var s = new SelectQueryBuilder();
+        selector(s);
+        return If(new SqlServerCondition(C.NOT, C.SPACE + string.Empty, C.EXISTS, C.BEGIN_SCOPE + string.Empty,
+            s.Build(), C.END_SCOPE + string.Empty));
     }
 
     //public IIfQueryBuilder IfOr(params AbstractSqlCondition[] conditions)
@@ -463,12 +453,10 @@ public partial class SqlServerQueryBuilder
         var t = new SetQueryBuilder();
         var functionCallExpressionBuilder = new CustomFunctionCallExpressionBuilder();
         right(functionCallExpressionBuilder);
-        using (var writer = SqlWriter.New)
-        {
-            functionCallExpressionBuilder.Build(writer);
-            var expression = t.Set(variable).To(RawInternal(writer.Build()));
-            _list.Add(expression);
-        }
+        using var writer = SqlWriter.New;
+        functionCallExpressionBuilder.Build(writer);
+        var expression = t.Set(variable).To(RawInternal(writer.Build()));
+        _list.Add(expression);
     }
 
     public void Set(AbstractSqlVariable variable, AbstractSqlExpression value)
@@ -513,10 +501,8 @@ public partial class SqlServerQueryBuilder
 
     public void Truncate<TTable>() where TTable : ITable, new()
     {
-        using (var table = new TTable())
-        {
-            Truncate(table.Name);
-        }
+        using var table = new TTable();
+        Truncate(table.Name);
     }
 
     public ITryNoTryQueryBuilder Try(Action<IQueryBuilder> builder)

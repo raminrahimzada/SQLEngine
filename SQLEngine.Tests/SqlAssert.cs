@@ -65,34 +65,30 @@ namespace SQLEngine.Tests
                 return;
             }
 
-            using(var b = Query.New)
+            using var b = Query.New;
+            switch(b)
             {
-                switch(b)
-                {
-                    case SqlServerQueryBuilder _:
-                        _connectionString = "Server=MATRIX\\SERVER19;Database=master;Trusted_Connection=True;";
-                        ValidateQueryInSqlServer(sqlQuery);
-                        break;
-                }
+                case SqlServerQueryBuilder _:
+                    _connectionString = "Server=MATRIX\\SERVER19;Database=master;Trusted_Connection=True;";
+                    ValidateQueryInSqlServer(sqlQuery);
+                    break;
             }
         }
         public static void ValidateQueryInSqlServer(string sqlQuery)
         {
             try
             {
-                using(var connection = new SqlConnection(_connectionString))
-                {
-                    connection.Open();
-                    var cmd = connection.CreateCommand();
+                using var connection = new SqlConnection(_connectionString);
+                connection.Open();
+                var cmd = connection.CreateCommand();
 
-                    //https://docs.microsoft.com/en-us/sql/t-sql/statements/set-noexec-transact-sql?redirectedfrom=MSDN&view=sql-server-ver15
-                    //https://docs.microsoft.com/en-us/sql/t-sql/statements/set-parseonly-transact-sql?view=sql-server-ver15
-                    cmd.CommandText = "SET NOEXEC ON;SET PARSEONLY ON;";
-                    cmd.ExecuteNonQuery();
-                    cmd.CommandText = sqlQuery;
-                    cmd.ExecuteNonQuery();
-                    cmd.Dispose();
-                }
+                //https://docs.microsoft.com/en-us/sql/t-sql/statements/set-noexec-transact-sql?redirectedfrom=MSDN&view=sql-server-ver15
+                //https://docs.microsoft.com/en-us/sql/t-sql/statements/set-parseonly-transact-sql?view=sql-server-ver15
+                cmd.CommandText = "SET NOEXEC ON;SET PARSEONLY ON;";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = sqlQuery;
+                cmd.ExecuteNonQuery();
+                cmd.Dispose();
             }
             catch(SqlException e)
             {

@@ -12,10 +12,8 @@ internal sealed class AlterQueryBuilder : AbstractQueryBuilder, IAlterQueryBuild
 
     public IAlterTableNoNameQueryBuilder Table<TTable>() where TTable : ITable, new()
     {
-        using(var table = new TTable())
-        {
-            return Table(table.Name, table.Schema);
-        }
+        using var table = new TTable();
+        return Table(table.Name, table.Schema);
     }
 
     public override void Build(ISqlWriter writer)

@@ -93,12 +93,10 @@ internal sealed class FunctionQueryBuilder : AbstractQueryBuilder
         writer.WriteLine(C.BEGIN);
         writer.Indent++;
 
-        using(var o = Query.New)
-        {
-            writer.Indent--;
-            _bodyBuilder(o);
-            writer.Indent--;
-            writer.WriteLine(C.END);
-        }
+        using var o = Query.New;
+        writer.Indent--;
+        _bodyBuilder(o);
+        writer.Indent--;
+        writer.WriteLine(C.END);
     }
 }

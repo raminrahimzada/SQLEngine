@@ -15,10 +15,8 @@ internal sealed class DropTableQueryBuilder : AbstractQueryBuilder,
 
     public IDropTableNoNameQueryBuilder Table<TTable>() where TTable : ITable, new()
     {
-        using(var table = new TTable())
-        {
-            return Table(table.Name);
-        }
+        using var table = new TTable();
+        return Table(table.Name);
     }
 
     public IDropTableNoNameNoSchemaQueryBuilder FromSchema(string schemaName)

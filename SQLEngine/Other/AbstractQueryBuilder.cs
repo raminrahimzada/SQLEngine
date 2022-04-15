@@ -22,11 +22,9 @@ public abstract class AbstractQueryBuilder : IAbstractQueryBuilder
 
     public string Build()
     {
-        using(var writer = SqlWriter.New)
-        {
-            Build(writer);
-            return writer.Build();
-        }
+        using var writer = SqlWriter.New;
+        Build(writer);
+        return writer.Build();
     }
 
     public void Dispose()

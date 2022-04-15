@@ -41,10 +41,8 @@ internal sealed class CreateViewQueryBuilder : AbstractQueryBuilder, ICreateView
         writer.Write(C.SPACE);
         writer.Write(C.AS);
         writer.Write(C.SPACE);
-        using(var sb = new SelectQueryBuilder())
-        {
-            _selectionBuilder(sb);
-            sb.Build(writer);
-        }
+        using var sb = new SelectQueryBuilder();
+        _selectionBuilder(sb);
+        sb.Build(writer);
     }
 }

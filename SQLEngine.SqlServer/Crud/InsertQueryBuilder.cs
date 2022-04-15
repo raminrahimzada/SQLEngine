@@ -28,10 +28,8 @@ internal sealed class InsertQueryBuilder : AbstractQueryBuilder,
 
     public IInsertNoIntoQueryBuilder Into<TTable>() where TTable : ITable, new()
     {
-        using(var table = new TTable())
-        {
-            return Into(table.Name, table.Schema);
-        }
+        using var table = new TTable();
+        return Into(table.Name, table.Schema);
     }
 
     public IInsertNeedValueQueryBuilder Value(string columnName, AbstractSqlLiteral columnValue)

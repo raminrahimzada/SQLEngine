@@ -40,10 +40,8 @@ internal sealed class UpdateQueryBuilder : AbstractQueryBuilder,
 
     public IUpdateNoTableQueryBuilder Table<TTable>() where TTable : ITable, new()
     {
-        using(var table = new TTable())
-        {
-            return Table(table.Name, table.Schema);
-        }
+        using var table = new TTable();
+        return Table(table.Name, table.Schema);
     }
 
 

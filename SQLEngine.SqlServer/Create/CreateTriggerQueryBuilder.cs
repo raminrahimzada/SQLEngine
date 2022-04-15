@@ -83,10 +83,8 @@ internal sealed class CreateTriggerQueryBuilder : AbstractQueryBuilder, ICreateT
         writer.Write(C.AS);
         writer.WriteLine(C.SPACE);
 
-        using(var x = new TriggerBodyQueryBuilder())
-        {
-            _body(x);
-            x.Build(writer);
-        }
+        using var x = new TriggerBodyQueryBuilder();
+        _body(x);
+        x.Build(writer);
     }
 }

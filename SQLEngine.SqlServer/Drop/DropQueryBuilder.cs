@@ -12,10 +12,8 @@ internal sealed class DropQueryBuilder : AbstractQueryBuilder, IDropQueryBuilder
 
     public IDropTableNoNameQueryBuilder Table<TTable>() where TTable : ITable, new()
     {
-        using(var table = new TTable())
-        {
-            return Table(table.Name);
-        }
+        using var table = new TTable();
+        return Table(table.Name);
     }
 
     public IDropFunctionQueryBuilder Function(string funcName)

@@ -28,16 +28,14 @@ internal sealed class AlterTableRenameColumnQueryBuilder : AbstractQueryBuilder
 
     public override void Build(ISqlWriter writer)
     {
-        using(var t = new ExecuteQueryBuilder())
-        {
-            var fullColumnName = $"{I(_tableName)}.{I(_columnName)}";
-            //https://stackoverflow.com/a/9355281/7901692
+        using var t = new ExecuteQueryBuilder();
+        var fullColumnName = $"{I(_tableName)}.{I(_columnName)}";
+        //https://stackoverflow.com/a/9355281/7901692
 
-            t.Procedure("sys.sp_rename")
-                .Arg("objtype", "COLUMN".ToSQL())
-                .Arg("objname", fullColumnName.ToSQL())
-                .Arg("newname", _columnNewName.ToSQL())
-                .Build(writer);
-        }
+        t.Procedure("sys.sp_rename")
+            .Arg("objtype", "COLUMN".ToSQL())
+            .Arg("objname", fullColumnName.ToSQL())
+            .Arg("newname", _columnNewName.ToSQL())
+            .Build(writer);
     }
 }

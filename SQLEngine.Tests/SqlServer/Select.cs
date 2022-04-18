@@ -66,6 +66,7 @@ SELECT TOP(1)  *
 ";
         SqlAssert.EqualQuery(q.ToString(), queryThat);
     }
+    
     [Fact]
     public void Test_Simple_Select_3()
     {

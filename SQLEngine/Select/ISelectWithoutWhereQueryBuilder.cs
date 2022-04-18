@@ -1,4 +1,7 @@
-﻿namespace SQLEngine;
+﻿using System;
+using System.Linq.Expressions;
+
+namespace SQLEngine;
 
 public interface ISelectWithoutWhereQueryBuilder :
     IAbstractSelectQueryBuilder
@@ -12,4 +15,9 @@ public interface ISelectWithoutWhereQueryBuilder :
     ISelectOrderBuilder OrderByDesc(ISqlExpression expression);
     ISelectOrderBuilder OrderByDesc(AbstractSqlColumn column);
     ISelectOrderBuilder OrderByDesc(string columnName);
+}
+
+public interface ISelectWithoutWhereQueryBuilder<TTable>
+{
+    ISelectOrderBuilder<TTable> OrderBy<TProperty>(Expression<Func<TTable, TProperty>> expression);
 }

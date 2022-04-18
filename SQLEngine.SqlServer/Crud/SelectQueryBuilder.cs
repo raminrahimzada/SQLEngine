@@ -6,7 +6,9 @@ using System.Linq.Expressions;
 namespace SQLEngine.SqlServer;
 
 internal sealed class SelectQueryBuilder<TTable> : SelectQueryBuilder,
-    ISelectWithoutFromQueryBuilder<TTable>
+    ISelectWithoutFromQueryBuilder<TTable>,
+    ISelectWithoutWhereQueryBuilder<TTable>, ISelectOrderBuilder,
+    ISelectOrderBuilder<TTable>
 {
     public SelectQueryBuilder(SelectQueryBuilder builder)
     {
@@ -24,9 +26,16 @@ internal sealed class SelectQueryBuilder<TTable> : SelectQueryBuilder,
         _groupByClauses = builder._groupByClauses;
     }
 
-    public ISelectWithoutWhereQueryBuilder Where(Expression<Func<TTable, bool>> expression)
+    public ISelectWithoutWhereQueryBuilder<TTable> Where(Expression<Func<TTable, bool>> expression)
     {
         _whereClause = Query.Settings.ExpressionCompiler.Compile(expression);
+        return this;
+    }
+
+    public ISelectOrderBuilder<TTable> OrderBy<TProperty>(Expression<Func<TTable, TProperty>> expression)
+    {
+        var orderByClause = Query.Settings.ExpressionCompiler.Compile(expression);
+        _orderByClauses.Add(new OrderByQueryModel(new SqlServerRawExpression(orderByClause)));
         return this;
     }
 }

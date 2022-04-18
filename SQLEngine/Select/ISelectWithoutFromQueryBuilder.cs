@@ -21,5 +21,5 @@ public interface ISelectWithoutFromQueryBuilder : ISelectOrderBuilder, IJoinedQu
 
 public interface ISelectWithoutFromQueryBuilder<TTable> : ISelectWithoutFromQueryBuilder
 {
-    ISelectWithoutWhereQueryBuilder Where(Expression<Func<TTable, bool>> expression);
+    ISelectWithoutWhereQueryBuilder<TTable> Where(Expression<Func<TTable, bool>> expression);
 }

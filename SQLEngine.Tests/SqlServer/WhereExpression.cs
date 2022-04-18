@@ -70,15 +70,14 @@ SELECT TOP(1)  *
             .Top(1)
             .From<UserTable>()
             .Where(x => x.Age == 17)
-            .OrderBy("Id");
+            .OrderBy(x=>x.IdByte);
 
 
         const string queryThat = @"
         SELECT TOP(1)   * 
             FROM dbo.Users
             WHERE Age = 17
-            ORDER BY Id
-
+            ORDER BY IdByte
         ";
         SqlAssert.EqualQuery(q.ToString(), queryThat);
     }
@@ -147,14 +146,14 @@ SELECT TOP(1)  *
             .SelectAssign(myCreatedDate, createdDate)
             .From<UserTable>()
             .Where(x => x.IdInteger == 17)
-            .OrderBy(id);
+            .OrderBy(x=>x.IdByte);
 
         const string queryThat = @"
         DECLARE  @myCreatedDate DATETIME ;
         SELECT TOP(1)  @myCreatedDate=CreatedDate
             FROM dbo.Users
             WHERE IdInteger = 17
-            ORDER BY Id
+            ORDER BY IdByte
         ";
         SqlAssert.EqualQuery(q.ToString(), queryThat);
     }

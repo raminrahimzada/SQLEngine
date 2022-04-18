@@ -281,7 +281,7 @@ public partial class AllTests
     [Fact]
     public void Test_Expression_Compiler_Simple_Contains_Integer_2()
     {
-        var expected = $"CAST({nameof(UserTable.IdInteger)} AS bigint) IN (1,2,3)";
+        var expected = $"{nameof(UserTable.IdInteger)} IN (1,2,3)";
         var arr = new long[] { 1, 2, 3 };
         var actual = _compiler.Compile<UserTable>(x => arr.Contains(x.IdInteger));
         Assert.Equal(expected, actual);
@@ -289,7 +289,7 @@ public partial class AllTests
     [Fact]
     public void Test_Expression_Compiler_Simple_Contains_Integer_3()
     {
-        var expected = $"CAST({nameof(UserTable.IdInteger)} AS double) IN (1,2,3)";
+        var expected = $"{nameof(UserTable.IdInteger)} IN (1,2,3)";
         var arr = new double[] { 1, 2, 3 };
         var actual = _compiler.Compile<UserTable>(x => arr.Contains(x.IdInteger));
         Assert.Equal(expected, actual);
@@ -297,7 +297,7 @@ public partial class AllTests
     [Fact]
     public void Test_Expression_Compiler_Simple_Contains_Integer_4()
     {
-        var expected = $"CAST({nameof(UserTable.IdInteger)} AS float) IN (1,2,3)";
+        var expected = $"{nameof(UserTable.IdInteger)} IN (1,2,3)";
         var arr = new float[] { 1, 2, 3 };
         var actual = _compiler.Compile<UserTable>(x => arr.Contains(x.IdInteger));
         Assert.Equal(expected, actual);
@@ -445,7 +445,7 @@ public partial class AllTests
     [Fact]
     public void Test_Expression_Compiler_Simple_Contains_Long_3()
     {
-        var expected = $"CAST({nameof(UserTable.IdLong)} AS double) IN (1,2,3)";
+        var expected = $"{nameof(UserTable.IdLong)} IN (1,2,3)";
         var arr = new double[] { 1, 2, 3 };
         var actual = _compiler.Compile<UserTable>(x => arr.Contains(x.IdLong));
         Assert.Equal(expected, actual);
@@ -453,7 +453,7 @@ public partial class AllTests
     [Fact]
     public void Test_Expression_Compiler_Simple_Contains_Long_4()
     {
-        var expected = $"CAST({nameof(UserTable.IdLong)} AS float) IN (1,2,3)";
+        var expected = $"{nameof(UserTable.IdLong)} IN (1,2,3)";
         var arr = new float[] { 1, 2, 3 };
         var actual = _compiler.Compile<UserTable>(x => arr.Contains(x.IdLong));
         Assert.Equal(expected, actual);
@@ -461,7 +461,7 @@ public partial class AllTests
     [Fact]
     public void Test_Expression_Compiler_Simple_Contains_Long_5()
     {
-        var expected = $"CAST({nameof(UserTable.IdLong)} AS decimal(19,4)) IN (1,2,3)";
+        var expected = $"{nameof(UserTable.IdLong)} IN (1,2,3)";
         var arr = new decimal[] { 1, 2, 3 };
         var actual = _compiler.Compile<UserTable>(x => arr.Contains(x.IdLong));
         Assert.Equal(expected, actual);

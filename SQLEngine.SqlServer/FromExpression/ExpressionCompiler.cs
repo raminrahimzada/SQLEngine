@@ -11,6 +11,10 @@ public sealed class SqlExpressionCompiler : IExpressionCompiler
 {
     public string Compile<T>(Expression<Func<T, bool>> expression)
     {
+        return Compile<T, bool>(expression);
+    }
+    public string Compile<T, D>(Expression<Func<T, D>> expression)
+    {
         switch(expression.NodeType)
         {
             case ExpressionType.Add:
@@ -50,19 +54,27 @@ public sealed class SqlExpressionCompiler : IExpressionCompiler
             case ExpressionType.Invoke:
                 break;
             case ExpressionType.Lambda:
-                if(expression.Body is MethodCallExpression body)
                 {
-                    return Compile(body);
-                }
-                if(expression.Body is UnaryExpression unaryExpression)
-                {
-                    return Compile(unaryExpression);
-                }
-                if(expression.Body is BinaryExpression binaryExpression)
-                {
-                    return Compile(binaryExpression);
+                    if(expression.Body is MethodCallExpression body)
+                    {
+                        return Compile(body);
+                    }
+                    if(expression.Body is UnaryExpression unaryExpression)
+                    {
+                        return Compile(unaryExpression);
+                    }
+                    if(expression.Body is BinaryExpression binaryExpression)
+                    {
+                        return Compile(binaryExpression);
+                    }
+
+                    if(expression.Body is MemberExpression memberExpression)
+                    {
+                        return Compile(memberExpression);
+                    }
                 }
 
+                throw null;
                 break;
             case ExpressionType.LeftShift:
                 break;
@@ -713,6 +725,12 @@ public sealed class SqlExpressionCompiler : IExpressionCompiler
         switch(expression.NodeType)
         {
             case ExpressionType.Add:
+                {
+                    if(expression is BinaryExpression binaryExpression)
+                    {
+                        return CompileBinary(binaryExpression.Left, binaryExpression.Right, "+");
+                    }
+                }
                 break;
             case ExpressionType.AddChecked:
                 break;
@@ -741,6 +759,7 @@ public sealed class SqlExpressionCompiler : IExpressionCompiler
                     return CompileCast(unaryExpression.Operand, unaryExpression.Type);
                 }
 
+                ;
                 break;
             case ExpressionType.ConvertChecked:
                 break;
@@ -750,6 +769,7 @@ public sealed class SqlExpressionCompiler : IExpressionCompiler
                     return "(" + Compile(binaryExpressionDivide.Left) + ") / (" + Compile(binaryExpressionDivide.Right) + ")";
                 }
 
+                ;
                 break;
             case ExpressionType.Equal:
                 break;
@@ -785,17 +805,22 @@ public sealed class SqlExpressionCompiler : IExpressionCompiler
 
                     return Query.Settings.EscapeStrategy.Escape(memberExpression.Member.Name);
                 }
+
+                ;
                 break;
             case ExpressionType.MemberInit:
                 break;
             case ExpressionType.Modulo:
                 break;
             case ExpressionType.Multiply:
-                if(expression is BinaryExpression binaryExpression)
                 {
-                    return "(" + Compile(binaryExpression.Left) + ") * (" + Compile(binaryExpression.Right) + ")";
+                    if(expression is BinaryExpression binaryExpression)
+                    {
+                        return "(" + Compile(binaryExpression.Left) + ") * (" + Compile(binaryExpression.Right) + ")";
+                    }
                 }
 
+                ;
                 break;
             case ExpressionType.MultiplyChecked:
                 break;
@@ -927,6 +952,16 @@ public sealed class SqlExpressionCompiler : IExpressionCompiler
             var memberExpression = (MemberExpression)expression;
             if(memberExpression.Member is PropertyInfo propertyInfo)
             {
+                var a = propertyInfo.PropertyType.FullName;
+                var b = type.FullName;
+                ;
+                if(a == "System.Int32" && b == "System.Double") return memberExpression.Member.Name;
+                if(a == "System.Int32" && b == "System.Int64") return memberExpression.Member.Name;
+                if(a == "System.Int32" && b == "System.Single") return memberExpression.Member.Name;
+                if(a == "System.Int64" && b == "System.Double") return memberExpression.Member.Name;
+                if(a == "System.Int64" && b == "System.Single") return memberExpression.Member.Name;
+                if(a == "System.Int64" && b == "System.Decimal") return memberExpression.Member.Name;
+                ;
                 if(propertyInfo.PropertyType == type)
                 {
                     return Compile(memberExpression);

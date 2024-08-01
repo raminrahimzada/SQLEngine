@@ -1,15 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-
     <IsPackable>false</IsPackable>
-
     <AnalysisLevel>preview</AnalysisLevel>
-
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
@@ -23,10 +18,14 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\SQLEngine.SqlServer\SQLEngine.SqlServer.csproj" />
     <ProjectReference Include="..\SQLEngine\SQLEngine.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Reference Include="Npgsql, Version=5.0.18.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7">
+      <HintPath>..\packages\Npgsql.5.0.18\lib\net5.0\Npgsql.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
 </Project>
